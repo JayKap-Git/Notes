@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The SDE Interview Field Manual — CS Fundamentals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#0e1320;            /* deep navy ink */
+    --bg-2:#121a2b;          /* raised panel */
+    --bg-3:#0a0f1a;          /* code well */
+    --bg-side:#0b1019;       /* sidebar */
+    --ink:#e7ebf5;           /* primary text */
+    --ink-2:#a4b0c9;         /* secondary text */
+    --ink-3:#6b7689;         /* muted / comments */
+    --line:#222b40;          /* hairline */
+    --line-2:#2c3650;        /* stronger hairline */
+    --teal:#5eead4;          /* structure / links / key terms */
+    --teal-dim:#2dd4bf;
+    --amber:#f5b544;         /* gotcha / common mistake */
+    --violet:#a78bfa;        /* interview lens */
+    --violet-soft:#c4b5fd;
+    --green:#9be6a2;         /* code strings / "do this" */
+    --blue:#7fb7ff;          /* code types */
+    --rad:14px;
+    --rad-sm:9px;
+    --maxw:860px;
+    --side:286px;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --disp:'Space Grotesk',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:32px}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--body);font-size:16.5px;line-height:1.72;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  /* faint grid texture for the "engineering notebook" feel */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 0%,transparent 75%);
+            mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 0%,transparent 75%);
+  }
+
+  /* ============ SCROLL PROGRESS ============ */
+  .progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent}
+  .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--violet));box-shadow:0 0 14px rgba(94,234,212,.5)}
+
+  /* ============ LAYOUT ============ */
+  .shell{position:relative;z-index:1;display:grid;grid-template-columns:var(--side) minmax(0,1fr)}
+
+  /* ============ SIDEBAR ============ */
+  .sidebar{
+    position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    background:var(--bg-side);border-right:1px solid var(--line);
+    padding:26px 18px 60px;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
+  }
+  .sidebar::-webkit-scrollbar{width:8px}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:8px}
+  .brand{display:flex;flex-direction:column;gap:3px;padding:4px 8px 18px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+  .brand .kbd{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--teal);text-transform:uppercase}
+  .brand .name{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:-.01em;line-height:1.2}
+  .navgroup{margin-top:16px}
+  .navgroup>.g-head{
+    display:flex;align-items:baseline;gap:9px;padding:6px 8px;font-family:var(--mono);
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+  }
+  .navgroup>.g-head .n{color:var(--teal);font-weight:700}
+  .navgroup ul{list-style:none;margin:2px 0 0;padding:0}
+  .navgroup li a{
+    display:block;padding:6px 8px 6px 26px;color:var(--ink-2);text-decoration:none;
+    font-size:14px;border-left:2px solid transparent;border-radius:0 7px 7px 0;transition:.15s;
+  }
+  .navgroup li a:hover{color:var(--ink);background:var(--bg-2)}
+  .navgroup li a.active{color:var(--ink);border-left-color:var(--teal);background:linear-gradient(90deg,rgba(94,234,212,.12),transparent)}
+  .navgroup li a.active::before{content:"›";color:var(--teal);margin-left:-14px;margin-right:6px;font-weight:700}
+
+  /* ============ CONTENT ============ */
+  .content{min-width:0;padding:0 clamp(20px,5vw,72px) 120px}
+  .wrap{max-width:var(--maxw);margin:0 auto}
+
+  /* ----- hero ----- */
+  .hero{padding:clamp(56px,9vw,104px) 0 38px;border-bottom:1px solid var(--line)}
+  .hero .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:20px}
+  .hero h1{font-family:var(--disp);font-weight:700;font-size:clamp(34px,6vw,58px);line-height:1.04;letter-spacing:-.02em;margin:0 0 18px}
+  .hero h1 em{font-style:normal;color:var(--teal)}
+  .hero .sub{font-size:clamp(16px,2.4vw,19px);color:var(--ink-2);max-width:62ch;margin:0 0 30px}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--line-2);padding:6px 12px;border-radius:999px}
+
+  .legend{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .legend .lg{display:flex;gap:11px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--rad-sm);padding:13px 15px}
+  .legend .dot{width:10px;height:10px;border-radius:3px;margin-top:6px;flex:none}
+  .legend .lg b{font-family:var(--disp);font-size:14px;display:block}
+  .legend .lg span{font-size:13px;color:var(--ink-2);line-height:1.5}
+
+  /* ----- section frames ----- */
+  .sec{padding-top:80px;border-bottom:1px solid var(--line)}
+  .sec:last-of-type{border-bottom:none}
+  .sec-tag{font-family:var(--mono);font-size:13px;color:var(--ink-3);letter-spacing:.05em;margin-bottom:10px}
+  .sec-tag .hl{color:var(--teal)}
+  .sec>.wrap>h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4.4vw,42px);letter-spacing:-.02em;line-height:1.08;margin:0 0 14px}
+  .sec-intro{font-size:17.5px;color:var(--ink-2);max-width:64ch;margin:0 0 8px;padding-bottom:14px}
+
+  h3{font-family:var(--disp);font-weight:600;font-size:clamp(21px,3vw,27px);letter-spacing:-.01em;margin:54px 0 6px;scroll-margin-top:30px;display:flex;align-items:center;gap:11px}
+  h3 .num{font-family:var(--mono);font-size:14px;color:var(--teal);font-weight:500;background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.25);padding:2px 9px;border-radius:7px;flex:none}
+  h4{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--ink);margin:30px 0 4px;letter-spacing:-.005em}
+
+  p{margin:14px 0;color:var(--ink)}
+  .lead{color:var(--ink-2)}
+  a{color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(94,234,212,.3)}
+  a:hover{border-bottom-color:var(--teal)}
+  strong,b{color:#fff;font-weight:600}
+  .term{color:var(--teal);font-weight:600}
+  em{color:var(--violet-soft);font-style:italic}
+
+  ul,ol{margin:14px 0;padding-left:24px}
+  li{margin:7px 0}
+  li::marker{color:var(--teal)}
+  ul.tight li,ol.tight li{margin:3px 0}
+
+  /* inline code */
+  :not(pre)>code{
+    font-family:var(--mono);font-size:.86em;background:rgba(127,183,255,.1);
+    color:#cfe3ff;border:1px solid var(--line-2);padding:1px 6px;border-radius:6px;
+  }
+
+  /* ============ CODE BLOCKS ============ */
+  .code{margin:20px 0;border:1px solid var(--line-2);border-radius:var(--rad);overflow:hidden;background:var(--bg-3)}
+  .code-head{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0d1424;border-bottom:1px solid var(--line)}
+  .code-head .lang{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .code-head .dots{display:flex;gap:6px}
+  .code-head .dots i{width:10px;height:10px;border-radius:50%;display:block;opacity:.55}
+  .code-head .dots i:nth-child(1){background:#fb7185}
+  .code-head .dots i:nth-child(2){background:var(--amber)}
+  .code-head .dots i:nth-child(3){background:var(--green)}
+  .copy{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:transparent;border:1px solid var(--line-2);padding:4px 10px;border-radius:6px;cursor:pointer;transition:.15s}
+  .copy:hover{color:var(--ink);border-color:var(--teal)}
+  .copy.ok{color:var(--green);border-color:var(--green)}
+  pre{margin:0;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.65;scrollbar-width:thin}
+  pre::-webkit-scrollbar{height:9px}
+  pre::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:8px}
+  pre code{font-family:var(--mono);background:none;border:none;padding:0;color:#d6dcea;font-size:inherit}
+
+  /* prism token palette (tinted to match the design) */
+  .token.comment,.token.prolog,.token.doctype,.token.cdata{color:var(--ink-3);font-style:italic}
+  .token.punctuation{color:#aeb7cc}
+  .token.keyword,.token.boolean,.token.atrule{color:var(--teal)}
+  .token.string,.token.char,.token.attr-value,.token.inserted{color:var(--green)}
+  .token.number,.token.constant,.token.symbol{color:var(--amber)}
+  .token.function,.token.method{color:var(--violet-soft)}
+  .token.class-name,.token.builtin,.token.namespace{color:var(--blue)}
+  .token.operator,.token.entity,.token.url{color:#b9c2d8}
+  .token.property,.token.tag,.token.attr-name{color:#7fb7ff}
+  .token.regex,.token.important,.token.variable{color:var(--amber)}
+  .token.deleted{color:#fb7185}
+
+  /* ============ CALLOUTS ============ */
+  .box{margin:22px 0;border-radius:var(--rad);padding:16px 18px 16px 20px;border:1px solid var(--line-2);position:relative;background:var(--bg-2)}
+  .box .b-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .box p:first-of-type{margin-top:2px}
+  .box p:last-child{margin-bottom:0}
+  .box.lens{border-left:3px solid var(--violet);background:linear-gradient(100deg,rgba(167,139,250,.09),transparent 60%)}
+  .box.lens .b-label{color:var(--violet)}
+  .box.gotcha{border-left:3px solid var(--amber);background:linear-gradient(100deg,rgba(245,181,68,.09),transparent 60%)}
+  .box.gotcha .b-label{color:var(--amber)}
+  .box.key{border-left:3px solid var(--teal);background:linear-gradient(100deg,rgba(94,234,212,.09),transparent 60%)}
+  .box.key .b-label{color:var(--teal)}
+  .box .qa{margin:10px 0 0}
+  .box .qa .q{color:#fff;font-weight:600}
+  .box .qa .a{color:var(--ink-2)}
+
+  /* ============ TABLES ============ */
+  .table-wrap{margin:22px 0;overflow-x:auto;border:1px solid var(--line-2);border-radius:var(--rad);scrollbar-width:thin}
+  table{border-collapse:collapse;width:100%;min-width:480px;font-size:14.5px}
+  th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:#0d1424;font-family:var(--disp);font-weight:600;font-size:13px;color:var(--teal);letter-spacing:.02em;border-bottom:1px solid var(--line-2);position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:rgba(127,183,255,.04)}
+  td code{white-space:nowrap}
+
+  /* ============ MISC ============ */
+  .divider{height:1px;background:var(--line);margin:46px 0;border:none}
+  .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .pill{font-family:var(--mono);font-size:12.5px;background:var(--bg-2);border:1px solid var(--line-2);color:var(--ink-2);padding:5px 11px;border-radius:8px}
+  .pill b{color:var(--teal);font-weight:600}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+  .grid2>div{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--rad-sm);padding:14px 16px}
+  .grid2 h4{margin-top:0}
+  .ascii{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);background:var(--bg-3);border:1px solid var(--line-2);border-radius:var(--rad);padding:16px 18px;overflow-x:auto;line-height:1.5;margin:20px 0;white-space:pre}
+
+  .foot{padding:60px 0 0;color:var(--ink-3);font-size:14px}
+  .foot .wrap{border-top:1px solid var(--line);padding-top:26px}
+  .foot b{color:var(--ink-2)}
+
+  /* ============ BACK TO TOP / NAV TOGGLE ============ */
+  #totop{position:fixed;right:22px;bottom:22px;z-index:50;background:var(--bg-2);border:1px solid var(--line-2);color:var(--ink);font-family:var(--mono);font-size:12px;padding:10px 14px;border-radius:999px;cursor:pointer;opacity:0;transform:translateY(10px);transition:.25s;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  #totop.show{opacity:1;transform:translateY(0)}
+  #totop:hover{border-color:var(--teal);color:var(--teal)}
+  .nav-toggle{display:none}
+  .scrim{display:none}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr}
+    .sidebar{position:fixed;top:0;left:0;z-index:45;width:300px;max-width:86vw;height:100vh;transform:translateX(-105%);transition:transform .28s ease;box-shadow:0 0 50px rgba(0,0,0,.6)}
+    .sidebar.open{transform:translateX(0)}
+    .nav-toggle{display:flex;align-items:center;gap:9px;position:fixed;top:14px;left:14px;z-index:46;background:var(--bg-2);border:1px solid var(--line-2);color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:10px 14px;border-radius:10px;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+    .nav-toggle .bars{display:inline-flex;flex-direction:column;gap:3px}
+    .nav-toggle .bars i{width:16px;height:2px;background:var(--teal);display:block}
+    .scrim.show{display:block;position:fixed;inset:0;z-index:44;background:rgba(4,7,14,.6);backdrop-filter:blur(2px)}
+    .content{padding-top:8px}
+    .hero{padding-top:84px}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    body{font-size:16px}
+    .legend{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+
+<button class="nav-toggle" id="navToggle" aria-label="Open navigation"><span class="bars"><i></i><i></i><i></i></span>Index</button>
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="kbd">// study build</span>
+      <span class="name">Interview Field Manual</span>
+    </div>
+    <nav id="nav">
+      <div class="navgroup">
+        <div class="g-head"><span class="n">01</span> OOP</div>
+        <ul class="tight">
+          <li><a href="#oop-pillars">Four pillars</a></li>
+          <li><a href="#oop-poly">Polymorphism</a></li>
+          <li><a href="#oop-ovr">Overloading vs overriding</a></li>
+          <li><a href="#oop-static">Static, hiding &amp; binding</a></li>
+          <li><a href="#oop-patterns">Design patterns</a></li>
+        </ul>
+      </div>
+      <div class="navgroup">
+        <div class="g-head"><span class="n">02</span> DBMS</div>
+        <ul class="tight">
+          <li><a href="#db-txn">Transactions &amp; ACID</a></li>
+          <li><a href="#db-cc">Concurrency control</a></li>
+          <li><a href="#db-atom">Atomicity &amp; recovery</a></li>
+          <li><a href="#db-norm">Redundancy vs consistency</a></li>
+          <li><a href="#db-sql">SQL, from scratch</a></li>
+        </ul>
+      </div>
+      <div class="navgroup">
+        <div class="g-head"><span class="n">03</span> OS</div>
+        <ul class="tight">
+          <li><a href="#os-pt">Process vs thread</a></li>
+          <li><a href="#os-sem">Semaphores</a></li>
+          <li><a href="#os-dead">Deadlock</a></li>
+          <li><a href="#os-vm">Virtual memory</a></li>
+        </ul>
+      </div>
+      <div class="navgroup">
+        <div class="g-head"><span class="n">04</span> Networks</div>
+        <ul class="tight">
+          <li><a href="#cn-layers">The layers</a></li>
+          <li><a href="#cn-tcp">TCP vs UDP</a></li>
+          <li><a href="#cn-err">Error management</a></li>
+          <li><a href="#cn-route">Routing basics</a></li>
+        </ul>
+      </div>
+      <div class="navgroup">
+        <div class="g-head"><span class="n">05</span> System Design</div>
+        <ul class="tight">
+          <li><a href="#sd-solid">SOLID &amp; LLD</a></li>
+          <li><a href="#sd-uml">UML relationships</a></li>
+          <li><a href="#sd-hld">HLD building blocks</a></li>
+          <li><a href="#sd-frame">Interview framework</a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content">
+    <header class="hero">
+      <div class="wrap">
+        <div class="eyebrow">CS fundamentals · zero → interview‑ready</div>
+        <h1>Five subjects.<br>One <em>field manual</em>.</h1>
+        <p class="sub">A single page that walks you from the absolute basics to the depth interviewers actually probe — OOP, DBMS (with real SQL), Operating Systems, Computer Networks, and System Design. Built to be read top‑to‑bottom or jumped around mid‑prep.</p>
+        <div class="meta">
+          <span class="chip">OOP</span>
+          <span class="chip">DBMS + SQL</span>
+          <span class="chip">OS</span>
+          <span class="chip">Networks</span>
+          <span class="chip">LLD / HLD</span>
+        </div>
+        <div class="legend">
+          <div class="lg"><span class="dot" style="background:var(--teal)"></span><div><b>Key idea</b><span>The one thing you must not forget from a topic.</span></div></div>
+          <div class="lg"><span class="dot" style="background:var(--amber)"></span><div><b>Gotcha</b><span>The mistake that trips people up in interviews.</span></div></div>
+          <div class="lg"><span class="dot" style="background:var(--violet)"></span><div><b>Interview lens</b><span>What they're really asking, with model answers.</span></div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================ 01 · OOP ============================ -->
+    <section class="sec" id="oop">
+      <div class="wrap">
+        <div class="sec-tag">// <span class="hl">01</span> · object-oriented programming</div>
+        <h2>OOP: how objects think</h2>
+        <p class="sec-intro">OOP models a program as a society of objects that hold their own data and expose behaviour. Master four pillars, then the two ideas interviewers love to poke at — <strong>polymorphism</strong> and the subtle line between <strong>overloading</strong> and <strong>overriding</strong>.</p>
+
+        <h3 id="oop-pillars"><span class="num">1.1</span> The four pillars</h3>
+        <p>Everything else is built on these. Know the one-line definition <em>and</em> a concrete "why".</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pillar</th><th>What it means</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td><b>Abstraction</b></td><td>Expose <i>what</i> an object does, hide <i>how</i>. You drive a car via the pedal, not the combustion.</td><td>Lets callers depend on an interface, not internals.</td></tr>
+              <tr><td><b>Encapsulation</b></td><td>Bundle data + the methods that guard it; keep fields <code>private</code> behind getters/setters.</td><td>Invariants stay valid — no one sets <code>age = -5</code>.</td></tr>
+              <tr><td><b>Inheritance</b></td><td>A subclass reuses and specializes a parent (<code>Dog extends Animal</code>).</td><td>Share code, model "is-a" relationships.</td></tr>
+              <tr><td><b>Polymorphism</b></td><td>One interface, many behaviours — the same call resolves to different code per object.</td><td>Write code against the base type; new types slot in for free.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha</span>
+          <p>Abstraction vs encapsulation get confused constantly. <strong>Abstraction is design-level</strong> (hiding complexity behind a clean interface); <strong>encapsulation is implementation-level</strong> (hiding data behind access modifiers). One is about <i>what to show</i>, the other about <i>how to protect it</i>.</p>
+        </div>
+
+        <h3 id="oop-poly"><span class="num">1.2</span> Polymorphism: static vs dynamic</h3>
+        <p>"Many forms." It comes in two flavours, and naming which is which is a guaranteed interview question.</p>
+        <ul>
+          <li><span class="term">Compile-time / static polymorphism</span> — resolved by the <strong>compiler</strong> using the method signature. This is <b>method overloading</b> (and, in C++, operator overloading).</li>
+          <li><span class="term">Run-time / dynamic polymorphism</span> — resolved at <strong>runtime</strong> using the actual object's type. This is <b>method overriding</b>, powered by dynamic dispatch.</li>
+        </ul>
+
+        <h4>Overloading (compiler decides)</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">class Calc {
+    int    add(int a, int b)           { return a + b; }   // baseline
+    double add(double a, double b)     { return a + b; }   // different param TYPES
+    int    add(int a, int b, int c)    { return a + b + c; } // different param COUNT
+}
+
+// The compiler looks at the ARGUMENTS you pass and picks the matching method.
+new Calc().add(2, 3);        // calls add(int,int)
+new Calc().add(2.0, 3.0);    // calls add(double,double)</code></pre></div>
+
+        <h4>Overriding + dynamic dispatch (the object decides)</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">class Animal { void speak() { System.out.println("...generic..."); } }
+class Dog extends Animal { @Override void speak() { System.out.println("Woof"); } }
+class Cat extends Animal { @Override void speak() { System.out.println("Meow"); } }
+
+Animal a = new Dog();   // reference TYPE = Animal, actual OBJECT = Dog
+a.speak();              // prints "Woof" — chosen at RUNTIME from the real object
+
+for (Animal x : new Animal[]{ new Dog(), new Cat() })
+    x.speak();          // "Woof" then "Meow" — same call site, different code</code></pre></div>
+        <p>Under the hood the JVM keeps a <span class="term">virtual method table (vtable)</span> per class — a lookup of "for this method name, which actual implementation?" At the call <code>a.speak()</code> it follows the object's vtable, so the <i>object's</i> version runs regardless of the reference type.</p>
+
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p>In <strong>Java, instance methods are virtual by default</strong> — overriding "just works." In <strong>C++ you must opt in with <code>virtual</code></strong>, otherwise the call binds statically to the reference type.</p>
+        </div>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">cpp</span><button class="copy">Copy</button></div><pre><code class="language-cpp">struct Animal { virtual void speak(); };   // 'virtual' enables dynamic dispatch
+struct Dog : Animal { void speak() override; };
+
+Animal* p = new Dog();
+p-&gt;speak();   // WITH virtual -> Dog::speak().  WITHOUT virtual -> Animal::speak()</code></pre></div>
+
+        <h3 id="oop-ovr"><span class="num">1.3</span> Overloading vs overriding</h3>
+        <p>The single most asked OOP question. Memorize this table cold.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Overloading</th><th>Overriding</th></tr></thead>
+            <tbody>
+              <tr><td><b>Where</b></td><td>Same class (or inherited)</td><td>Across parent → child</td></tr>
+              <tr><td><b>Signature</b></td><td>Same name, <b>different</b> parameters</td><td><b>Identical</b> name + parameters</td></tr>
+              <tr><td><b>Binding</b></td><td>Compile-time (static)</td><td>Run-time (dynamic)</td></tr>
+              <tr><td><b>Polymorphism</b></td><td>Static / ad-hoc</td><td>Dynamic / subtype</td></tr>
+              <tr><td><b>Return type</b></td><td>Can differ (but type alone ≠ overload)</td><td>Same, or a <i>covariant</i> subtype</td></tr>
+              <tr><td><b>Access modifier</b></td><td>Anything</td><td>Cannot be <b>more</b> restrictive</td></tr>
+              <tr><td><b>Exceptions</b></td><td>Anything</td><td>No new/broader <i>checked</i> exceptions</td></tr>
+              <tr><td><b><code>static</code> / <code>final</code> / <code>private</code></b></td><td>Allowed</td><td>Cannot be overridden</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha</span>
+          <p><strong>Return type alone does not overload.</strong> <code>int f(int x)</code> and <code>double f(int x)</code> won't compile together — the compiler can't tell them apart from the call site. You need a different <i>parameter list</i>.</p>
+        </div>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <div class="qa"><span class="q">Q: "Can you overload the <code>main</code> method?"</span><br><span class="a">A: Yes — <code>main(String[])</code> is just a method; you can add <code>main(int)</code> etc. But the JVM only ever calls <code>public static void main(String[] args)</code> as the entry point. The overloads are normal methods you'd have to call yourself.</span></div>
+          <div class="qa"><span class="q">Q: "Is constructor overloading a thing?"</span><br><span class="a">A: Yes — multiple constructors with different parameter lists. Constructors are <i>never</i> overridden (they aren't inherited), so only overloading applies.</span></div>
+        </div>
+
+        <h3 id="oop-static"><span class="num">1.4</span> Static members, hiding &amp; binding</h3>
+        <p>This is the "static inheritance" trap. Static members <i>are</i> inherited (a child can reference them), but they belong to the <strong>class</strong>, not the object — so they don't participate in dynamic dispatch. Redefining a static method in a child does not override it; it <span class="term">hides</span> it.</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">class Parent {
+    static void who() { System.out.println("Parent.who [static]"); }
+           void hi()  { System.out.println("Parent.hi  [instance]"); }
+}
+class Child extends Parent {
+    static void who() { System.out.println("Child.who [static]"); }   // HIDES
+           void hi()  { System.out.println("Child.hi  [instance]"); } // OVERRIDES
+}
+
+Parent p = new Child();
+p.who();   // "Parent.who" -> STATIC resolved by REFERENCE type (compile time)
+p.hi();    // "Child.hi"    -> INSTANCE resolved by OBJECT type (runtime)</code></pre></div>
+        <p>Same story for <strong>fields</strong> — they are resolved by the reference type, never polymorphic. This is field hiding:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">class A { int x = 1; }
+class B extends A { int x = 2; }   // hides A.x, doesn't override it
+
+A ref = new B();
+System.out.println(ref.x);          // 1  -> field picked by REFERENCE type A
+System.out.println(((B) ref).x);    // 2  -> cast changes the reference type</code></pre></div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p>One sentence to carry into the room: <strong>instance methods bind dynamically (object type); static methods and all fields bind statically (reference type).</strong> Override applies only to non-static, non-final, non-private instance methods.</p>
+        </div>
+
+        <h3 id="oop-patterns"><span class="num">1.5</span> Design patterns you must know</h3>
+        <p>Patterns are reusable solutions to recurring design problems. They cluster into three families.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Family</th><th>Solves</th><th>Common members</th></tr></thead>
+            <tbody>
+              <tr><td><b>Creational</b></td><td>How objects get made</td><td>Singleton, Factory Method, Abstract Factory, Builder, Prototype</td></tr>
+              <tr><td><b>Structural</b></td><td>How objects compose</td><td>Adapter, Decorator, Facade, Proxy, Composite</td></tr>
+              <tr><td><b>Behavioral</b></td><td>How objects talk &amp; share responsibility</td><td>Strategy, Observer, Command, State, Iterator, Template Method</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Singleton — exactly one instance</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">// (a) Bill Pugh holder — lazy, thread-safe, no locking. PREFERRED.
+public class Config {
+    private Config() {}
+    private static class Holder { static final Config INSTANCE = new Config(); }
+    public static Config get() { return Holder.INSTANCE; }   // class loaded only on first use
+}
+
+// (b) Double-checked locking — note 'volatile' (prevents seeing a half-built object)
+public class Cache {
+    private static volatile Cache instance;
+    private Cache() {}
+    public static Cache get() {
+        if (instance == null) {                 // 1st check (no lock, fast path)
+            synchronized (Cache.class) {
+                if (instance == null)           // 2nd check (inside lock)
+                    instance = new Cache();
+            }
+        }
+        return instance;
+    }
+}
+
+// (c) Enum — simplest; immune to reflection & serialization attacks
+public enum Settings { INSTANCE; public void load() { /* ... */ } }</code></pre></div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha</span>
+          <p>Without <code>volatile</code>, double-checked locking is <b>broken</b>: instruction reordering can publish the reference before the constructor finishes, so another thread sees a non-null but half-initialized object.</p>
+        </div>
+
+        <h4>Factory Method — ask for a type, get an object</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">interface Shape { double area(); }
+class Circle implements Shape { public double area() { return 3.14159; } }
+class Square implements Shape { public double area() { return 4.0; } }
+
+class ShapeFactory {
+    static Shape create(String type) {
+        return switch (type) {
+            case "circle" -&gt; new Circle();
+            case "square" -&gt; new Square();
+            default -&gt; throw new IllegalArgumentException("Unknown: " + type);
+        };
+    }
+}
+Shape s = ShapeFactory.create("circle");   // caller never says 'new Circle()'</code></pre></div>
+
+        <h4>Builder — readable construction of complex objects</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">class Pizza {
+    private final String size; private final boolean cheese, pepperoni;
+    private Pizza(Builder b) { size = b.size; cheese = b.cheese; pepperoni = b.pepperoni; }
+
+    static class Builder {
+        private final String size;            // required
+        private boolean cheese, pepperoni;    // optional
+        Builder(String size)   { this.size = size; }
+        Builder cheese()       { this.cheese = true;    return this; }   // fluent
+        Builder pepperoni()    { this.pepperoni = true; return this; }
+        Pizza build()          { return new Pizza(this); }
+    }
+}
+Pizza p = new Pizza.Builder("large").cheese().pepperoni().build();</code></pre></div>
+        <p class="lead">Builder kills the "telescoping constructor" anti-pattern (<code>new Pizza("L", true, false, true, ...)</code> where nobody can tell what the booleans mean).</p>
+
+        <h4>Strategy — swap an algorithm at runtime</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">interface PayStrategy { void pay(int amount); }
+class CardPay implements PayStrategy { public void pay(int a) { /* charge card */ } }
+class UpiPay  implements PayStrategy { public void pay(int a) { /* charge UPI  */ } }
+
+class Checkout {
+    private PayStrategy strategy;
+    void use(PayStrategy s)      { this.strategy = s; }   // inject behaviour
+    void checkout(int amount)    { strategy.pay(amount); }
+}
+Checkout c = new Checkout();
+c.use(new UpiPay());     // pick the algorithm without touching Checkout's code
+c.checkout(500);</code></pre></div>
+
+        <h4>Observer — publish/subscribe</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">interface Observer { void update(String news); }
+
+class NewsAgency {                                   // the Subject
+    private final List&lt;Observer&gt; subs = new ArrayList&lt;&gt;();
+    void subscribe(Observer o)   { subs.add(o); }
+    void publish(String news)    { for (Observer o : subs) o.update(news); }
+}
+// Any number of observers register and get pushed updates — loose coupling.</code></pre></div>
+
+        <h4>Decorator — add behaviour by wrapping</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">java</span><button class="copy">Copy</button></div><pre><code class="language-java">interface Coffee { double cost(); }
+class Plain implements Coffee { public double cost() { return 40; } }
+
+abstract class AddOn implements Coffee {     // wraps another Coffee
+    protected final Coffee inner;
+    AddOn(Coffee c) { this.inner = c; }
+}
+class Milk extends AddOn {
+    Milk(Coffee c) { super(c); }
+    public double cost() { return inner.cost() + 10; }   // extend without subclass-explosion
+}
+Coffee order = new Milk(new Milk(new Plain()));   // 40 + 10 + 10 = 60</code></pre></div>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <div class="qa"><span class="q">Q: "Strategy vs State — aren't they the same code?"</span><br><span class="a">A: Structurally near-identical, but intent differs. <b>Strategy</b> = the client picks an interchangeable algorithm. <b>State</b> = the object changes its own behaviour as its internal state transitions (and states often trigger the next state).</span></div>
+          <div class="qa"><span class="q">Q: "Why is Singleton sometimes called an anti-pattern?"</span><br><span class="a">A: It's global mutable state in disguise — it hides dependencies, makes unit testing hard (can't easily mock/replace it), and can become a concurrency bottleneck. Dependency injection is usually cleaner.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ 02 · DBMS ============================ -->
+    <section class="sec" id="dbms">
+      <div class="wrap">
+        <div class="sec-tag">// <span class="hl">02</span> · database management systems</div>
+        <h2>DBMS: keeping data correct under chaos</h2>
+        <p class="sec-intro">A database's whole job is to stay <strong>correct</strong> while many users hammer it at once and machines crash mid-write. That promise is <strong>ACID</strong>, enforced by transactions, concurrency control, and recovery. Then we get hands-on with <strong>SQL</strong>.</p>
+
+        <h3 id="db-txn"><span class="num">2.1</span> Transactions &amp; ACID</h3>
+        <p>A <span class="term">transaction</span> is a unit of work that must happen completely or not at all — classically, transferring money: debit one account, credit another. Halfway = corruption. Every transaction guarantees four properties:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Property</th><th>Promise</th><th>Enforced by</th></tr></thead>
+            <tbody>
+              <tr><td><b>A — Atomicity</b></td><td>All operations commit, or all roll back. No partial work.</td><td>Undo log, <code>COMMIT</code>/<code>ROLLBACK</code></td></tr>
+              <tr><td><b>C — Consistency</b></td><td>The DB moves from one valid state to another; constraints (keys, checks) always hold.</td><td>Constraints + the app's correct logic</td></tr>
+              <tr><td><b>I — Isolation</b></td><td>Concurrent transactions don't see each other's half-done work; result equals <i>some</i> serial order.</td><td>Locks / MVCC</td></tr>
+              <tr><td><b>D — Durability</b></td><td>Once committed, data survives crashes and power loss.</td><td>Write-ahead (redo) log on disk</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">BEGIN;                                              -- start transaction
+  UPDATE accounts SET balance = balance - 100 WHERE id = 1;   -- debit
+  UPDATE accounts SET balance = balance + 100 WHERE id = 2;   -- credit
+COMMIT;        -- both succeed together; if anything fails -> ROLLBACK (atomicity)</code></pre></div>
+
+        <h3 id="db-cc"><span class="num">2.2</span> Concurrency control</h3>
+        <p>Run transactions in parallel for speed, but interleaving creates anomalies. Interviewers expect you to name all four:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Anomaly</th><th>What happens</th></tr></thead>
+            <tbody>
+              <tr><td><b>Lost update</b></td><td>T1 and T2 both read X, both write; the later write silently erases the earlier one.</td></tr>
+              <tr><td><b>Dirty read</b></td><td>T1 reads a value T2 wrote but <i>hasn't committed</i>; T2 then rolls back — T1 used data that never existed.</td></tr>
+              <tr><td><b>Non-repeatable read</b></td><td>T1 reads a row, T2 updates+commits it, T1 reads again and gets a <i>different value</i>.</td></tr>
+              <tr><td><b>Phantom read</b></td><td>T1 runs a range query, T2 inserts a new matching row, T1 re-runs and sees an <i>extra</i> row.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>Isolation levels — the dial that trades safety for speed</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Level</th><th>Dirty read</th><th>Non-repeatable</th><th>Phantom</th></tr></thead>
+            <tbody>
+              <tr><td>Read Uncommitted</td><td>possible</td><td>possible</td><td>possible</td></tr>
+              <tr><td>Read Committed</td><td>prevented</td><td>possible</td><td>possible</td></tr>
+              <tr><td>Repeatable Read</td><td>prevented</td><td>prevented</td><td>possible*</td></tr>
+              <tr><td>Serializable</td><td>prevented</td><td>prevented</td><td>prevented</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="lead">*MySQL's InnoDB actually blocks phantoms at Repeatable Read too, using <i>gap locks</i>. Higher isolation = more correctness but more locking and less concurrency.</p>
+
+        <h4>How isolation is implemented</h4>
+        <ul>
+          <li><span class="term">Lock-based</span> — <b>shared (S)</b> locks for reads, <b>exclusive (X)</b> locks for writes. The key protocol is <b>Two-Phase Locking (2PL)</b>: a <i>growing</i> phase where a txn only acquires locks, then a <i>shrinking</i> phase where it only releases. 2PL guarantees <b>conflict serializability</b>.</li>
+          <li><span class="term">Strict 2PL</span> — hold all exclusive locks until <code>COMMIT</code>. Prevents cascading rollbacks (no one reads your uncommitted writes).</li>
+          <li><span class="term">Timestamp ordering</span> — each txn gets a timestamp; conflicting operations must execute in timestamp order, else the younger txn aborts.</li>
+          <li><span class="term">MVCC (multi-version concurrency control)</span> — every write creates a new <i>version</i>; readers see a consistent snapshot from their start time. <b>Readers never block writers and vice-versa</b> (used by PostgreSQL, InnoDB, Oracle).</li>
+        </ul>
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p>A schedule is <strong>conflict-serializable</strong> if its <i>precedence graph</i> (node per txn, edge on each conflicting read/write pair) is <strong>acyclic</strong>. Acyclic ⇒ equivalent to some serial order ⇒ safe.</p>
+        </div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha</span>
+          <p>Locking introduces <strong>deadlocks</strong>: T1 holds lock on A and wants B; T2 holds B and wants A. The DB detects the cycle in its <i>wait-for graph</i> (or hits a timeout) and aborts one transaction as the "victim."</p>
+        </div>
+
+        <h3 id="db-atom"><span class="num">2.3</span> Atomicity &amp; recovery</h3>
+        <p>How does "all-or-nothing" survive a power cut <i>mid-write</i>? The answer is <span class="term">Write-Ahead Logging (WAL)</span>: the change is written to a durable log <strong>before</strong> it touches the actual data pages.</p>
+        <ul class="tight">
+          <li><b>Undo</b> info lets the DB roll back uncommitted transactions after a crash (atomicity).</li>
+          <li><b>Redo</b> info lets it re-apply committed transactions that hadn't reached disk (durability).</li>
+          <li><b><code>SAVEPOINT</code></b> gives partial rollback inside a transaction.</li>
+        </ul>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">BEGIN;
+  INSERT INTO orders(id, total) VALUES (1, 500);
+  SAVEPOINT after_order;
+  INSERT INTO items(order_id, sku) VALUES (1, 'BAD');
+ROLLBACK TO after_order;      -- undo just the items insert, keep the order
+COMMIT;</code></pre></div>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <div class="qa"><span class="q">Q: "How is atomicity actually achieved?"</span><br><span class="a">A: The recovery manager + WAL. Every modification logs an undo (old value) and redo (new value) record before the data page is flushed. On restart, the DB replays the log: redo committed work, undo anything uncommitted. So a transaction is either fully reflected or fully erased.</span></div>
+        </div>
+
+        <h3 id="db-norm"><span class="num">2.4</span> Redundancy vs consistency</h3>
+        <p>Store the same fact in two places and they <i>will</i> drift apart. Redundancy causes <span class="term">anomalies</span>:</p>
+        <ul class="tight">
+          <li><b>Update anomaly</b> — change a department name, miss one row, now it's inconsistent.</li>
+          <li><b>Insertion anomaly</b> — can't add a department until at least one employee exists in it.</li>
+          <li><b>Deletion anomaly</b> — delete the last employee and you accidentally lose the department's info.</li>
+        </ul>
+        <p><span class="term">Normalization</span> removes redundancy by splitting tables according to <i>functional dependencies</i> (X → Y means X determines Y).</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Form</th><th>Rule</th><th>Removes</th></tr></thead>
+            <tbody>
+              <tr><td><b>1NF</b></td><td>Atomic values only; no repeating groups / arrays in a cell.</td><td>Multi-valued cells</td></tr>
+              <tr><td><b>2NF</b></td><td>1NF + no <i>partial</i> dependency (every non-key column depends on the <b>whole</b> composite key).</td><td>Partial dependencies</td></tr>
+              <tr><td><b>3NF</b></td><td>2NF + no <i>transitive</i> dependency (non-key columns depend only on the key, not on other non-key columns).</td><td>Transitive dependencies</td></tr>
+              <tr><td><b>BCNF</b></td><td>For every dependency X → Y, X must be a <b>candidate key</b>. (Stricter 3NF.)</td><td>Remaining key anomalies</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p>The 3NF mantra: <strong>"every non-key attribute depends on the key, the whole key, and nothing but the key."</strong> ("the key" = 1NF, "the whole key" = 2NF, "nothing but the key" = 3NF.)</p>
+        </div>
+        <p><span class="term">Denormalization</span> is the deliberate reverse: re-introduce redundancy (e.g. store <code>dept_name</code> on each order) to <b>avoid expensive joins</b> and speed up reads. The trade: faster reads, but slower/riskier writes and a duty to keep copies in sync. Normalize for OLTP correctness; denormalize selectively for read-heavy analytics.</p>
+
+        <h3 id="db-sql"><span class="num">2.5</span> SQL — from zero to interview queries</h3>
+        <p>SQL has four sub-languages. Knowing which is which signals fluency:</p>
+        <div class="pillrow">
+          <span class="pill"><b>DDL</b> structure — CREATE, ALTER, DROP, TRUNCATE</span>
+          <span class="pill"><b>DML</b> data — SELECT, INSERT, UPDATE, DELETE</span>
+          <span class="pill"><b>DCL</b> access — GRANT, REVOKE</span>
+          <span class="pill"><b>TCL</b> txns — COMMIT, ROLLBACK, SAVEPOINT</span>
+        </div>
+
+        <h4>Our example schema (used throughout)</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">CREATE TABLE departments (
+    id   INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE employees (
+    id         INT PRIMARY KEY,
+    name       VARCHAR(50) NOT NULL,
+    dept_id    INT,
+    manager_id INT,                 -- self-reference to another employee's id
+    salary     INT,
+    FOREIGN KEY (dept_id)    REFERENCES departments(id),
+    FOREIGN KEY (manager_id) REFERENCES employees(id)
+);</code></pre></div>
+
+        <h4>SELECT — the workhorse</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">SELECT name, salary          -- 1. which columns to return
+FROM   employees             -- 2. from which table
+WHERE  salary &gt;= 50000        -- 3. keep only matching rows
+ORDER  BY salary DESC         -- 4. sort the result
+LIMIT  10;                    -- 5. cap the number of rows</code></pre></div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea — logical execution order</span>
+          <p>SQL is <i>written</i> SELECT-first but <i>executed</i> in this order:</p>
+          <p><code>FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</code></p>
+          <p>That's why you <strong>can't use a SELECT alias in WHERE</strong> (WHERE runs before SELECT exists) but <strong>can use it in ORDER BY</strong> (which runs after).</p>
+        </div>
+
+        <h4>JOINs — combining tables</h4>
+        <p>A join matches rows across tables on a condition. The type decides what happens to <i>non-matching</i> rows.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Join</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><b>INNER JOIN</b></td><td>Only rows with a match in <b>both</b> tables.</td></tr>
+              <tr><td><b>LEFT JOIN</b></td><td>All left rows; right columns are <code>NULL</code> where no match.</td></tr>
+              <tr><td><b>RIGHT JOIN</b></td><td>All right rows; left columns <code>NULL</code> where no match.</td></tr>
+              <tr><td><b>FULL OUTER JOIN</b></td><td>All rows from both; <code>NULL</code>s on the side that's missing.</td></tr>
+              <tr><td><b>CROSS JOIN</b></td><td>Cartesian product — every left row × every right row.</td></tr>
+              <tr><td><b>SELF JOIN</b></td><td>A table joined to itself (e.g. employee ↔ manager).</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">-- INNER: employees that have a department
+SELECT e.name, d.name AS dept
+FROM   employees e
+JOIN   departments d ON e.dept_id = d.id;
+
+-- LEFT: ALL employees, dept shows NULL if they have none
+SELECT e.name, d.name AS dept
+FROM   employees e
+LEFT JOIN departments d ON e.dept_id = d.id;
+
+-- SELF JOIN: pair each employee with their manager
+SELECT e.name AS employee, m.name AS manager
+FROM   employees e
+LEFT JOIN employees m ON e.manager_id = m.id;</code></pre></div>
+
+        <h4>Aggregation: GROUP BY &amp; HAVING</h4>
+        <p>Aggregate functions (<code>COUNT, SUM, AVG, MIN, MAX</code>) collapse many rows into one. <code>GROUP BY</code> makes one result row per group.</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">SELECT dept_id,
+       COUNT(*)    AS headcount,
+       AVG(salary) AS avg_pay
+FROM   employees
+GROUP  BY dept_id
+HAVING AVG(salary) &gt; 60000      -- filter GROUPS (after aggregation)
+ORDER  BY avg_pay DESC;</code></pre></div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha — WHERE vs HAVING</span>
+          <p><strong>WHERE filters rows before grouping; HAVING filters groups after aggregation.</strong> You cannot put an aggregate in WHERE (<code>WHERE COUNT(*) &gt; 1</code> is illegal) — that's HAVING's job. Also: every non-aggregated column in SELECT must appear in GROUP BY.</p>
+        </div>
+
+        <h4>Subqueries</h4>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">-- Scalar subquery: who earns above the company average?
+SELECT name FROM employees
+WHERE salary &gt; (SELECT AVG(salary) FROM employees);
+
+-- Correlated subquery: above-average WITHIN their own department
+-- (inner query re-runs for each outer row, referencing e.dept_id)
+SELECT e.name
+FROM   employees e
+WHERE  e.salary &gt; (SELECT AVG(x.salary) FROM employees x WHERE x.dept_id = e.dept_id);
+
+-- EXISTS: departments that have at least one employee
+SELECT d.name FROM departments d
+WHERE EXISTS (SELECT 1 FROM employees e WHERE e.dept_id = d.id);</code></pre></div>
+
+        <h4>Window functions (the senior-level differentiator)</h4>
+        <p>Like aggregates, but they <strong>keep every row</strong> and compute across a "window" of related rows defined by <code>OVER (PARTITION BY ... ORDER BY ...)</code>.</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">SELECT name, dept_id, salary,
+       ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn,
+       RANK()       OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rnk,
+       DENSE_RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS drnk,
+       SUM(salary)  OVER (PARTITION BY dept_id)                      AS dept_total,
+       LAG(salary)  OVER (ORDER BY salary)                           AS prev_salary
+FROM employees;</code></pre></div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea — the three ranking functions on ties</span>
+          <p>For salaries 100, 100, 90: <strong>ROW_NUMBER</strong> = 1, 2, 3 (always unique). <strong>RANK</strong> = 1, 1, 3 (skips after a tie). <strong>DENSE_RANK</strong> = 1, 1, 2 (no gaps).</p>
+        </div>
+
+        <h4>Classic interview queries</h4>
+        <p><b>1 · Nth-highest salary</b> (shown for 2nd) — three idiomatic ways:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">-- (a) Subquery — max salary that is below the overall max
+SELECT MAX(salary) FROM employees
+WHERE salary &lt; (SELECT MAX(salary) FROM employees);
+
+-- (b) DENSE_RANK — generalises to ANY N and handles ties cleanly
+SELECT DISTINCT salary FROM (
+    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS r
+    FROM employees
+) t
+WHERE r = 2;                      -- change 2 to N
+
+-- (c) LIMIT / OFFSET (MySQL, Postgres)
+SELECT DISTINCT salary FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1;                 -- OFFSET = N - 1</code></pre></div>
+        <p><b>2 · Find duplicates</b> and <b>3 · earn more than manager</b>:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">-- Duplicate names
+SELECT name, COUNT(*) AS cnt
+FROM   employees
+GROUP  BY name
+HAVING COUNT(*) &gt; 1;
+
+-- Employees who out-earn their manager (self-join)
+SELECT e.name
+FROM   employees e
+JOIN   employees m ON e.manager_id = m.id
+WHERE  e.salary &gt; m.salary;</code></pre></div>
+        <p><b>4 · Top earner per department</b> and <b>5 · delete duplicates keeping one</b>:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">-- Highest-paid employee in each department
+SELECT name, dept_id, salary FROM (
+    SELECT name, dept_id, salary,
+           RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS r
+    FROM employees
+) t
+WHERE r = 1;
+
+-- Remove duplicate rows, keep the one with the smallest id
+DELETE FROM employees
+WHERE id NOT IN (
+    SELECT MIN(id) FROM employees GROUP BY name, dept_id, salary
+);</code></pre></div>
+
+        <h4>Indexes — why queries get fast (or slow)</h4>
+        <p>An <span class="term">index</span> is an auxiliary structure (usually a <b>B+ tree</b>) that keeps a column's values sorted with pointers to rows — turning a full-table scan O(n) into a tree lookup O(log n) for <code>WHERE</code>, <code>JOIN</code>, and <code>ORDER BY</code>.</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">sql</span><button class="copy">Copy</button></div><pre><code class="language-sql">CREATE INDEX idx_emp_dept ON employees(dept_id);   -- speeds up filters/joins on dept_id</code></pre></div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha</span>
+          <p>Don't index everything. Each index <strong>costs storage and slows every INSERT/UPDATE/DELETE</strong> (the index must be maintained). Index <i>high-selectivity</i> columns used in filters and joins. A <b>clustered</b> index sorts the table itself (one per table); a <b>non-clustered</b> index is a separate structure pointing back to rows.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ 03 · OS ============================ -->
+    <section class="sec" id="os">
+      <div class="wrap">
+        <div class="sec-tag">// <span class="hl">03</span> · operating systems</div>
+        <h2>OS: sharing one machine, safely</h2>
+        <p class="sec-intro">An OS multiplexes finite hardware — CPU, RAM, devices — across many programs while keeping them isolated and responsive. The interview core: how concurrent work is coordinated (<strong>semaphores</strong>), how it deadlocks, and how <strong>virtual memory</strong> fakes infinite RAM.</p>
+
+        <h3 id="os-pt"><span class="num">3.1</span> Process vs thread</h3>
+        <p>A <span class="term">process</span> is a program in execution with its <i>own</i> address space and resources. A <span class="term">thread</span> is the smallest unit of execution <i>inside</i> a process; multiple threads share the process's memory but each has its own stack, registers, and program counter.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Process</th><th>Thread</th></tr></thead>
+            <tbody>
+              <tr><td><b>Address space</b></td><td>Private, isolated</td><td>Shared with sibling threads</td></tr>
+              <tr><td><b>Owns</b></td><td>Code, heap, data, files, PCB</td><td>Stack, registers, PC, TCB</td></tr>
+              <tr><td><b>Creation / switch</b></td><td>Heavy (new space, TLB flush)</td><td>Light (same space)</td></tr>
+              <tr><td><b>Communication</b></td><td>IPC: pipes, sockets, message queues, shared memory</td><td>Direct — shared variables</td></tr>
+              <tr><td><b>Fault isolation</b></td><td>One crash doesn't kill others</td><td>A bad thread can crash the whole process</td></tr>
+              <tr><td><b>Sync needed?</b></td><td>Rarely (isolated)</td><td>Constantly (shared data → races)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p>Threads buy <strong>concurrency cheaply</strong> by sharing memory — but that shared memory is exactly why you need locks/semaphores. Processes are safer but pricier to create and to communicate between.</p>
+        </div>
+
+        <h3 id="os-sem"><span class="num">3.2</span> Semaphores</h3>
+        <p>A <span class="term">semaphore</span> is an integer guarded by two <strong>atomic</strong> operations:</p>
+        <ul class="tight">
+          <li><b><code>wait()</code></b> (a.k.a. <code>P</code> / <code>down</code>): decrement; if the result would be negative, the caller <b>blocks</b> until a resource frees up.</li>
+          <li><b><code>signal()</code></b> (a.k.a. <code>V</code> / <code>up</code>): increment; wake one waiting thread if any.</li>
+        </ul>
+        <div class="grid2">
+          <div><h4>Binary semaphore</h4><p>Value 0 or 1. Acts like a lock for mutual exclusion / signaling.</p></div>
+          <div><h4>Counting semaphore</h4><p>Any non-negative value. Controls access to a pool of <code>N</code> identical resources.</p></div>
+        </div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha — mutex vs binary semaphore</span>
+          <p>They look alike but differ in <strong>ownership</strong>. A <b>mutex has an owner</b>: only the thread that locked it may unlock it (built for mutual exclusion). A <b>semaphore has no owner</b>: any thread can <code>signal()</code> it (built for signaling/counting). Using a semaphore where you need a mutex is a classic bug.</p>
+        </div>
+        <h4>The canonical problem: producer–consumer</h4>
+        <p>A bounded buffer of size <code>N</code>. Producers must wait if it's full; consumers must wait if it's empty; only one thread touches the buffer at a time. Three semaphores solve it:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">c</span><button class="copy">Copy</button></div><pre><code class="language-c">semaphore mutex = 1;   // mutual exclusion on the buffer
+semaphore empty = N;   // number of empty slots  (producers wait on this)
+semaphore full  = 0;   // number of filled slots (consumers wait on this)
+
+void producer() {
+    while (true) {
+        item = produce();
+        wait(empty);          // is there room? block if buffer full
+        wait(mutex);          // enter critical section
+            buffer_put(item);
+        signal(mutex);        // leave critical section
+        signal(full);         // announce: one more item to consume
+    }
+}
+
+void consumer() {
+    while (true) {
+        wait(full);           // is there an item? block if buffer empty
+        wait(mutex);
+            item = buffer_get();
+        signal(mutex);
+        signal(empty);        // announce: one more free slot
+        consume(item);
+    }
+}</code></pre></div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha — lock ordering</span>
+          <p>Order matters: take the <i>counting</i> semaphore (<code>empty</code>/<code>full</code>) <strong>before</strong> <code>mutex</code>. Reverse it and you can deadlock — a producer holding <code>mutex</code> while blocked on a full buffer freezes every consumer that needs <code>mutex</code> to make room.</p>
+        </div>
+
+        <h3 id="os-dead"><span class="num">3.3</span> Deadlock</h3>
+        <p>A <span class="term">deadlock</span> is a set of processes each waiting forever for a resource another holds. It can happen <strong>only when all four Coffman conditions hold at once</strong>:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Condition</th><th>Meaning</th><th>Break it by…</th></tr></thead>
+            <tbody>
+              <tr><td><b>Mutual exclusion</b></td><td>A resource is non-shareable (one holder at a time).</td><td>Make resources shareable where possible</td></tr>
+              <tr><td><b>Hold and wait</b></td><td>A process holds resources while requesting more.</td><td>Request all resources up front</td></tr>
+              <tr><td><b>No preemption</b></td><td>Resources can't be forcibly taken; released only voluntarily.</td><td>Allow preemption / rollback</td></tr>
+              <tr><td><b>Circular wait</b></td><td>A cycle: P1 waits for P2's resource, … Pn waits for P1's.</td><td>Impose a global ordering on resources</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>The four strategies</h4>
+        <ul>
+          <li><b>Prevention</b> — structurally negate one of the four conditions (e.g. always acquire resources in a fixed numeric order ⇒ no circular wait).</li>
+          <li><b>Avoidance</b> — grant a request only if the system stays in a <span class="term">safe state</span>. The <b>Banker's algorithm</b> checks whether a safe sequence still exists (one ordering in which every process can get its max need and finish) before allocating.</li>
+          <li><b>Detection &amp; recovery</b> — allow deadlocks, find cycles in the <i>wait-for graph</i>, then recover by aborting a process or preempting resources.</li>
+          <li><b>Ignore (Ostrich algorithm)</b> — pretend it won't happen; reboot if it does. What general-purpose OSes mostly do, because prevention is costly and deadlocks are rare.</li>
+        </ul>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <div class="qa"><span class="q">Q: "Difference between deadlock, starvation, and livelock?"</span><br><span class="a">A: <b>Deadlock</b> — processes blocked forever in a cycle, none progresses. <b>Starvation</b> — a process is <i>perpetually denied</i> a resource (e.g. low priority always skipped) though others progress. <b>Livelock</b> — processes keep changing state in response to each other but make no real progress (two people stepping aside in a hallway forever).</span></div>
+        </div>
+
+        <h3 id="os-vm"><span class="num">3.4</span> Virtual memory</h3>
+        <p><span class="term">Virtual memory</span> gives each process its own large, contiguous address space — even larger than physical RAM — by splitting memory into fixed-size <b>pages</b> (virtual) mapped to <b>frames</b> (physical) via a <span class="term">page table</span>. The MMU translates every address; rarely-used pages live on disk.</p>
+        <div class="ascii">Virtual address  ──►  [ Page table / TLB ]  ──►  Physical frame
+   (page #, offset)        translate page#→frame#        (frame #, offset)
+
+If the page isn't in RAM  ──►  PAGE FAULT  ──►  OS loads it from disk
+                                                (demand paging)</div>
+        <ul class="tight">
+          <li><b>Demand paging</b> — a page is loaded only when first accessed; the access traps as a <span class="term">page fault</span> and the OS fetches it.</li>
+          <li><b>TLB (Translation Lookaside Buffer)</b> — a small cache of recent page→frame translations, so most lookups skip the page table entirely.</li>
+          <li><b>Locality of reference</b> — programs tend to reuse nearby addresses, which is why caching and paging work at all.</li>
+        </ul>
+        <h4>Page replacement — what to evict when RAM is full</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Algorithm</th><th>Evicts…</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td><b>FIFO</b></td><td>The oldest-loaded page</td><td>Simple, but suffers <i>Belady's anomaly</i></td></tr>
+              <tr><td><b>Optimal (OPT)</b></td><td>The page used farthest in the future</td><td>Theoretical best; needs the future, so unimplementable — a benchmark</td></tr>
+              <tr><td><b>LRU</b></td><td>The least-recently-used page</td><td>Good real-world choice; approximates OPT via the past</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha — Belady's anomaly</span>
+          <p>Intuitively, more frames ⇒ fewer faults. With <strong>FIFO this can reverse</strong>: adding frames sometimes <i>increases</i> page faults. LRU and OPT are "stack algorithms" and never show this anomaly.</p>
+        </div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea — thrashing</span>
+          <p>When the active <span class="term">working set</span> doesn't fit in RAM, the system spends nearly all its time paging in/out instead of computing — that's <strong>thrashing</strong>. CPU utilization collapses. The fix: reduce the degree of multiprogramming (fewer processes) or add RAM so each working set fits.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ 04 · CN ============================ -->
+    <section class="sec" id="cn">
+      <div class="wrap">
+        <div class="sec-tag">// <span class="hl">04</span> · computer networks</div>
+        <h2>Networks: getting bits across the world</h2>
+        <p class="sec-intro">Networking is layered so each level solves one problem and trusts the layer below. Nail the <strong>layer model and its protocols</strong>, the <strong>TCP vs UDP</strong> trade-off, how errors are caught/fixed, and how routers find paths.</p>
+
+        <h3 id="cn-layers"><span class="num">4.1</span> The layers &amp; their protocols</h3>
+        <p>The <span class="term">OSI model</span> has 7 conceptual layers; the practical <span class="term">TCP/IP model</span> collapses them into 4. Data gains a header at each layer going down (<i>encapsulation</i>) and sheds it going up.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>OSI layer</th><th>Job</th><th>Protocols / devices</th><th>Unit</th></tr></thead>
+            <tbody>
+              <tr><td><b>7 Application</b></td><td>Services the user touches</td><td>HTTP(S), DNS, FTP, SMTP, DHCP</td><td>Data</td></tr>
+              <tr><td><b>6 Presentation</b></td><td>Encoding, encryption, compression</td><td>TLS/SSL, JPEG, ASCII</td><td>Data</td></tr>
+              <tr><td><b>5 Session</b></td><td>Open / manage / close sessions</td><td>RPC, NetBIOS</td><td>Data</td></tr>
+              <tr><td><b>4 Transport</b></td><td>End-to-end delivery, ports</td><td>TCP, UDP</td><td>Segment</td></tr>
+              <tr><td><b>3 Network</b></td><td>Logical addressing &amp; routing</td><td>IP, ICMP · routers</td><td>Packet</td></tr>
+              <tr><td><b>2 Data Link</b></td><td>Node-to-node, MAC, framing</td><td>Ethernet, ARP · switches</td><td>Frame</td></tr>
+              <tr><td><b>1 Physical</b></td><td>Raw bits on the medium</td><td>Cables, radio, signals</td><td>Bit</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="lead">TCP/IP mapping: <b>Application</b> (OSI 5–7) · <b>Transport</b> (4) · <b>Internet</b> (3) · <b>Link/Network Access</b> (1–2). Mnemonic, bottom-up: <i>Please Do Not Throw Sausage Pizza Away</i>.</p>
+        <div class="box gotcha">
+          <span class="b-label">▲ Gotcha — addresses live at different layers</span>
+          <p><strong>MAC addresses are Layer 2</strong> (physical, burned into the NIC, local hop). <strong>IP addresses are Layer 3</strong> (logical, routable end-to-end). <strong>Port numbers are Layer 4</strong> (which application/socket). <b>ARP</b> is what maps an IP to a MAC on the local network.</p>
+        </div>
+
+        <h3 id="cn-tcp"><span class="num">4.2</span> TCP vs UDP</h3>
+        <p>Both are Layer-4 transport protocols; the choice is reliability vs speed. This comparison is asked in nearly every networking interview.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>TCP</th><th>UDP</th></tr></thead>
+            <tbody>
+              <tr><td><b>Connection</b></td><td>Connection-oriented (handshake first)</td><td>Connectionless (just send)</td></tr>
+              <tr><td><b>Reliability</b></td><td>Guaranteed, ordered, retransmits lost data</td><td>Best-effort — may drop, duplicate, reorder</td></tr>
+              <tr><td><b>Flow / congestion control</b></td><td>Yes (windowing, slow start)</td><td>No</td></tr>
+              <tr><td><b>Header size</b></td><td>20+ bytes (heavier)</td><td>8 bytes (lean)</td></tr>
+              <tr><td><b>Speed</b></td><td>Slower, more overhead</td><td>Fast, low latency</td></tr>
+              <tr><td><b>Use it for</b></td><td>Web, email, file transfer, anything that must arrive intact</td><td>Live video/voice, gaming, DNS — where speed beats perfection</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea — TCP 3-way handshake</span>
+          <p>To open a connection: <code>SYN</code> (client → server, "let's talk, seq=x") → <code>SYN-ACK</code> (server → client, "ok, seq=y, ack=x+1") → <code>ACK</code> (client → server, "ack=y+1"). Now both sides agree on starting sequence numbers. Teardown takes <b>four</b> steps (FIN/ACK each direction).</p>
+        </div>
+
+        <h3 id="cn-err"><span class="num">4.3</span> Error management</h3>
+        <p>Bits flip in transit. The receiver must at least <i>detect</i> corruption, and sometimes <i>correct</i> it.</p>
+        <h4>Detection — "is this frame damaged?"</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Scheme</th><th>How</th><th>Catches</th></tr></thead>
+            <tbody>
+              <tr><td><b>Parity bit</b></td><td>Add 1 bit so the count of 1s is even (or odd).</td><td>Any <i>odd</i> number of flipped bits</td></tr>
+              <tr><td><b>2D parity</b></td><td>Parity per row <i>and</i> per column.</td><td>Detects + can correct a single-bit error</td></tr>
+              <tr><td><b>Checksum</b></td><td>Sum the data words (one's-complement), send the sum; receiver re-adds.</td><td>Many errors; weaker than CRC</td></tr>
+              <tr><td><b>CRC</b></td><td>Treat data as a polynomial, divide by a generator, append the remainder.</td><td>Very strong — esp. <i>burst</i> errors (used in Ethernet)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>Correction — "fix it without re-asking"</h4>
+        <p><span class="term">Hamming code</span> places parity bits at power-of-2 positions (1, 2, 4, 8…). Their combined "syndrome" pinpoints the exact position of a single flipped bit, so the receiver flips it back — single-error correction with no retransmission.</p>
+        <p>When you'd rather just ask again, you use <span class="term">ARQ (Automatic Repeat reQuest)</span> — retransmission protocols built on ACKs and timeouts:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ARQ protocol</th><th>Behaviour</th><th>Efficiency</th></tr></thead>
+            <tbody>
+              <tr><td><b>Stop-and-Wait</b></td><td>Send one frame, wait for its ACK before sending the next.</td><td>Low on high-latency links (line sits idle)</td></tr>
+              <tr><td><b>Go-Back-N</b></td><td>Send a window of N frames; on a loss, retransmit that frame <i>and everything after it</i>. Receiver discards out-of-order frames.</td><td>Better; wastes bandwidth re-sending good frames</td></tr>
+              <tr><td><b>Selective Repeat</b></td><td>Retransmit <i>only</i> the lost frame; receiver buffers out-of-order ones.</td><td>Best; needs buffering &amp; more bookkeeping</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="cn-route"><span class="num">4.4</span> Routing basics</h3>
+        <p><span class="term">Routing</span> is how routers decide the path a packet takes across networks, using <i>routing tables</i> they build and update. Dynamic routing splits into two big families:</p>
+        <div class="grid2">
+          <div>
+            <h4>Distance Vector</h4>
+            <p>Each router tells <i>neighbors</i> its distance to every destination; "routing by rumor." Computes paths with the <b>Bellman-Ford</b> algorithm.</p>
+            <p><b>Protocol:</b> RIP (hop-count metric, max 15). <b>Weakness:</b> the <i>count-to-infinity</i> problem — slow to learn a link died. Mitigated by split horizon &amp; poison reverse.</p>
+          </div>
+          <div>
+            <h4>Link State</h4>
+            <p>Each router floods the <i>entire topology</i> (link-state advertisements) to everyone, then independently runs <b>Dijkstra's</b> algorithm to find shortest paths.</p>
+            <p><b>Protocol:</b> OSPF. <b>Trade:</b> faster convergence and loop-free, but more memory and CPU per router.</p>
+          </div>
+        </div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p><strong>Within</strong> an organization you run an interior protocol (RIP / OSPF). <strong>Between</strong> organizations (autonomous systems), the internet runs <span class="term">BGP</span> — a <i>path-vector</i> protocol that exchanges full AS-paths and applies policy, not just shortest distance.</p>
+        </div>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <div class="qa"><span class="q">Q: "What actually happens when you type a URL and hit enter?"</span><br><span class="a">A: Browser checks cache → <b>DNS</b> resolves the domain to an IP (Layer 7 over UDP) → <b>TCP</b> 3-way handshake to that IP:443 → <b>TLS</b> handshake for HTTPS → HTTP request sent → server responds → browser parses HTML, fetches assets, renders. Along the way IP routing (Layer 3) and ARP/MAC (Layer 2) move each packet hop by hop.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 · SYSTEM DESIGN ============ -->
+    <section class="sec" id="systemdesign">
+      <div class="wrap">
+        <div class="sec-tag">// <span class="hl">05</span> · system design</div>
+        <h2>System Design: from one class to a million users</h2>
+        <p class="sec-intro">Two scales of the same skill. <strong>LLD</strong> is about classes, responsibilities and relationships inside one service — interviewers probe it through SOLID, UML and patterns. <strong>HLD</strong> is about boxes and arrows between services — load balancers, caches, databases, queues — and the trade-offs that hold them together. Learn the vocabulary, then the framework to apply it under pressure.</p>
+
+        <h3 id="sd-solid"><span class="num">5.1</span> SOLID &amp; Low-Level Design</h3>
+        <p><span class="term">SOLID</span> is five principles for writing classes that are easy to change without breaking things. They are the backbone of every LLD interview — know the name, the one-line idea, and the smell each one fixes.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Letter</th><th>Principle</th><th>In one line</th></tr></thead>
+            <tbody>
+              <tr><td><b>S</b></td><td>Single Responsibility</td><td>A class should have <i>one reason to change</i> — one job. A <code>User</code> class shouldn't also format reports and send email.</td></tr>
+              <tr><td><b>O</b></td><td>Open/Closed</td><td>Open for <i>extension</i>, closed for <i>modification</i>. Add new behaviour by adding code, not editing tested code.</td></tr>
+              <tr><td><b>L</b></td><td>Liskov Substitution</td><td>A subclass must be usable anywhere its parent is, without surprises. The classic <code>Square extends Rectangle</code> trap breaks this.</td></tr>
+              <tr><td><b>I</b></td><td>Interface Segregation</td><td>Many small, focused interfaces beat one fat one. Don't force a class to implement methods it doesn't use.</td></tr>
+              <tr><td><b>D</b></td><td>Dependency Inversion</td><td>Depend on <i>abstractions</i>, not concretions. High-level code shouldn't <code>new</code> up low-level classes — inject interfaces.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The <b>O</b> and <b>D</b> principles are where most refactors happen. Here's the Open/Closed idea concretely — a payment processor that breaks the rule, then one that follows it:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">JAVA</span><button class="copy">Copy</button></div><pre><code class="language-java">// ✗ Violates OCP: every new method forces editing this class
+class PaymentService {
+    void pay(String type) {
+        if (type.equals("card"))      { /* ... */ }
+        else if (type.equals("upi"))  { /* ... */ }   // edit again for each new type
+    }
+}
+
+// ✓ Follows OCP + DIP: extend by adding a class, depend on the interface
+interface PaymentMethod { void pay(double amount); }
+
+class CardPayment implements PaymentMethod {
+    public void pay(double amount) { /* charge card */ }
+}
+class UpiPayment implements PaymentMethod {
+    public void pay(double amount) { /* charge UPI  */ }
+}
+
+class PaymentService {
+    void checkout(PaymentMethod method, double amount) {
+        method.pay(amount);          // new methods need ZERO changes here
+    }
+}</code></pre></div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Common mistake</span>
+          <p>Reciting "SOLID" but only being able to expand <b>S</b>. Interviewers always push: <i>"give me an example of an LSP violation."</i> Have one ready — the <code>Square/Rectangle</code> case (setting width on a Square silently changes height, breaking code written against Rectangle) or a <code>Bird</code> hierarchy where <code>Penguin.fly()</code> has to throw.</p>
+        </div>
+
+        <h4>The other principles you'll be quizzed on</h4>
+        <div class="pillrow">
+          <span class="pill"><b>DRY</b> — Don't Repeat Yourself</span>
+          <span class="pill"><b>KISS</b> — Keep It Simple</span>
+          <span class="pill"><b>YAGNI</b> — You Aren't Gonna Need It</span>
+          <span class="pill"><b>Composition &gt; Inheritance</b></span>
+        </div>
+        <p><span class="term">DRY</span> says extract duplicated logic into one place. <span class="term">KISS</span> and <span class="term">YAGNI</span> push the other way — don't over-engineer or build for imaginary future needs. <span class="term">Composition over inheritance</span> means prefer "has-a" (a <code>Car</code> <i>has an</i> <code>Engine</code>) over deep "is-a" trees, because inheritance is rigid and leaks parent details into children. The Strategy and Decorator patterns are composition in action.</p>
+
+        <h4>Design patterns — the LLD recap map</h4>
+        <p>You met several patterns in the OOP section. Interviewers expect you to <i>place</i> a pattern in its family and name when you'd reach for it. The three Gang-of-Four families:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Family</th><th>Solves</th><th>Patterns (★ = covered earlier)</th></tr></thead>
+            <tbody>
+              <tr><td><b>Creational</b></td><td><i>How</i> objects get made</td><td>★ Singleton, ★ Factory Method, ★ Builder, Abstract Factory, Prototype</td></tr>
+              <tr><td><b>Structural</b></td><td>How objects are <i>composed</i> into bigger structures</td><td>★ Decorator, Adapter, Facade, Proxy, Composite, Bridge</td></tr>
+              <tr><td><b>Behavioural</b></td><td>How objects <i>communicate</i> &amp; share responsibility</td><td>★ Strategy, ★ Observer, Command, Template Method, State, Iterator, Chain of Responsibility</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <p>Pattern questions are usually "<i>which pattern fits X?</i>" Quick reflexes: pluggable algorithms → <b>Strategy</b>; notify many on change → <b>Observer</b>; wrap to add behaviour → <b>Decorator</b>; make incompatible interfaces work together → <b>Adapter</b>; simplify a messy subsystem behind one entry point → <b>Facade</b>; build a complex object step-by-step → <b>Builder</b>; one shared instance → <b>Singleton</b>. Don't force patterns where a plain method works — that's an anti-pattern in itself.</p>
+        </div>
+
+        <h3 id="sd-uml"><span class="num">5.2</span> UML relationships</h3>
+        <p>LLD answers are drawn as class diagrams, so you must read and draw the <span class="term">relationship arrows</span>. They differ by <i>strength of coupling</i> and <i>lifetime ownership</i>:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Relationship</th><th>Meaning</th><th>Lifetime</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><b>Association</b><br><span class="mono">───&gt;</span></td><td>"uses-a" / knows-about. A general link between two classes.</td><td>Independent</td><td>A <code>Teacher</code> is associated with <code>Student</code>s.</td></tr>
+              <tr><td><b>Aggregation</b><br><span class="mono">◇───</span></td><td>"has-a", weak ownership. The whole holds parts, but parts can outlive it.</td><td>Independent</td><td>A <code>Department</code> has <code>Professor</code>s — close the dept, profs still exist.</td></tr>
+              <tr><td><b>Composition</b><br><span class="mono">◆───</span></td><td>"owns-a", strong ownership. Parts can't exist without the whole.</td><td>Tied together</td><td>A <code>House</code> has <code>Room</code>s — destroy the house, rooms go too.</td></tr>
+              <tr><td><b>Inheritance</b><br><span class="mono">──▷</span></td><td>"is-a". A subclass specialises a superclass.</td><td>—</td><td><code>Car</code> is a <code>Vehicle</code>.</td></tr>
+              <tr><td><b>Dependency</b><br><span class="mono">- - -&gt;</span></td><td>"depends-on" transiently — appears as a method parameter or local, not a field.</td><td>Momentary</td><td><code>OrderService</code> depends on a <code>PaymentGateway</code> passed to <code>checkout()</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box key">
+          <span class="b-label">◆ Key idea</span>
+          <p>Aggregation vs Composition trips everyone up. The test is <i>lifetime</i>: if destroying the container should destroy the parts, it's <b>composition</b> (filled diamond ◆). If the parts can live on independently, it's <b>aggregation</b> (hollow diamond ◇). Both are "has-a"; ownership strength is the difference.</p>
+        </div>
+
+        <h4>A worked mini-LLD: a parking lot</h4>
+        <p>This is the canonical LLD warm-up. You don't write full code — you identify <i>entities, relationships and key behaviours</i>. A clean first pass:</p>
+        <div class="code"><div class="code-head"><span class="dots"><i></i><i></i><i></i></span><span class="lang">DESIGN</span><button class="copy">Copy</button></div><pre><code class="language-java">ParkingLot  ──◆── Floor          // lot OWNS floors (composition)
+Floor       ──◆── ParkingSpot    // floor OWNS spots
+ParkingSpot ──&gt;   Vehicle        // spot references the parked vehicle
+
+Vehicle (abstract)               // is-a hierarchy
+  ├── Car        extends Vehicle
+  ├── Bike       extends Vehicle
+  └── Truck      extends Vehicle
+
+SpotType  enum { COMPACT, LARGE, BIKE, EV }    // strategy for fit-check
+Ticket    { id, spot, entryTime, exitTime }
+FeeStrategy (interface)          // ✦ Strategy pattern: hourly / flat / EV
+ParkingLot.assignSpot(Vehicle)   // key behaviour → returns Ticket
+ParkingLot.processExit(Ticket)   // → FeeStrategy.calculate()</code></pre></div>
+        <p>Notice the SOLID/pattern hooks: <code>FeeStrategy</code> keeps pricing <b>open/closed</b>, the <code>Vehicle</code> hierarchy uses <b>inheritance</b>, and the lot→floor→spot chain is <b>composition</b>. Calling those out by name is exactly what scores points.</p>
+
+        <h3 id="sd-hld"><span class="num">5.3</span> HLD building blocks</h3>
+        <p>High-Level Design zooms out to <i>services, data stores and the network between them</i>. There's a fixed toolbox of components; an HLD answer is choosing the right ones and justifying the trade-offs. Start with the most fundamental choice — how you grow.</p>
+
+        <h4>Scaling: vertical vs horizontal</h4>
+        <div class="grid2">
+          <div>
+            <h4>Vertical (scale up)</h4>
+            <p>Buy a bigger machine — more CPU/RAM. Simple, no code changes. But there's a hard ceiling, it's expensive, and that one box is a <b>single point of failure</b>.</p>
+          </div>
+          <div>
+            <h4>Horizontal (scale out)</h4>
+            <p>Add more machines and split the load. Near-unlimited and fault-tolerant, but needs a <b>load balancer</b>, and your app must be <i>stateless</i> (or share state externally) to spread freely.</p>
+          </div>
+        </div>
+
+        <h4>Load balancing</h4>
+        <p>A <span class="term">load balancer</span> sits in front of your servers and distributes incoming requests so no single server is overwhelmed. It also does <i>health checks</i> — routing traffic away from dead instances. Common algorithms: <b>round-robin</b> (rotate evenly), <b>least-connections</b> (send to the least-busy server), and <b>consistent hashing</b> (stick a given user/key to the same server, vital for caches).</p>
+
+        <h4>Caching</h4>
+        <p>A <span class="term">cache</span> stores hot data in fast memory (e.g. Redis, Memcached) so you avoid slow recomputes or DB hits. Caching is the single highest-leverage performance lever — and the source of the hardest bugs (stale data, invalidation).</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Concept</th><th>What it is</th></tr></thead>
+            <tbody>
+              <tr><td><b>Cache-aside</b> (lazy)</td><td>App checks cache first; on a miss, reads DB and populates the cache. Most common.</td></tr>
+              <tr><td><b>Write-through</b></td><td>Writes go to cache <i>and</i> DB together — cache always fresh, writes slightly slower.</td></tr>
+              <tr><td><b>Write-back</b></td><td>Write to cache now, flush to DB later — fast, but risks data loss on crash.</td></tr>
+              <tr><td><b>Eviction policy</b></td><td>When full, what to drop: <b>LRU</b> (least recently used) is the default; also LFU, FIFO.</td></tr>
+              <tr><td><b>TTL</b></td><td>Time-to-live — entries auto-expire to bound staleness.</td></tr>
+              <tr><td><b>CDN</b></td><td>Content Delivery Network — caches static assets (images, JS, CSS) at edge servers physically near users.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box gotcha">
+          <span class="b-label">▲ Common mistake</span>
+          <p>Forgetting <b>cache invalidation</b>. "There are only two hard things in CS: cache invalidation and naming things." When the underlying data changes, the cached copy is now <i>stale</i>. Always state your invalidation strategy (TTL expiry, or explicit delete-on-write) — interviewers wait for it.</p>
+        </div>
+
+        <h4>Database scaling: replication &amp; sharding</h4>
+        <div class="grid2">
+          <div>
+            <h4>Replication</h4>
+            <p>Copy data across multiple DB nodes. <b>Primary-replica</b>: writes go to the primary, reads spread across read-replicas — great for read-heavy loads. Adds <i>replication lag</i> (replicas briefly behind).</p>
+          </div>
+          <div>
+            <h4>Sharding (partitioning)</h4>
+            <p>Split one big dataset across DBs by a <b>shard key</b> (e.g. <code>user_id % N</code>, or by region). Each shard holds a slice. Scales writes too, but cross-shard queries and joins get painful, and a bad key causes <i>hot shards</i>.</p>
+          </div>
+        </div>
+        <p>Partitioning comes in two flavours: <b>horizontal</b> (split <i>rows</i> across stores — what "sharding" usually means) and <b>vertical</b> (split <i>columns</i>/tables by access pattern).</p>
+
+        <h4>SQL vs NoSQL</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>SQL (relational)</th><th>NoSQL</th></tr></thead>
+            <tbody>
+              <tr><td><b>Schema</b></td><td>Fixed, predefined</td><td>Flexible / schema-less</td></tr>
+              <tr><td><b>Scaling</b></td><td>Vertical mainly; sharding is manual</td><td>Built for horizontal scale-out</td></tr>
+              <tr><td><b>Guarantees</b></td><td>Strong ACID, joins, complex queries</td><td>Often BASE; eventual consistency, denormalized</td></tr>
+              <tr><td><b>Use when</b></td><td>Relationships, transactions, reporting (banking, orders)</td><td>Massive scale, flexible/changing data (feeds, logs, catalogs)</td></tr>
+              <tr><td><b>Types</b></td><td>Postgres, MySQL</td><td>Document (Mongo), key-value (Redis/DynamoDB), wide-column (Cassandra), graph (Neo4j)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>CAP theorem</h4>
+        <p>The cornerstone trade-off of distributed data. A distributed store can guarantee only <b>two</b> of these three at once:</p>
+        <div class="pillrow">
+          <span class="pill"><b>C</b> — Consistency (every read sees the latest write)</span>
+          <span class="pill"><b>A</b> — Availability (every request gets a response)</span>
+          <span class="pill"><b>P</b> — Partition tolerance (works despite network splits)</span>
+        </div>
+        <p>Since network partitions <i>will</i> happen at scale, <b>P</b> is non-negotiable — so the real choice is <b>C vs A</b>. A <b>CP</b> system (e.g. a banking ledger) refuses to answer rather than return stale data; an <b>AP</b> system (e.g. a social feed) always answers, accepting it may be briefly out of date.</p>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <p>The sharper modern framing is <span class="term">PACELC</span>: <i>if Partitioned, choose A or C; Else (normal operation) choose Latency or Consistency.</i> It captures that even with no partition, you still trade speed against strong consistency. Naming PACELC signals depth beyond the textbook CAP triangle.</p>
+        </div>
+
+        <h4>Async &amp; the rest of the toolbox</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Component</th><th>Why it exists</th></tr></thead>
+            <tbody>
+              <tr><td><b>Message queue</b> (Kafka, RabbitMQ, SQS)</td><td>Decouples producer from consumer. Smooths traffic spikes, enables async work (email, video encoding), and buffers so a slow consumer doesn't drop requests.</td></tr>
+              <tr><td><b>API Gateway</b></td><td>Single entry point for clients — handles routing, auth, rate limiting, and request aggregation in front of many microservices.</td></tr>
+              <tr><td><b>Rate limiter</b></td><td>Caps requests per client (e.g. token-bucket / leaky-bucket algorithm) to prevent abuse and protect downstream services.</td></tr>
+              <tr><td><b>Reverse proxy</b></td><td>Fronts servers for SSL termination, compression, and caching (e.g. Nginx).</td></tr>
+              <tr><td><b>Blob/object store</b> (S3)</td><td>Stores large files (images, video, backups) cheaply — DBs are the wrong place for these.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Microservices vs monolith</h4>
+        <div class="grid2">
+          <div>
+            <h4>Monolith</h4>
+            <p>One deployable unit. Simple to build, test and deploy early; fast in-process calls. But it gets tangled at scale and you must redeploy everything for any change.</p>
+          </div>
+          <div>
+            <h4>Microservices</h4>
+            <p>Many small services, deployed independently, each owning its data. Scale and ship teams independently — at the cost of network latency, distributed-system complexity, and harder debugging. <i>Start monolith, split when pain is real.</i></p>
+          </div>
+        </div>
+
+        <div class="box key">
+          <span class="b-label">◆ Key idea — back-of-the-envelope estimation</span>
+          <p>Interviewers want rough numbers, not precision. Anchor on a few constants: <b>1 day ≈ 86,400 s ≈ 10⁵ s</b>; a read from <b>memory ≈ 100 ns</b>, from <b>SSD ≈ 100 µs</b>, from <b>disk/network ≈ 1–100 ms</b>. Method: <i>users → requests/day → divide by 10⁵ for QPS → ×payload for bandwidth → ×retention for storage</i>. Example: 100M daily users × 10 requests = 10⁹/day ÷ 10⁵ ≈ <b>10k QPS average</b> (×2–3 for peak). Always separate <b>read QPS from write QPS</b> — it drives your whole design.</p>
+        </div>
+
+        <h3 id="sd-frame"><span class="num">5.4</span> The interview framework</h3>
+        <p>A system-design round is open-ended on purpose — they're watching your <i>process</i>. Don't jump to drawing databases. Follow a script so you never freeze. The standard 6-step flow:</p>
+        <ol class="tight">
+          <li><b>Clarify requirements</b> (~5 min). Pin down <i>functional</i> needs ("users post and follow") and <i>non-functional</i> ones (scale, latency, consistency vs availability, read:write ratio). Never design before scoping — ask first.</li>
+          <li><b>Estimate scale.</b> Back-of-envelope the QPS, storage, and bandwidth from the numbers above. This justifies every later choice (do we even need sharding?).</li>
+          <li><b>Define the API.</b> List the core endpoints — <code>createPost()</code>, <code>getFeed(userId)</code>. This nails down exactly what the system must do.</li>
+          <li><b>Design the data model.</b> Pick SQL vs NoSQL with a reason, sketch the main tables/entities and the access patterns that shape them.</li>
+          <li><b>Draw the high-level design.</b> Client → load balancer → app servers → cache → DB, plus queues/CDN/blob store as needed. Walk a request through end to end.</li>
+          <li><b>Deep-dive &amp; address bottlenecks.</b> Pick the hard part (the feed fan-out, the hot shard) and go deep. Name the <b>single points of failure</b> and how you'd remove them (replication, multiple LBs), then the trade-offs you accepted.</li>
+        </ol>
+        <div class="box lens">
+          <span class="b-label">◇ Interview lens</span>
+          <p>What actually gets you the offer: <b>thinking out loud</b> (they're hiring your reasoning), <b>stating trade-offs explicitly</b> ("I'll use cache-aside, accepting brief staleness for big latency wins"), and <b>driving the conversation</b> rather than waiting to be asked. There's no single correct architecture — a well-justified design always beats a "perfect" one you can't explain.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="foot">
+      <div class="wrap">
+        <p><b>Interview Field Manual</b> — OOP · DBMS &amp; SQL · Operating Systems · Computer Networks · System Design. Built as a single self-contained page; read top-to-bottom or jump via the index. Every section pairs the core idea with the <b>◆ key insight</b>, the <b>▲ gotcha</b> people miss, and the <b>◇ interview lens</b>.</p>
+        <p style="margin-top:10px">Good luck out there. Revise the gotchas the night before — that's where rounds are won. 🚀</p>
+      </div>
+    </footer>
+  </main>
+</div><!-- /shell -->
+
+<button id="totop" aria-label="Back to top">↑ top</button>
+
+<!-- Prism: core first, then clike before language grammars that depend on it -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+<script>
+(function () {
+  // ---- Syntax highlight ----
+  if (window.Prism) { try { Prism.highlightAll(); } catch (e) {} }
+
+  // ---- Scroll progress bar ----
+  var bar = document.getElementById('bar');
+  var totop = document.getElementById('totop');
+  function onScroll() {
+    var st = window.scrollY || document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var pct = h > 0 ? (st / h) * 100 : 0;
+    if (bar) bar.style.width = pct + '%';
+    if (totop) totop.classList.toggle('show', st > 600);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- Back to top ----
+  if (totop) totop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ---- Mobile nav drawer ----
+  var sidebar = document.getElementById('sidebar');
+  var scrim = document.getElementById('scrim');
+  var toggle = document.getElementById('navToggle');
+  function closeDrawer() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (scrim) scrim.classList.remove('show');
+  }
+  if (toggle) toggle.addEventListener('click', function () {
+    if (sidebar) sidebar.classList.toggle('open');
+    if (scrim) scrim.classList.toggle('show');
+  });
+  if (scrim) scrim.addEventListener('click', closeDrawer);
+
+  // ---- Scrollspy: highlight active section in the index ----
+  var links = Array.prototype.slice.call(document.querySelectorAll('.navgroup li a'));
+  var map = new Map();
+  links.forEach(function (a) {
+    var id = (a.getAttribute('href') || '').slice(1);
+    var el = id && document.getElementById(id);
+    if (el) map.set(el, a);
+  });
+  function setActive(a) {
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (a) a.classList.add('active');
+  }
+  if ('IntersectionObserver' in window && map.size) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) setActive(map.get(e.target));
+      });
+    }, { rootMargin: '-12% 0px -80% 0px', threshold: 0 });
+    map.forEach(function (a, el) { obs.observe(el); });
+  }
+  // Close the mobile drawer when a section link is tapped
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      setActive(a);
+      if (window.innerWidth <= 900) closeDrawer();
+    });
+  });
+
+  // ---- Copy buttons on code blocks ----
+  document.querySelectorAll('.code .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var block = btn.closest('.code');
+      var pre = block && block.querySelector('pre');
+      if (!pre) return;
+      var text = pre.innerText;
+      var done = function () {
+        var old = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('ok');
+        setTimeout(function () { btn.textContent = old; btn.classList.remove('ok'); }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () { fallback(text, done); });
+      } else { fallback(text, done); }
+    });
+  });
+  function fallback(text, done) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta); done();
+    } catch (e) {}
+  }
+})();
+</script>
+</body>
+</html>

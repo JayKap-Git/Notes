@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Notes</title>
+
+<!-- Fonts: Space Grotesk (display) / IBM Plex Sans (body) / JetBrains Mono (code & data) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Syntax highlighting theme -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<style>
+  :root{
+    --bg:#0d1015;
+    --surface:#14181f;
+    --ink:#e7ebf2;
+    --ink-soft:#c4cad6;
+    --muted:#8b94a5;
+    --faint:#6b7484;
+    --line:#232a33;
+    --line-strong:#2f3742;
+    --accent:#7c93ff;
+    --accent-tint:rgba(124,147,255,0.14);
+    --code-bg:#080b10;
+    --hover:#1a2029;
+    --inline-bg:#1b212b;
+    --inline-fg:#acc1ff;
+    --chip-bg:#1b212b;
+    --radius:14px;
+    --header-h:64px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:16.5px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  a{color:var(--accent);text-decoration:none;}
+  ::selection{background:#2a3a6b;}
+
+  /* ---------- Header ---------- */
+  .site{
+    position:sticky;top:0;z-index:40;
+    height:var(--header-h);
+    display:flex;align-items:center;gap:18px;
+    padding:0 22px;
+    background:rgba(13,16,21,0.82);
+    backdrop-filter:saturate(160%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    display:flex;align-items:baseline;gap:9px;
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;font-size:20px;letter-spacing:-0.01em;
+    color:var(--ink);white-space:nowrap;
+  }
+  .brand .soft{color:var(--faint);font-weight:600;}
+  .brand .tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;font-weight:500;color:var(--accent);
+    background:var(--accent-tint);
+    padding:2px 7px;border-radius:6px;letter-spacing:0;
+    transform:translateY(-1px);
+  }
+
+  .navtabs{display:flex;gap:3px;margin-left:8px;}
+  .navtab{
+    font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:14.5px;
+    padding:7px 15px;border-radius:9px;cursor:pointer;
+    background:transparent;border:1px solid transparent;color:var(--muted);
+    transition:background .12s,color .12s;
+  }
+  .navtab:hover{color:var(--ink);background:var(--hover);}
+  .navtab.active{color:var(--accent);background:var(--accent-tint);}
+
+  .search{position:relative;margin-left:auto;flex:0 1 300px;}
+  .search input{
+    width:100%;height:38px;
+    padding:0 12px 0 36px;
+    font-family:inherit;font-size:14.5px;color:var(--ink);
+    background:var(--surface);
+    border:1px solid var(--line-strong);border-radius:9px;
+    outline:none;transition:border-color .15s, box-shadow .15s;
+  }
+  .search input::placeholder{color:var(--faint);}
+  .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint);}
+  .search svg{
+    position:absolute;left:11px;top:50%;transform:translateY(-50%);
+    width:16px;height:16px;stroke:var(--faint);pointer-events:none;
+  }
+
+  .menu-btn{
+    display:none;width:38px;height:38px;
+    align-items:center;justify-content:center;
+    background:var(--surface);border:1px solid var(--line-strong);
+    border-radius:9px;cursor:pointer;color:var(--ink-soft);
+  }
+  .menu-btn svg{width:18px;height:18px;stroke:currentColor;}
+
+  /* ---------- Shell layout ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns:248px minmax(0,1fr);
+    gap:38px;
+    max-width:1180px;margin:0 auto;
+    padding:30px 26px 120px;
+  }
+
+  /* ---------- Sidebar nav ---------- */
+  .nav{
+    position:sticky;top:calc(var(--header-h) + 22px);
+    align-self:start;
+    max-height:calc(100vh - var(--header-h) - 44px);
+    overflow-y:auto;padding-right:6px;
+  }
+  .nav-group{margin-bottom:20px;}
+  .nav-group[hidden]{display:none;}
+  .nav-cat{
+    display:flex;align-items:center;gap:8px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);
+    margin:0 0 8px 2px;
+  }
+  .cat-dot{width:8px;height:8px;border-radius:50%;background:var(--cat,var(--accent));flex:none;}
+  .nav-link{
+    display:block;
+    padding:6px 10px;margin:1px 0;
+    font-size:14px;color:var(--ink-soft);
+    border-radius:8px;line-height:1.35;
+    border-left:2px solid transparent;
+    transition:background .12s,color .12s;
+  }
+  .nav-link[hidden]{display:none;}
+  .nav-link:hover{background:var(--hover);color:var(--ink);}
+  .nav-link.active{
+    background:var(--accent-tint);color:var(--accent);
+    font-weight:600;border-left-color:var(--accent);
+  }
+
+  /* ---------- Main ---------- */
+  .main{min-width:0;}
+  .lede{
+    margin:2px 0 22px;
+    font-size:15px;color:var(--muted);max-width:60ch;
+  }
+
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px;}
+  .pill{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12.5px;font-weight:500;
+    padding:6px 13px;border-radius:999px;cursor:pointer;
+    background:var(--surface);color:var(--ink-soft);
+    border:1px solid var(--line-strong);
+    transition:background .12s,color .12s,border-color .12s;
+  }
+  .pill:hover{border-color:var(--faint);}
+  .pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+
+  /* ---------- Card ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 32px 34px;
+    margin-bottom:26px;
+    scroll-margin-top:88px;
+    box-shadow:0 1px 3px rgba(0,0,0,.4);
+  }
+  .card[hidden]{display:none;}
+
+  .eyebrow{
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11.5px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;margin-bottom:9px;
+  }
+  .eyebrow .cat-label{color:var(--cat);}
+  .eyebrow .src{
+    color:var(--faint);font-weight:500;
+    padding-left:9px;border-left:1px solid var(--line-strong);
+  }
+
+  .card-title{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:600;font-size:27px;line-height:1.18;
+    letter-spacing:-0.015em;color:var(--ink);
+    margin:0 0 16px;
+  }
+
+  /* meta strip */
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+  .pill-meta{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:5px 11px;border-radius:8px;
+    background:var(--chip-bg);border:1px solid var(--line);
+  }
+  .pill-meta .k{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10.5px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--faint);
+  }
+  .pill-meta .v{
+    font-family:"JetBrains Mono",monospace;
+    font-size:13px;font-weight:600;color:var(--ink);
+  }
+  .chip{
+    display:inline-flex;align-items:center;
+    padding:5px 11px;border-radius:8px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12.5px;color:var(--muted);
+    background:transparent;border:1px dashed var(--line-strong);
+  }
+
+  /* ---------- Body blocks ---------- */
+  .card-body{margin-top:22px;}
+  .card-body .blk-h{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:600;font-size:16.5px;color:var(--ink);
+    margin:30px 0 10px;padding-left:11px;
+    border-left:3px solid var(--cat);
+    letter-spacing:-0.005em;
+  }
+  .card-body .blk-h:first-child{margin-top:4px;}
+  .card-body .blk-p{margin:12px 0;color:var(--ink-soft);}
+  .card-body .blk-ul,
+  .card-body .blk-ol{margin:12px 0;padding-left:22px;color:var(--ink-soft);}
+  .card-body .blk-ul li,
+  .card-body .blk-ol li{margin:6px 0;}
+  .card-body .blk-ol{counter-reset:step;list-style:none;padding-left:0;}
+  .card-body .blk-ol li{
+    position:relative;padding-left:34px;margin:9px 0;
+  }
+  .card-body .blk-ol li::before{
+    counter-increment:step;content:counter(step);
+    position:absolute;left:0;top:1px;
+    width:22px;height:22px;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"JetBrains Mono",monospace;font-size:11.5px;font-weight:600;
+    color:var(--cat);background:color-mix(in srgb,var(--cat) 18%,transparent);
+  }
+
+  .card-body code{
+    font-family:"JetBrains Mono",monospace;
+    font-size:.86em;
+    background:var(--inline-bg);color:var(--inline-fg);
+    padding:1px 5px;border-radius:5px;
+  }
+
+  .card-body .blk-note{
+    margin:16px 0;padding:13px 16px;
+    background:color-mix(in srgb,var(--cat) 14%,var(--surface));
+    border:1px solid color-mix(in srgb,var(--cat) 30%,var(--line));
+    border-left:3px solid var(--cat);
+    border-radius:9px;
+    font-size:14.5px;color:var(--ink-soft);
+  }
+  .card-body .blk-note code{background:var(--bg);}
+
+  /* code block */
+  .card-body .blk-code{
+    margin:16px 0;
+    background:var(--code-bg);
+    border-radius:11px;
+    padding:16px 18px;
+    overflow-x:auto;
+    border:1px solid #1c2230;
+  }
+  .card-body .blk-code code.hljs{
+    background:transparent;padding:0;
+    font-family:"JetBrains Mono",monospace;
+    font-size:13.3px;line-height:1.62;
+  }
+
+  /* table */
+  .blk-table-wrap{margin:16px 0;overflow-x:auto;border:1px solid var(--line);border-radius:11px;}
+  .blk-table{border-collapse:collapse;width:100%;
+    font-family:"JetBrains Mono",monospace;font-size:13px;}
+  .blk-table th{
+    text-align:left;padding:11px 14px;
+    font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--muted);background:var(--chip-bg);
+    border-bottom:1px solid var(--line-strong);white-space:nowrap;
+  }
+  .blk-table td{
+    padding:10px 14px;border-bottom:1px solid var(--line);
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .blk-table tbody tr:last-child td{border-bottom:none;}
+  .blk-table tbody tr:hover{background:var(--hover);}
+  .blk-table .td-name{color:var(--ink);font-weight:600;}
+
+  /* empty state */
+  .empty{
+    display:none;padding:60px 20px;text-align:center;color:var(--muted);
+  }
+  .empty[hidden]{display:none;}
+  .empty.show{display:block;}
+  .empty .big{
+    font-family:"Space Grotesk",sans-serif;font-size:19px;color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+
+  /* overlay for mobile drawer */
+  .overlay{
+    display:none;position:fixed;inset:0;z-index:30;
+    background:rgba(20,24,30,.4);
+  }
+  .overlay.show{display:block;}
+
+  /* focus visibility */
+  a:focus-visible,.pill:focus-visible,.menu-btn:focus-visible,input:focus-visible{
+    outline:2px solid var(--accent);outline-offset:2px;
+  }
+
+  /* fade-in */
+  @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .main{animation:rise .4s ease both;}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr;gap:0;padding:22px 18px 100px;}
+    .menu-btn{display:flex;}
+    .nav{
+      position:fixed;top:0;left:0;z-index:35;
+      width:270px;max-width:84vw;height:100vh;max-height:100vh;
+      background:var(--surface);border-right:1px solid var(--line);
+      padding:22px 16px;margin:0;border-radius:0;
+      transform:translateX(-102%);transition:transform .22s ease;
+      box-shadow:0 0 40px rgba(0,0,0,.6);
+    }
+    .nav.open{transform:none;}
+    .card{padding:24px 20px 28px;}
+    .card-title{font-size:23px;}
+  }
+  @media (max-width:680px){
+    .brand{display:none;}
+    .navtab{padding:6px 11px;font-size:13.5px;}
+  }
+  @media (max-width:560px){
+    .search{flex:1 1 auto;}
+    .navtab{padding:6px 9px;font-size:13px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="brand">Study&nbsp;<span class="soft">Notes</span></div>
+  <nav class="navtabs" id="navtabs" aria-label="Sections">
+    <button class="navtab active" data-section="dsa">DSA</button>
+    <button class="navtab" data-section="lld">LLD</button>
+    <button class="navtab" data-section="sql">SQL</button>
+  </nav>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="search" type="text" placeholder="Search…" autocomplete="off" spellcheck="false">
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="shell">
+  <aside class="nav" id="nav" aria-label="Topics"></aside>
+
+  <main class="main">
+    <p class="lede">Approach, idiomatic Java, the data structures involved, and time/space complexity for each problem. Use search or the filters to jump around.</p>
+    <div class="pills" id="pills"></div>
+    <div id="cards"></div>
+    <div class="empty" id="empty">
+      <div class="big">No notes match that.</div>
+      <div>Try a different word, or reset the filter to “All”.</div>
+    </div>
+  </main>
+</div>
+
+<!-- Syntax highlighter (loaded before app so hljs is defined) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+
+<script>/*APP_START*/
+/* =====================================================================
+   HOW TO ADD A NEW PROBLEM LATER
+   Push one object into TOPICS:
+   {
+     id:'unique-slug', category:'graphs'|'hashing'|'pointers'|'bits'|'sorting',
+     source:'small note shown next to the title (optional)',
+     title:'Problem Name',
+     time:'O(...)', space:'O(...)',           // shown as pills
+     ds:['Data structure', 'Another one'],     // shown as chips
+     blocks:[                                   // rendered in order
+       { t:'h',     x:'Approach' },             // subheading
+       { t:'p',     x:'paragraph (inline HTML ok; escape < as &lt;)' },
+       { t:'ul',    x:['bullet','bullet'] },    // unordered list
+       { t:'ol',    x:['step','step'] },        // numbered steps
+       { t:'note',  x:'highlighted callout' },
+       { t:'code',  x:`raw Java here — no escaping needed` },
+       { t:'table', head:['A','B'], rows:[['1','2'],['3','4']] }
+     ]
+   }
+   ===================================================================== */
+
+const DSA_CATS = {
+  graphs:   { label:'Graphs',              color:'#6b8afd' },
+  hashing:  { label:'Arrays & Hashing',    color:'#b794f6' },
+  pointers: { label:'Two Pointers',        color:'#22d3ee' },
+  heaps:    { label:'Heaps',               color:'#f472b6' },
+  dp:       { label:'Dynamic Programming', color:'#4ade80' },
+  bits:     { label:'Bit Manipulation',    color:'#fbbf24' },
+  sorting:  { label:'Sorting',             color:'#fb7185' },
+  design:   { label:'Design',              color:'#fb923c' },
+};
+
+const DSA_TOPICS = [
+
+/* ============================ GRAPHS ============================ */
+{
+  id:'dijkstra', category:'graphs', source:'Single-source shortest path',
+  title:"Dijkstra's Algorithm",
+  time:'O((V + E) log V)', space:'O(V + E)',
+  ds:['Min-heap (PriorityQueue)','Adjacency list','dist[]'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Greedy. Keep <code>dist[]</code> as the best known distance from the source. Repeatedly pull the closest <em>unsettled</em> node from a min-heap and relax its outgoing edges. Once a node is popped, its distance is final — which is exactly why this needs <strong>non-negative</strong> edge weights.' },
+    { t:'ol', x:[
+      'Set <code>dist[src] = 0</code>, every other distance to infinity. Push <code>(src, 0)</code>.',
+      'Pop the node with the smallest distance. If its popped distance is larger than <code>dist[node]</code>, it is a stale entry — skip it.',
+      'For each neighbour, if going through the current node is shorter, update its distance and push the new pair.',
+      'Repeat until the heap empties.'
+    ]},
+    { t:'note', x:'The stale-entry check (<code>if (d &gt; dist[u]) continue;</code>) lets us push duplicates instead of doing an explicit decrease-key. Negative edges break the greedy guarantee → use Bellman-Ford instead.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'Edges from node 0: <code>0→1 (4)</code>, <code>0→2 (1)</code>, <code>2→1 (2)</code>, <code>1→3 (1)</code>. The heap pops node 2 first (dist 1), relaxes 1 down to 3, then pops 1 (dist 3) and relaxes 3 to 4. Final <code>dist = [0, 3, 1, 4]</code>.' },
+    { t:'code', x:
+`import java.util.*;
+
+class Dijkstra {
+    // adj.get(u) = list of int[]{v, weight}
+    public int[] shortestPath(int n, List<List<int[]>> adj, int src) {
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+
+        // min-heap of {node, distance}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        pq.offer(new int[]{src, 0});
+
+        while (!pq.isEmpty()) {
+            int[] top = pq.poll();
+            int u = top[0], d = top[1];
+            if (d > dist[u]) continue;          // stale entry, already improved
+
+            for (int[] edge : adj.get(u)) {
+                int v = edge[0], w = edge[1];
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    pq.offer(new int[]{v, dist[v]});
+                }
+            }
+        }
+        return dist;
+    }
+}`}
+  ]
+},
+
+{
+  id:'bellman-ford', category:'graphs', source:'Single-source · negative weights',
+  title:'Bellman-Ford',
+  time:'O(V · E)', space:'O(V)',
+  ds:['Edge list','dist[]'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Relax <em>every</em> edge, <code>V − 1</code> times. A shortest path visits at most <code>V − 1</code> edges, so after <code>V − 1</code> full passes all true shortest distances have settled. Handles negative edges, and one extra pass detects negative cycles.' },
+    { t:'ol', x:[
+      'Initialise <code>dist[src] = 0</code>, the rest to infinity.',
+      'Repeat <code>V − 1</code> times: for each edge <code>(u, v, w)</code>, if <code>dist[u] + w &lt; dist[v]</code>, update <code>dist[v]</code>.',
+      'Run the relaxation loop once more. If any edge still improves, a negative-weight cycle is reachable.'
+    ]},
+    { t:'note', x:'Slower than Dijkstra (no heap, brute relaxation), but it is the simplest correct choice when weights can be negative. The <code>dist[u] != INF</code> guard avoids integer overflow when relaxing through unreached nodes.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'Edges: <code>0→1 (4)</code>, <code>0→2 (5)</code>, <code>1→2 (−3)</code>, <code>2→3 (2)</code>. The negative edge pulls <code>dist[2]</code> down to <code>4 − 3 = 1</code>, so the final <code>dist = [0, 4, 1, 3]</code> — something Dijkstra would get wrong.' },
+    { t:'code', x:
+`import java.util.*;
+
+class BellmanFord {
+    // edges[i] = {u, v, w}
+    public int[] shortestPath(int n, int[][] edges, int src) {
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+
+        // relax all edges V - 1 times
+        for (int i = 1; i < n; i++) {
+            for (int[] e : edges) {
+                int u = e[0], v = e[1], w = e[2];
+                if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }
+
+        // one more pass -> any improvement means a negative cycle
+        for (int[] e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+                throw new IllegalStateException("Negative-weight cycle detected");
+            }
+        }
+        return dist;
+    }
+}`}
+  ]
+},
+
+{
+  id:'floyd-warshall', category:'graphs', source:'All-pairs shortest path',
+  title:'Floyd-Warshall',
+  time:'O(V³)', space:'O(V²)',
+  ds:['2D distance matrix','Dynamic programming'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Dynamic programming over <em>intermediate vertices</em>. For every middle vertex <code>k</code>, ask whether routing <code>i → k → j</code> beats the current best <code>i → j</code>. After trying all <code>k</code>, <code>dist[i][j]</code> holds the shortest path between every pair.' },
+    { t:'ol', x:[
+      'Start with the adjacency matrix: direct edge weights, <code>0</code> on the diagonal, a large value for "no edge".',
+      'For each <code>k</code>, then each <code>i</code>, then each <code>j</code>: <code>dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])</code>.',
+      'The <code>k</code> loop must be outermost — it is the DP dimension being added one vertex at a time.'
+    ]},
+    { t:'note', x:'Use <code>INF = 1e9</code> (not <code>Integer.MAX_VALUE</code>) so <code>INF + INF</code> does not overflow. A negative value on the diagonal afterwards means a negative cycle is reachable from that vertex.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'Direct edges <code>0→1 (3)</code>, <code>1→2 (1)</code>, <code>0→2 (7)</code>. When <code>k = 1</code>, the path <code>0 → 1 → 2</code> costs <code>3 + 1 = 4</code>, beating the direct <code>7</code>, so <code>dist[0][2]</code> becomes 4.' },
+    { t:'code', x:
+`class FloydWarshall {
+    static final int INF = 1_000_000_000;
+
+    // dist[i][j] = edge weight, 0 on the diagonal, INF if no direct edge
+    public void allPairsShortestPath(int[][] dist) {
+        int n = dist.length;
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+        // dist[i][i] < 0 for any i  =>  negative cycle reachable
+    }
+}`}
+  ]
+},
+
+/* ====================== ARRAYS & HASHING ====================== */
+{
+  id:'detect-squares', category:'hashing', source:'LeetCode 2013',
+  title:'Detect Squares',
+  time:'add O(1) · count O(n)', space:'O(n)',
+  ds:['HashMap (point → count)'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Design problem. Store how many times each point has been added in a hash map (encode <code>(x, y)</code> into one key). To count axis-aligned squares through a query point, scan the distinct stored points looking for a valid <em>diagonal</em> corner.' },
+    { t:'ol', x:[
+      'A point <code>(x, y)</code> is a diagonal corner of a square with the query <code>(px, py)</code> when <code>x ≠ px</code> and <code>|x − px| = |y − py|</code> (equal, non-zero horizontal and vertical gap).',
+      'The other two corners are forced: <code>(px, y)</code> and <code>(x, py)</code>.',
+      'Each combination multiplies in: <code>count(diagonal) × count(px, y) × count(x, py)</code>. Sum over all diagonals.'
+    ]},
+    { t:'note', x:'Encoding <code>key = x * 2000 + y</code> works because coordinates are bounded by 1000, so <code>y &lt; 2000</code> and you can decode with <code>x = k / 2000</code>, <code>y = k % 2000</code>. Iterating distinct points keeps <code>count</code> cheap even with many duplicate adds.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'Add <code>(3,10)</code>, <code>(11,2)</code>, <code>(3,2)</code>, then <code>count(11,10)</code>. Only <code>(3,2)</code> qualifies as a diagonal (gap 8 on both axes); the side corners <code>(11,2)</code> and <code>(3,10)</code> each exist once → <strong>1</strong> square.' },
+    { t:'code', x:
+`import java.util.*;
+
+class DetectSquares {
+    private Map<Integer, Integer> cnt = new HashMap<>();
+
+    public void add(int[] point) {
+        cnt.merge(key(point[0], point[1]), 1, Integer::sum);
+    }
+
+    public int count(int[] point) {
+        int px = point[0], py = point[1], res = 0;
+        for (Map.Entry<Integer, Integer> e : cnt.entrySet()) {
+            int k = e.getKey();
+            int x = k / 2000, y = k % 2000;             // decode the diagonal corner
+            // must form an axis-aligned square with (px, py)
+            if (x == px || Math.abs(x - px) != Math.abs(y - py)) continue;
+            res += e.getValue()
+                 * cnt.getOrDefault(key(px, y), 0)       // corner above/below query
+                 * cnt.getOrDefault(key(x, py), 0);      // corner left/right of query
+        }
+        return res;
+    }
+
+    private int key(int x, int y) {
+        return x * 2000 + y;                             // 0 <= x, y <= 1000
+    }
+}`}
+  ]
+},
+
+{
+  id:'valid-sudoku', category:'hashing', source:'LeetCode 36',
+  title:'Valid Sudoku',
+  time:'O(1) — fixed 9×9', space:'O(1)',
+  ds:['boolean[9][9] seen-sets'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'A board is valid if no digit repeats within any row, any column, or any 3×3 box. Track "seen" flags for all three constraints in a single pass and bail out on the first clash.' },
+    { t:'ol', x:[
+      'Keep three boolean grids: <code>rows[r][d]</code>, <code>cols[c][d]</code>, <code>boxes[b][d]</code>, where <code>d</code> is the digit index 0–8.',
+      'Map a cell to its box with <code>b = (r / 3) * 3 + c / 3</code>.',
+      'For each filled cell, if its digit is already flagged in the row, column, or box → invalid. Otherwise flag all three.'
+    ]},
+    { t:'note', x:'Only the currently filled cells need to be consistent — empty cells (<code>.</code>) are skipped. Because the grid size is fixed at 81 cells, this is constant time; it generalises to <code>O(n²)</code> for an n×n board.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'If two <code>5</code>s appear in the same 3×3 box, both map to the same <code>b</code> and digit index <code>4</code>; the second hit finds <code>boxes[b][4]</code> already true and returns <code>false</code>.' },
+    { t:'code', x:
+`class ValidSudoku {
+    public boolean isValid(char[][] board) {
+        boolean[][] rows  = new boolean[9][9];
+        boolean[][] cols  = new boolean[9][9];
+        boolean[][] boxes = new boolean[9][9];
+
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (board[r][c] == '.') continue;
+                int d = board[r][c] - '1';              // '1'..'9' -> 0..8
+                int b = (r / 3) * 3 + c / 3;            // box index 0..8
+
+                if (rows[r][d] || cols[c][d] || boxes[b][d]) return false;
+                rows[r][d] = cols[c][d] = boxes[b][d] = true;
+            }
+        }
+        return true;
+    }
+}`}
+  ]
+},
+
+{
+  id:'group-anagrams', category:'hashing', source:'LeetCode 49',
+  title:'Group Anagrams',
+  time:'O(N · K)', space:'O(N · K)',
+  ds:['HashMap (signature → list)'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Anagrams share the same multiset of letters. Build a canonical <em>signature</em> for each word and bucket words by that signature in a hash map. Two signatures match exactly when the words are anagrams.' },
+    { t:'ul', x:[
+      '<strong>Count key (used here):</strong> a 26-length frequency array turned into a string like <code>1#0#0#…</code>. Building it is <code>O(K)</code> per word.',
+      '<strong>Sort key (alternative):</strong> sort the characters of each word. Simpler to write but costs <code>O(K log K)</code> per word.'
+    ]},
+    { t:'note', x:'Pick the count key when words are long (linear vs log-linear). The <code>#</code> separators stop <code>"aa","b"</code> (counts <code>2,0,…</code>) from colliding with <code>"a","ab"</code>-style frequencies.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'<code>["eat","tea","tan","ate","nat","bat"]</code> → <code>[[eat,tea,ate], [tan,nat], [bat]]</code>. "eat", "tea", "ate" all reduce to the signature for one <code>a</code>, one <code>e</code>, one <code>t</code>.' },
+    { t:'code', x:
+`import java.util.*;
+
+class GroupAnagrams {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String s : strs) {
+            int[] freq = new int[26];
+            for (char ch : s.toCharArray()) freq[ch - 'a']++;
+
+            // signature unique to this letter multiset, e.g. "1#0#0#2#..."
+            StringBuilder key = new StringBuilder();
+            for (int f : freq) key.append(f).append('#');
+
+            map.computeIfAbsent(key.toString(), k -> new ArrayList<>()).add(s);
+        }
+        return new ArrayList<>(map.values());
+    }
+}`}
+  ]
+},
+
+/* ========================= TWO POINTERS ========================= */
+{
+  id:'trapping-rain-water', category:'pointers', source:'LeetCode 42',
+  title:'Trapping Rain Water',
+  time:'O(n)', space:'O(1)',
+  ds:['Two pointers'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Water trapped above bar <code>i</code> equals <code>min(maxLeft, maxRight) − height[i]</code>. The two-pointer trick avoids precomputing those max arrays: whichever side is shorter is the binding wall, so it is safe to settle that side first.' },
+    { t:'ol', x:[
+      'Start a pointer at each end with running <code>leftMax</code> and <code>rightMax</code> both 0.',
+      'If <code>height[left] &lt; height[right]</code>, the left wall is the limit. Update <code>leftMax</code>, add <code>leftMax − height[left]</code>, move left inward.',
+      'Otherwise do the mirror image on the right side.',
+      'Stop when the pointers meet.'
+    ]},
+    { t:'note', x:'Two other valid solutions: precompute <code>leftMax[]</code> and <code>rightMax[]</code> arrays (still <code>O(n)</code> time but <code>O(n)</code> space), or use a monotonic decreasing stack that fills water layer by layer.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'<code>[0,1,0,2,1,0,1,3,2,1,2,1]</code> traps <strong>6</strong> units — the dips between the taller bars at indices 3 and 7 hold the water.' },
+    { t:'code', x:
+`class TrappingRainWater {
+    public int trap(int[] height) {
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0, water = 0;
+
+        while (left < right) {
+            if (height[left] < height[right]) {
+                leftMax = Math.max(leftMax, height[left]);   // left is the limiting wall
+                water += leftMax - height[left];
+                left++;
+            } else {
+                rightMax = Math.max(rightMax, height[right]);
+                water += rightMax - height[right];
+                right--;
+            }
+        }
+        return water;
+    }
+}`}
+  ]
+},
+
+/* ====================== BIT MANIPULATION ====================== */
+{
+  id:'bit-manipulation', category:'bits', source:'Core techniques',
+  title:'Bit Manipulation Techniques',
+  time:'O(1) per op', space:'O(1)',
+  ds:['Integer / bitmask'],
+  blocks:[
+    { t:'h', x:'Idea' },
+    { t:'p', x:'Treat an integer as 32 boolean flags. A <code>1 &lt;&lt; i</code> mask isolates bit <code>i</code>; AND/OR/XOR/NOT then read or edit it without touching the others. These run in constant time and underpin subsets, parity tricks, and space-cheap state.' },
+    { t:'h', x:'Single-bit operations' },
+    { t:'code', x:
+`int getBit(int x, int i)    { return (x >> i) & 1; }      // read bit i (0 or 1)
+int setBit(int x, int i)    { return x | (1 << i); }      // force bit i to 1
+int clearBit(int x, int i)  { return x & ~(1 << i); }     // force bit i to 0
+int toggleBit(int x, int i) { return x ^ (1 << i); }      // flip bit i`},
+    { t:'note', x:'For bit positions ≥ 31 or for <code>long</code> values, use <code>1L &lt;&lt; i</code> so the shift is not truncated to a 32-bit <code>int</code>.' },
+    { t:'h', x:'Useful identities' },
+    { t:'ul', x:[
+      '<code>x &amp; (x - 1)</code> clears the lowest set bit — loop it to count set bits (Brian Kernighan).',
+      '<code>x &amp; (-x)</code> isolates the lowest set bit by itself.',
+      '<code>x &gt; 0 &amp;&amp; (x &amp; (x - 1)) == 0</code> tests "is x a power of two".',
+      'XOR cancels equal values: <code>a ^ a = 0</code> and <code>a ^ 0 = a</code> — the basis of the single-number trick.'
+    ]},
+    { t:'code', x:
+`class BitTricks {
+    boolean isPowerOfTwo(int x) { return x > 0 && (x & (x - 1)) == 0; }
+    int lowestSetBit(int x)     { return x & (-x); }       // e.g. 12 (1100) -> 4
+
+    // Brian Kernighan: loops once per set bit, not 32 times
+    int countBits(int x) {
+        int c = 0;
+        while (x != 0) { x &= (x - 1); c++; }
+        return c;
+    }
+
+    // every value appears twice except one -> XOR leaves the loner
+    int singleNumber(int[] nums) {
+        int acc = 0;
+        for (int n : nums) acc ^= n;
+        return acc;
+    }
+}`},
+    { t:'note', x:'Java also gives you <code>Integer.bitCount(x)</code>, <code>Integer.numberOfTrailingZeros(x)</code>, and <code>Integer.highestOneBit(x)</code> — prefer these in real code; the manual versions are for understanding what they do.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'<code>singleNumber([4,1,2,1,2])</code> → <code>4</code>: the pairs <code>1^1</code> and <code>2^2</code> vanish to 0, leaving <code>4</code>. And <code>isPowerOfTwo(16)</code> is true while <code>isPowerOfTwo(18)</code> is false.' }
+  ]
+},
+
+/* =========================== SORTING =========================== */
+{
+  id:'sorting', category:'sorting', source:'Comparison & linear sorts',
+  title:'Sorting Techniques',
+  time:'O(n log n) – O(n²)', space:'O(1) – O(n)',
+  ds:['Arrays','Recursion stack','Binary heap','Count buckets'],
+  blocks:[
+    { t:'h', x:'The landscape' },
+    { t:'p', x:'Two families. <strong>Comparison sorts</strong> only compare elements and cannot beat <code>O(n log n)</code> in the worst case. <strong>Non-comparison sorts</strong> (counting, radix) exploit the structure of the keys to hit linear time, but only work on bounded integers/keys.' },
+    { t:'ul', x:[
+      '<strong>Stable</strong> = equal elements keep their original relative order (matters when sorting by a secondary key).',
+      '<strong>In-place</strong> = uses only <code>O(1)</code> extra memory beyond the input.'
+    ]},
+    { t:'table',
+      head:['Algorithm','Best','Average','Worst','Space','Stable'],
+      rows:[
+        ['Bubble','O(n)','O(n²)','O(n²)','O(1)','Yes'],
+        ['Selection','O(n²)','O(n²)','O(n²)','O(1)','No'],
+        ['Insertion','O(n)','O(n²)','O(n²)','O(1)','Yes'],
+        ['Merge','O(n log n)','O(n log n)','O(n log n)','O(n)','Yes'],
+        ['Quick','O(n log n)','O(n log n)','O(n²)','O(log n)','No'],
+        ['Heap','O(n log n)','O(n log n)','O(n log n)','O(1)','No'],
+        ['Counting','O(n + k)','O(n + k)','O(n + k)','O(n + k)','Yes'],
+        ['Radix','O(d·(n+b))','O(d·(n+b))','O(d·(n+b))','O(n + b)','Yes']
+      ]
+    },
+    { t:'note', x:'Shared helper used below: <code>void swap(int[] a, int i, int j) { int t = a[i]; a[i] = a[j]; a[j] = t; }</code>' },
+
+    { t:'h', x:'Bubble sort' },
+    { t:'p', x:'Repeatedly swap adjacent out-of-order pairs; the largest element "bubbles" to the end each pass. The <code>swapped</code> flag makes an already-sorted array cost <code>O(n)</code>.' },
+    { t:'code', x:
+`void bubbleSort(int[] a) {
+    int n = a.length;
+    for (int i = 0; i < n - 1; i++) {
+        boolean swapped = false;
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (a[j] > a[j + 1]) { swap(a, j, j + 1); swapped = true; }
+        }
+        if (!swapped) break;            // already sorted, stop early
+    }
+}`},
+
+    { t:'h', x:'Selection sort' },
+    { t:'p', x:'Each pass scans the unsorted part for the minimum and swaps it into place. Few swaps (<code>O(n)</code>) but always <code>O(n²)</code> comparisons, even on sorted input.' },
+    { t:'code', x:
+`void selectionSort(int[] a) {
+    int n = a.length;
+    for (int i = 0; i < n - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < n; j++)
+            if (a[j] < a[min]) min = j;
+        swap(a, i, min);
+    }
+}`},
+
+    { t:'h', x:'Insertion sort' },
+    { t:'p', x:'Grow a sorted prefix by inserting each new element into its correct slot, shifting larger ones right. Excellent on small or nearly-sorted arrays — best case <code>O(n)</code>.' },
+    { t:'code', x:
+`void insertionSort(int[] a) {
+    for (int i = 1; i < a.length; i++) {
+        int key = a[i], j = i - 1;
+        while (j >= 0 && a[j] > key) {   // shift bigger elements right
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+}`},
+
+    { t:'h', x:'Merge sort' },
+    { t:'p', x:'Divide and conquer: split in half, sort each half, then merge two sorted halves in linear time. Guaranteed <code>O(n log n)</code> and stable, at the cost of <code>O(n)</code> scratch space.' },
+    { t:'code', x:
+`void mergeSort(int[] a, int l, int r) {
+    if (l >= r) return;
+    int m = l + (r - l) / 2;
+    mergeSort(a, l, m);
+    mergeSort(a, m + 1, r);
+    merge(a, l, m, r);
+}
+
+void merge(int[] a, int l, int m, int r) {
+    int[] tmp = new int[r - l + 1];
+    int i = l, j = m + 1, k = 0;
+    while (i <= m && j <= r)
+        tmp[k++] = (a[i] <= a[j]) ? a[i++] : a[j++];   // <= keeps it stable
+    while (i <= m) tmp[k++] = a[i++];
+    while (j <= r) tmp[k++] = a[j++];
+    System.arraycopy(tmp, 0, a, l, tmp.length);
+}`},
+
+    { t:'h', x:'Quick sort' },
+    { t:'p', x:'Pick a pivot, partition so smaller elements sit left and larger right, then recurse on each side. Fast in practice and in-place; worst case <code>O(n²)</code> on already-sorted input with a naive pivot (randomise or use median-of-three to avoid it).' },
+    { t:'code', x:
+`void quickSort(int[] a, int lo, int hi) {
+    if (lo >= hi) return;
+    int p = partition(a, lo, hi);
+    quickSort(a, lo, p - 1);
+    quickSort(a, p + 1, hi);
+}
+
+int partition(int[] a, int lo, int hi) {
+    int pivot = a[hi], i = lo;          // Lomuto scheme, last element as pivot
+    for (int j = lo; j < hi; j++)
+        if (a[j] < pivot) swap(a, i++, j);
+    swap(a, i, hi);                     // put pivot in its final place
+    return i;
+}`},
+
+    { t:'h', x:'Heap sort' },
+    { t:'p', x:'Build a max-heap in the array, then repeatedly swap the root (max) to the back and sift down the reduced heap. In-place and a hard <code>O(n log n)</code> ceiling, but not stable.' },
+    { t:'code', x:
+`void heapSort(int[] a) {
+    int n = a.length;
+    for (int i = n / 2 - 1; i >= 0; i--) heapify(a, n, i);   // build max-heap
+    for (int end = n - 1; end > 0; end--) {
+        swap(a, 0, end);                                     // largest to the back
+        heapify(a, end, 0);                                  // restore heap on the rest
+    }
+}
+
+void heapify(int[] a, int n, int i) {
+    int largest = i, l = 2 * i + 1, r = 2 * i + 2;
+    if (l < n && a[l] > a[largest]) largest = l;
+    if (r < n && a[r] > a[largest]) largest = r;
+    if (largest != i) { swap(a, i, largest); heapify(a, n, largest); }
+}`},
+
+    { t:'h', x:'Counting sort' },
+    { t:'p', x:'No comparisons. Tally how many times each value appears, take prefix sums to find final positions, then place elements walking back-to-front to stay stable. Linear when the value range <code>k</code> is not much bigger than <code>n</code>.' },
+    { t:'code', x:
+`int[] countingSort(int[] a, int k) {       // values in [0, k]
+    int[] count = new int[k + 1];
+    for (int x : a) count[x]++;
+    for (int i = 1; i <= k; i++) count[i] += count[i - 1];   // prefix sums = positions
+    int[] out = new int[a.length];
+    for (int i = a.length - 1; i >= 0; i--)                  // back-to-front keeps it stable
+        out[--count[a[i]]] = a[i];
+    return out;
+}`},
+
+    { t:'h', x:'Radix sort' },
+    { t:'p', x:'Sort by digit, least-significant first, using a stable counting sort on each digit. After <code>d</code> passes (one per digit) the whole array is ordered. Great for fixed-width integers.' },
+    { t:'code', x:
+`void radixSort(int[] a) {
+    int max = Arrays.stream(a).max().orElse(0);
+    for (int exp = 1; max / exp > 0; exp *= 10)             // exp = 1, 10, 100, ...
+        countingByDigit(a, exp);
+}
+
+void countingByDigit(int[] a, int exp) {
+    int n = a.length;
+    int[] out = new int[n], count = new int[10];
+    for (int x : a) count[(x / exp) % 10]++;
+    for (int i = 1; i < 10; i++) count[i] += count[i - 1];
+    for (int i = n - 1; i >= 0; i--) {                      // stable pass on this digit
+        int d = (a[i] / exp) % 10;
+        out[--count[d]] = a[i];
+    }
+    System.arraycopy(out, 0, a, 0, n);
+}`},
+    { t:'note', x:'Java built-ins: <code>Arrays.sort(int[])</code> uses dual-pivot quicksort; <code>Arrays.sort(Object[])</code> and <code>Collections.sort</code> use TimSort, which is stable and adaptive. Reach for these in real code — the implementations above are for the interview whiteboard.' }
+  ]
+},
+
+/* ===================== DYNAMIC PROGRAMMING ===================== */
+{
+  id:'burst-balloons', category:'dp', source:'LeetCode 312',
+  title:'Burst Balloons',
+  time:'O(n³)', space:'O(n²)',
+  ds:['2D DP table','Interval DP'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'The trap: bursting a balloon changes the neighbours of the rest. Flip the question — instead of the <em>first</em> balloon to burst, fix the <strong>last</strong> balloon <code>k</code> to burst inside an open interval <code>(i, j)</code>. When <code>k</code> is last, its neighbours are exactly the still-unburst boundaries <code>i</code> and <code>j</code>, so its coins are fixed.' },
+    { t:'ol', x:[
+      'Pad the array with virtual <code>1</code>s at both ends so every real balloon has neighbours.',
+      '<code>dp[i][j]</code> = max coins from bursting every balloon strictly between boundaries <code>i</code> and <code>j</code>.',
+      'For each interval, try every <code>k</code> as the last burst: <code>nums[i]·nums[k]·nums[j] + dp[i][k] + dp[k][j]</code>.',
+      'Fill by increasing interval width; the answer is <code>dp[0][n + 1]</code>.'
+    ]},
+    { t:'note', x:'Choosing the <em>last</em> element to act on is the signature move of partition / interval DP. A left-to-right "first burst" formulation fails because the neighbours keep shifting.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'<code>[3,1,5,8]</code> → <strong>167</strong>. Best order is burst 1, then 5, then 3, then 8 → <code>15 + 120 + 24 + 8</code>.' },
+    { t:'code', x:
+`class BurstBalloons {
+    public int maxCoins(int[] nums) {
+        int n = nums.length;
+        int[] b = new int[n + 2];
+        b[0] = b[n + 1] = 1;                       // virtual balloons worth 1
+        for (int i = 0; i < n; i++) b[i + 1] = nums[i];
+
+        // dp[i][j] = max coins from bursting everything strictly between i and j
+        int[][] dp = new int[n + 2][n + 2];
+
+        for (int len = 2; len <= n + 1; len++) {    // gap between the two boundaries
+            for (int i = 0; i + len <= n + 1; i++) {
+                int j = i + len;
+                for (int k = i + 1; k < j; k++) {    // k = last balloon to burst in (i, j)
+                    int coins = b[i] * b[k] * b[j] + dp[i][k] + dp[k][j];
+                    dp[i][j] = Math.max(dp[i][j], coins);
+                }
+            }
+        }
+        return dp[0][n + 1];
+    }
+}`}
+  ]
+},
+
+{
+  id:'matrix-chain', category:'dp', source:'Matrix Chain Multiplication',
+  title:'MCM — Optimal Partition',
+  time:'O(n³)', space:'O(n²)',
+  ds:['2D DP table','Interval DP'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Matrix <code>Ai</code> has shape <code>dims[i−1] × dims[i]</code>. Multiplication is associative, so the product is fixed but the <em>cost</em> depends on how you parenthesise. Find the cheapest split point for every sub-chain.' },
+    { t:'ol', x:[
+      '<code>dp[i][j]</code> = minimum scalar multiplications to compute <code>Ai · … · Aj</code>.',
+      'Try every split <code>k</code>: build <code>(Ai…Ak)</code> and <code>(Ak+1…Aj)</code> first, then multiply the two results.',
+      'That final multiply costs <code>dims[i−1] · dims[k] · dims[j]</code>; add the two sub-costs.',
+      '<code>dp[i][i] = 0</code> (one matrix is free); the answer is <code>dp[1][n]</code>.'
+    ]},
+    { t:'note', x:'Identical skeleton to Burst Balloons: iterate by chain length, split at every <code>k</code>. Only the meaning of the "merge cost" changes — that is the whole family of partition DP.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'dims <code>[10, 30, 5, 60]</code> (matrices 10×30, 30×5, 5×60). <code>(A1A2)A3</code> costs <code>1500 + 3000 = 4500</code>; <code>A1(A2A3)</code> costs <code>9000 + 18000 = 27000</code>. Minimum is <strong>4500</strong>.' },
+    { t:'code', x:
+`class MatrixChain {
+    // dims has length n + 1; matrix i is dims[i-1] x dims[i]  (i = 1..n)
+    public int minMultiplications(int[] dims) {
+        int n = dims.length - 1;                    // number of matrices
+        int[][] dp = new int[n + 1][n + 1];         // 1-indexed by matrix
+
+        for (int len = 2; len <= n; len++) {         // chain length
+            for (int i = 1; i + len - 1 <= n; i++) {
+                int j = i + len - 1;
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = i; k < j; k++) {         // split: (Ai..Ak)(Ak+1..Aj)
+                    int cost = dp[i][k] + dp[k + 1][j]
+                             + dims[i - 1] * dims[k] * dims[j];
+                    dp[i][j] = Math.min(dp[i][j], cost);
+                }
+            }
+        }
+        return dp[1][n];
+    }
+}`}
+  ]
+},
+
+/* =========================== DESIGN =========================== */
+{
+  id:'lru-cache', category:'design', source:'LeetCode 146',
+  title:'LRU Cache',
+  time:'get O(1) · put O(1)', space:'O(capacity)',
+  ds:['HashMap','Doubly linked list'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'You need O(1) lookup <em>and</em> O(1) "mark this as most-recently used". A hash map gives the lookup; a doubly linked list keeps usage order so any node can be moved or evicted in O(1). The map points at nodes; the list orders them.' },
+    { t:'ol', x:[
+      'Keep a doubly linked list with sentinel <code>head</code> (most recent) and <code>tail</code> (least recent), plus a <code>map</code> from key → node.',
+      '<code>get</code>: a miss returns −1; a hit moves the node to the front and returns its value.',
+      '<code>put</code> on an existing key: update the value and move it to the front.',
+      '<code>put</code> on a new key while full: evict the node just before <code>tail</code> (the LRU), drop it from the map, then insert the new node at the front.'
+    ]},
+    { t:'note', x:'Sentinel <code>head</code>/<code>tail</code> nodes kill all the null-checks at the ends. Shortcut: a <code>LinkedHashMap</code> with <code>accessOrder = true</code> plus an overridden <code>removeEldestEntry</code> does this in ~10 lines — but interviewers usually want the manual version.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'capacity 2 — <code>put(1,1)</code>, <code>put(2,2)</code>, <code>get(1)</code> → 1 (key 1 is now most recent), <code>put(3,3)</code> evicts key 2, so <code>get(2)</code> → −1.' },
+    { t:'code', x:
+`import java.util.*;
+
+class LRUCache {
+    private class Node {
+        int key, val;
+        Node prev, next;
+        Node(int k, int v) { key = k; val = v; }
+    }
+
+    private final int capacity;
+    private final Map<Integer, Node> map = new HashMap<>();
+    private final Node head = new Node(0, 0);   // sentinel: most-recent side
+    private final Node tail = new Node(0, 0);   // sentinel: least-recent side
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        Node node = map.get(key);
+        if (node == null) return -1;
+        moveToFront(node);                      // touch = most recently used
+        return node.val;
+    }
+
+    public void put(int key, int value) {
+        Node node = map.get(key);
+        if (node != null) {
+            node.val = value;
+            moveToFront(node);
+            return;
+        }
+        if (map.size() == capacity) {           // evict the least recently used
+            Node lru = tail.prev;
+            remove(lru);
+            map.remove(lru.key);
+        }
+        Node fresh = new Node(key, value);
+        map.put(key, fresh);
+        addFront(fresh);
+    }
+
+    private void addFront(Node node) {          // splice in right after head
+        node.next = head.next;
+        node.prev = head;
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    private void remove(Node node) {            // unlink from the list
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void moveToFront(Node node) {
+        remove(node);
+        addFront(node);
+    }
+}`}
+  ]
+},
+
+/* ============================ HEAPS ============================ */
+{
+  id:'find-median-stream', category:'heaps', source:'LeetCode 295',
+  title:'Find Median from Data Stream',
+  time:'add O(log n) · median O(1)', space:'O(n)',
+  ds:['Max-heap + Min-heap'],
+  blocks:[
+    { t:'h', x:'Approach' },
+    { t:'p', x:'Hold the smaller half of the numbers in a <strong>max-heap</strong> and the larger half in a <strong>min-heap</strong>. The two heap tops sit exactly at the middle, so the median is one peek (odd count) or the average of both peeks (even count) — all without ever sorting.' },
+    { t:'ol', x:[
+      '<code>lo</code> = max-heap of the lower half; <code>hi</code> = min-heap of the upper half.',
+      'On add: push the value into <code>lo</code>, then move <code>lo</code>\'s top into <code>hi</code>. This guarantees every element in <code>lo</code> ≤ every element in <code>hi</code>.',
+      'If <code>hi</code> ended up larger, move its top back to <code>lo</code> — so <code>lo</code> is always equal in size to <code>hi</code> or one bigger.',
+      'Median: if <code>lo</code> is bigger, return its top; otherwise average the two tops.'
+    ]},
+    { t:'note', x:'Two invariants do all the work: <code>max(lo) ≤ min(hi)</code>, and <code>lo.size()</code> is <code>hi.size()</code> or one more. The "push to lo, shift its max to hi" step enforces the ordering automatically.' },
+    { t:'h', x:'Example' },
+    { t:'p', x:'Stream <code>1, 2, 3</code>: median is 1, then 1.5, then 2. After all three, <code>lo = {2, 1}</code> (top 2) and <code>hi = {3}</code>, so the median is <code>lo.peek() = 2</code>.' },
+    { t:'code', x:
+`import java.util.*;
+
+class MedianFinder {
+    // lower half (max-heap) and upper half (min-heap)
+    private PriorityQueue<Integer> lo = new PriorityQueue<>(Collections.reverseOrder());
+    private PriorityQueue<Integer> hi = new PriorityQueue<>();
+
+    public void addNum(int num) {
+        lo.offer(num);            // tentatively add to the lower half
+        hi.offer(lo.poll());      // push its max up -> keeps max(lo) <= min(hi)
+        if (hi.size() > lo.size())
+            lo.offer(hi.poll());  // keep lo the same size as hi, or one larger
+    }
+
+    public double findMedian() {
+        if (lo.size() > hi.size()) return lo.peek();    // odd count
+        return (lo.peek() + hi.peek()) / 2.0;           // even count
+    }
+}`}
+  ]
+}
+
+];
+
+/* =====================================================================
+   ===================  LLD  —  Low-Level Design  =====================
+   ===================================================================== */
+const LLD_CATS = {
+  principles: { label:'Principles (SOLID)', color:'#6b8afd' },
+  creational: { label:'Creational',         color:'#4ade80' },
+  structural: { label:'Structural',         color:'#fbbf24' },
+  behavioral: { label:'Behavioral',         color:'#fb7185' },
+};
+
+const LLD_TOPICS = [
+
+{
+  id:'solid', category:'principles', source:`The foundation of good OO design`,
+  title:`SOLID Principles`,
+  ds:[`SRP`,`OCP`,`LSP`,`ISP`,`DIP`],
+  blocks:[
+    { t:'p', x:`Five guidelines that keep classes easy to change and test. Patterns are concrete tools; SOLID is the judgement for when to reach for them.` },
+    { t:'h', x:`The five` },
+    { t:'ul', x:[
+      `<strong>S — Single Responsibility:</strong> a class should have one reason to change. Don't mix business logic with persistence or formatting.`,
+      `<strong>O — Open/Closed:</strong> open for extension, closed for modification. Add behaviour with new classes, not by editing tested ones.`,
+      `<strong>L — Liskov Substitution:</strong> a subtype must work anywhere its base type does, without surprising the caller.`,
+      `<strong>I — Interface Segregation:</strong> prefer many small, focused interfaces over one fat interface clients are forced to implement whole.`,
+      `<strong>D — Dependency Inversion:</strong> depend on abstractions, not concretions. High-level code shouldn't import low-level details.`
+    ]},
+    { t:'h', x:`Example — Dependency Inversion` },
+    { t:'p', x:`The service depends on a <code>Repository</code> interface, so you can swap the database for an in-memory fake in tests without touching the service.` },
+    { t:'code', x:
+`interface Repository { void save(Order o); }       // the abstraction
+
+class OrderService {                                // high-level: knows only the interface
+    private final Repository repo;
+    OrderService(Repository repo) { this.repo = repo; }   // dependency injected in
+    void place(Order o) { repo.save(o); }
+}
+
+class SqlRepository implements Repository {         // low-level detail, swappable
+    public void save(Order o) { /* INSERT ... */ }
+}` },
+    { t:'note', x:`Most patterns are SOLID made concrete — Strategy is Open/Closed, Adapter protects Liskov, dependency injection is Dependency Inversion in practice.` }
+  ]
+},
+
+/* ----- Creational ----- */
+{
+  id:'singleton', category:'creational', source:`One instance, global access`,
+  title:`Singleton`,
+  ds:[`Shared state`,`Lazy init`],
+  blocks:[
+    { t:'p', x:`Ensure a class has exactly one instance and give a single global point of access to it.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`A single shared resource: config, logging, a connection pool.`,`Exactly one coordinator must exist across the app.`] },
+    { t:'code', x:
+`class Logger {
+    private Logger() {}                         // private: no external construction
+
+    private static class Holder {               // class loads only on first access
+        static final Logger INSTANCE = new Logger();
+    }
+
+    public static Logger getInstance() {
+        return Holder.INSTANCE;                 // lazy AND thread-safe, no locking
+    }
+
+    public void log(String msg) { System.out.println(msg); }
+}` },
+    { t:'note', x:`The initialization-on-demand holder idiom is lazy and thread-safe with zero synchronization. Caveat: a singleton is global state — easy to overuse and awkward to unit-test.` }
+  ]
+},
+
+{
+  id:'factory-method', category:'creational', source:`Defer instantiation to subclasses`,
+  title:`Factory Method`,
+  ds:[`Polymorphic creation`],
+  blocks:[
+    { t:'p', x:`Define an interface for creating an object, but let subclasses decide which concrete class to instantiate. Localises every <code>new</code> in one overridable method.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`A class can't anticipate the exact type it must create.`,`You want subclasses to choose the product.`] },
+    { t:'code', x:
+`interface Notification { void send(String to); }
+
+class Email implements Notification { public void send(String to) { /* ... */ } }
+class Sms   implements Notification { public void send(String to) { /* ... */ } }
+
+abstract class NotificationFactory {
+    abstract Notification create();             // the factory method
+    void notifyUser(String to) { create().send(to); }   // works against the interface
+}
+
+class EmailFactory extends NotificationFactory {
+    Notification create() { return new Email(); }
+}` },
+    { t:'note', x:`A plain static factory (one method with a switch) is the lighter cousin; Factory Method uses subclassing so the choice is polymorphic.` }
+  ]
+},
+
+{
+  id:'abstract-factory', category:'creational', source:`Families of related objects`,
+  title:`Abstract Factory`,
+  ds:[`Product families`],
+  blocks:[
+    { t:'p', x:`Produce families of related objects without naming their concrete classes — and guarantee the products in one family match.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Products come in matching sets (e.g. UI widgets per OS theme).`,`You must never mix products from different families.`] },
+    { t:'code', x:
+`interface Button   { void render(); }
+interface Checkbox { void render(); }
+
+interface GuiFactory {                          // creates a whole matching family
+    Button   createButton();
+    Checkbox createCheckbox();
+}
+
+class MacFactory implements GuiFactory {
+    public Button   createButton()   { return new MacButton(); }
+    public Checkbox createCheckbox() { return new MacCheckbox(); }
+}
+// WindowsFactory returns WindowsButton + WindowsCheckbox, and so on.` },
+    { t:'note', x:`Factory Method makes one product; Abstract Factory makes a coordinated family via several factory methods grouped behind one interface.` }
+  ]
+},
+
+{
+  id:'builder', category:'creational', source:`Step-by-step construction`,
+  title:`Builder`,
+  ds:[`Optional params`,`Immutability`],
+  blocks:[
+    { t:'p', x:`Construct a complex object step by step, separating how it's built from its final representation. Kills the "constructor with eight booleans" problem.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Many optional parameters (telescoping constructors).`,`You want readable creation of immutable objects.`] },
+    { t:'code', x:
+`class Pizza {
+    private final String size;
+    private final boolean cheese, pepperoni;
+
+    private Pizza(Builder b) { size = b.size; cheese = b.cheese; pepperoni = b.pepperoni; }
+
+    static class Builder {
+        private final String size;              // required
+        private boolean cheese, pepperoni;      // optional
+
+        Builder(String size)  { this.size = size; }
+        Builder cheese()      { this.cheese = true;    return this; }
+        Builder pepperoni()   { this.pepperoni = true; return this; }
+        Pizza   build()       { return new Pizza(this); }
+    }
+}
+// new Pizza.Builder("L").cheese().pepperoni().build();` },
+    { t:'note', x:`This fluent builder is everywhere — <code>StringBuilder</code>, <code>Stream.Builder</code>, HTTP request builders. Each call returns <code>this</code> so they chain.` }
+  ]
+},
+
+{
+  id:'prototype', category:'creational', source:`Clone existing objects`,
+  title:`Prototype`,
+  ds:[`Copying`],
+  blocks:[
+    { t:'p', x:`Create new objects by copying a configured prototype instead of building from scratch.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Construction is expensive and you already have a similar instance.`,`You want a pre-configured object to copy and tweak.`] },
+    { t:'code', x:
+`interface Shape { Shape copy(); }
+
+class Circle implements Shape {
+    int radius;
+    Circle(int r) { this.radius = r; }
+    public Circle copy() { return new Circle(this.radius); }   // copy, then modify
+}
+// Circle c2 = c1.copy();  c2.radius = 10;` },
+    { t:'note', x:`Mind deep vs shallow copy — copying a mutable field by reference shares it between clones. A copy constructor is usually cleaner than Java's awkward <code>Cloneable</code>.` }
+  ]
+},
+
+/* ----- Structural ----- */
+{
+  id:'adapter', category:'structural', source:`Bridge incompatible interfaces`,
+  title:`Adapter`,
+  ds:[`Wrapping`,`Legacy glue`],
+  blocks:[
+    { t:'p', x:`Wrap one class so it presents the interface a client expects — like a power-plug adapter between two shapes of socket.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Integrating a third-party or legacy class whose API doesn't match yours.`,`You can't (or shouldn't) change either side.`] },
+    { t:'code', x:
+`interface JsonLogger { void logJson(String json); }
+
+class LegacyLogger {                            // the incompatible existing class
+    void write(String text) { /* ... */ }
+}
+
+class LoggerAdapter implements JsonLogger {     // adapts LegacyLogger -> JsonLogger
+    private final LegacyLogger legacy;
+    LoggerAdapter(LegacyLogger l) { this.legacy = l; }
+    public void logJson(String json) { legacy.write(json); }
+}` },
+    { t:'note', x:`Adapter changes an interface; Decorator keeps the interface and adds behaviour. Same wrapping mechanism, different intent.` }
+  ]
+},
+
+{
+  id:'bridge', category:'structural', source:`Split abstraction from implementation`,
+  title:`Bridge`,
+  ds:[`Composition`,`Avoid class blowup`],
+  blocks:[
+    { t:'p', x:`Decouple an abstraction from its implementation so the two can vary independently — combining N abstractions with M implementations using N+M classes instead of N×M.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Two dimensions vary independently (Shape × Renderer, Message × Channel).`,`Inheritance would explode into a subclass for every combination.`] },
+    { t:'code', x:
+`interface Renderer { void drawCircle(float r); }       // implementation side
+
+abstract class Shape {                                  // abstraction side
+    protected final Renderer renderer;
+    Shape(Renderer r) { this.renderer = r; }
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    private final float radius;
+    Circle(Renderer r, float radius) { super(r); this.radius = radius; }
+    void draw() { renderer.drawCircle(radius); }        // delegate to the impl
+}
+// new Circle(new VectorRenderer(), 5)  vs  new Circle(new RasterRenderer(), 5)` },
+    { t:'note', x:`The abstraction HAS-A implementation (composition) rather than inheriting it — that's what lets the two hierarchies grow separately.` }
+  ]
+},
+
+{
+  id:'composite', category:'structural', source:`Tree of part-whole objects`,
+  title:`Composite`,
+  ds:[`Trees`,`Uniform API`],
+  blocks:[
+    { t:'p', x:`Treat individual objects and groups of objects uniformly through one interface, so the client doesn't care whether it holds a leaf or a whole subtree.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`A tree structure: files/folders, UI components, org charts.`,`Leaves and containers should respond to the same operations.`] },
+    { t:'code', x:
+`interface FileNode { int size(); }
+
+class File implements FileNode {
+    private final int size;
+    File(int size) { this.size = size; }
+    public int size() { return size; }                  // leaf
+}
+
+class Folder implements FileNode {
+    private final List<FileNode> children = new ArrayList<>();
+    void add(FileNode n) { children.add(n); }
+    public int size() {                                 // recurse over children
+        return children.stream().mapToInt(FileNode::size).sum();
+    }
+}` },
+    { t:'note', x:`The client calls <code>size()</code> the same way on one file or a deep folder tree — that uniformity is the whole point.` }
+  ]
+},
+
+{
+  id:'decorator', category:'structural', source:`Add behaviour by wrapping`,
+  title:`Decorator`,
+  ds:[`Composition`,`Stackable`],
+  blocks:[
+    { t:'p', x:`Attach responsibilities to an object dynamically by wrapping it in another object with the same interface. Wrappers stack.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`You want to add features (logging, buffering, compression) at runtime.`,`Subclassing every combination would explode.`] },
+    { t:'code', x:
+`interface Coffee { double cost(); }
+
+class Espresso implements Coffee { public double cost() { return 2.0; } }
+
+abstract class CoffeeDecorator implements Coffee {
+    protected final Coffee inner;
+    CoffeeDecorator(Coffee c) { this.inner = c; }
+}
+
+class Milk extends CoffeeDecorator {
+    Milk(Coffee c) { super(c); }
+    public double cost() { return inner.cost() + 0.5; }   // delegate, then add
+}
+// new Milk(new Milk(new Espresso())).cost()  ->  3.0` },
+    { t:'note', x:`Java I/O is the textbook case: <code>new BufferedReader(new InputStreamReader(stream))</code>. Same interface in and out, behaviour layered on.` }
+  ]
+},
+
+{
+  id:'facade', category:'structural', source:`One simple front for a subsystem`,
+  title:`Facade`,
+  ds:[`Simplification`],
+  blocks:[
+    { t:'p', x:`Provide a single, simplified entry point to a complex subsystem so clients aren't forced to wire up all its parts.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Clients need only common operations, not the full machinery.`,`You want to reduce coupling to a sprawling subsystem.`] },
+    { t:'code', x:
+`class VideoConverter {                          // facade over codecs, mixing, muxing
+    private final AudioMixer  mixer  = new AudioMixer();
+    private final CodecFactory codecs = new CodecFactory();
+
+    public File convert(File src, String format) {
+        var codec = codecs.extract(src);
+        var mixed = mixer.fix(src);
+        return codecs.write(mixed, format);     // hides the messy pipeline
+    }
+}
+// client: new VideoConverter().convert(file, "mp4");` },
+    { t:'note', x:`A facade simplifies but doesn't seal off the subsystem — advanced clients can still reach past it for fine-grained control.` }
+  ]
+},
+
+{
+  id:'flyweight', category:'structural', source:`Share data to save memory`,
+  title:`Flyweight`,
+  ds:[`Object pooling`,`Memory`],
+  blocks:[
+    { t:'p', x:`Share the common (intrinsic) part of state across many objects so you can fit far more of them in memory.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Huge numbers of similar objects (glyphs, map tiles, particles) blow up memory.`,`Most of each object's state is identical and reusable.`] },
+    { t:'code', x:
+`class TreeType {                                // shared intrinsic state (heavy)
+    final String name, texture;
+    TreeType(String n, String t) { name = n; texture = t; }
+}
+
+class TreeFactory {
+    private static final Map<String, TreeType> pool = new HashMap<>();
+    static TreeType get(String name, String texture) {
+        return pool.computeIfAbsent(name + texture, k -> new TreeType(name, texture));
+    }
+}
+// each Tree stores only x, y (extrinsic) + a shared TreeType reference` },
+    { t:'note', x:`Split state into intrinsic (shared, pooled) and extrinsic (passed per use). <code>Integer.valueOf</code> caches −128..127 with exactly this trick.` }
+  ]
+},
+
+{
+  id:'proxy', category:'structural', source:`Stand-in that controls access`,
+  title:`Proxy`,
+  ds:[`Lazy load`,`Access control`],
+  blocks:[
+    { t:'p', x:`Provide a placeholder with the same interface as a real object, to control access to it — for lazy loading, caching, security, or remoting.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`The real object is expensive, remote, or needs guarding.`,`You want to add a control layer transparently.`] },
+    { t:'code', x:
+`interface Image { void display(); }
+
+class RealImage implements Image {              // expensive: loads from disk
+    RealImage(String file) { /* load bytes... */ }
+    public void display() { /* ... */ }
+}
+
+class ImageProxy implements Image {             // lazy-loading proxy
+    private final String file;
+    private RealImage real;
+    ImageProxy(String file) { this.file = file; }
+    public void display() {
+        if (real == null) real = new RealImage(file);   // load on first use only
+        real.display();
+    }
+}` },
+    { t:'note', x:`Unlike Facade, a proxy mirrors the real object's interface exactly. Spring AOP, Hibernate lazy entities, and RMI stubs are all proxies.` }
+  ]
+},
+
+/* ----- Behavioral ----- */
+{
+  id:'chain-of-responsibility', category:'behavioral', source:`Pass a request down a chain`,
+  title:`Chain of Responsibility`,
+  ds:[`Decoupling`,`Pipelines`],
+  blocks:[
+    { t:'p', x:`Pass a request along a chain of handlers; each one either handles it or forwards it to the next. The sender never knows which handler responds.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Several objects might handle a request and the right one isn't known up front.`,`Middleware / filter pipelines, approval ladders, log levels.`] },
+    { t:'code', x:
+`abstract class Handler {
+    protected Handler next;
+    Handler setNext(Handler n) { this.next = n; return n; }
+    abstract void handle(Request r);
+    protected void forward(Request r) { if (next != null) next.handle(r); }
+}
+
+class AuthHandler extends Handler {
+    void handle(Request r) {
+        if (!r.authed) return;                  // stop the chain here
+        forward(r);                             // ...or pass it along
+    }
+}` },
+    { t:'note', x:`Servlet filters and most HTTP middleware stacks are chains. It decouples the sender from the concrete receiver.` }
+  ]
+},
+
+{
+  id:'command', category:'behavioral', source:`Wrap a request as an object`,
+  title:`Command`,
+  ds:[`Undo/redo`,`Queues`],
+  blocks:[
+    { t:'p', x:`Encapsulate a request as an object, so you can queue it, log it, or undo it. The invoker triggers commands without knowing what they do.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`You need undo/redo or a history of operations.`,`You want to queue, schedule, or parameterise actions.`] },
+    { t:'code', x:
+`interface Command { void execute(); void undo(); }
+
+class Light { void on() {} void off() {} }
+
+class LightOnCommand implements Command {
+    private final Light light;
+    LightOnCommand(Light l) { this.light = l; }
+    public void execute() { light.on(); }
+    public void undo()    { light.off(); }
+}
+// an invoker (button / queue) stores a stack of Commands for undo` },
+    { t:'note', x:`The invoker holds commands without caring what they do — that decoupling is what powers undo stacks and task queues.` }
+  ]
+},
+
+{
+  id:'iterator', category:'behavioral', source:`Traverse without exposing internals`,
+  title:`Iterator`,
+  ds:[`Traversal`],
+  blocks:[
+    { t:'p', x:`Access the elements of a collection in sequence without revealing how it's stored internally.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`You want a uniform way to walk different containers.`,`The container's internal structure should stay hidden.`] },
+    { t:'code', x:
+`class Range implements Iterable<Integer> {
+    private final int n;
+    Range(int n) { this.n = n; }
+    public Iterator<Integer> iterator() {
+        return new Iterator<>() {
+            int i = 0;
+            public boolean hasNext() { return i < n; }
+            public Integer next()    { return i++; }
+        };
+    }
+}
+// for (int x : new Range(3)) { ... }   // 0, 1, 2` },
+    { t:'note', x:`Java bakes this in as <code>Iterator</code> / <code>Iterable</code>; the <code>for-each</code> loop is just sugar over it.` }
+  ]
+},
+
+{
+  id:'mediator', category:'behavioral', source:`Centralise complex communication`,
+  title:`Mediator`,
+  ds:[`Hub-and-spoke`],
+  blocks:[
+    { t:'p', x:`Put the rules of how a set of objects interact into one mediator object, so they stop referring to each other directly.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Many-to-many object relationships create tangled dependencies.`,`Chat rooms, UI dialogs where widgets affect each other.`] },
+    { t:'code', x:
+`class ChatRoom {                                // the mediator
+    private final List<User> users = new ArrayList<>();
+    void join(User u) { users.add(u); u.room = this; }
+    void send(String msg, User from) {
+        for (User u : users) if (u != from) u.receive(msg);
+    }
+}
+
+class User {
+    ChatRoom room;
+    void send(String m)    { room.send(m, this); }   // talk THROUGH the mediator
+    void receive(String m) { /* ... */ }
+}` },
+    { t:'note', x:`Turns a mesh of object-to-object references into a hub-and-spoke. Each user knows only the room, not the other users.` }
+  ]
+},
+
+{
+  id:'memento', category:'behavioral', source:`Capture and restore state`,
+  title:`Memento`,
+  ds:[`Snapshots`,`Undo`],
+  blocks:[
+    { t:'p', x:`Capture an object's internal state in an opaque token so it can be restored later, without exposing the object's internals.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`You need snapshots / undo but won't expose private fields.`,`Editors, transactions, game save points.`] },
+    { t:'code', x:
+`class Editor {
+    private String text = "";
+    void type(String t) { text += t; }
+
+    Memento save()              { return new Memento(text); }
+    void restore(Memento m)     { this.text = m.text; }
+
+    static class Memento {                      // opaque snapshot
+        private final String text;
+        private Memento(String t) { this.text = t; }
+    }
+}
+// var m = editor.save();  editor.type("oops");  editor.restore(m);` },
+    { t:'note', x:`Pairs naturally with Command for undo: a command saves a memento before it acts, and restores it on undo.` }
+  ]
+},
+
+{
+  id:'observer', category:'behavioral', source:`Publish / subscribe on change`,
+  title:`Observer`,
+  ds:[`Events`,`Pub/sub`],
+  blocks:[
+    { t:'p', x:`Define a one-to-many dependency: when one object changes, all its subscribers are notified automatically.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Event systems, model→view updates, anything reactive.`,`Subscribers should attach/detach freely at runtime.`] },
+    { t:'code', x:
+`interface Observer { void update(int price); }
+
+class Stock {
+    private final List<Observer> observers = new ArrayList<>();
+    private int price;
+    void subscribe(Observer o) { observers.add(o); }
+    void setPrice(int p) {
+        this.price = p;
+        for (Observer o : observers) o.update(p);   // notify everyone
+    }
+}` },
+    { t:'note', x:`The backbone of event-driven UIs and pub/sub messaging. RxJava generalises it from single values to streams of events.` }
+  ]
+},
+
+{
+  id:'state', category:'behavioral', source:`Behaviour changes with state`,
+  title:`State`,
+  ds:[`State machines`],
+  blocks:[
+    { t:'p', x:`Let an object change its behaviour when its internal state changes, so it appears to switch class. Each state becomes its own class.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Lots of <code>if (state == ...)</code> branching spread across methods.`,`Vending machines, TCP connections, order lifecycles.`] },
+    { t:'code', x:
+`interface State { void next(Order o); }
+
+class Pending implements State { public void next(Order o) { o.setState(new Shipped());   } }
+class Shipped implements State { public void next(Order o) { o.setState(new Delivered()); } }
+
+class Order {
+    private State state = new Pending();
+    void setState(State s) { this.state = s; }
+    void advance()         { state.next(this); }   // behaviour delegated to the state
+}` },
+    { t:'note', x:`Replaces giant state-switch conditionals with one class per state. Close cousin of Strategy — but here the states swap themselves.` }
+  ]
+},
+
+{
+  id:'strategy', category:'behavioral', source:`Interchangeable algorithms`,
+  title:`Strategy`,
+  ds:[`Runtime swap`,`Composition`],
+  blocks:[
+    { t:'p', x:`Define a family of interchangeable algorithms behind one interface, and pick which to use at runtime.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Several ways to do one thing: sort orders, payment methods, compression.`,`You want to choose or change behaviour without subclass trees.`] },
+    { t:'code', x:
+`interface PayStrategy { void pay(int amount); }
+
+class CardPay implements PayStrategy { public void pay(int amt) { /* charge card */ } }
+class UpiPay  implements PayStrategy { public void pay(int amt) { /* charge UPI  */ } }
+
+class Checkout {
+    private PayStrategy strategy;
+    void setStrategy(PayStrategy s) { this.strategy = s; }
+    void pay(int amt)               { strategy.pay(amt); }   // swap behaviour at runtime
+}` },
+    { t:'note', x:`A <code>Comparator</code> handed to <code>sort</code> is a strategy. Favours composition over a tangle of subclasses.` }
+  ]
+},
+
+{
+  id:'template-method', category:'behavioral', source:`Fixed skeleton, overridable steps`,
+  title:`Template Method`,
+  ds:[`Inheritance`,`Hooks`],
+  blocks:[
+    { t:'p', x:`Define the skeleton of an algorithm in a base method, leaving a few steps for subclasses to fill in. The overall order is locked.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`Several algorithms share structure but differ in a few steps.`,`You want to enforce the order while varying details.`] },
+    { t:'code', x:
+`abstract class DataParser {
+    public final void run() {                   // the template: fixed order
+        open();
+        parse();                                // the varying step
+        close();
+    }
+    void open()  { /* shared */ }
+    void close() { /* shared */ }
+    abstract void parse();                      // subclasses supply this
+}
+
+class CsvParser extends DataParser {
+    void parse() { /* CSV-specific parsing */ }
+}` },
+    { t:'note', x:`<code>final run()</code> locks the sequence; subclasses only override the hooks. The inverse of Strategy — inheritance varies the steps, not composition.` }
+  ]
+},
+
+{
+  id:'visitor', category:'behavioral', source:`Add operations without editing classes`,
+  title:`Visitor`,
+  ds:[`Double dispatch`],
+  blocks:[
+    { t:'p', x:`Represent an operation to perform over a set of element types, kept outside those classes — so you can add new operations without touching the elements.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`A stable set of element types but many operations to add (AST traversal, reporting, pricing).`,`You don't want to bloat each element class with every operation.`] },
+    { t:'code', x:
+`interface Visitor { void visit(Circle c); void visit(Square s); }
+
+interface Shape { void accept(Visitor v); }
+
+class Circle implements Shape { public void accept(Visitor v) { v.visit(this); } }  // double
+class Square implements Shape { public void accept(Visitor v) { v.visit(this); } }  // dispatch
+
+class AreaVisitor implements Visitor {
+    public void visit(Circle c) { /* area of a circle */ }
+    public void visit(Square s) { /* area of a square */ }
+}` },
+    { t:'note', x:`Easy to add operations, hard to add element types (you'd edit every visitor). The accept→visit "double dispatch" is what selects the right overload.` }
+  ]
+},
+
+{
+  id:'interpreter', category:'behavioral', source:`Evaluate a small grammar`,
+  title:`Interpreter`,
+  ds:[`Grammars`,`Recursion`],
+  blocks:[
+    { t:'p', x:`Given a simple language, represent its grammar as classes and evaluate sentences by recursing over the resulting tree.` },
+    { t:'h', x:`Use when` },
+    { t:'ul', x:[`A small, well-defined grammar: rules engines, arithmetic, simple DSLs.`,`The language is stable and not performance-critical.`] },
+    { t:'code', x:
+`interface Expr { int eval(); }
+
+class Num implements Expr {
+    private final int v;
+    Num(int v) { this.v = v; }
+    public int eval() { return v; }
+}
+
+class Add implements Expr {
+    private final Expr l, r;
+    Add(Expr l, Expr r) { this.l = l; this.r = r; }
+    public int eval() { return l.eval() + r.eval(); }   // recurse over the tree
+}
+// new Add(new Num(2), new Num(3)).eval()  ->  5` },
+    { t:'note', x:`Each grammar rule becomes a class. Rarely hand-rolled beyond toy DSLs — real parsers use generators — but this is the conceptual basis.` }
+  ]
+}
+
+];
+
+/* =====================================================================
+   ===============================  SQL  ===============================
+   ===================================================================== */
+const SQL_CATS = {
+  basics:    { label:'Querying basics',    color:'#6b8afd' },
+  joins:     { label:'Joins',              color:'#22d3ee' },
+  aggregate: { label:'Grouping',           color:'#4ade80' },
+  subquery:  { label:'Subqueries & CTEs',  color:'#b794f6' },
+  window:    { label:'Window functions',   color:'#fbbf24' },
+  setops:    { label:'Set operations',     color:'#fb7185' },
+  ddl:       { label:'Schema & DML',       color:'#fb923c' },
+  patterns:  { label:'Interview patterns', color:'#f472b6' },
+};
+
+const SQL_TOPICS = [
+
+{
+  id:'sql-select', category:'basics', source:`The core read query`,
+  title:`SELECT, WHERE, ORDER BY`,
+  ds:[`SELECT`,`WHERE`,`LIMIT`],
+  blocks:[
+    { t:'p', x:`Pick columns, filter rows, sort, and limit. SQL evaluates clauses in a logical order that explains a lot of its quirks: <code>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</code>.` },
+    { t:'code', lang:'sql', x:
+`SELECT name, salary
+FROM employees
+WHERE department = 'Engineering'
+  AND salary > 50000
+ORDER BY salary DESC
+LIMIT 10;` },
+    { t:'h', x:`Common filters` },
+    { t:'code', lang:'sql', x:
+`SELECT DISTINCT city
+FROM customers
+WHERE country IN ('IN', 'US')
+  AND name LIKE 'A%'              -- starts with A
+  AND age BETWEEN 18 AND 30       -- inclusive
+  AND phone IS NOT NULL;          -- NULL needs IS, not =` },
+    { t:'note', x:`Because <code>WHERE</code> runs before <code>SELECT</code>, a column alias defined in <code>SELECT</code> can't be used in <code>WHERE</code> — but it can in <code>ORDER BY</code>, which runs after.` }
+  ]
+},
+
+{
+  id:'sql-joins', category:'joins', source:`Combine rows across tables`,
+  title:`Joins`,
+  ds:[`INNER`,`LEFT`,`SELF`],
+  blocks:[
+    { t:'p', x:`A join stitches rows from two tables on a matching condition. The join type decides what happens to rows that have no match on the other side.` },
+    { t:'h', x:`The types` },
+    { t:'ul', x:[
+      `<strong>INNER</strong> — only rows that match on both sides.`,
+      `<strong>LEFT</strong> — all left rows; unmatched right columns come back NULL (<strong>RIGHT</strong> is the mirror).`,
+      `<strong>FULL OUTER</strong> — every row from both sides. <strong>CROSS</strong> — every combination (cartesian).`
+    ]},
+    { t:'code', lang:'sql', x:
+`-- only employees who have a department
+SELECT e.name, d.name AS department
+FROM employees e
+INNER JOIN departments d ON e.dept_id = d.id;
+
+-- keep ALL employees, even those with no department (d.* is NULL)
+SELECT e.name, d.name AS department
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.id;` },
+    { t:'h', x:`Self-join` },
+    { t:'code', lang:'sql', x:
+`-- pair each employee with their manager (same table, two aliases)
+SELECT e.name AS employee, m.name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;` },
+    { t:'note', x:`<code>LEFT JOIN</code> plus <code>WHERE d.id IS NULL</code> is the anti-join — it finds left rows that have no match at all.` }
+  ]
+},
+
+{
+  id:'sql-group', category:'aggregate', source:`Collapse rows into summaries`,
+  title:`GROUP BY & Aggregates`,
+  ds:[`GROUP BY`,`HAVING`,`COUNT`],
+  blocks:[
+    { t:'p', x:`Aggregate functions (<code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>) crush many rows into one summary. <code>GROUP BY</code> produces one summary row per group; <code>HAVING</code> filters those groups.` },
+    { t:'code', lang:'sql', x:
+`SELECT department,
+       COUNT(*)    AS headcount,
+       AVG(salary) AS avg_salary,
+       MAX(salary) AS top_salary
+FROM employees
+GROUP BY department
+HAVING COUNT(*) >= 5             -- only departments with 5+ people
+ORDER BY avg_salary DESC;` },
+    { t:'note', x:`<code>WHERE</code> filters rows (before grouping); <code>HAVING</code> filters groups (after). <code>COUNT(*)</code> counts rows, <code>COUNT(col)</code> ignores NULLs. Every non-aggregated SELECT column must be in <code>GROUP BY</code>.` }
+  ]
+},
+
+{
+  id:'sql-subquery', category:'subquery', source:`Queries inside queries`,
+  title:`Subqueries & CTEs`,
+  ds:[`WITH`,`EXISTS`,`correlated`],
+  blocks:[
+    { t:'p', x:`A subquery is a query nested in another. A CTE (<code>WITH</code>) names a subquery up front so the main query reads top to bottom instead of inside out.` },
+    { t:'code', lang:'sql', x:
+`-- employees earning above the company average (scalar subquery)
+SELECT name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);` },
+    { t:'h', x:`Same idea with a CTE` },
+    { t:'code', lang:'sql', x:
+`WITH dept_avg AS (
+    SELECT dept_id, AVG(salary) AS avg_sal
+    FROM employees
+    GROUP BY dept_id
+)
+SELECT e.name
+FROM employees e
+JOIN dept_avg a ON e.dept_id = a.dept_id
+WHERE e.salary > a.avg_sal;       -- beats their OWN department's average` },
+    { t:'note', x:`<code>EXISTS</code> often beats <code>IN</code> with subqueries because it stops at the first match. A correlated subquery references the outer row and re-runs per row — readable, but watch the cost.` }
+  ]
+},
+
+{
+  id:'sql-window', category:'window', source:`Compute across rows, keep them all`,
+  title:`Window Functions`,
+  ds:[`OVER`,`PARTITION BY`,`RANK`],
+  blocks:[
+    { t:'p', x:`Window functions compute over a set of rows related to the current one — without collapsing them the way <code>GROUP BY</code> does. You still get every row back, plus the computed column.` },
+    { t:'code', lang:'sql', x:
+`-- rank employees by salary WITHIN each department
+SELECT name, department, salary,
+       RANK()       OVER (PARTITION BY department ORDER BY salary DESC) AS rnk,
+       ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rn
+FROM employees;` },
+    { t:'h', x:`Running total` },
+    { t:'code', lang:'sql', x:
+`SELECT sale_date, amount,
+       SUM(amount) OVER (ORDER BY sale_date) AS running_total
+FROM sales;` },
+    { t:'note', x:`<code>PARTITION BY</code> sets the groups; the inner <code>ORDER BY</code> orders rows within each. <code>RANK</code> leaves gaps after ties (1,2,2,4); <code>DENSE_RANK</code> doesn't (1,2,2,3); <code>ROW_NUMBER</code> is always unique.` }
+  ]
+},
+
+{
+  id:'sql-setops', category:'setops', source:`Combine two result sets`,
+  title:`UNION, INTERSECT, EXCEPT`,
+  ds:[`UNION`,`INTERSECT`,`EXCEPT`],
+  blocks:[
+    { t:'p', x:`Stack the rows of two queries that return matching columns. The variants differ in how they treat duplicates and overlap.` },
+    { t:'ul', x:[
+      `<strong>UNION</strong> combines and removes duplicates; <strong>UNION ALL</strong> keeps them (and is faster).`,
+      `<strong>INTERSECT</strong> keeps rows present in both; <strong>EXCEPT</strong> (a.k.a. MINUS) keeps rows in the first but not the second.`
+    ]},
+    { t:'code', lang:'sql', x:
+`-- people who are both a customer and a supplier
+SELECT email FROM customers
+INTERSECT
+SELECT email FROM suppliers;
+
+-- all unique contact emails from either table
+SELECT email FROM customers
+UNION
+SELECT email FROM suppliers;` },
+    { t:'note', x:`Both sides must have the same number of columns with compatible types. Use <code>UNION ALL</code> when you know there are no duplicates — it skips the costly dedupe.` }
+  ]
+},
+
+{
+  id:'sql-ddl', category:'ddl', source:`Define structure, change data`,
+  title:`Schema, Constraints & Transactions`,
+  ds:[`CREATE`,`constraints`,`ACID`],
+  blocks:[
+    { t:'p', x:`DDL defines structure (tables, keys, indexes); DML changes data (insert, update, delete). Constraints keep the data valid at all times.` },
+    { t:'code', lang:'sql', x:
+`CREATE TABLE employees (
+    id      INT PRIMARY KEY,
+    name    VARCHAR(100) NOT NULL,
+    dept_id INT REFERENCES departments(id),    -- foreign key
+    salary  INT CHECK (salary >= 0),
+    email   VARCHAR(255) UNIQUE
+);
+
+CREATE INDEX idx_emp_dept ON employees(dept_id);   -- speeds up joins & filters` },
+    { t:'h', x:`Changing data, atomically` },
+    { t:'code', lang:'sql', x:
+`INSERT INTO employees (id, name, dept_id, salary) VALUES (1, 'Asha', 3, 90000);
+UPDATE employees SET salary = salary * 1.1 WHERE dept_id = 3;
+DELETE FROM employees WHERE id = 1;
+
+-- all or nothing: a transaction
+BEGIN;
+  UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+  UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;                                         -- ROLLBACK undoes everything instead` },
+    { t:'note', x:`Transactions give ACID — Atomicity, Consistency, Isolation, Durability. An index speeds reads but slows writes; index what you filter and join on. A <code>DELETE</code> with no <code>WHERE</code> empties the table.` }
+  ]
+},
+
+{
+  id:'sql-patterns', category:'patterns', source:`Queries that show up constantly`,
+  title:`Interview Patterns`,
+  ds:[`Nth highest`,`dedupe`],
+  blocks:[
+    { t:'p', x:`A handful of classics worth knowing cold.` },
+    { t:'h', x:`Nth highest salary` },
+    { t:'code', lang:'sql', x:
+`-- 2nd highest distinct salary (empty if none)
+SELECT DISTINCT salary
+FROM (
+    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+    FROM employees
+) t
+WHERE rnk = 2;` },
+    { t:'h', x:`Find duplicate emails` },
+    { t:'code', lang:'sql', x:
+`SELECT email, COUNT(*) AS cnt
+FROM users
+GROUP BY email
+HAVING COUNT(*) > 1;` },
+    { t:'h', x:`Delete duplicates, keep the lowest id` },
+    { t:'code', lang:'sql', x:
+`DELETE FROM users
+WHERE id NOT IN (
+    SELECT keep_id FROM (
+        SELECT MIN(id) AS keep_id FROM users GROUP BY email
+    ) t                              -- wrapper subquery: required by MySQL
+);` },
+    { t:'note', x:`<code>DENSE_RANK</code> handles ties cleanly for "Nth highest". MySQL forbids reading the same table you're deleting from directly, so the delete wraps the grouping in an extra subquery.` }
+  ]
+}
+
+];
+
+/* ======================= SECTION REGISTRY ======================= */
+const SECTIONS = {
+  dsa: { label:'DSA', cats:DSA_CATS, topics:DSA_TOPICS,
+         blurb:`Approach, idiomatic Java, the data structures involved, and time/space complexity for each problem.` },
+  lld: { label:'LLD', cats:LLD_CATS, topics:LLD_TOPICS,
+         blurb:`Design patterns and principles — each with its intent, when to reach for it, and a small Java example.` },
+  sql: { label:'SQL', cats:SQL_CATS, topics:SQL_TOPICS,
+         blurb:`SQL from querying basics to window functions and transactions, with runnable examples throughout.` },
+};
+
+/* ============================ RENDER ============================ */
+const $ = (s, r=document) => r.querySelector(s);
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+function renderBlock(b){
+  switch(b.t){
+    case 'h':   return el('h3','blk-h', b.x);
+    case 'p':   { const p=el('p','blk-p'); p.innerHTML=b.x; return p; }
+    case 'note':{ const d=el('div','blk-note'); d.innerHTML=b.x; return d; }
+    case 'ul':  { const ul=el('ul','blk-ul'); b.x.forEach(i=>{ const li=el('li'); li.innerHTML=i; ul.appendChild(li); }); return ul; }
+    case 'ol':  { const ol=el('ol','blk-ol'); b.x.forEach(i=>{ const li=el('li'); li.innerHTML=i; ol.appendChild(li); }); return ol; }
+    case 'code':{ const pre=el('pre','blk-code'); const c=el('code'); c.className='language-'+(b.lang||'java'); c.textContent=b.x; pre.appendChild(c); return pre; }
+    case 'table':{
+      const wrap=el('div','blk-table-wrap'); const t=el('table','blk-table');
+      const thead=el('thead'); const trh=el('tr');
+      b.head.forEach(h=>trh.appendChild(el('th',null,h)));
+      thead.appendChild(trh); t.appendChild(thead);
+      const tb=el('tbody');
+      b.rows.forEach(r=>{ const tr=el('tr'); r.forEach((c,i)=>tr.appendChild(el('td', i===0?'td-name':null, c))); tb.appendChild(tr); });
+      t.appendChild(tb); wrap.appendChild(t); return wrap;
+    }
+  }
+}
+
+function metaPill(k, v){
+  const p=el('span','pill-meta');
+  p.appendChild(el('span','k', k));
+  p.appendChild(el('span','v', v));
+  return p;
+}
+
+function renderCard(topic){
+  const cat = CATS[topic.category];
+  const card = el('article','card');
+  card.id = topic.id;
+  card.dataset.category = topic.category;
+  card.style.setProperty('--cat', cat.color);
+
+  const head = el('header');
+  const eb = el('div','eyebrow');
+  eb.appendChild(el('span','cat-dot'));
+  eb.appendChild(el('span','cat-label', cat.label));
+  if(topic.source) eb.appendChild(el('span','src', topic.source));
+  head.appendChild(eb);
+  head.appendChild(el('h2','card-title', topic.title));
+  card.appendChild(head);
+
+  const meta = el('div','meta');
+  if(topic.time)  meta.appendChild(metaPill('Time', topic.time));
+  if(topic.space) meta.appendChild(metaPill('Space', topic.space));
+  (topic.ds||[]).forEach(d=> meta.appendChild(el('span','chip', d)));
+  card.appendChild(meta);
+
+  const body = el('div','card-body');
+  topic.blocks.forEach(b=>{ const node=renderBlock(b); if(node) body.appendChild(node); });
+  card.appendChild(body);
+  return card;
+}
+
+/* ---- DOM handles ---- */
+const cardsEl  = $('#cards');
+const navEl    = $('#nav');
+const pillsEl  = $('#pills');
+const searchEl = $('#search');
+const emptyEl  = $('#empty');
+const ledeEl   = $('.lede');
+const overlay  = $('#overlay');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- active-section state (reassigned on switch) ---- */
+let CATS, TOPICS, navMap = {}, activeCat = 'all', spy = null;
+
+function clear(node){ while(node.firstChild) node.removeChild(node.firstChild); }
+
+/* build the cards for the current section */
+function buildCards(){
+  clear(cardsEl);
+  TOPICS.forEach(t=> cardsEl.appendChild(renderCard(t)));
+}
+
+/* build the sidebar nav, grouped by category */
+function buildNav(){
+  clear(navEl);
+  navMap = {};
+  Object.keys(CATS).forEach(catKey=>{
+    const list = TOPICS.filter(t=>t.category===catKey);
+    if(!list.length) return;
+    const group = el('div','nav-group');
+    group.dataset.category = catKey;
+    const head = el('div','nav-cat');
+    const dot = el('span','cat-dot'); dot.style.background = CATS[catKey].color;
+    head.appendChild(dot);
+    head.appendChild(el('span','nav-cat-label', CATS[catKey].label));
+    group.appendChild(head);
+    list.forEach(t=>{
+      const a = el('a','nav-link', t.title);
+      a.href = '#'+t.id; a.dataset.target = t.id;
+      navMap[t.id] = a;
+      group.appendChild(a);
+    });
+    navEl.appendChild(group);
+  });
+}
+
+/* build the filter pills */
+function makePill(label, cat){
+  const b = el('button','pill', label);
+  b.dataset.cat = cat;
+  if(cat===activeCat) b.classList.add('active');
+  b.addEventListener('click', ()=>{
+    activeCat = cat;
+    pillsEl.querySelectorAll('.pill').forEach(p=>p.classList.toggle('active', p.dataset.cat===cat));
+    applyFilter();
+  });
+  return b;
+}
+function buildPills(){
+  clear(pillsEl);
+  activeCat = 'all';
+  pillsEl.appendChild(makePill('All','all'));
+  Object.keys(CATS).forEach(k=> pillsEl.appendChild(makePill(CATS[k].label, k)));
+}
+
+/* search + category filter over the current section */
+function applyFilter(){
+  const q = searchEl.value.trim().toLowerCase();
+  let visible = 0;
+  TOPICS.forEach(t=>{
+    const card = document.getElementById(t.id);
+    if(!card) return;
+    const link = navMap[t.id];
+    const matchCat = activeCat==='all' || t.category===activeCat;
+    const hay = (t.title+' '+CATS[t.category].label+' '+(t.ds||[]).join(' ')+' '+(t.source||'')).toLowerCase();
+    const matchQ = !q || hay.includes(q);
+    const show = matchCat && matchQ;
+    card.hidden = !show;
+    if(link) link.hidden = !show;
+    if(show) visible++;
+  });
+  navEl.querySelectorAll('.nav-group').forEach(g=>{
+    g.hidden = g.querySelectorAll('.nav-link:not([hidden])').length === 0;
+  });
+  emptyEl.classList.toggle('show', visible===0);
+}
+
+/* scroll-spy: highlight the nav item nearest the top */
+function buildSpy(){
+  if(spy) spy.disconnect();
+  spy = new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        navEl.querySelectorAll('.nav-link.active').forEach(n=>n.classList.remove('active'));
+        const a = navMap[en.target.id];
+        if(a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin:'-84px 0px -68% 0px', threshold:0 });
+  TOPICS.forEach(t=>{ const c=document.getElementById(t.id); if(c) spy.observe(c); });
+}
+
+function highlightCode(){
+  if(window.hljs) cardsEl.querySelectorAll('pre code').forEach(b=> hljs.highlightElement(b));
+}
+
+/* ---- drawer (mobile) ---- */
+function openDrawer(){ navEl.classList.add('open'); overlay.classList.add('show'); }
+function closeDrawer(){ navEl.classList.remove('open'); overlay.classList.remove('show'); }
+
+/* ---- switch the whole page to a section ---- */
+function buildSection(key){
+  const section = SECTIONS[key];
+  CATS = section.cats;
+  TOPICS = section.topics;
+  searchEl.value = '';
+  ledeEl.textContent = section.blurb;
+  buildCards();
+  buildNav();
+  buildPills();
+  buildSpy();
+  highlightCode();
+  applyFilter();
+  document.querySelectorAll('.navtab').forEach(t=> t.classList.toggle('active', t.dataset.section===key));
+  window.scrollTo({ top:0, behavior:'auto' });
+  closeDrawer();
+}
+
+/* ---- persistent listeners ---- */
+$('#menuBtn').addEventListener('click', ()=> navEl.classList.contains('open') ? closeDrawer() : openDrawer());
+overlay.addEventListener('click', closeDrawer);
+searchEl.addEventListener('input', applyFilter);
+
+navEl.addEventListener('click', e=>{
+  const a = e.target.closest('.nav-link');
+  if(!a) return;
+  e.preventDefault();
+  const target = document.getElementById(a.dataset.target);
+  if(target){
+    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block:'start' });
+    history.replaceState(null,'','#'+a.dataset.target);
+  }
+  closeDrawer();
+});
+
+$('#navtabs').addEventListener('click', e=>{
+  const b = e.target.closest('.navtab');
+  if(b) buildSection(b.dataset.section);
+});
+
+/* ---- init ---- */
+buildSection('dsa');
+/*APP_END*/</script>
+</body>
+</html>
