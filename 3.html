@@ -1,0 +1,3508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samsung PPO — Java Algorithm Mastery Guide</title>
+<style>
+:root{
+  --bg:#0e1117; --bg2:#151b24; --panel:#161c26; --panel2:#1c2430;
+  --ink:#e6edf3; --ink2:#aab4c0; --ink3:#7a8694;
+  --line:#27303d; --line2:#323d4d;
+  --accent:#4ea1ff; --accent2:#7c5cff;
+  --graph:#37c9a3; --backtrack:#ff8a5c; --dp:#ff5c8a; --binary:#ffce4e;
+  --greedy:#9b8cff; --math:#56c2ff; --geometry:#5cffb0;
+  --ok:#37c98a; --code-bg:#0b0f15;
+  --kw:#ff7b9c; --typ:#6fd3ff; --str:#9ee37d; --num:#ffd479; --cmt:#6b7686; --fn:#dcb6ff; --ann:#ffce4e;
+  --mono:'SF Mono','JetBrains Mono','Fira Code',Consolas,'Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+::selection{background:rgba(78,161,255,.32)}
+/* ---------- layout ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(14,17,23,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.topbar h1{font-size:16px;font-weight:700;letter-spacing:.3px}
+.topbar h1 small{color:var(--ink3);font-weight:500}
+.searchwrap{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#search{background:var(--panel);border:1px solid var(--line2);color:var(--ink);padding:7px 12px;border-radius:8px;
+  font-size:13px;width:220px;outline:none}
+#search:focus{border-color:var(--accent)}
+.progresspill{font-size:12px;color:var(--ink2);background:var(--panel);border:1px solid var(--line);padding:6px 11px;border-radius:20px}
+.progresspill b{color:var(--ok)}
+.layout{display:grid;grid-template-columns:282px 1fr;gap:0;max-width:1500px;margin:0 auto}
+/* ---------- sidebar ---------- */
+.sidebar{position:sticky;top:53px;align-self:start;height:calc(100vh - 53px);overflow-y:auto;
+  border-right:1px solid var(--line);padding:18px 14px 60px}
+.sidebar::-webkit-scrollbar{width:9px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+.navgroup{margin-bottom:14px}
+.navgroup>.gh{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--ink3);font-weight:700;
+  padding:6px 10px;display:flex;align-items:center;gap:7px}
+.navgroup .dot{width:8px;height:8px;border-radius:50%}
+.sidebar a.navlink{display:flex;gap:8px;align-items:baseline;padding:5px 10px 5px 24px;border-radius:7px;
+  color:var(--ink2);font-size:13px;line-height:1.35;transition:.12s}
+.sidebar a.navlink .ix{color:var(--ink3);font-size:11px;font-variant-numeric:tabular-nums;min-width:20px}
+.sidebar a.navlink:hover{background:var(--panel);color:var(--ink)}
+.sidebar a.navlink.active{background:var(--panel2);color:#fff}
+.sidebar a.navlink.active .ix{color:var(--accent)}
+.sidebar a.navlink.learned .ix::after{content:" ✓";color:var(--ok)}
+/* ---------- main ---------- */
+main{padding:28px 38px 120px;min-width:0}
+.hero{background:linear-gradient(135deg,#161c26,#11202e);border:1px solid var(--line2);border-radius:16px;
+  padding:26px 30px;margin-bottom:26px}
+.hero h2{font-size:26px;margin-bottom:8px;background:linear-gradient(90deg,#4ea1ff,#7c5cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--ink2);max-width:760px;margin-bottom:6px}
+.hero .legend{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.hero .legend span{font-size:12px;color:var(--ink2);background:var(--panel);border:1px solid var(--line);padding:4px 10px;border-radius:20px}
+.filterbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.fbtn{font-size:12.5px;color:var(--ink2);background:var(--panel);border:1px solid var(--line2);padding:6px 13px;
+  border-radius:20px;cursor:pointer;transition:.12s;user-select:none}
+.fbtn:hover{color:#fff;border-color:var(--accent)}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:#06121f;font-weight:600}
+/* ---------- problem card ---------- */
+.problem{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:26px;scroll-margin-top:64px}
+.problem.hide{display:none}
+.phead{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.phead h3{font-size:20px;font-weight:700;flex:1;min-width:240px}
+.phead h3 .num{display:inline-block;background:var(--bg);border:1px solid var(--line2);color:var(--ink3);
+  font-size:13px;padding:2px 8px;border-radius:7px;margin-right:10px;font-variant-numeric:tabular-nums}
+.done{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);cursor:pointer;user-select:none;
+  background:var(--bg);border:1px solid var(--line2);padding:5px 11px;border-radius:20px;white-space:nowrap}
+.done input{accent-color:var(--ok);cursor:pointer}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+.tag{font-size:11.5px;padding:3px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--line2);color:var(--ink2);font-weight:600}
+.tag.cat{color:#06121f}
+.diff{font-size:11.5px;padding:3px 10px;border-radius:6px;font-weight:700}
+.diff.easy{background:rgba(55,201,138,.16);color:#54d99a;border:1px solid rgba(55,201,138,.35)}
+.diff.med{background:rgba(255,206,78,.14);color:#ffce4e;border:1px solid rgba(255,206,78,.32)}
+.diff.hard{background:rgba(255,92,138,.14);color:#ff7b9c;border:1px solid rgba(255,92,138,.32)}
+.block{margin-top:18px}
+.block>h4{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.block>h4 .ic{font-size:15px}
+.block p{color:var(--ink);margin-bottom:8px}
+.block p.sub,.block li.sub{color:var(--ink2)}
+.block ul,.block ol{margin:6px 0 8px 22px}
+.block li{margin-bottom:5px;color:var(--ink)}
+.block code.inl{font-family:var(--mono);background:var(--bg);border:1px solid var(--line2);padding:1px 6px;border-radius:5px;font-size:13px;color:#9ee3ff}
+.io{background:var(--code-bg);border:1px solid var(--line2);border-radius:10px;padding:12px 14px;margin-top:10px;
+  font-family:var(--mono);font-size:13px;white-space:pre-wrap;color:var(--ink2);overflow-x:auto}
+.io b{color:var(--accent)}
+.callout{border-left:3px solid var(--accent);background:rgba(78,161,255,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin-top:10px;color:var(--ink2);font-size:14px}
+.callout.warn{border-color:var(--binary);background:rgba(255,206,78,.07)}
+.callout b{color:var(--ink)}
+/* ---------- viz ---------- */
+.viz{background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:16px;margin-top:10px;overflow-x:auto}
+.viz svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.viz .vcap{font-size:12.5px;color:var(--ink3);text-align:center;margin-top:10px}
+.player{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.player button{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);font-size:13px;
+  padding:6px 14px;border-radius:8px;cursor:pointer}
+.player button:hover{border-color:var(--accent);color:#fff}
+.player button:disabled{opacity:.4;cursor:default}
+.player .stepinfo{font-size:12.5px;color:var(--ink2);min-width:60px;text-align:center}
+.framenote{text-align:center;font-size:13px;color:var(--ink);margin-top:10px;min-height:20px}
+.framenote b{color:var(--accent)}
+/* grid cells */
+.gridtbl{border-collapse:collapse;margin:0 auto}
+.gridtbl td{width:34px;height:34px;text-align:center;font-family:var(--mono);font-size:13px;
+  border:1px solid var(--line2);color:var(--ink);background:var(--panel)}
+.gridtbl td.wall{background:#2a2f3a;color:#5a6472}
+.gridtbl td.start{background:rgba(78,161,255,.28);color:#cfe6ff;font-weight:700}
+.gridtbl td.goal{background:rgba(255,92,138,.28);color:#ffd0de;font-weight:700}
+.gridtbl td.visit{background:rgba(55,201,163,.22);color:#bff3e6}
+.gridtbl td.frontier{background:rgba(255,206,78,.30);color:#fff1c2;font-weight:700}
+.gridtbl td.path{background:rgba(124,92,255,.30);color:#e3d8ff;font-weight:700}
+.dptbl{border-collapse:collapse;margin:0 auto;font-family:var(--mono);font-size:12.5px}
+.dptbl td,.dptbl th{border:1px solid var(--line2);padding:5px 9px;text-align:center;color:var(--ink2)}
+.dptbl th{background:var(--panel2);color:var(--ink3);font-weight:600}
+.dptbl td.cur{background:var(--accent);color:#06121f;font-weight:700}
+.dptbl td.dep{background:rgba(124,92,255,.30);color:#e3d8ff}
+.dptbl td.fill{background:rgba(55,201,163,.16);color:#bff3e6}
+.barwrap{display:flex;gap:6px;align-items:flex-end;justify-content:center;height:120px;margin-top:6px}
+.bar{width:34px;background:linear-gradient(180deg,#4ea1ff,#7c5cff);border-radius:5px 5px 0 0;position:relative;
+  display:flex;align-items:flex-end;justify-content:center;color:#06121f;font-weight:700;font-size:12px;font-family:var(--mono)}
+.bar .lbl{position:absolute;bottom:-20px;color:var(--ink3);font-weight:500}
+.bar.mark{background:linear-gradient(180deg,#ffce4e,#ff8a5c)}
+.legendrow{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:12px;font-size:12px;color:var(--ink2)}
+.legendrow span{display:inline-flex;align-items:center;gap:6px}
+.legendrow i{width:13px;height:13px;border-radius:3px;display:inline-block}
+/* ---------- code ---------- */
+.codebox{margin-top:18px;border-radius:12px;border:1px solid var(--line2);overflow:hidden;background:var(--code-bg)}
+.codebar{display:flex;align-items:center;justify-content:space-between;background:var(--panel2);
+  padding:7px 12px;border-bottom:1px solid var(--line2)}
+.codebar .fname{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.codebar .fname::before{content:"☕ ";}
+.copybtn{background:var(--bg);border:1px solid var(--line2);color:var(--ink2);font-size:12px;
+  padding:4px 12px;border-radius:7px;cursor:pointer}
+.copybtn:hover{color:#fff;border-color:var(--accent)}
+.copybtn.copied{color:var(--ok);border-color:var(--ok)}
+pre.code{margin:0;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:12.7px;line-height:1.62;tab-size:4}
+pre.code::-webkit-scrollbar{height:10px}
+pre.code::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+.tok-kw{color:var(--kw)}.tok-typ{color:var(--typ)}.tok-str{color:var(--str)}
+.tok-num{color:var(--num)}.tok-cmt{color:var(--cmt);font-style:italic}.tok-fn{color:var(--fn)}.tok-ann{color:var(--ann)}
+.cx{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px}
+.cx div{font-size:13px;color:var(--ink2)}
+.cx b{color:var(--ink);font-family:var(--mono)}
+.backtop{position:fixed;right:22px;bottom:22px;background:var(--accent);color:#06121f;border:none;width:44px;height:44px;
+  border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4);display:none;z-index:40;font-weight:700}
+.backtop.show{display:block}
+.empty{text-align:center;color:var(--ink3);padding:60px 0;font-size:15px}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  main{padding:20px 16px 80px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>⚡ Samsung PPO <small>· Java Algorithm Mastery</small></h1>
+  <div class="searchwrap">
+    <span class="progresspill">Learned: <b id="learnedCount">0</b> / <span id="totalCount">0</span></span>
+    <input id="search" type="text" placeholder="Search problems / tags…">
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main>
+    <div class="hero">
+      <h2>Crack the Samsung 3-Hour Coding Test</h2>
+      <p>Every classic Samsung R&amp;D India problem from your practice set — re-written in clean, idiomatic <b>Java</b>, each with a precise problem statement, the core idea, a hand-drawn <b>visualization</b>, the full solution, and complexity. Tick problems off as you master them; your progress is saved in this browser.</p>
+      <p class="sub">Tip: use the category filters and search to drill the “MUST DO” topics first — Bipartite, Cycle detection, Burst Balloon, Endoscopy, Mr Lee/Kim, Research Team, Spaceship, Wormhole, Omnious.</p>
+      <div class="legend">
+        <span>🟢 Easy = warm-up</span><span>🟡 Medium = core test level</span><span>🔴 Hard = stretch</span>
+        <span>📊 = interactive visualization</span>
+      </div>
+    </div>
+    <div class="filterbar" id="filterbar"></div>
+    <div id="problems">
+      <!--PROBLEMS-START-->
+
+<!-- ================= 01 BIPARTITE ================= -->
+<section class="problem" id="p-bipartite" data-cat="graph" data-title="Bipartite Graph (Same Colour)">
+  <div class="phead">
+    <h3><span class="num">01</span>Bipartite Graph — Same Colour Set</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">2-Colouring</span><span class="tag">DFS</span><span class="diff easy">Easy</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given an undirected graph as an adjacency matrix, decide whether it is <b>bipartite</b> — i.e. whether the vertices can be split into two groups so that <b>every edge joins the two groups</b> (never two vertices inside the same group). If it is bipartite, print one of the two colour groups; otherwise print <code class="inl">-1</code>. The graph may be disconnected.</p>
+    <div class="io"><b>Input</b>
+4
+0 1 0 1
+1 0 1 0
+0 1 0 1
+1 0 1 0
+<b>Output</b>  (vertices coloured 0)
+0 2</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>A graph is bipartite <b>iff it has no odd-length cycle</b>. Try to 2-colour it: start a component with colour <code class="inl">0</code>, and every neighbour must get the <i>opposite</i> colour (<code class="inl">1 - color[u]</code>). If you ever reach a neighbour that is <b>already coloured the same</b> as the current vertex, an odd cycle exists → not bipartite. Loop over all vertices to also colour <b>disconnected components</b>.</p>
+    <div class="callout"><b>Pattern to remember:</b> “opposite-colour DFS/BFS”. The exact same skeleton solves <i>team-splitting</i>, <i>conflict graphs</i>, and <i>is-this-graph-2-colourable</i> questions.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 520 200" width="520" height="200">
+        <defs><marker id="a1"/></defs>
+        <line x1="120" y1="55" x2="120" y2="150" stroke="#3a4658" stroke-width="2"/>
+        <line x1="120" y1="55" x2="380" y2="150" stroke="#3a4658" stroke-width="2"/>
+        <line x1="380" y1="55" x2="120" y2="150" stroke="#3a4658" stroke-width="2"/>
+        <line x1="380" y1="55" x2="380" y2="150" stroke="#3a4658" stroke-width="2"/>
+        <text x="60" y="35" fill="#4ea1ff" font-size="13" font-family="monospace">Group 0</text>
+        <text x="330" y="35" fill="#ff5c8a" font-size="13" font-family="monospace">Group 1</text>
+        <circle cx="120" cy="55" r="22" fill="#1b3a5c" stroke="#4ea1ff" stroke-width="2"/><text x="120" y="60" fill="#cfe6ff" font-size="14" text-anchor="middle" font-family="monospace">0</text>
+        <circle cx="380" cy="55" r="22" fill="#4a1b30" stroke="#ff5c8a" stroke-width="2"/><text x="380" y="60" fill="#ffd0de" font-size="14" text-anchor="middle" font-family="monospace">1</text>
+        <circle cx="120" cy="150" r="22" fill="#1b3a5c" stroke="#4ea1ff" stroke-width="2"/><text x="120" y="155" fill="#cfe6ff" font-size="14" text-anchor="middle" font-family="monospace">2</text>
+        <circle cx="380" cy="150" r="22" fill="#4a1b30" stroke="#ff5c8a" stroke-width="2"/><text x="380" y="155" fill="#ffd0de" font-size="14" text-anchor="middle" font-family="monospace">3</text>
+      </svg>
+      <div class="vcap">Every edge crosses from a <span style="color:#4ea1ff">blue</span> vertex to a <span style="color:#ff5c8a">pink</span> vertex — no edge stays inside one group → <b>bipartite</b>. If any edge were drawn inside a group, the answer would be −1.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="bipartite"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(V²) (matrix scan)</div><div>💾 <b>Space:</b> O(V) colour array + recursion</div></div>
+</section>
+<script type="text/x-java" data-code="bipartite" data-file="Bipartite.java">
+import java.util.*;
+
+public class Bipartite {
+    static int n;
+    static int[][] adj;
+    static int[] color;            // -1 = uncoloured, else 0 or 1
+
+    // DFS 2-colouring. Returns false the moment an odd cycle is detected.
+    static boolean isBipartite(int u) {
+        boolean ok = true;
+        for (int v = 0; v < n; v++) {
+            if (adj[u][v] == 1) {
+                if (color[v] == -1) {              // neighbour not coloured yet
+                    color[v] = 1 - color[u];       // give it the OPPOSITE colour
+                    ok &= isBipartite(v);
+                } else if (color[v] == color[u]) { // edge inside one group -> fail
+                    return false;
+                }
+            }
+        }
+        return ok;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        adj = new int[n][n];
+        color = new int[n];
+        Arrays.fill(color, -1);
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                adj[i][j] = sc.nextInt();
+
+        for (int i = 0; i < n; i++) {              // covers disconnected components
+            if (color[i] == -1) {
+                color[i] = 0;                      // seed each component with colour 0
+                if (!isBipartite(i)) { System.out.println(-1); return; }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++)
+            if (color[i] == 0) sb.append(i).append(' ');
+        System.out.println(sb.toString().trim());
+    }
+}
+</script>
+
+<!-- ================= 02 CYCLE DIRECTED ================= -->
+<section class="problem" id="p-cyc-dir" data-cat="graph" data-title="Detect &amp; Print Cycle (Directed)">
+  <div class="phead">
+    <h3><span class="num">02</span>Detect &amp; Print a Cycle — Directed Graph</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">DFS</span><span class="tag">Colours (White/Gray/Black)</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given a <b>directed</b> graph, determine whether it contains a cycle, and if so print the vertices that form one such cycle in order.</p>
+    <div class="io"><b>Input</b>  (n, then m edges  u→v)
+4
+4
+0 1
+1 2
+2 0
+2 3
+<b>Output</b>
+Cycle: [0, 1, 2]</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Use the classic <b>three-colour DFS</b>:</p>
+    <ul>
+      <li><b>WHITE (0)</b> — not visited yet.</li>
+      <li><b>GRAY (1)</b> — on the current recursion stack (being explored).</li>
+      <li><b>BLACK (2)</b> — fully finished.</li>
+    </ul>
+    <p>If DFS reaches a <b>GRAY</b> vertex, that edge points back into the active path — a <b>back edge</b> — which means a cycle. Record the back-edge endpoints (<code class="inl">cycleStart</code>, <code class="inl">cycleEnd</code>) and rebuild the path with a <code class="inl">parent[]</code> array.</p>
+    <div class="callout warn"><b>Directed vs Undirected:</b> for directed graphs a back edge to <i>any</i> GRAY ancestor is a cycle. The <code class="inl">parent==v</code> shortcut used for <i>undirected</i> graphs (problem 03) does <b>not</b> apply here.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 520 190" width="520" height="190">
+        <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 Z" fill="#ff5c8a"/></marker>
+        <marker id="arrg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 Z" fill="#5a6678"/></marker></defs>
+        <line x1="92" y1="95" x2="188" y2="95" stroke="#5a6678" stroke-width="2" marker-end="url(#arrg)"/>
+        <line x1="232" y1="80" x2="318" y2="55" stroke="#5a6678" stroke-width="2" marker-end="url(#arrg)"/>
+        <path d="M335 78 Q260 150 95 112" fill="none" stroke="#ff5c8a" stroke-width="2.5" marker-end="url(#arr)" stroke-dasharray="5 4"/>
+        <line x1="352" y1="62" x2="440" y2="120" stroke="#5a6678" stroke-width="2" marker-end="url(#arrg)"/>
+        <g font-family="monospace" font-size="14" text-anchor="middle">
+          <circle cx="70" cy="95" r="22" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="70" y="100" fill="#bff3e6">0</text>
+          <circle cx="210" cy="95" r="22" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="210" y="100" fill="#bff3e6">1</text>
+          <circle cx="340" cy="62" r="22" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="340" y="67" fill="#bff3e6">2</text>
+          <circle cx="455" cy="130" r="22" fill="#2a2f3a" stroke="#5a6472" stroke-width="2"/><text x="455" y="135" fill="#8a94a4">3</text>
+        </g>
+        <text x="200" y="170" fill="#ff5c8a" font-size="12.5" text-anchor="middle" font-family="monospace">dashed pink = back edge (2 → 0) closes the cycle 0→1→2→0</text>
+      </svg>
+      <div class="vcap">Vertices 0,1,2 are GRAY on the stack when the edge 2→0 finds 0 still GRAY → cycle found. Vertex 3 is a dead-end branch.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="cycdir"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(V²)</div><div>💾 <b>Space:</b> O(V)</div></div>
+</section>
+<script type="text/x-java" data-code="cycdir" data-file="DirectedCycle.java">
+import java.util.*;
+
+public class DirectedCycle {
+    static int n;
+    static int[][] adj;
+    static int[] color;            // 0=WHITE, 1=GRAY(on stack), 2=BLACK(done)
+    static int[] parent;
+    static int cycleStart = -1, cycleEnd = -1;
+
+    static boolean dfs(int u) {
+        color[u] = 1;                          // mark GRAY: now on the recursion stack
+        for (int v = 0; v < n; v++) {
+            if (adj[u][v] == 0) continue;
+            if (color[v] == 0) {               // tree edge -> recurse
+                parent[v] = u;
+                if (dfs(v)) return true;
+            } else if (color[v] == 1) {        // back edge to a GRAY ancestor => cycle
+                cycleEnd = u;
+                cycleStart = v;
+                return true;
+            }
+        }
+        color[u] = 2;                          // mark BLACK: fully explored, no cycle here
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int m = sc.nextInt();
+        adj = new int[n][n];
+        color = new int[n];
+        parent = new int[n];
+        Arrays.fill(parent, -1);
+        for (int i = 0; i < m; i++) {
+            int x = sc.nextInt(), y = sc.nextInt();
+            adj[x][y] = 1;                      // directed edge x -> y
+        }
+
+        boolean found = false;
+        for (int i = 0; i < n && !found; i++)
+            if (color[i] == 0) found = dfs(i);
+
+        if (!found) { System.out.println("No cycle"); return; }
+
+        // Rebuild the cycle: walk parents from cycleEnd back up to cycleStart.
+        LinkedList<Integer> cyc = new LinkedList<>();
+        for (int v = cycleEnd; v != cycleStart; v = parent[v]) cyc.addFirst(v);
+        cyc.addFirst(cycleStart);
+        System.out.println("Cycle: " + cyc);
+    }
+}
+</script>
+
+<!-- ================= 03 CYCLE UNDIRECTED ================= -->
+<section class="problem" id="p-cyc-undir" data-cat="graph" data-title="Detect &amp; Print Cycle (Undirected)">
+  <div class="phead">
+    <h3><span class="num">03</span>Detect &amp; Print a Cycle — Undirected Graph</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">DFS</span><span class="tag">Parent Tracking</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given an <b>undirected</b> graph (n vertices, m edges), detect a cycle and print its vertices.</p>
+    <div class="io"><b>Input</b>  (n  m, then m edges)
+4 4
+0 1
+1 2
+2 3
+3 1
+<b>Output</b>
+Cycle: [1, 2, 3]</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>DFS while remembering the vertex you came <b>from</b> (the parent). A neighbour that is already visited and is <b>not the parent</b> means you reached it by a second route → cycle. The one extra rule vs. the directed case is the <code class="inl">v == parent</code> skip, because in an undirected graph the edge you just used appears in both directions.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 520 180" width="520" height="180">
+        <line x1="92" y1="90" x2="188" y2="90" stroke="#5a6678" stroke-width="2"/>
+        <line x1="232" y1="78" x2="318" y2="55" stroke="#9b8cff" stroke-width="2.5"/>
+        <line x1="318" y1="120" x2="232" y2="100" stroke="#9b8cff" stroke-width="2.5"/>
+        <line x1="340" y1="78" x2="340" y2="118" stroke="#ffce4e" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <g font-family="monospace" font-size="14" text-anchor="middle">
+          <circle cx="70" cy="90" r="22" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="70" y="95" fill="#bff3e6">0</text>
+          <circle cx="210" cy="90" r="22" fill="#2c2747" stroke="#9b8cff" stroke-width="2"/><text x="210" y="95" fill="#dcd3ff">1</text>
+          <circle cx="340" cy="55" r="22" fill="#2c2747" stroke="#9b8cff" stroke-width="2"/><text x="340" y="60" fill="#dcd3ff">2</text>
+          <circle cx="340" cy="130" r="22" fill="#2c2747" stroke="#9b8cff" stroke-width="2"/><text x="340" y="135" fill="#dcd3ff">3</text>
+        </g>
+        <text x="430" y="95" fill="#ffce4e" font-size="12" font-family="monospace">back edge</text>
+        <text x="430" y="112" fill="#ffce4e" font-size="12" font-family="monospace">3 — 1</text>
+      </svg>
+      <div class="vcap"><span style="color:#9b8cff">Purple</span> = the cycle 1-2-3. The <span style="color:#ffce4e">yellow dashed</span> edge 3-1 reaches an already-visited non-parent vertex, revealing the loop.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="cycundir"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(V²)</div><div>💾 <b>Space:</b> O(V)</div></div>
+</section>
+<script type="text/x-java" data-code="cycundir" data-file="UndirectedCycle.java">
+import java.util.*;
+
+public class UndirectedCycle {
+    static int n;
+    static int[][] adj;
+    static boolean[] vis;
+    static int[] parent;
+    static int cycleStart = -1, cycleEnd = -1;
+
+    static boolean dfs(int u, int p) {         // p = parent we arrived from
+        vis[u] = true;
+        for (int v = 0; v < n; v++) {
+            if (adj[u][v] == 0 || v == p) continue;  // ignore the edge back to parent
+            if (vis[v]) {                       // visited & not parent => cycle
+                cycleEnd = u;
+                cycleStart = v;
+                return true;
+            }
+            parent[v] = u;
+            if (dfs(v, u)) return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int m = sc.nextInt();
+        adj = new int[n][n];
+        vis = new boolean[n];
+        parent = new int[n];
+        Arrays.fill(parent, -1);
+        for (int i = 0; i < m; i++) {
+            int x = sc.nextInt(), y = sc.nextInt();
+            adj[x][y] = adj[y][x] = 1;          // undirected: symmetric
+        }
+
+        boolean found = false;
+        for (int i = 0; i < n && !found; i++)
+            if (!vis[i]) found = dfs(i, -1);
+
+        if (!found) { System.out.println("No cycle"); return; }
+
+        LinkedList<Integer> cyc = new LinkedList<>();
+        for (int v = cycleEnd; v != cycleStart; v = parent[v]) cyc.addFirst(v);
+        cyc.addFirst(cycleStart);
+        System.out.println("Cycle: " + cyc);
+    }
+}
+</script>
+
+<!-- ================= 04 DOCTOR PROBABILITY ================= -->
+<section class="problem" id="p-doctor" data-cat="graph" data-title="Doctor Probability">
+  <div class="phead">
+    <h3><span class="num">04</span>Doctor Probability — Most Likely Division</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">DFS</span><span class="tag">Probability</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A doctor moves around divisions connected as a <b>directed weighted graph</b>; an edge weight is the <b>probability</b> of moving along it. He spends <b>10 minutes</b> in each division. Given a total time <code class="inl">T</code>, find the division he is <b>most likely</b> to be in at that moment (and the probability), by summing the probability of every walk of the right length ending in each division.</p>
+    <div class="io"><b>Input</b>  (tests; then nodes edges time; then edges f t prob…)
+1
+6 10 40
+1 2 0.3 1 3 0.7 3 3 0.2 3 4 0.8 2 4 1 4 5 0.9 4 4 0.1 5 6 1.0 6 3 0.5 6 6 0.5
+<b>Output</b>
+6 0.774000</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Enumerate <b>all walks</b> from the start that last exactly <code class="inl">T/10</code> hops. Carry the running product of edge probabilities <code class="inl">p</code>. When time runs out, <b>add</b> <code class="inl">p</code> to <code class="inl">answer[currentDivision]</code> (many different walks can land on the same division — their probabilities accumulate). Finally pick the division with the largest accumulated probability.</p>
+    <div class="callout"><b>Why DFS and not just one path?</b> Each step branches into several possible moves, each with its own probability. We sum over <i>all</i> branches → this is expectation/total-probability, computed by exhaustive DFS over walks of fixed length.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 540 200" width="540" height="200">
+        <defs><marker id="ad" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#56c2ff"/></marker></defs>
+        <g stroke="#56c2ff" stroke-width="1.8" fill="none">
+          <line x1="62" y1="100" x2="150" y2="55" marker-end="url(#ad)"/>
+          <line x1="62" y1="100" x2="150" y2="150" marker-end="url(#ad)"/>
+          <line x1="172" y1="55" x2="350" y2="100" marker-end="url(#ad)"/>
+          <line x1="172" y1="150" x2="262" y2="105" marker-end="url(#ad)"/>
+          <line x1="282" y1="100" x2="420" y2="100" marker-end="url(#ad)"/>
+        </g>
+        <g font-family="monospace" font-size="11" fill="#9ee3ff">
+          <text x="95" y="68">0.3</text><text x="95" y="148">0.7</text>
+          <text x="250" y="70">0.8</text><text x="205" y="118">1.0</text><text x="350" y="92">0.9</text>
+        </g>
+        <g font-family="monospace" font-size="14" text-anchor="middle">
+          <circle cx="40" cy="100" r="20" fill="#16323f" stroke="#56c2ff" stroke-width="2"/><text x="40" y="105" fill="#bdeaff">1</text>
+          <circle cx="160" cy="55" r="20" fill="#16323f" stroke="#56c2ff" stroke-width="2"/><text x="160" y="60" fill="#bdeaff">2</text>
+          <circle cx="160" cy="150" r="20" fill="#16323f" stroke="#56c2ff" stroke-width="2"/><text x="160" y="155" fill="#bdeaff">3</text>
+          <circle cx="272" cy="100" r="20" fill="#16323f" stroke="#56c2ff" stroke-width="2"/><text x="272" y="105" fill="#bdeaff">4</text>
+          <circle cx="380" cy="100" r="20" fill="#16323f" stroke="#56c2ff" stroke-width="2"/><text x="380" y="105" fill="#bdeaff">5</text>
+          <circle cx="440" cy="100" r="20" fill="#16323f" stroke="#56c2ff" stroke-width="2"/><text x="440" y="105" fill="#bdeaff">6</text>
+        </g>
+      </svg>
+      <div class="vcap">Each arrow carries a probability. A walk's probability is the product along it; division 6 collects 0.774 by summing every length-4 walk that ends there.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="doctor"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(branching<sup>T/10</sup>)</div><div>💾 <b>Space:</b> O(V²) graph + recursion depth T/10</div></div>
+</section>
+<script type="text/x-java" data-code="doctor" data-file="DoctorProbability.java">
+import java.util.*;
+
+public class DoctorProbability {
+    static int nodes;
+    static double[][] g;        // g[u][v] = probability of moving u -> v
+    static double[] answer;     // accumulated probability of finishing at each division
+
+    // Explore every walk; each level consumes 10 minutes.
+    static void dfs(int cur, int timeLeft, double p) {
+        if (timeLeft <= 0) {            // time is up: credit current division
+            answer[cur] += p;
+            return;
+        }
+        for (int v = 1; v <= nodes; v++)
+            if (g[cur][v] != 0)
+                dfs(v, timeLeft - 10, p * g[cur][v]);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        while (T-- > 0) {
+            nodes = sc.nextInt();
+            int edges = sc.nextInt();
+            int time = sc.nextInt();
+            g = new double[nodes + 1][nodes + 1];
+            answer = new double[nodes + 1];
+            for (int i = 0; i < edges; i++) {
+                int f = sc.nextInt(), t = sc.nextInt();
+                double pr = sc.nextDouble();
+                g[f][t] = pr;
+            }
+
+            dfs(1, time, 1.0);          // start at division 1 with probability 1
+
+            int best = 0;
+            double bestP = 0.0;
+            for (int i = 1; i <= nodes; i++)
+                if (answer[i] > bestP) { bestP = answer[i]; best = i; }
+
+            System.out.printf("%d %.6f%n", best, bestP);
+        }
+    }
+}
+</script>
+
+<!-- ================= 05 CHESS PIECE (KNIGHT BFS) ================= -->
+<section class="problem" id="p-knight" data-cat="graph" data-title="Chess Piece (Knight BFS)">
+  <div class="phead">
+    <h3><span class="num">05</span>Chess Piece — Minimum Knight Moves 📊</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">BFS</span><span class="tag">Grid / Shortest Path</span><span class="diff easy">Easy</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>On an N×M board a moving piece jumps like a <b>knight</b>. Find the minimum number of moves to land exactly on a stationary target. Print <code class="inl">-1</code> if unreachable.</p>
+    <div class="io"><b>Input</b>  (T; then N M; then R C S K)
+2
+9 9
+3 5 2 8
+20 20
+2 3 7 9
+<b>Output</b>
+Case #1
+2
+Case #2
+5</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Unweighted shortest path on a grid ⇒ <b>BFS</b>. Each cell has up to <b>8 knight moves</b>. BFS explores in expanding rings, so the <b>first</b> time we touch the target, its distance is the minimum. Mark cells as visited the moment they enter the queue to avoid re-processing.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization — BFS rings (press Play)</h4>
+    <div class="viz">
+      <div class="stepviz" data-frames="knight"></div>
+      <div class="legendrow">
+        <span><i style="background:rgba(78,161,255,.5)"></i>start</span>
+        <span><i style="background:rgba(255,92,138,.5)"></i>target</span>
+        <span><i style="background:rgba(255,206,78,.6)"></i>current ring (frontier)</span>
+        <span><i style="background:rgba(55,201,163,.4)"></i>already visited</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="knight"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N·M)</div><div>💾 <b>Space:</b> O(N·M)</div></div>
+</section>
+<script type="text/x-java" data-code="knight" data-file="KnightMoves.java">
+import java.util.*;
+
+public class KnightMoves {
+    static final int[][] MV = {{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        for (int t = 1; t <= T; t++) {
+            int n = sc.nextInt(), m = sc.nextInt();
+            int r1 = sc.nextInt(), c1 = sc.nextInt();   // start
+            int r2 = sc.nextInt(), c2 = sc.nextInt();   // target
+
+            int[][] dist = new int[n + 1][m + 1];
+            for (int[] row : dist) Arrays.fill(row, -1);
+
+            ArrayDeque<int[]> q = new ArrayDeque<>();
+            q.add(new int[]{r1, c1});
+            dist[r1][c1] = 0;
+            int ans = (r1 == r2 && c1 == c2) ? 0 : -1;
+
+            while (!q.isEmpty() && ans == -1) {
+                int[] cur = q.poll();
+                for (int[] d : MV) {
+                    int nx = cur[0] + d[0], ny = cur[1] + d[1];
+                    if (nx < 1 || nx > n || ny < 1 || ny > m || dist[nx][ny] != -1) continue;
+                    dist[nx][ny] = dist[cur[0]][cur[1]] + 1;
+                    if (nx == r2 && ny == c2) { ans = dist[nx][ny]; break; }
+                    q.add(new int[]{nx, ny});
+                }
+            }
+
+            System.out.println("Case #" + t);
+            System.out.println(ans);
+        }
+    }
+}
+</script>
+
+<!-- ================= 06 LAUGHING GAS ================= -->
+<section class="problem" id="p-gas" data-cat="graph" data-title="Laughing Gas (Flood BFS)">
+  <div class="phead">
+    <h3><span class="num">06</span>Laughing Gas — Time to Fill the Room</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">BFS Flood Fill</span><span class="tag">Grid</span><span class="diff easy">Easy</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Gas is released at one cell of a grid and spreads to the 4-adjacent <b>open</b> cells (value <code class="inl">1</code>) each second; walls are <code class="inl">0</code>. Output how many seconds until the gas stops spreading — i.e. the <b>maximum distance</b> from the source to any reachable cell.</p>
+    <div class="io"><b>Input</b>  (T; R C; grid; start row col)
+1
+3 3
+1 1 1
+1 0 1
+1 1 1
+1 1
+<b>Output</b>
+Case #1
+4</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Plain multi-ring <b>BFS flood fill</b>. The source is distance 0; each ring of newly-reached open cells is +1 second. The answer is simply the largest distance label assigned during the flood.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="gridtbl" style="margin:auto">
+        <tr><td class="start">0</td><td class="visit">1</td><td class="visit">2</td></tr>
+        <tr><td class="visit">1</td><td class="wall">█</td><td class="visit">3</td></tr>
+        <tr><td class="visit">2</td><td class="visit">3</td><td class="visit">4</td></tr>
+      </table>
+      <div class="vcap">Numbers = seconds for the gas to arrive. The wall (█) is skipped, so the far corner is reached in <b>4</b> seconds — the answer.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="gas"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(R·C)</div><div>💾 <b>Space:</b> O(R·C)</div></div>
+</section>
+<script type="text/x-java" data-code="gas" data-file="LaughingGas.java">
+import java.util.*;
+
+public class LaughingGas {
+    static final int[][] DIR = {{1,0},{-1,0},{0,1},{0,-1}};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        for (int t = 1; t <= T; t++) {
+            int R = sc.nextInt(), C = sc.nextInt();
+            int[][] g = new int[R + 1][C + 1];
+            for (int i = 1; i <= R; i++)
+                for (int j = 1; j <= C; j++)
+                    g[i][j] = sc.nextInt();
+            int sr = sc.nextInt(), scol = sc.nextInt();
+
+            int[][] dist = new int[R + 1][C + 1];
+            for (int[] row : dist) Arrays.fill(row, -1);
+
+            ArrayDeque<int[]> q = new ArrayDeque<>();
+            q.add(new int[]{sr, scol});
+            dist[sr][scol] = 0;
+            int maxSec = 0;
+
+            while (!q.isEmpty()) {
+                int[] cur = q.poll();
+                maxSec = Math.max(maxSec, dist[cur[0]][cur[1]]);
+                for (int[] d : DIR) {
+                    int nx = cur[0] + d[0], ny = cur[1] + d[1];
+                    if (nx < 1 || nx > R || ny < 1 || ny > C) continue;
+                    if (g[nx][ny] == 1 && dist[nx][ny] == -1) {
+                        dist[nx][ny] = dist[cur[0]][cur[1]] + 1;
+                        q.add(new int[]{nx, ny});
+                    }
+                }
+            }
+
+            System.out.println("Case #" + t);
+            System.out.println(maxSec);
+        }
+    }
+}
+</script>
+
+<!-- ================= 07 FROG JUMP ================= -->
+<section class="problem" id="p-frog" data-cat="graph" data-title="Frog Jump (0-1 BFS)">
+  <div class="phead">
+    <h3><span class="num">07</span>Frog Jump — Cheapest Path (0-1 BFS)</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">0-1 BFS (Deque)</span><span class="tag">Grid</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A frog sits on a grid where <code class="inl">1</code> = lily pad (standable), <code class="inl">0</code> = water. Moving <b>horizontally</b> along pads is <b>free</b> (cost 0). A <b>vertical</b> hop costs <b>1</b>. Find the minimum cost to travel from a source pad to a destination pad.</p>
+    <div class="io"><b>Input</b>  (n; n×n grid; sx sy tx ty)
+3
+1 1 1
+0 1 0
+1 1 1
+0 0 2 2
+<b>Output</b>
+2        (descend 2 rows = 2 vertical hops; sideways is free)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Edges weigh only <b>0 or 1</b> ⇒ use <b>0-1 BFS</b> with a <b>double-ended queue</b>. A 0-cost (horizontal) move pushes to the <b>front</b>; a 1-cost (vertical) move pushes to the <b>back</b>. This keeps the deque sorted by distance, giving Dijkstra-quality answers in O(V+E) without a heap.</p>
+    <div class="callout warn"><b>Trap:</b> a plain FIFO BFS is <i>wrong</i> when edges have mixed 0/1 weights — it may finalize a node before a cheaper 0-cost route arrives. The deque (front for 0, back for 1) is what makes it correct.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="gridtbl" style="margin:auto">
+        <tr><td class="start">S</td><td class="path">→0</td><td>·</td></tr>
+        <tr><td class="wall">█</td><td class="path">↓1</td><td class="wall">█</td></tr>
+        <tr><td>·</td><td class="path">↓2</td><td class="goal">G=2</td></tr>
+      </table>
+      <div class="vcap">Horizontal slides (<b>→</b>) keep the same cost; only vertical hops (<b>↓</b>) add 1. Two descents from the top row to the bottom row ⇒ cheapest cost <b>2</b>.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="frog"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N²)</div><div>💾 <b>Space:</b> O(N²)</div></div>
+</section>
+<script type="text/x-java" data-code="frog" data-file="FrogJump.java">
+import java.util.*;
+
+public class FrogJump {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] mat = new int[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                mat[i][j] = sc.nextInt();
+        int sx = sc.nextInt(), sy = sc.nextInt(), tx = sc.nextInt(), ty = sc.nextInt();
+
+        int[][] dist = new int[n][n];
+        for (int[] row : dist) Arrays.fill(row, Integer.MAX_VALUE);
+
+        // {dx, dy, cost} : left & right are FREE, up & down cost 1
+        int[][] moves = {{0,-1,0}, {0,1,0}, {-1,0,1}, {1,0,1}};
+
+        Deque<int[]> dq = new ArrayDeque<>();
+        dist[sx][sy] = 0;
+        dq.addFirst(new int[]{sx, sy});
+
+        while (!dq.isEmpty()) {
+            int[] cur = dq.pollFirst();
+            int x = cur[0], y = cur[1];
+            for (int[] mv : moves) {
+                int nx = x + mv[0], ny = y + mv[1], w = mv[2];
+                if (nx < 0 || nx >= n || ny < 0 || ny >= n || mat[nx][ny] != 1) continue;
+                if (dist[x][y] + w < dist[nx][ny]) {
+                    dist[nx][ny] = dist[x][y] + w;
+                    if (w == 0) dq.addFirst(new int[]{nx, ny});  // 0-cost -> front
+                    else        dq.addLast(new int[]{nx, ny});   // 1-cost -> back
+                }
+            }
+        }
+
+        System.out.println(dist[tx][ty] == Integer.MAX_VALUE ? -1 : dist[tx][ty]);
+    }
+}
+</script>
+
+<!-- ================= 08 ENDOSCOPY ================= -->
+<section class="problem" id="p-endo" data-cat="graph" data-title="Endoscopy (Pipe BFS)">
+  <div class="phead">
+    <h3><span class="num">08</span>Endoscopy — Connected Pipes</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">BFS</span><span class="tag">Bitmask / Shape Matching</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A grid of <b>pipe pieces</b> (types 1–7); each type opens toward some of {left, right, up, down}. Starting from a given pipe and an endoscope of length <code class="inl">L</code>, count how many pipes are reachable. You may move between adjacent pipes only when <b>both</b> sides have a matching opening, and only within <code class="inl">L</code> steps.</p>
+    <div class="io"><b>Pipe openings</b>
+1: L R U D   2: U D   3: L R
+4: R U       5: R D   6: L D   7: L U   (0 = no pipe)
+<b>Input</b>  (T; n m sX sY L; grid)
+<b>Output</b>  count of reachable pipes (incl. start)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Encode each pipe as four booleans (its openings). A step from <code class="inl">A</code> to its neighbour <code class="inl">B</code> on the right is legal only if <b>A opens right AND B opens left</b>. Then it is ordinary <b>BFS</b> with a distance cap: only enqueue a neighbour when <code class="inl">dist + 1 ≤ L</code>. Count every cell that gets a distance label.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization — opening shapes</h4>
+    <div class="viz">
+      <svg viewBox="0 0 560 130" width="560" height="130">
+        <g stroke="#37c9a3" stroke-width="3" fill="none" font-family="monospace">
+          <g transform="translate(20,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><line x1="0" y1="25" x2="50" y2="25"/><line x1="25" y1="0" x2="25" y2="50"/></g>
+          <g transform="translate(90,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><line x1="25" y1="0" x2="25" y2="50"/></g>
+          <g transform="translate(160,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><line x1="0" y1="25" x2="50" y2="25"/></g>
+          <g transform="translate(230,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><path d="M25,25 L50,25 M25,25 L25,0"/></g>
+          <g transform="translate(300,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><path d="M25,25 L50,25 M25,25 L25,50"/></g>
+          <g transform="translate(370,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><path d="M25,25 L0,25 M25,25 L25,50"/></g>
+          <g transform="translate(440,20)"><rect width="50" height="50" fill="#16302a" stroke="#2c4a42"/><path d="M25,25 L0,25 M25,25 L25,0"/></g>
+        </g>
+        <g font-family="monospace" font-size="13" fill="#9ee3ff" text-anchor="middle">
+          <text x="45" y="90">1</text><text x="115" y="90">2</text><text x="185" y="90">3</text>
+          <text x="255" y="90">4</text><text x="325" y="90">5</text><text x="395" y="90">6</text><text x="465" y="90">7</text>
+        </g>
+        <text x="280" y="118" fill="#7a8694" font-size="12" text-anchor="middle" font-family="monospace">Two neighbours connect only if their facing edges both carry a line.</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="endo"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(n·m)</div><div>💾 <b>Space:</b> O(n·m)</div></div>
+</section>
+<script type="text/x-java" data-code="endo" data-file="Endoscopy.java">
+import java.util.*;
+
+public class Endoscopy {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        StringBuilder sb = new StringBuilder();
+        while (T-- > 0) {
+            int n = sc.nextInt(), m = sc.nextInt();
+            int sX = sc.nextInt(), sY = sc.nextInt(), L = sc.nextInt();
+
+            int[][] g = new int[n][m];
+            boolean[][] cl = new boolean[n][m], cr = new boolean[n][m];
+            boolean[][] cu = new boolean[n][m], cd = new boolean[n][m];
+
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < m; j++) {
+                    int v = sc.nextInt();
+                    g[i][j] = v;
+                    // openings per pipe type
+                    switch (v) {
+                        case 1: cl[i][j]=cr[i][j]=cu[i][j]=cd[i][j]=true; break;
+                        case 2: cu[i][j]=cd[i][j]=true; break;
+                        case 3: cl[i][j]=cr[i][j]=true; break;
+                        case 4: cr[i][j]=cu[i][j]=true; break;
+                        case 5: cr[i][j]=cd[i][j]=true; break;
+                        case 6: cl[i][j]=cd[i][j]=true; break;
+                        case 7: cl[i][j]=cu[i][j]=true; break;
+                    }
+                }
+
+            int[][] dist = new int[n][m];
+            for (int[] row : dist) Arrays.fill(row, -1);
+            int result = 0;
+
+            if (g[sX][sY] != 0) {
+                ArrayDeque<int[]> q = new ArrayDeque<>();
+                dist[sX][sY] = 1;                 // start counts as length 1
+                q.add(new int[]{sX, sY});
+                result = 1;
+
+                while (!q.isEmpty()) {
+                    int[] c = q.poll();
+                    int p = c[0], qy = c[1];
+                    if (dist[p][qy] + 1 > L) continue;          // length cap
+
+                    // up: I open up & neighbour opens down
+                    if (p-1 >= 0 && dist[p-1][qy] == -1 && cu[p][qy] && cd[p-1][qy]) {
+                        dist[p-1][qy] = dist[p][qy] + 1; result++; q.add(new int[]{p-1, qy});
+                    }
+                    if (p+1 < n && dist[p+1][qy] == -1 && cd[p][qy] && cu[p+1][qy]) {
+                        dist[p+1][qy] = dist[p][qy] + 1; result++; q.add(new int[]{p+1, qy});
+                    }
+                    if (qy-1 >= 0 && dist[p][qy-1] == -1 && cl[p][qy] && cr[p][qy-1]) {
+                        dist[p][qy-1] = dist[p][qy] + 1; result++; q.add(new int[]{p, qy-1});
+                    }
+                    if (qy+1 < m && dist[p][qy+1] == -1 && cr[p][qy] && cl[p][qy+1]) {
+                        dist[p][qy+1] = dist[p][qy] + 1; result++; q.add(new int[]{p, qy+1});
+                    }
+                }
+            }
+            sb.append(result).append('\n');
+        }
+        System.out.print(sb);
+    }
+}
+</script>
+
+<!-- ================= 09 RESEARCH TEAM ================= -->
+<section class="problem" id="p-research" data-cat="graph" data-title="Research Team / Rare Elements">
+  <div class="phead">
+    <h3><span class="num">09</span>Research Team — Rare Elements (1-Centre)</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">Multi-BFS</span><span class="tag">Min-of-Max</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A grid has roads (<code class="inl">1</code>) and blocked cells (<code class="inl">0</code>). Up to 5 rare-element locations sit on roads. Build a research centre <b>on a road</b> so that the <b>longest</b> distance from the centre to any element is as <b>small</b> as possible. Output that minimised longest distance.</p>
+    <div class="io"><b>Input</b>  (T; then per test:  N C; C locations; N×N grid)
+<b>Output</b>  #t  &lt;shortest of the longest distances&gt;</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Naïvely you'd BFS from every road cell — O((N²)²). Instead, <b>BFS once from each element</b> (only ≤5 of them) to get its distance to every road cell. Then for each candidate cell take the <b>max</b> over the elements (worst element), and the answer is the <b>min</b> of those maxes — a classic <b>min-of-max (1-centre)</b> pattern.</p>
+    <div class="callout"><b>Optimisation insight:</b> flipping the BFS direction (from the few sources, not the many candidates) cuts work from ~160 000 BFS runs to just 5. Always BFS from the smaller set.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="gridtbl" style="margin:auto">
+        <tr><td class="goal">E1</td><td class="visit">1</td><td class="visit">2</td><td class="wall">█</td></tr>
+        <tr><td class="visit">1</td><td class="frontier">2★</td><td class="visit">3</td><td class="visit">4</td></tr>
+        <tr><td class="visit">2</td><td class="visit">3</td><td class="wall">█</td><td class="goal">E2</td></tr>
+      </table>
+      <div class="vcap">Distances shown are from element <b>E1</b>. The starred cell ★ is one candidate centre; its score is max(dist&nbsp;to&nbsp;E1, dist&nbsp;to&nbsp;E2). The answer is the candidate whose worst-element distance is smallest.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="research"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(C·N²)</div><div>💾 <b>Space:</b> O(C·N²)</div></div>
+</section>
+<script type="text/x-java" data-code="research" data-file="ResearchTeam.java">
+import java.util.*;
+
+public class ResearchTeam {
+    static final int[][] DIR = {{1,0},{-1,0},{0,1},{0,-1}};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        for (int tc = 1; tc <= T; tc++) {
+            int N = sc.nextInt(), C = sc.nextInt();
+            int[][] loc = new int[C][2];
+            for (int i = 0; i < C; i++) { loc[i][0] = sc.nextInt() - 1; loc[i][1] = sc.nextInt() - 1; }
+            int[][] g = new int[N][N];
+            for (int i = 0; i < N; i++)
+                for (int j = 0; j < N; j++)
+                    g[i][j] = sc.nextInt();
+
+            // BFS from each rare element -> distance to every road cell
+            int[][][] dist = new int[C][N][N];
+            for (int k = 0; k < C; k++) {
+                int[][] d = dist[k];
+                for (int[] row : d) Arrays.fill(row, -1);
+                ArrayDeque<int[]> q = new ArrayDeque<>();
+                d[loc[k][0]][loc[k][1]] = 0;
+                q.add(new int[]{loc[k][0], loc[k][1]});
+                while (!q.isEmpty()) {
+                    int[] c = q.poll();
+                    for (int[] dd : DIR) {
+                        int nx = c[0] + dd[0], ny = c[1] + dd[1];
+                        if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
+                        if (g[nx][ny] == 0 || d[nx][ny] != -1) continue;
+                        d[nx][ny] = d[c[0]][c[1]] + 1;
+                        q.add(new int[]{nx, ny});
+                    }
+                }
+            }
+
+            int answer = Integer.MAX_VALUE;
+            for (int i = 0; i < N; i++)
+                for (int j = 0; j < N; j++) {
+                    if (g[i][j] == 0) continue;          // centre must sit on a road
+                    int worst = 0; boolean reachAll = true;
+                    for (int k = 0; k < C; k++) {
+                        if (dist[k][i][j] == -1) { reachAll = false; break; }
+                        worst = Math.max(worst, dist[k][i][j]);
+                    }
+                    if (reachAll) answer = Math.min(answer, worst);
+                }
+
+            System.out.println("#" + tc + " " + answer);
+        }
+    }
+}
+</script>
+
+<!-- ================= 10 MR KIM ================= -->
+<section class="problem" id="p-kim" data-cat="backtrack" data-title="Mr Kim (TSP Path)">
+  <div class="phead">
+    <h3><span class="num">10</span>Mr Kim — Shortest Delivery Route</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">TSP (Path)</span><span class="tag">Permutations + Pruning</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Starting at the <b>office</b>, Mr Kim must visit all <code class="inl">N</code> customers (5–10) and finish at his <b>home</b>. Distance between points is <b>Manhattan</b> <code class="inl">|x₁−x₂|+|y₁−y₂|</code>. Find the length of the shortest such route.</p>
+    <div class="io"><b>Input</b>  (T; then N; then office, home, then N customers)
+5
+0 0  100 100  70 40  30 10  10 5  90 70  50 20
+<b>Output</b>
+#1 200</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>With N ≤ 10, just try <b>every order</b> of customers (backtracking permutations). Keep a running <code class="inl">cost</code>; when all customers are visited add the hop to <b>home</b> and update the best. Crucial speed-up: <b>prune</b> the branch as soon as <code class="inl">cost ≥ best</code> — this turns a hopeless 10! search into something instant.</p>
+    <div class="callout">For the larger TSP (N up to ~15) the textbook upgrade is <b>bitmask DP</b>: <code class="inl">dp[mask][last]</code>. The permutation+prune version is what fits a 3-hour test for N ≤ 10.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 520 200" width="520" height="200">
+        <polyline points="40,170 150,60 250,120 360,40 470,150" fill="none" stroke="#ff8a5c" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <g font-family="monospace" font-size="11" fill="#ffb694">
+          <circle cx="40" cy="170" r="9" fill="#4ea1ff"/><text x="20" y="190">Office</text>
+          <circle cx="150" cy="60" r="7" fill="#ff8a5c"/><text x="135" y="50">C1</text>
+          <circle cx="250" cy="120" r="7" fill="#ff8a5c"/><text x="240" y="145">C2</text>
+          <circle cx="360" cy="40" r="7" fill="#ff8a5c"/><text x="350" y="30">C3</text>
+          <circle cx="470" cy="150" r="9" fill="#ff5c8a"/><text x="450" y="172">Home</text>
+        </g>
+      </svg>
+      <div class="vcap">One candidate ordering Office → C1 → C2 → C3 → Home. Backtracking tries all orderings and keeps the cheapest total Manhattan length.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="kim"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N!) with pruning</div><div>💾 <b>Space:</b> O(N)</div></div>
+</section>
+<script type="text/x-java" data-code="kim" data-file="MrKim.java">
+import java.util.*;
+
+public class MrKim {
+    static int n;
+    static int[] xs, ys;          // 0 = office, 1..n = customers, n+1 = home
+    static boolean[] visited;
+    static int best;
+
+    static int dist(int i, int j) { return Math.abs(xs[i]-xs[j]) + Math.abs(ys[i]-ys[j]); }
+
+    static void dfs(int cur, int count, int cost) {
+        if (cost >= best) return;                 // prune: already worse than best
+        if (count == n) {                         // all customers visited -> go home
+            best = Math.min(best, cost + dist(cur, n + 1));
+            return;
+        }
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                dfs(i, count + 1, cost + dist(cur, i));
+                visited[i] = false;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int tCases = sc.nextInt();
+        for (int tc = 1; tc <= tCases; tc++) {
+            n = sc.nextInt();
+            xs = new int[n + 2]; ys = new int[n + 2]; visited = new boolean[n + 2];
+            xs[0]   = sc.nextInt(); ys[0]   = sc.nextInt();   // office
+            xs[n+1] = sc.nextInt(); ys[n+1] = sc.nextInt();   // home
+            for (int i = 1; i <= n; i++) { xs[i] = sc.nextInt(); ys[i] = sc.nextInt(); }
+
+            best = Integer.MAX_VALUE;
+            dfs(0, 0, 0);                          // start at office
+            System.out.println("#" + tc + " " + best);
+        }
+    }
+}
+</script>
+
+<!-- ================= 11 MR LEE ================= -->
+<section class="problem" id="p-lee" data-cat="backtrack" data-title="Mr Lee (TSP Cycle)">
+  <div class="phead">
+    <h3><span class="num">11</span>Mr Lee — Cheapest Round Trip</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">TSP (Cycle)</span><span class="tag">Cost Matrix</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given an <code class="inl">N×N</code> airfare matrix (entry <code class="inl">0</code> = no flight), start at city <code class="inl">0</code>, visit every city exactly once, and <b>return to city 0</b> at minimum total fare. Print <code class="inl">-1</code> if impossible.</p>
+    <div class="io"><b>Input</b>  (T; then N; then N×N matrix)
+1
+5
+0 14 4 10 20
+14 0 7 8 7
+4 5 0 7 16
+11 7 9 0 2
+18 7 17 4 0
+<b>Output</b>
+30</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Same permutation backtracking as Mr Kim, but it's a <b>cycle</b>: after placing the last city you must add the edge back to <code class="inl">0</code>. Skip any move where the fare is <code class="inl">0</code> (no flight). Base case fires at <code class="inl">count == N-1</code> because city 0 is fixed as start.</p>
+    <div class="callout warn"><b>Mr Kim vs Mr Lee:</b> Kim is an open <i>path</i> (office → home, different endpoints); Lee is a closed <i>cycle</i> (back to the start). One line of difference — recognise which one the statement wants.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 420 200" width="420" height="200">
+        <polygon points="210,30 360,120 300,180 120,180 60,120" fill="none" stroke="#2e3a4a" stroke-width="1"/>
+        <polyline points="210,30 360,120 300,180 120,180 60,120 210,30" fill="none" stroke="#ff8a5c" stroke-width="2.5"/>
+        <g font-family="monospace" font-size="13" text-anchor="middle">
+          <circle cx="210" cy="30" r="18" fill="#3a2417" stroke="#ff8a5c" stroke-width="2"/><text x="210" y="35" fill="#ffd0b8">0</text>
+          <circle cx="360" cy="120" r="16" fill="#22303f" stroke="#5a6678" stroke-width="2"/><text x="360" y="125" fill="#cdd6e2">1</text>
+          <circle cx="300" cy="180" r="16" fill="#22303f" stroke="#5a6678" stroke-width="2"/><text x="300" y="185" fill="#cdd6e2">2</text>
+          <circle cx="120" cy="180" r="16" fill="#22303f" stroke="#5a6678" stroke-width="2"/><text x="120" y="185" fill="#cdd6e2">3</text>
+          <circle cx="60" cy="120" r="16" fill="#22303f" stroke="#5a6678" stroke-width="2"/><text x="60" y="125" fill="#cdd6e2">4</text>
+        </g>
+      </svg>
+      <div class="vcap">A Hamiltonian <b>cycle</b> starting and ending at city 0. Backtracking enumerates every such loop and keeps the cheapest.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="lee"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N!)</div><div>💾 <b>Space:</b> O(N)</div></div>
+</section>
+<script type="text/x-java" data-code="lee" data-file="MrLee.java">
+import java.util.*;
+
+public class MrLee {
+    static int N, best;
+    static int[][] cost;
+    static boolean[] visited;
+
+    static void dfs(int src, int count, int acc) {
+        if (acc >= best) return;                       // prune
+        if (count == N - 1) {                          // all visited; close the loop
+            if (cost[src][0] != 0) best = Math.min(best, acc + cost[src][0]);
+            return;
+        }
+        for (int i = 0; i < N; i++) {
+            if (!visited[i] && cost[src][i] != 0) {     // 0 = no flight
+                visited[i] = true;
+                dfs(i, count + 1, acc + cost[src][i]);
+                visited[i] = false;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            N = sc.nextInt();
+            cost = new int[N][N];
+            visited = new boolean[N];
+            for (int i = 0; i < N; i++)
+                for (int j = 0; j < N; j++)
+                    cost[i][j] = sc.nextInt();
+
+            best = Integer.MAX_VALUE;
+            visited[0] = true;                          // city 0 is the fixed start
+            dfs(0, 0, 0);
+            System.out.println(best == Integer.MAX_VALUE ? -1 : best);
+        }
+    }
+}
+</script>
+
+<!-- ================= 12 WORMHOLE DFS ================= -->
+<section class="problem" id="p-worm-dfs" data-cat="backtrack" data-title="Wormhole (DFS)">
+  <div class="phead">
+    <h3><span class="num">12</span>Wormhole — Min Distance (DFS)</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">DFS over Subsets</span><span class="tag">Manhattan</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A spaceship travels from source to destination. There are <code class="inl">N</code> bidirectional <b>wormholes</b>; wormhole <code class="inl">i</code> connects point A=(x₁,y₁) and B=(x₂,y₂) and costs <code class="inl">w</code> to traverse. Moving on the plane costs Manhattan distance. Find the minimum total cost; you may use any number of wormholes (or none).</p>
+    <div class="io"><b>Input</b>  (T; then N; sX sY tX tY; then N lines: x1 y1 x2 y2 w)
+<b>Output</b>  minimum distance</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>At each state (current position, target, accumulated cost) you may either <b>go straight</b> to the destination, or <b>enter any unused wormhole</b> from either end (pay the walk to that mouth + the wormhole fee, then continue from the other mouth). DFS over the order of wormholes used, marking each used so it isn't re-entered. Track the global minimum.</p>
+    <div class="callout">See problem 34 (<a href="#p-worm-floyd">Floyd–Warshall</a>) for the same task solved as a graph of <code class="inl">2N+2</code> nodes — cleaner when N is larger.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 520 180" width="520" height="180">
+        <line x1="40" y1="140" x2="150" y2="60" stroke="#5a6678" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="370" y1="120" x2="480" y2="40" stroke="#5a6678" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="M150,60 C230,20 300,160 370,120" fill="none" stroke="#7c5cff" stroke-width="3"/>
+        <g font-family="monospace" font-size="11">
+          <circle cx="40" cy="140" r="8" fill="#4ea1ff"/><text x="20" y="160" fill="#9cc5ff">src</text>
+          <circle cx="150" cy="60" r="7" fill="#7c5cff"/><text x="120" y="50" fill="#c8bcff">A</text>
+          <circle cx="370" cy="120" r="7" fill="#7c5cff"/><text x="380" y="135" fill="#c8bcff">B</text>
+          <circle cx="480" cy="40" r="8" fill="#ff5c8a"/><text x="460" y="30" fill="#ffb0c6">dst</text>
+        </g>
+        <text x="260" y="160" fill="#a99bff" font-size="12" text-anchor="middle" font-family="monospace">walk → A, pay w, teleport to B, walk → dst</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="wormdfs"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N!·2^N) worst</div><div>💾 <b>Space:</b> O(N)</div></div>
+</section>
+<script type="text/x-java" data-code="wormdfs" data-file="WormholeDFS.java">
+import java.util.*;
+
+public class WormholeDFS {
+    static int n, ans;
+    static int[][] w;          // [i] = {x1, y1, x2, y2, cost}
+    static boolean[] used;
+
+    static int dist(int ax, int ay, int bx, int by) { return Math.abs(ax-bx) + Math.abs(ay-by); }
+
+    static void dfs(int sx, int sy, int tx, int ty, int val) {
+        ans = Math.min(ans, val + dist(sx, sy, tx, ty));   // option: walk straight to target
+        for (int i = 0; i < n; i++) {
+            if (used[i]) continue;
+            used[i] = true;
+            // enter at mouth A, come out at mouth B
+            dfs(w[i][2], w[i][3], tx, ty, val + dist(sx, sy, w[i][0], w[i][1]) + w[i][4]);
+            // enter at mouth B, come out at mouth A
+            dfs(w[i][0], w[i][1], tx, ty, val + dist(sx, sy, w[i][2], w[i][3]) + w[i][4]);
+            used[i] = false;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            n = sc.nextInt();
+            int sx = sc.nextInt(), sy = sc.nextInt(), tx = sc.nextInt(), ty = sc.nextInt();
+            w = new int[n][5];
+            used = new boolean[n];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < 5; j++)
+                    w[i][j] = sc.nextInt();
+
+            ans = Integer.MAX_VALUE;
+            dfs(sx, sy, tx, ty, 0);
+            System.out.println(ans);
+        }
+    }
+}
+</script>
+
+<!-- ================= 13 OIL MINE ================= -->
+<section class="problem" id="p-oil" data-cat="backtrack" data-title="Oil Mine (Fair Circular Split)">
+  <div class="phead">
+    <h3><span class="num">13</span>Oil Mine — Fair Circular Distribution</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Circular Partition</span><span class="tag">Min-of-Max−Min</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p><code class="inl">m</code> oil mines sit in a <b>circle</b>. Split them among <code class="inl">n</code> companies so each company gets a <b>contiguous arc</b> (no interleaving). Minimise the difference between the <b>richest</b> and <b>poorest</b> company's total.</p>
+    <div class="io"><b>Input</b>  (T; then n m; then m mine values)
+2
+2 4
+6 13 10 2
+2 4
+6 10 13 2
+<b>Output</b>
+5
+1</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Because the layout is a <b>ring</b>, fix where the first cut goes by trying every mine as a starting point. Walk the circle; at each mine choose to either <b>extend</b> the current company or <b>close</b> it and <b>open</b> a new one. When you arrive back at the start having opened exactly <code class="inl">n</code> companies, update the answer with <code class="inl">max − min</code> of the company totals.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 320 220" width="320" height="220">
+        <circle cx="160" cy="110" r="75" fill="none" stroke="#2e3a4a" stroke-width="2"/>
+        <g font-family="monospace" font-size="14" text-anchor="middle">
+          <circle cx="160" cy="35" r="20" fill="#3a2417" stroke="#ff8a5c" stroke-width="2"/><text x="160" y="40" fill="#ffd0b8">6</text>
+          <circle cx="235" cy="110" r="20" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="235" y="115" fill="#bff3e6">13</text>
+          <circle cx="160" cy="185" r="20" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="160" y="190" fill="#bff3e6">10</text>
+          <circle cx="85" cy="110" r="20" fill="#22303f" stroke="#37c9a3" stroke-width="2"/><text x="85" y="115" fill="#bff3e6">2</text>
+        </g>
+        <path d="M160 110 L160 35" stroke="#ff5c8a" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M160 110 L122 175" stroke="#ff5c8a" stroke-width="2" stroke-dasharray="4 3"/>
+      </svg>
+      <div class="vcap">Cuts split the ring into arcs. Best split here: {13} vs {10,2,6} → 13 vs 18 → difference <b>5</b>.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="oil"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(m · 2^m)</div><div>💾 <b>Space:</b> O(m)</div></div>
+</section>
+<script type="text/x-java" data-code="oil" data-file="OilMine.java">
+import java.util.*;
+
+public class OilMine {
+    static int companies, mines, ans;
+    static int[] oil;
+    static boolean[] visited;     // marks the starting mine to detect a full loop
+
+    static void solve(int i, int minV, int maxV, int sum, int opened) {
+        if (visited[i]) {                          // wrapped back to the start
+            int nMin = Math.min(sum, minV);
+            int nMax = Math.max(sum, maxV);
+            if (opened == companies - 1)            // exactly n companies formed
+                ans = Math.min(ans, nMax - nMin);
+            return;
+        }
+        visited[i] = true;
+        int j = (i + 1) % mines;
+
+        // 1) keep this mine in the current company
+        solve(j, minV, maxV, sum + oil[i], opened);
+
+        // 2) close the current company here, start a new one with this mine
+        int nMin = Math.min(sum, minV);
+        int nMax = Math.max(sum, maxV);
+        solve(j, nMin, nMax, oil[i], opened + 1);
+
+        visited[i] = false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            companies = sc.nextInt();
+            mines = sc.nextInt();
+            oil = new int[mines];
+            visited = new boolean[mines];
+            for (int i = 0; i < mines; i++) oil[i] = sc.nextInt();
+
+            ans = Integer.MAX_VALUE;
+            for (int i = 0; i < mines; i++)        // try every starting cut
+                solve(i, Integer.MAX_VALUE, Integer.MIN_VALUE, 0, 0);
+
+            System.out.println(ans);
+        }
+    }
+}
+</script>
+
+<!-- ================= 14 PILLAR PIPE ================= -->
+<section class="problem" id="p-pillar" data-cat="backtrack" data-title="Pillar / Banner (Two Equal Stacks)">
+  <div class="phead">
+    <h3><span class="num">14</span>Pillar Banner — Two Equal-Height Stacks</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Subset Partition</span><span class="tag">3-way choice</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>From an array of block heights, build <b>two pillars of equal height</b> (each pillar is a subset of blocks; not every block must be used) to place a banner as high as possible. Print the maximum equal height, or <code class="inl">0</code> if no non-trivial pair exists.</p>
+    <div class="io"><b>Input</b>
+5
+1 2 3 4 6
+<b>Output</b>
+8        (pillar A = {6,2} = 8, pillar B = {4,3,1} = 8)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Each block has <b>three choices</b>: go on pillar 1, go on pillar 2, or be left out. Recurse index by index carrying the two running sums <code class="inl">p1, p2</code>. Whenever <code class="inl">p1 == p2</code>, that's a valid equal height → update the max. This 3-way recursion is cleaner (and avoids duplicate work) compared with picking blocks in arbitrary order.</p>
+    <div class="callout">This is the <b>"Tug of War / Equal Subset"</b> template. The same shape answers "can we split into two equal-sum halves?" and "balance two loads".</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <div class="barwrap" style="height:160px">
+        <div class="bar mark" style="height:80px">6</div>
+        <div class="bar mark" style="height:30px">2</div>
+        <div style="width:24px"></div>
+        <div class="bar" style="height:55px">4</div>
+        <div class="bar" style="height:42px">3</div>
+        <div class="bar" style="height:18px">1</div>
+      </div>
+      <div class="vcap" style="margin-top:26px"><span style="color:#ffce4e">Pillar A = {6,2} = 8</span> &nbsp;|&nbsp; <span style="color:#7aa7ff">Pillar B = {4,3,1} = 8</span> &nbsp;→ equal height <b>8</b>.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="pillar"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(3ⁿ)</div><div>💾 <b>Space:</b> O(n)</div></div>
+</section>
+<script type="text/x-java" data-code="pillar" data-file="PillarBanner.java">
+import java.util.*;
+
+public class PillarBanner {
+    static int n, ans;
+    static int[] a;
+
+    static void solve(int idx, int p1, int p2) {
+        if (idx == n) {
+            if (p1 == p2) ans = Math.max(ans, p1);   // equal height found
+            return;
+        }
+        solve(idx + 1, p1, p2);            // leave block out
+        solve(idx + 1, p1 + a[idx], p2);   // put block on pillar 1
+        solve(idx + 1, p1, p2 + a[idx]);   // put block on pillar 2
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        a = new int[n];
+        for (int i = 0; i < n; i++) a[i] = sc.nextInt();
+        ans = 0;                            // both empty -> height 0 (the "no pair" case)
+        solve(0, 0, 0);
+        System.out.println(ans);
+    }
+}
+</script>
+
+<!-- ================= 15 JEWEL MAZE ================= -->
+<section class="problem" id="p-jewel" data-cat="backtrack" data-title="Jewel Maze">
+  <div class="phead">
+    <h3><span class="num">15</span>Jewel Maze — Most Jewels, No Repeats</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Grid DFS</span><span class="tag">Path Reconstruction</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>An <code class="inl">N×N</code> maze: <code class="inl">0</code> = passage, <code class="inl">1</code> = wall, <code class="inl">2</code> = jewel. Enter at top-left, exit at bottom-right, never stepping on the same cell twice. Collect the <b>maximum number of jewels</b> and print the winning path (marked with <code class="inl">3</code>).</p>
+    <div class="io"><b>Input</b>  (T; then N; then N×N maze)
+<b>Output</b>  jewels + the path grid</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Brute-force <b>DFS with backtracking</b>: from each cell try all 4 directions onto unvisited non-wall cells, adding 1 whenever you step on a jewel. When you reach the exit, if the jewel count beats the best so far, snapshot the current <code class="inl">visited</code> grid as the best path. Restore <code class="inl">visited</code> on the way back so other routes can use those cells.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="gridtbl" style="margin:auto">
+        <tr><td class="path">►</td><td class="wall">█</td><td class="path">♦</td><td class="path">►</td></tr>
+        <tr><td class="path">▼</td><td class="path">►</td><td class="path">▲</td><td class="path">▼</td></tr>
+        <tr><td>·</td><td class="path">▲</td><td class="wall">█</td><td class="path">▼</td></tr>
+        <tr><td class="wall">█</td><td>·</td><td>·</td><td class="path">◆</td></tr>
+      </table>
+      <div class="vcap">One winning route (purple) from top-left to bottom-right collecting jewels (♦). DFS explores every legal route and keeps the one with most jewels.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="jewel"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(4^(N²)) worst (small N)</div><div>💾 <b>Space:</b> O(N²)</div></div>
+</section>
+<script type="text/x-java" data-code="jewel" data-file="JewelMaze.java">
+import java.util.*;
+
+public class JewelMaze {
+    static int n, best;
+    static int[][] maze, bestPath;
+    static boolean[][] visited;
+    static final int[] dx = {1,0,-1,0}, dy = {0,1,0,-1};
+
+    static void dfs(int x, int y, int jewels) {
+        if (x == n-1 && y == n-1) {                 // reached the exit
+            if (jewels > best) {
+                best = jewels;
+                for (int i = 0; i < n; i++)
+                    for (int j = 0; j < n; j++)
+                        bestPath[i][j] = visited[i][j] ? 3 : maze[i][j];
+            }
+            return;
+        }
+        for (int k = 0; k < 4; k++) {
+            int nx = x + dx[k], ny = y + dy[k];
+            if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
+            if (visited[nx][ny] || maze[nx][ny] == 1) continue;   // wall or used
+            visited[nx][ny] = true;
+            dfs(nx, ny, jewels + (maze[nx][ny] == 2 ? 1 : 0));
+            visited[nx][ny] = false;                 // backtrack
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            n = sc.nextInt();
+            maze = new int[n][n]; visited = new boolean[n][n]; bestPath = new int[n][n];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    maze[i][j] = sc.nextInt();
+
+            best = -1;
+            visited[0][0] = true;
+            dfs(0, 0, maze[0][0] == 2 ? 1 : 0);
+
+            System.out.println("Jewels collected: " + best);
+            System.out.println("Path (3 = walked):");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) sb.append(bestPath[i][j]).append(' ');
+                sb.append('\n');
+            }
+            System.out.print(sb);
+        }
+    }
+}
+</script>
+
+<!-- ================= 16 TOGGLE COLUMN ================= -->
+<section class="problem" id="p-toggle" data-cat="backtrack" data-title="Toggle Columns (Max All-1 Rows)">
+  <div class="phead">
+    <h3><span class="num">16</span>Toggle Columns — Maximise All-1 Rows</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Bitmask Subsets</span><span class="tag">Parity Trick</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given a binary matrix, you may <b>toggle any column</b> (flip all its bits), exactly <code class="inl">k</code> toggles in total (a column may be toggled more than once). Maximise the number of rows that become <b>all 1s</b>.</p>
+    <div class="io"><b>Input</b>  (T; then rows cols k; then matrix)
+1
+3 3 2
+1 0 0
+1 0 1
+1 0 0
+<b>Output</b>
+#1 2</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Only the <b>parity</b> of each column's toggle count matters — flipping a column twice is a no-op. So the real decision is: which <b>set</b> <code class="inl">S</code> of columns ends up flipped an odd number of times. A set of size <code class="inl">f</code> is reachable iff <code class="inl">f ≤ k</code> and <code class="inl">k − f</code> is <b>even</b> (dump the leftover toggles in cancelling pairs). Enumerate all <code class="inl">2^cols</code> subsets, keep the feasible ones, and count all-1 rows.</p>
+    <div class="callout warn"><b>The exam trap</b> is brute-forcing <i>sequences</i> of k toggles (huge). Collapsing to <b>subset + parity</b> is what makes it fast.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="gridtbl" style="margin:auto">
+        <tr><td>1</td><td class="frontier">0→1</td><td class="frontier">0→1</td><td style="background:rgba(55,201,138,.25)">✓</td></tr>
+        <tr><td>1</td><td class="frontier">0→1</td><td>1→0</td><td>✗</td></tr>
+        <tr><td>1</td><td class="frontier">0→1</td><td class="frontier">0→1</td><td style="background:rgba(55,201,138,.25)">✓</td></tr>
+      </table>
+      <div class="vcap">Flipping columns 2 &amp; 3 (set size 2 = k) makes rows 1 &amp; 3 all-1 → answer <b>2</b>. The yellow cells are the toggled columns.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="toggle"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(2^cols · rows · cols)</div><div>💾 <b>Space:</b> O(rows · cols)</div></div>
+</section>
+<script type="text/x-java" data-code="toggle" data-file="ToggleColumn.java">
+import java.util.*;
+
+public class ToggleColumn {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int tc = 1; tc <= t; tc++) {
+            int r = sc.nextInt(), c = sc.nextInt(), k = sc.nextInt();
+            int[][] g = new int[r][c];
+            for (int i = 0; i < r; i++)
+                for (int j = 0; j < c; j++)
+                    g[i][j] = sc.nextInt();
+
+            int best = 0;
+            for (int mask = 0; mask < (1 << c); mask++) {   // subset of columns to flip
+                int flips = Integer.bitCount(mask);
+                if (flips > k || ((k - flips) & 1) != 0) continue;  // budget + parity
+
+                int rows = 0;
+                for (int i = 0; i < r; i++) {
+                    boolean allOne = true;
+                    for (int j = 0; j < c; j++) {
+                        int v = g[i][j];
+                        if (((mask >> j) & 1) == 1) v ^= 1;  // this column is flipped
+                        if (v == 0) { allOne = false; break; }
+                    }
+                    if (allOne) rows++;
+                }
+                best = Math.max(best, rows);
+            }
+            System.out.println("#" + tc + " " + best);
+        }
+    }
+}
+</script>
+
+<!-- ================= 17 OLD PHONE ================= -->
+<section class="problem" id="p-phone" data-cat="backtrack" data-title="Old Phone (Min Touches)">
+  <div class="phead">
+    <h3><span class="num">17</span>Old Phone — Minimum Touches</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Bounded DFS</span><span class="tag">Expression Search</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>An old phone's dial pad has some <b>broken digits</b>; a calculator offers some <b>working digits</b> and operations (<code class="inl">+ − × ÷ =</code>). Every key press is one "touch". Find the <b>minimum touches</b> to display a target number — either by typing it directly (if its digits work) or by computing it, e.g. <code class="inl">1 + 4 =</code> (4 touches) to get 5.</p>
+    <div class="io"><b>Per test:</b> N M O / working digits / operation codes (1=+,2=−,3=×,4=÷) / target
+<b>Output:</b>  #case: minimum touches (≤ O)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Search the space of <b>partial calculator expressions</b> with a hard cap of <code class="inl">O</code> touches (so the recursion always terminates). State = <code class="inl">(previousValue, currentNumber, pendingOp, touches)</code>. From any state you may press a working <b>digit</b> (append/start a number) or, once a number is shown, press an <b>operation</b> (which evaluates the pending op into <code class="inl">previousValue</code>). Whenever the value equals the target within the budget, record the touch count.</p>
+    <div class="callout">Think of it as an <b>IDDFS / bounded BFS over states</b>. The <code class="inl">O</code> cap is what keeps an otherwise infinite search finite.</div>
+  </div>
+
+  <div class="codebox" data-code="phone"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> exponential, bounded by O</div><div>💾 <b>Space:</b> O(O) recursion</div></div>
+</section>
+<script type="text/x-java" data-code="phone" data-file="OldPhone.java">
+import java.util.*;
+
+public class OldPhone {
+    static final int EMPTY = -10000000;     // sentinel: no current number on display
+    static int[] working, ops;
+    static int n, m, o, answer;
+
+    static int eval(int prev, int curr, int op) {
+        if (prev == EMPTY) return curr;
+        switch (op) {
+            case 1: return prev + curr;
+            case 2: return prev - curr;
+            case 3: return prev * curr;
+            case 4: return (curr == 0) ? Integer.MIN_VALUE : prev / curr;
+            default: return curr;
+        }
+    }
+
+    static void dfs(int prev, int curr, int op, int touches, int target) {
+        // pressing '=' now would evaluate to target?
+        if (op != -1 && curr != EMPTY && !(op == 4 && curr == 0)) {
+            if (eval(prev, curr, op) == target && touches < o)
+                answer = Math.min(answer, touches + 1);     // +1 for the '=' press
+        }
+        if (prev == target && touches < o && op != -1 && curr == EMPTY) answer = Math.min(answer, touches);
+        if (op == -1 && curr == target && touches < o)                  answer = Math.min(answer, touches);
+        if (touches > o) return;
+
+        // press an operation (only meaningful once a number is shown)
+        if (curr != EMPTY)
+            for (int i = 0; i < m; i++) {
+                if (curr == 0 && op == 4) continue;
+                int val = eval(prev, curr, op);
+                dfs(val, EMPTY, ops[i], touches + 1, target);
+            }
+
+        // press a working digit
+        for (int i = 0; i < n; i++) {
+            if (curr == EMPTY) dfs(prev, working[i], op, touches + 1, target);
+            else {
+                int val = Math.abs(curr) * 10 + working[i];
+                if (curr < 0) val = -val;
+                dfs(prev, val, op, touches + 1, target);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        int caseNo = 0;
+        while (t-- > 0) {
+            answer = Integer.MAX_VALUE;
+            n = sc.nextInt(); m = sc.nextInt(); o = sc.nextInt();
+            working = new int[n]; for (int i = 0; i < n; i++) working[i] = sc.nextInt();
+            ops = new int[m];     for (int i = 0; i < m; i++) ops[i] = sc.nextInt();
+            int target = sc.nextInt();
+
+            dfs(EMPTY, EMPTY, -1, 0, target);
+            caseNo++;
+            System.out.println("#" + caseNo + ": " + (answer == Integer.MAX_VALUE ? -1 : answer));
+        }
+    }
+}
+</script>
+
+<!-- ================= 18 FISHERMEN ================= -->
+<section class="problem" id="p-fish" data-cat="backtrack" data-title="Fishermen (Min Total Distance)">
+  <div class="phead">
+    <h3><span class="num">18</span>Fishermen — Minimum Walking Distance</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Assignment</span><span class="tag">Pruning</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A river bank has <code class="inl">N</code> numbered fishing spots (1…N). Several <b>gates</b> each release a number of fishermen; the gate at position <code class="inl">g</code> sends a fisherman to a spot at cost <code class="inl">|spot − g|</code>. Every fisherman must take a <b>distinct</b> spot. Minimise the <b>total</b> walking distance of all fishermen.</p>
+    <div class="io"><b>Input</b>  (N; G gates; then G lines: gatePosition fishermenCount)
+10
+3
+4 5
+6 2
+10 2
+<b>Output</b>
+9</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Flatten every fisherman into a list tagged with its gate position. This is a <b>minimum-cost assignment</b>: place fishermen one by one onto free spots, accumulate <code class="inl">|spot − gate|</code>, and keep the global minimum. <b>Prune</b> any branch whose partial cost already reaches the best found — that keeps the search tiny for the small N of a real test.</p>
+    <div class="callout">Because cost is <code class="inl">|spot − gate|</code> on a line, the optimum never "crosses"; the backtracking with pruning finds it exactly. (For large N you'd switch to min-cost matching / Hungarian.)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 520 130" width="520" height="130">
+        <line x1="30" y1="80" x2="500" y2="80" stroke="#3a4658" stroke-width="2"/>
+        <g font-family="monospace" font-size="11" fill="#aab4c0" text-anchor="middle">
+          <!-- spots 1..10 -->
+          <g>
+          <circle cx="60"  cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="60"  y="100">1</text>
+          <circle cx="108" cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="108" y="100">2</text>
+          <circle cx="156" cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="156" y="100">3</text>
+          <circle cx="204" cy="80" r="9" fill="#3a2417" stroke="#ff8a5c" stroke-width="2"/><text x="204" y="100">4*</text>
+          <circle cx="252" cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="252" y="100">5</text>
+          <circle cx="300" cy="80" r="9" fill="#3a2417" stroke="#ff8a5c" stroke-width="2"/><text x="300" y="100">6*</text>
+          <circle cx="348" cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="348" y="100">7</text>
+          <circle cx="396" cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="396" y="100">8</text>
+          <circle cx="444" cy="80" r="7" fill="#2c4a42" stroke="#37c9a3"/><text x="444" y="100">9</text>
+          <circle cx="492" cy="80" r="9" fill="#3a2417" stroke="#ff8a5c" stroke-width="2"/><text x="492" y="100">10*</text>
+          </g>
+        </g>
+        <text x="260" y="30" fill="#ffb694" font-size="12" text-anchor="middle" font-family="monospace">orange* = gate positions (4: 5 men, 6: 2 men, 10: 2 men)</text>
+      </svg>
+      <div class="vcap">Each fisherman walks to the nearest free spot subject to all being distinct; backtracking minimises the summed walk.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="fish"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N·N!/(N−F)!) worst, pruned</div><div>💾 <b>Space:</b> O(N)</div></div>
+</section>
+<script type="text/x-java" data-code="fish" data-file="Fishermen.java">
+import java.util.*;
+
+public class Fishermen {
+    static int N, F, best;
+    static int[] gateOf;       // gate position of each fisherman (flattened)
+    static boolean[] used;     // spot occupied?
+
+    static void assign(int idx, int sum) {
+        if (sum >= best) return;                 // prune
+        if (idx == F) { best = Math.min(best, sum); return; }
+        for (int s = 1; s <= N; s++) {
+            if (!used[s]) {
+                used[s] = true;
+                assign(idx + 1, sum + Math.abs(s - gateOf[idx]));
+                used[s] = false;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        int G = sc.nextInt();
+        List<Integer> men = new ArrayList<>();
+        for (int i = 0; i < G; i++) {
+            int pos = sc.nextInt(), cnt = sc.nextInt();
+            for (int c = 0; c < cnt; c++) men.add(pos);   // one entry per fisherman
+        }
+        F = men.size();
+        gateOf = new int[F];
+        for (int i = 0; i < F; i++) gateOf[i] = men.get(i);
+
+        used = new boolean[N + 1];
+        best = Integer.MAX_VALUE;
+        assign(0, 0);
+        System.out.println(best);
+    }
+}
+</script>
+
+<!-- ================= 19 SPACESHIP BOMB ================= -->
+<section class="problem" id="p-spaceship" data-cat="backtrack" data-title="Spaceship / Bomb (Max Coins)">
+  <div class="phead">
+    <h3><span class="num">19</span>Spaceship &amp; Bomb — Maximum Coins</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Grid Recursion</span><span class="tag">One-time Power-up</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A spaceship starts at the bottom-centre of a 5-column grid and climbs upward, each step moving to the cell above-left, above, or above-right. <code class="inl">1</code> = coin, <code class="inl">2</code> = enemy (blocks the move), <code class="inl">0</code> = empty. You may detonate a <b>bomb once</b> to clear all enemies in the 5×5 block ahead. Collect the maximum coins before getting stuck or running off the top.</p>
+    <div class="io"><b>Input</b>  (T; then rows; then rows×5 grid)
+<b>Output</b>  #case : max coins</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Recurse upward exploring the three diagonal moves, adding coins, never stepping onto an enemy. If <b>all three moves are blocked</b> and the bomb is still available, detonate the 5×5 region ahead (clearing enemies) and retry from the same cell with one fewer bomb. The recursion returns the best coin total over all choices.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="gridtbl" style="margin:auto">
+        <tr><td>0</td><td class="visit">1</td><td>0</td><td style="background:rgba(255,92,138,.25)">2</td><td>0</td></tr>
+        <tr><td>0</td><td class="frontier">2→0</td><td class="frontier">2→0</td><td class="frontier">2→0</td><td class="visit">1</td></tr>
+        <tr><td>0</td><td>0</td><td class="path">▲</td><td class="visit">1</td><td>1</td></tr>
+        <tr><td>x</td><td>x</td><td class="start">S</td><td>x</td><td>x</td></tr>
+      </table>
+      <div class="vcap">Yellow row = enemies cleared by the one-time bomb. The ship (S) climbs diagonally collecting <span style="color:#bff3e6">coins</span>; the bomb opens a blocked wall of enemies.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="spaceship"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(3^rows) bounded by 5 cols</div><div>💾 <b>Space:</b> O(rows)</div></div>
+</section>
+<script type="text/x-java" data-code="spaceship" data-file="SpaceshipBomb.java">
+import java.util.*;
+
+public class SpaceshipBomb {
+    static char[][] m;
+    static int rows;
+
+    // clear enemies in the 5 rows at/above `row`
+    static void detonate(int row) {
+        if (row < 0) return;
+        int top = Math.max(0, row - 4);
+        for (int i = row; i >= top; i--)
+            for (int j = 0; j < 5; j++)
+                if (m[i][j] == '2') m[i][j] = '0';
+    }
+
+    static int solve(int row, int col, int bombs) {
+        if (row <= 0 || col < 0 || col >= 5) return 0;      // off the top / sides
+        int ans = 0;
+        // three diagonal upward moves, never onto an enemy
+        if (m[row-1][col] != '2')
+            ans = Math.max(ans, (m[row-1][col] == '1' ? 1 : 0) + solve(row-1, col, bombs));
+        if (col > 0 && m[row-1][col-1] != '2')
+            ans = Math.max(ans, (m[row-1][col-1] == '1' ? 1 : 0) + solve(row-1, col-1, bombs));
+        if (col < 4 && m[row-1][col+1] != '2')
+            ans = Math.max(ans, (m[row-1][col+1] == '1' ? 1 : 0) + solve(row-1, col+1, bombs));
+
+        // completely blocked & bomb left -> clear the wall and retry
+        if (ans == 0 && bombs > 0) {
+            detonate(row - 1);
+            ans = solve(row, col, bombs - 1);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        int caseNo = 0;
+        while (t-- > 0) {
+            rows = sc.nextInt();
+            m = new char[rows][5];
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < 5; j++)
+                    m[i][j] = sc.next().charAt(0);
+            caseNo++;
+            // start one row below the grid, centre column, 1 bomb
+            System.out.println("#" + caseNo + " : " + solve(rows, 2, 1));
+        }
+    }
+}
+</script>
+
+<!-- ================= 20 INVENTORY ================= -->
+<section class="problem" id="p-inventory" data-cat="backtrack" data-title="Inventory / PC Configs (Max Profit)">
+  <div class="phead">
+    <h3><span class="num">20</span>Inventory — Maximise Selling Price</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--backtrack)">Backtracking</span>
+    <span class="tag">Bounded Knapsack</span><span class="tag">≤3 configs</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>You hold <code class="inl">D</code> CPUs, <code class="inl">E</code> memory chips, <code class="inl">F</code> boards. A leftover CPU sells for <code class="inl">d</code>, a leftover chip for <code class="inl">e</code>. Each of <code class="inl">N</code> PC configurations consumes <code class="inl">(Dᵢ,Eᵢ,Fᵢ)</code> parts and sells for <code class="inl">SPᵢ</code>. Using <b>at most 3 distinct</b> configurations (each any number of times), maximise total revenue (assembled PCs + leftover parts sold raw).</p>
+    <div class="io"><b>Input</b>  (T; then D E F d e; then N; then N lines Dᵢ Eᵢ Fᵢ SPᵢ)
+1
+10 10 10 2 1
+1
+1 2 2 3
+<b>Output</b>
+Case #1
+30</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>DFS over configurations with two moves at each: <b>skip</b> this config, or <b>use it</b> 1, 2, 3… times while parts remain (incrementing the "distinct configs used" counter, capped at 3). When you stop, add the value of leftover CPUs and chips (<code class="inl">D·d + E·e</code>) and update the best.</p>
+  </div>
+
+  <div class="codebox" data-code="inventory"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N³ · max-uses)</div><div>💾 <b>Space:</b> O(N)</div></div>
+</section>
+<script type="text/x-java" data-code="inventory" data-file="Inventory.java">
+import java.util.*;
+
+public class Inventory {
+    static int d, e, config, answer;
+    static int[][] cfg;        // [i] = {Di, Ei, Fi, SPi}
+
+    static void solve(int index, int used, int D, int E, int F, int cost) {
+        if (index >= config || used == 3) {
+            cost += D * d + E * e;             // sell leftover CPUs & chips
+            answer = Math.max(answer, cost);
+            return;
+        }
+        solve(index + 1, used, D, E, F, cost); // skip this configuration
+
+        int i = 1;                             // use this config i times
+        while (D - cfg[index][0]*i >= 0 && E - cfg[index][1]*i >= 0 && F - cfg[index][2]*i >= 0) {
+            solve(index + 1, used + 1,
+                  D - cfg[index][0]*i, E - cfg[index][1]*i, F - cfg[index][2]*i,
+                  cost + cfg[index][3]*i);
+            i++;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int tc = 1; tc <= t; tc++) {
+            answer = 0;
+            int D = sc.nextInt(), E = sc.nextInt(), F = sc.nextInt();
+            d = sc.nextInt(); e = sc.nextInt();
+            config = sc.nextInt();
+            cfg = new int[config][4];
+            for (int i = 0; i < config; i++)
+                for (int j = 0; j < 4; j++)
+                    cfg[i][j] = sc.nextInt();
+
+            solve(0, 0, D, E, F, 0);
+            System.out.println("Case #" + tc);
+            System.out.println(answer);
+        }
+    }
+}
+</script>
+
+<!-- ================= 21 2D MATRIX ================= -->
+<section class="problem" id="p-2d" data-cat="dp" data-title="2D Matrix (Max Path + Count)">
+  <div class="phead">
+    <h3><span class="num">21</span>2D Matrix — Max-Sum Path &amp; Path Count</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--dp)">DP</span>
+    <span class="tag">Grid DP</span><span class="tag">Counting</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>From the top-left to the bottom-right of an <code class="inl">N×N</code> grid of digits, moving only <b>right</b>, <b>down</b>, or <b>diagonally down-right</b>, find the <b>maximum digit sum</b> and <b>how many</b> distinct paths achieve it. Cells marked <code class="inl">x</code> are blocked. Output <code class="inl">0 0</code> if no path exists.</p>
+    <div class="io"><b>Input</b>  (T; then N; then N×N grid of digits / x)
+<b>Output</b>  &lt;maxSum&gt; &lt;numberOfMaxPaths&gt;</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Fill a DP table from the <b>bottom-right backward</b>. Each cell stores two things: the best sum reachable to the goal, and the <b>count</b> of ways achieving it. A cell's best = its digit + max of its three forward neighbours; its count = sum of the counts of every neighbour that ties for that max. Blocked cells are <code class="inl">−∞</code>. If the start ends up <code class="inl">−∞</code>, there is no path.</p>
+    <div class="callout"><b>Counting-while-optimising</b> is a recurring trick: carry <code class="inl">(bestValue, ways)</code> together and add up the ways of all neighbours that match the best.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <table class="dptbl">
+        <tr><th></th><th>j0</th><th>j1</th><th>j2</th></tr>
+        <tr><th>i0</th><td class="cur">12<br><small>2&nbsp;ways</small></td><td class="dep">9<br><small>2</small></td><td>5<br><small>1</small></td></tr>
+        <tr><th>i1</th><td class="dep">10<br><small>1</small></td><td class="dep">7<br><small>1</small></td><td>4<br><small>1</small></td></tr>
+        <tr><th>i2</th><td>6<br><small>1</small></td><td>3<br><small>1</small></td><td>0<br><small>1</small></td></tr>
+      </table>
+      <div class="vcap">Each cell = (best sum to goal, #ways). Cell (0,0) takes its digit + max(right, diag, down); ties in the neighbours add their counts together.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="grid2d"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N²)</div><div>💾 <b>Space:</b> O(N²)</div></div>
+</section>
+<script type="text/x-java" data-code="grid2d" data-file="MaxPath2D.java">
+import java.util.*;
+
+public class MaxPath2D {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        final int NEG = -1_000_000;             // stands for "unreachable / blocked"
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            char[][] a = new char[n][n];
+            for (int i = 0; i < n; i++) {
+                String s = sc.next();
+                for (int j = 0; j < n; j++) a[i][j] = s.charAt(j);
+            }
+            a[0][0] = '0'; a[n-1][n-1] = '0';   // entrance & exit add nothing
+
+            int[][] sum = new int[n][n], cnt = new int[n][n];
+            sum[n-1][n-1] = 0; cnt[n-1][n-1] = 1;
+
+            // last column (move only up)
+            for (int i = n-2; i >= 0; i--) {
+                if (a[i][n-1] == 'x') { for (int j = i; j >= 0; j--){ sum[j][n-1]=NEG; cnt[j][n-1]=0;} break; }
+                sum[i][n-1] = sum[i+1][n-1] + (a[i][n-1]-'0'); cnt[i][n-1] = 1;
+            }
+            // last row (move only left)
+            for (int j = n-2; j >= 0; j--) {
+                if (a[n-1][j] == 'x') { for (int k = j; k >= 0; k--){ sum[n-1][k]=NEG; cnt[n-1][k]=0;} break; }
+                sum[n-1][j] = sum[n-1][j+1] + (a[n-1][j]-'0'); cnt[n-1][j] = 1;
+            }
+            // the rest
+            for (int i = n-2; i >= 0; i--)
+                for (int j = n-2; j >= 0; j--) {
+                    if (a[i][j] == 'x') { sum[i][j] = NEG; cnt[i][j] = 0; continue; }
+                    int best = Math.max(sum[i][j+1], Math.max(sum[i+1][j+1], sum[i+1][j]));
+                    if (best <= NEG) { sum[i][j] = NEG; cnt[i][j] = 0; continue; }
+                    int ways = 0;
+                    if (sum[i][j+1]   == best) ways += cnt[i][j+1];
+                    if (sum[i+1][j+1] == best) ways += cnt[i+1][j+1];
+                    if (sum[i+1][j]   == best) ways += cnt[i+1][j];
+                    sum[i][j] = best + (a[i][j]-'0');
+                    cnt[i][j] = ways;
+                }
+
+            if (sum[0][0] <= NEG) System.out.println("0 0");
+            else System.out.println(sum[0][0] + " " + cnt[0][0]);
+        }
+    }
+}
+</script>
+
+<!-- ================= 22 BURST BALLOON CLASSIC ================= -->
+<section class="problem" id="p-burst1" data-cat="dp" data-title="Burst Balloon (Classic)">
+  <div class="phead">
+    <h3><span class="num">22</span>Burst Balloon — Classic Interval DP 📊</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--dp)">DP</span>
+    <span class="tag">Interval DP</span><span class="tag">"Last to burst"</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Balloons hold numbers. Bursting balloon <code class="inl">i</code> earns <code class="inl">nums[left]·nums[i]·nums[right]</code> coins, where left/right are its current neighbours (treat out-of-range as 1). After it pops, its neighbours become adjacent. Burst all balloons to collect the <b>maximum coins</b>.</p>
+    <div class="io"><b>Input</b>  (n; then n numbers)
+4
+3 1 5 8
+<b>Output</b>
+167</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>The trick is to think about which balloon is the <b>last</b> to burst in a range <code class="inl">(left, right)</code>. If balloon <code class="inl">k</code> is last, its neighbours are exactly the fixed walls <code class="inl">left−1</code> and <code class="inl">right+1</code> (everything between is already gone). So:</p>
+    <p style="text-align:center;font-family:var(--mono);color:#9ee3ff">dp[l][r] = max over k of ( nums[l-1]·nums[k]·nums[r+1] + dp[l][k-1] + dp[k+1][r] )</p>
+    <p class="sub">Pad both ends with <code class="inl">1</code>, then fill by increasing interval length. Answer is <code class="inl">dp[1][n]</code>.</p>
+    <div class="callout warn"><b>Why "last" not "first"?</b> Choosing the first balloon leaves a messy, splitting recurrence. Choosing the <i>last</i> fixes its two multipliers, decoupling the left and right sub-ranges cleanly.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization — DP table fills by interval length (press Play)</h4>
+    <div class="viz">
+      <div class="stepviz" data-frames="burst"></div>
+      <div class="legendrow">
+        <span><i style="background:var(--accent)"></i>cell being computed dp[l][r]</span>
+        <span><i style="background:rgba(124,92,255,.4)"></i>sub-problems it reads</span>
+        <span><i style="background:rgba(55,201,163,.3)"></i>already solved</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="burst"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(n³)</div><div>💾 <b>Space:</b> O(n²)</div></div>
+</section>
+<script type="text/x-java" data-code="burst" data-file="BurstBalloon.java">
+import java.util.*;
+
+public class BurstBalloon {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] nums = new int[n + 2];
+        nums[0] = nums[n + 1] = 1;               // virtual walls of value 1
+        for (int i = 1; i <= n; i++) nums[i] = sc.nextInt();
+
+        int[][] dp = new int[n + 2][n + 2];      // dp[l][r] = best coins bursting balloons l..r
+
+        for (int len = 1; len <= n; len++) {                 // interval length
+            for (int l = 1; l + len - 1 <= n; l++) {
+                int r = l + len - 1;
+                for (int k = l; k <= r; k++) {               // k = last balloon to burst in [l,r]
+                    int coins = nums[l-1] * nums[k] * nums[r+1]   // its neighbours are the walls
+                              + dp[l][k-1] + dp[k+1][r];
+                    dp[l][r] = Math.max(dp[l][r], coins);
+                }
+            }
+        }
+        System.out.println(dp[1][n]);
+    }
+}
+</script>
+
+<!-- ================= 23 BURST BALLOON (ZEROS) ================= -->
+<section class="problem" id="p-burst2" data-cat="dp" data-title="Burst Balloon (Zero-Aware Variant)">
+  <div class="phead">
+    <h3><span class="num">23</span>Burst Balloon — Zero-Aware Variant</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--dp)">DP</span>
+    <span class="tag">Interval DP</span><span class="tag">Edge-case Scoring</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>The Samsung/CareerCup wording: bursting a balloon scores the <b>product of its left and right neighbours</b> (left only / right only / itself at the boundaries), and balloons with value <b>0</b> are best removed first using their surrounding values. Maximise total points.</p>
+    <div class="io"><b>Input</b>
+6
+1 0 2 3 0 4
+<b>Output</b>
+34</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>First, sweep out the <b>zero</b> balloons, crediting each one the product of its previous kept value and its next value. Then run an interval DP over the surviving balloons (padded with 1s): for a sub-range a burst scores <code class="inl">nums[left]·nums[right]</code>, except for the very outer range where it scores the full triple product. Add the pre-counted zero points to the DP result.</p>
+    <div class="callout">This variant differs from #22 only in the <b>scoring rule</b> and the zero pre-pass. Recognising which scoring a statement intends is half the battle.</div>
+  </div>
+
+  <div class="codebox" data-code="burstz"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(n³)</div><div>💾 <b>Space:</b> O(n²)</div></div>
+</section>
+<script type="text/x-java" data-code="burstz" data-file="BurstBalloonZero.java">
+import java.util.*;
+
+public class BurstBalloonZero {
+    static int maxCoins(int[] A) {
+        int siz = A.length;
+        int[] nums = new int[siz + 2];
+        int n = 1, points = 0;
+
+        // keep positives; pre-score the zeros with neighbour product
+        for (int i = 0; i < siz; i++) {
+            if (A[i] > 0) {
+                nums[n++] = A[i];
+            } else {
+                int leftV  = (n - 1 > 0)   ? nums[n - 1] : 1;
+                int rightV = (i + 1 < siz) ? A[i + 1]    : 1;
+                points += leftV * rightV;
+            }
+        }
+        nums[0] = 1; nums[n] = 1; n++;           // pad both ends
+
+        int[][] dp = new int[n][n];
+        for (int j = 2; j < n; j++) {            // j = span between the two boundaries
+            for (int left = 0; left < n - j; left++) {
+                int right = left + j;
+                for (int i = left + 1; i < right; i++) {
+                    int gain = (left == 0 && right == n - 1)
+                             ? nums[left] * nums[i] * nums[right] + dp[left][i] + dp[i][right]
+                             : nums[left] * nums[right]           + dp[left][i] + dp[i][right];
+                    dp[left][right] = Math.max(dp[left][right], gain);
+                }
+            }
+        }
+        return points + dp[0][n - 1];
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int siz = sc.nextInt();
+        int[] A = new int[siz];
+        for (int i = 0; i < siz; i++) A[i] = sc.nextInt();
+        System.out.println(maxCoins(A));
+    }
+}
+</script>
+
+<!-- ================= 24 MARATHON ================= -->
+<section class="problem" id="p-marathon" data-cat="dp" data-title="Marathon (Pace/Energy DP)">
+  <div class="phead">
+    <h3><span class="num">24</span>Marathon — Fastest Time Within Energy</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--dp)">DP</span>
+    <span class="tag">Knapsack-style</span><span class="tag">Two Constraints</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Run a marathon of <code class="inl">D</code> km with energy budget <code class="inl">H</code>. You may pick one of <b>5 paces</b> for each km; a pace has a (time, energy) cost per km. Find the <b>minimum total time</b> to finish all <code class="inl">D</code> km without exceeding energy <code class="inl">H</code>. Output minutes and seconds.</p>
+    <div class="io"><b>Input</b>  (T; then D H; then 5 lines: min sec energy)
+1
+30 130
+4 50 7
+5 0 5
+5 10 4
+5 20 3
+5 30 2
+<b>Output</b>
+#1 153 20</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Two quantities accumulate independently — kilometres done and energy spent — so DP over both. <code class="inl">dp[k][e]</code> = minimum time to have run <code class="inl">k</code> km using exactly <code class="inl">e</code> energy. From each state, try all 5 paces for the next km. Answer = <code class="inl">min over e ≤ H of dp[D][e]</code>. Convert seconds → <code class="inl">min sec</code> at the end.</p>
+    <div class="callout">Faster paces cost more energy: this is the classic <b>"buy speed with a limited budget"</b> trade-off — exactly a bounded knapsack where the count axis is kilometres.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <div class="barwrap" style="height:140px;align-items:flex-end">
+        <div class="bar" style="height:120px">290<div class="lbl">7e</div></div>
+        <div class="bar" style="height:100px">300<div class="lbl">5e</div></div>
+        <div class="bar" style="height:88px">310<div class="lbl">4e</div></div>
+        <div class="bar mark" style="height:76px">320<div class="lbl">3e</div></div>
+        <div class="bar mark" style="height:64px">330<div class="lbl">2e</div></div>
+      </div>
+      <div class="vcap" style="margin-top:28px">5 paces: time/km (bar height, seconds) vs energy/km. Spend just enough energy on faster paces to minimise total time within budget H.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="marathon"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(D · H · 5)</div><div>💾 <b>Space:</b> O(D · H)</div></div>
+</section>
+<script type="text/x-java" data-code="marathon" data-file="Marathon.java">
+import java.util.*;
+
+public class Marathon {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int tc = 1; tc <= t; tc++) {
+            int D = sc.nextInt(), H = sc.nextInt();
+            int[] time = new int[5], energy = new int[5];
+            for (int i = 0; i < 5; i++) {
+                int mn = sc.nextInt(), s = sc.nextInt(), e = sc.nextInt();
+                time[i] = mn * 60 + s;          // seconds per km
+                energy[i] = e;
+            }
+
+            final int INF = Integer.MAX_VALUE / 2;
+            int[][] dp = new int[D + 1][H + 1];
+            for (int[] row : dp) Arrays.fill(row, INF);
+            dp[0][0] = 0;
+
+            for (int k = 0; k < D; k++)
+                for (int e = 0; e <= H; e++) {
+                    if (dp[k][e] == INF) continue;
+                    for (int p = 0; p < 5; p++) {
+                        int ne = e + energy[p];
+                        if (ne > H) continue;
+                        dp[k+1][ne] = Math.min(dp[k+1][ne], dp[k][e] + time[p]);
+                    }
+                }
+
+            int best = INF;
+            for (int e = 0; e <= H; e++) best = Math.min(best, dp[D][e]);
+            System.out.println("#" + tc + " " + (best / 60) + " " + (best % 60));
+        }
+    }
+}
+</script>
+
+<!-- ================= 25 TREE CUTTING ================= -->
+<section class="problem" id="p-treecut" data-cat="dp" data-title="Tree Cutting (Robot Stack)">
+  <div class="phead">
+    <h3><span class="num">25</span>Tree Cutting — Robot With a Stack</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--dp)">DP</span>
+    <span class="tag">Memoised DP</span><span class="tag">Process by Height</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A robot starts at position <code class="inl">0</code> on a line <code class="inl">0…n</code> and must cut every tree (positions 1…n−1, up to one on each side) and deliver them all to position <code class="inl">n</code>. Cutting any tree costs 1; moving distance <code class="inl">d</code> costs <code class="inl">d</code>. The carried stack must stay <b>non-increasing in height bottom→top</b> (you may only pick up a tree no taller than the one currently on top). Minimise total cost.</p>
+    <div class="io"><b>Input</b>  (T; then n; left[] ; right[])
+1
+5
+0 3 2 1 0
+0 3 2 1 0
+<b>Output</b>
+#1 11</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>The stack rule forces you to collect trees in <b>decreasing height order</b> (tallest at the bottom). So process heights from high to low. For a given height, all its trees sit between positions <code class="inl">L</code> (leftmost) and <code class="inl">R</code> (rightmost); the robot must sweep that whole span and end at one of the two ends before dropping to the next-lower height. <b>Memoise on</b> <code class="inl">(currentHeight, robotPosition)</code>. Cutting cost (= total trees) is added naturally as you pass each level.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 460 150" width="460" height="150">
+        <line x1="30" y1="110" x2="430" y2="110" stroke="#3a4658" stroke-width="2"/>
+        <g font-family="monospace" font-size="11" fill="#aab4c0" text-anchor="middle">
+          <text x="30"  y="130">0</text><text x="130" y="130">1</text><text x="230" y="130">2</text>
+          <text x="330" y="130">3</text><text x="430" y="130">4=n</text>
+        </g>
+        <!-- trees height 3 at pos1, 2 at pos2, 1 at pos3 -->
+        <rect x="120" y="40" width="20" height="70" fill="#37c9a3"/><text x="130" y="35" fill="#bff3e6" font-size="11" text-anchor="middle" font-family="monospace">h3</text>
+        <rect x="220" y="60" width="20" height="50" fill="#4ea1ff"/><text x="230" y="55" fill="#cfe6ff" font-size="11" text-anchor="middle" font-family="monospace">h2</text>
+        <rect x="320" y="80" width="20" height="30" fill="#ff8a5c"/><text x="330" y="75" fill="#ffd0b8" font-size="11" text-anchor="middle" font-family="monospace">h1</text>
+        <circle cx="30" cy="110" r="8" fill="#ffce4e"/><text x="30" y="100" fill="#ffe999" font-size="10" text-anchor="middle" font-family="monospace">robot</text>
+      </svg>
+      <div class="vcap">Pick up tallest (h3) first so the stack stays non-increasing. 6 cuts + 5 movement = total <b>11</b>.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="treecut"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(maxH · n)</div><div>💾 <b>Space:</b> O(maxH · n)</div></div>
+</section>
+<script type="text/x-java" data-code="treecut" data-file="TreeCutting.java">
+import java.util.*;
+
+public class TreeCutting {
+    static int n;
+    static int[][] dp;
+    static List<List<Integer>> trees;       // trees.get(h) = sorted positions of trees of height h
+
+    static int solve(int height, int pos) {
+        if (height == 0) return n - pos;     // nothing left: walk to the depot at n
+        if (dp[height][pos] != -1) return dp[height][pos];
+
+        List<Integer> line = trees.get(height);
+        if (line.isEmpty()) return dp[height][pos] = solve(height - 1, pos);
+
+        int t = line.size();                 // trees at this height (each costs 1 to cut)
+        int L = line.get(0), R = line.get(t - 1);
+        int cost;
+
+        if (pos < L) {                                   // span is to the right
+            cost = t + (R - pos) + solve(height - 1, R);
+        } else if (pos > R) {                            // span is to the left
+            cost = t + (pos - L) + solve(height - 1, L);
+        } else {                                         // span surrounds us: end at L or R
+            int viaR = t + (pos - L) + (R - L) + solve(height - 1, R);
+            int viaL = t + (R - pos) + (R - L) + solve(height - 1, L);
+            cost = Math.min(viaR, viaL);
+        }
+        return dp[height][pos] = cost;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int tc = 1; tc <= t; tc++) {
+            n = sc.nextInt();
+            trees = new ArrayList<>();
+            for (int i = 0; i <= 1000; i++) trees.add(new ArrayList<>());
+
+            for (int i = 0; i < n; i++) { int a = sc.nextInt(); if (a > 0) trees.get(a).add(i); }
+            for (int i = 0; i < n; i++) { int a = sc.nextInt(); if (a > 0) trees.get(a).add(i); }
+            for (int i = 0; i <= 1000; i++) Collections.sort(trees.get(i));
+
+            dp = new int[1001][n + 1];
+            for (int[] row : dp) Arrays.fill(row, -1);
+
+            System.out.println("#" + tc + " " + solve(1000, 0));
+        }
+    }
+}
+</script>
+
+<!-- ================= 26 AGGRESSIVE COWS ================= -->
+<section class="problem" id="p-cows" data-cat="binary" data-title="Aggressive Cows">
+  <div class="phead">
+    <h3><span class="num">26</span>Aggressive Cows — Maximise Min Gap 📊</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--binary)">Binary Search</span>
+    <span class="tag">Search on Answer</span><span class="tag">Greedy Check</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given stall positions on a line and <code class="inl">c</code> cows, place the cows so that the <b>minimum distance</b> between any two cows is as <b>large</b> as possible. Output that largest possible minimum distance.</p>
+    <div class="io"><b>Input</b>  (T; then n c; then n positions)
+1
+5 3
+1 2 8 4 9
+<b>Output</b>
+3        (cows at 1, 4, 8/9 → min gap 3)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>"Maximise the minimum" ⇒ <b>binary search on the answer</b>. Sort the positions. For a candidate gap <code class="inl">x</code>, greedily place cows left-to-right, dropping a cow whenever it's ≥ <code class="inl">x</code> away from the last placed one. If you can seat all <code class="inl">c</code> cows, <code class="inl">x</code> is feasible — try larger; otherwise try smaller. The feasibility is <b>monotonic</b> (works for x ⇒ works for all smaller x), which is exactly what binary search needs.</p>
+    <div class="callout"><b>Signature of this pattern:</b> the words "maximise the minimum" or "minimise the maximum" with a <i>checkable</i> condition almost always mean <b>binary search the answer + greedy verify</b>.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization — binary search the gap (press Play)</h4>
+    <div class="viz">
+      <div class="stepviz" data-frames="cow"></div>
+      <div class="legendrow">
+        <span><i style="background:#37c98a"></i>placed cow</span>
+        <span><i style="background:var(--line2)"></i>empty stall</span>
+        <span><i style="background:var(--binary)"></i>candidate gap x</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="cows"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(n log(maxPos))</div><div>💾 <b>Space:</b> O(1)</div></div>
+</section>
+<script type="text/x-java" data-code="cows" data-file="AggressiveCows.java">
+import java.util.*;
+
+public class AggressiveCows {
+    // Can we seat `cows` cows with at least `gap` between consecutive ones?
+    static boolean canPlace(int[] a, int n, int cows, int gap) {
+        int count = 1, last = a[0];
+        for (int i = 1; i < n; i++) {
+            if (a[i] - last >= gap) {
+                count++; last = a[i];
+                if (count == cows) return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt(), cows = sc.nextInt();
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++) a[i] = sc.nextInt();
+            Arrays.sort(a);
+
+            int lo = 0, hi = a[n-1] - a[0], ans = 0;
+            while (lo <= hi) {
+                int mid = (lo + hi) / 2;
+                if (canPlace(a, n, cows, mid)) { ans = mid; lo = mid + 1; }  // feasible -> push up
+                else                            hi = mid - 1;                 // too big   -> push down
+            }
+            System.out.println(ans);
+        }
+    }
+}
+</script>
+
+<!-- ================= 27 SINKHOLE ================= -->
+<section class="problem" id="p-sinkhole" data-cat="binary" data-title="Sinkhole (Max Square ≤1 hole)">
+  <div class="phead">
+    <h3><span class="num">27</span>Sinkhole — Largest Square With ≤1 Hole</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--binary)">Binary Search</span>
+    <span class="tag">2D Prefix Sum</span><span class="tag">Monotonic Check</span><span class="diff hard">Hard</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>On an <code class="inl">N×M</code> plot with <code class="inl">K</code> marked sinkholes, find the <b>largest square</b> sub-region containing <b>at most one</b> sinkhole, and report its corner coordinates.</p>
+    <div class="io"><b>Input</b>  (T; then N M; then K; then K sinkhole coordinates)
+<b>Output</b>  #i  topLeftX topLeftY  bottomRightX bottomRightY</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Build a <b>2-D prefix sum</b> so the number of sinkholes inside any rectangle is an O(1) query. The side length is <b>monotonic</b>: if no square of side <code class="inl">k</code> has ≤1 hole, none of side <code class="inl">k+1</code> does either (a bigger square can only contain more). So <b>binary search the side length</b>, and for each candidate scan all squares using the prefix sum.</p>
+    <p style="text-align:center;font-family:var(--mono);color:#9ee3ff;font-size:12.5px">count(i,j,k) = pre[i+k][j+k] − pre[i+k][j] − pre[i][j+k] + pre[i][j]</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization — inclusion–exclusion</h4>
+    <div class="viz">
+      <svg viewBox="0 0 260 200" width="260" height="200">
+        <rect x="20" y="20" width="180" height="150" fill="#16202b" stroke="#3a4658"/>
+        <rect x="20" y="20" width="120" height="100" fill="rgba(124,92,255,.18)" stroke="#7c5cff" stroke-dasharray="4 3"/>
+        <rect x="80" y="70" width="120" height="100" fill="rgba(78,161,255,.18)" stroke="#4ea1ff"/>
+        <text x="140" y="120" fill="#cfe6ff" font-size="11" text-anchor="middle" font-family="monospace">k×k</text>
+        <text x="200" y="190" fill="#9ee3ff" font-size="11" text-anchor="end" font-family="monospace">pre[i+k][j+k]</text>
+      </svg>
+      <div class="vcap">A rectangle's sinkhole count = big corner − two strips + the doubly-removed corner (inclusion–exclusion on the prefix table).</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="sinkhole"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N·M·log(min(N,M)))</div><div>💾 <b>Space:</b> O(N·M)</div></div>
+</section>
+<script type="text/x-java" data-code="sinkhole" data-file="Sinkhole.java">
+import java.util.*;
+
+public class Sinkhole {
+    static int[][] pre;
+    static int N, M;
+    static int xb, yb, xt, yt;          // best square corners (1-indexed)
+
+    // does some k×k square hold <=1 sinkhole?  records the best such square
+    static boolean feasible(int k) {
+        boolean found = false;
+        int bestCount = Integer.MAX_VALUE;
+        for (int i = 0; i + k <= N; i++)
+            for (int j = 0; j + k <= M; j++) {
+                int cnt = pre[i+k][j+k] - pre[i+k][j] - pre[i][j+k] + pre[i][j];
+                if (cnt <= 1 && cnt < bestCount) {       // prefer the cleaner square
+                    bestCount = cnt;
+                    xb = i + 1; yb = j + 1;              // top-left
+                    xt = i + k; yt = j + k;              // bottom-right
+                    found = true;
+                }
+            }
+        return found;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        for (int tc = 1; tc <= T; tc++) {
+            N = sc.nextInt(); M = sc.nextInt();
+            int[][] g = new int[N + 1][M + 1];
+            int K = sc.nextInt();
+            for (int i = 0; i < K; i++) { int x = sc.nextInt(), y = sc.nextInt(); g[x][y] = 1; }
+
+            pre = new int[N + 1][M + 1];
+            for (int i = 1; i <= N; i++)
+                for (int j = 1; j <= M; j++)
+                    pre[i][j] = pre[i-1][j] + pre[i][j-1] - pre[i-1][j-1] + g[i][j];
+
+            int lo = 1, hi = Math.min(N, M), bestK = 1;
+            feasible(1);
+            while (lo <= hi) {
+                int mid = (lo + hi) / 2;
+                if (feasible(mid)) { bestK = mid; lo = mid + 1; }   // grow the square
+                else hi = mid - 1;
+            }
+            feasible(bestK);                         // lock in coordinates for the answer
+            System.out.println("#" + tc + " " + xb + " " + yb + " " + xt + " " + yt);
+        }
+    }
+}
+</script>
+
+<!-- ================= 28 CROW POT ================= -->
+<section class="problem" id="p-crow" data-cat="greedy" data-title="Crow &amp; Pots (Min Stones)">
+  <div class="phead">
+    <h3><span class="num">28</span>Thirsty Crow — Minimum Stones (Worst Case)</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--greedy)">Greedy</span>
+    <span class="tag">Sorting</span><span class="tag">Level Filling</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>There are <code class="inl">N</code> pots; pot <code class="inl">i</code> overflows after <code class="inl">Oᵢ</code> stones. The crow wants <code class="inl">K</code> pots to overflow but doesn't know which pots are which. Compute the minimum number of stones needed to <b>guarantee</b> K overflows in the <b>worst case</b>.</p>
+    <div class="io"><b>Input</b>  (N; N overflow numbers; K)
+2
+5 58
+1
+<b>Output</b>
+10        (5 into each pot → the "5" pot overflows)</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Worst case = adversary reveals the hardest pots first, so the crow must fill <b>all</b> pots level by level. Sort overflow numbers ascending. Raising the water from one level to the next costs that height increment times the number of pots <b>still in play</b>. After <code class="inl">K</code> pots overflow, the rest can be ignored:</p>
+    <p style="text-align:center;font-family:var(--mono);color:#9ee3ff">total = Σ (Oᵢ − Oᵢ₋₁) · (N − i),  for i = 0 … K−1</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <div class="barwrap" style="height:140px">
+        <div class="bar mark" style="height:30px">5</div>
+        <div class="bar" style="height:120px">58</div>
+      </div>
+      <div class="vcap" style="margin-top:26px">Fill both pots to level 5 (cost 5×2 = <b>10</b>) → the smaller pot overflows. Sorting + incremental level fill gives the worst-case minimum.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="crow"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N log N)</div><div>💾 <b>Space:</b> O(1)</div></div>
+</section>
+<script type="text/x-java" data-code="crow" data-file="CrowPot.java">
+import java.util.*;
+
+public class CrowPot {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] o = new int[n];
+        for (int i = 0; i < n; i++) o[i] = sc.nextInt();
+        int k = sc.nextInt();
+
+        Arrays.sort(o);
+        // turn absolute overflow numbers into incremental level heights
+        for (int i = n - 1; i >= 1; i--) o[i] = Math.max(0, o[i] - o[i - 1]);
+
+        long total = 0;
+        for (int i = 0; i < k; i++)
+            total += (long) o[i] * (n - i);     // each increment paid by all remaining pots
+
+        System.out.println(total);
+    }
+}
+</script>
+
+<!-- ================= 29 OMNIOUS NUMBER ================= -->
+<section class="problem" id="p-omnious" data-cat="math" data-title="Omnious Number">
+  <div class="phead">
+    <h3><span class="num">29</span>Omnious Number — Digit Frequency Filter</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--math)">Math</span>
+    <span class="tag">Digit Counting</span><span class="tag">Brute Range</span><span class="diff easy">Easy</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>In a range <code class="inl">[a, b]</code>, count the "valid" numbers — those in which the given <b>forbidden digits</b> appear, in total, <b>fewer than k</b> times. (A product number is discarded if it contains the forbidden digits k or more times.)</p>
+    <div class="io"><b>Input</b>  (a b k; then n; then n forbidden digits)
+24 12943 3
+3
+1 3 5
+<b>Output</b>
+&lt;count of valid numbers&gt;</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Ranges in these problems are small enough to <b>iterate</b>. For each number, peel off digits with <code class="inl">% 10</code> and <code class="inl">/ 10</code>, count how many are forbidden, and accept it if that total is below <code class="inl">k</code>. A boolean lookup table for the forbidden digits keeps the inner check O(1).</p>
+    <div class="callout">For huge ranges you'd switch to <b>digit DP</b>, but for Samsung-sized bounds the straight loop is the intended, bug-free answer.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 420 120" width="420" height="120">
+        <text x="20" y="40" fill="#e6edf3" font-size="22" font-family="monospace">1 1 2 2 3</text>
+        <g font-family="monospace" font-size="12">
+          <rect x="18" y="50" width="22" height="22" fill="rgba(255,92,138,.3)" stroke="#ff5c8a"/>
+          <rect x="46" y="50" width="22" height="22" fill="rgba(255,92,138,.3)" stroke="#ff5c8a"/>
+          <rect x="158" y="50" width="22" height="22" fill="rgba(255,92,138,.3)" stroke="#ff5c8a"/>
+        </g>
+        <text x="20" y="100" fill="#ff7b9c" font-size="13" font-family="monospace">forbidden {1,3,5} appear 3× → discard (k=3)</text>
+      </svg>
+      <div class="vcap"><code style="color:#9ee3ff">11223</code> has forbidden digits 3 times → rejected. <code style="color:#9ee3ff">11222</code> has them twice → accepted.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="omnious"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O((b−a)·digits)</div><div>💾 <b>Space:</b> O(1)</div></div>
+</section>
+<script type="text/x-java" data-code="omnious" data-file="OmniousNumber.java">
+import java.util.*;
+
+public class OmniousNumber {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int a = sc.nextInt(), b = sc.nextInt(), k = sc.nextInt();
+        int n = sc.nextInt();
+        boolean[] forbidden = new boolean[10];
+        for (int i = 0; i < n; i++) forbidden[sc.nextInt()] = true;
+
+        int count = 0;
+        for (int num = a; num <= b; num++) {
+            int temp = num, bad = 0;
+            if (temp == 0 && forbidden[0]) bad++;
+            while (temp > 0) {
+                if (forbidden[temp % 10]) bad++;
+                temp /= 10;
+            }
+            if (bad < k) count++;            // valid if forbidden digits used < k times
+        }
+        System.out.println(count);
+    }
+}
+</script>
+
+<!-- ================= 30 STRING COMPRESSION ================= -->
+<section class="problem" id="p-strcomp" data-cat="math" data-title="String Compression (Merge Counts)">
+  <div class="phead">
+    <h3><span class="num">30</span>String Compression — Merge Letter Counts</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--math)">Strings</span>
+    <span class="tag">Parsing</span><span class="tag">Hash by Letter</span><span class="diff easy">Easy</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A compressed string is a run of <code class="inl">letter,count</code> pairs, e.g. <code class="inl">a10b5a3</code>. Merge repeated letters by summing their counts and print each present letter (a→z) with its total.</p>
+    <div class="io"><b>Input</b>
+a10b5a3
+<b>Output</b>
+a 13 b 5</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Single linear scan. Read a letter, then read all the digits that follow it into a number, and add that to a size-26 bucket for that letter. Finally print the buckets in order. The only subtlety is correctly consuming a <b>multi-digit</b> count before the next letter.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 420 90" width="420" height="90">
+        <g font-family="monospace" font-size="16" fill="#e6edf3">
+          <text x="20" y="35">a10</text><text x="100" y="35">b5</text><text x="160" y="35">a3</text>
+        </g>
+        <text x="250" y="35" fill="#7a8694" font-size="16" font-family="monospace">→</text>
+        <g font-family="monospace" font-size="16">
+          <text x="285" y="35" fill="#9ee37d">a=13</text><text x="370" y="35" fill="#9ee37d">b=5</text>
+        </g>
+        <text x="20" y="70" fill="#7a8694" font-size="12" font-family="monospace">bucket[a] += 10, bucket[b] += 5, bucket[a] += 3</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="strcomp"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(len)</div><div>💾 <b>Space:</b> O(26)</div></div>
+</section>
+<script type="text/x-java" data-code="strcomp" data-file="StringCompression.java">
+import java.util.*;
+
+public class StringCompression {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        long[] count = new long[26];
+
+        int i = 0, len = s.length();
+        while (i < len) {
+            char c = s.charAt(i++);          // a letter
+            int num = 0;
+            while (i < len && Character.isDigit(s.charAt(i)))  // its (multi-digit) count
+                num = num * 10 + (s.charAt(i++) - '0');
+            count[c - 'a'] += num;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < 26; j++)
+            if (count[j] != 0)
+                sb.append((char) ('a' + j)).append(' ').append(count[j]).append(' ');
+        System.out.println(sb.toString().trim());
+    }
+}
+</script>
+
+<!-- ================= 31 NECKLACE ================= -->
+<section class="problem" id="p-necklace" data-cat="math" data-title="Necklace (Balance R/B)">
+  <div class="phead">
+    <h3><span class="num">31</span>Necklace — Balance Red &amp; Blue Beads</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--math)">Strings</span>
+    <span class="tag">Prefix Balance</span><span class="tag">HashMap</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A necklace has <code class="inl">2n</code> beads (<code class="inl">R</code>/<code class="inl">B</code>) with a knot exactly in the middle (between bead <code class="inl">n</code> and <code class="inl">n+1</code>); beads can't cross the knot. By removing beads from <b>both ends</b>, find the minimum removals so the remaining middle segment has <b>equal</b> R and B counts.</p>
+    <div class="io"><b>Input</b>  (T; then per test: n, then string)
+3
+2
+RRRR
+<b>Output</b>
+#0 4</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Map <code class="inl">B→+1</code>, <code class="inl">R→−1</code> and take a running <b>prefix balance</b>. A segment has equal R and B exactly when its two endpoints share the same prefix balance. Store the <b>first index</b> of each balance in a hashmap; when the same balance reappears with the left end <b>before</b> the knot and the right end <b>after</b> it (so the kept segment straddles the knot), it's a valid balanced middle. Keep the longest; answer = <code class="inl">2n − longest</code>.</p>
+    <div class="callout">"Equal counts of two symbols in a substring" → <b>+1/−1 prefix sums + first-seen hashmap</b>. This is the same engine behind "longest subarray with equal 0s and 1s".</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 460 110" width="460" height="110">
+        <line x1="230" y1="15" x2="230" y2="95" stroke="#ffce4e" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="230" y="108" fill="#ffce4e" font-size="11" text-anchor="middle" font-family="monospace">knot</text>
+        <g font-family="monospace" font-size="13" text-anchor="middle">
+          <circle cx="60"  cy="50" r="16" fill="#4a1b30" stroke="#ff5c8a"/><text x="60"  y="55" fill="#ffd0de">R</text>
+          <circle cx="120" cy="50" r="16" fill="#1b3a5c" stroke="#4ea1ff"/><text x="120" y="55" fill="#cfe6ff">B</text>
+          <circle cx="180" cy="50" r="16" fill="#4a1b30" stroke="#ff5c8a"/><text x="180" y="55" fill="#ffd0de">R</text>
+          <circle cx="280" cy="50" r="16" fill="#1b3a5c" stroke="#4ea1ff"/><text x="280" y="55" fill="#cfe6ff">B</text>
+          <circle cx="340" cy="50" r="16" fill="#4a1b30" stroke="#ff5c8a"/><text x="340" y="55" fill="#ffd0de">R</text>
+          <circle cx="400" cy="50" r="16" fill="#1b3a5c" stroke="#4ea1ff"/><text x="400" y="55" fill="#cfe6ff">B</text>
+        </g>
+      </svg>
+      <div class="vcap">Keep the longest balanced segment that <b>spans the knot</b>; remove the rest from both ends.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="necklace"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(n)</div><div>💾 <b>Space:</b> O(n)</div></div>
+</section>
+<script type="text/x-java" data-code="necklace" data-file="Necklace.java">
+import java.util.*;
+
+public class Necklace {
+    static int solve(String s, int n) {
+        HashMap<Integer, Integer> first = new HashMap<>();
+        first.put(0, -1);                     // empty prefix has balance 0 at index -1
+        int balance = 0, maxLen = 0;
+        for (int i = 0; i < s.length(); i++) {
+            balance += (s.charAt(i) == 'R') ? -1 : 1;
+            if (first.containsKey(balance)) {
+                int l = first.get(balance);
+                // segment (l, i] is balanced; keep it only if it straddles the knot
+                if (i >= n && l < n) maxLen = Math.max(maxLen, i - l);
+            } else {
+                first.put(balance, i);        // store earliest index of this balance
+            }
+        }
+        return s.length() - maxLen;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = sc.nextInt();
+            String s = sc.next();
+            System.out.println("#" + i + " " + solve(s, n));
+        }
+    }
+}
+</script>
+
+<!-- ================= 32 SUM AT LEVEL K ================= -->
+<section class="problem" id="p-levelk" data-cat="math" data-title="Sum at Level K (Tree Parse)">
+  <div class="phead">
+    <h3><span class="num">32</span>Sum at Level K — Parenthesised Tree</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--math)">Trees</span>
+    <span class="tag">String Parsing</span><span class="tag">Depth Tracking</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>A binary tree is encoded as nested parentheses, each node written as <code class="inl">(value (leftSubtree)(rightSubtree))</code>, values may be negative. Given a level <code class="inl">K</code> (root = level 0), output the <b>sum of all node values at that level</b>.</p>
+    <div class="io"><b>Input</b>  (K; then the tree string)
+3
+(0(5(6()())(-4()(9()())))(7(1()())(3()())))
+<b>Output</b>
+&lt;sum of values at depth 3&gt;</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>No tree object needed — track the <b>parenthesis depth</b> while scanning. A value always appears right after its own opening bracket, so a value read at paren-depth <code class="inl">d</code> sits at tree level <code class="inl">d − 1</code>. Parse signed integers as you go and add the ones whose level equals <code class="inl">K</code>.</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 380 180" width="380" height="180">
+        <line x1="190" y1="30" x2="110" y2="80" stroke="#3a4658" stroke-width="1.5"/>
+        <line x1="190" y1="30" x2="270" y2="80" stroke="#3a4658" stroke-width="1.5"/>
+        <line x1="110" y1="80" x2="70" y2="130" stroke="#3a4658" stroke-width="1.5"/>
+        <line x1="270" y1="80" x2="230" y2="130" stroke="#3a4658" stroke-width="1.5"/>
+        <line x1="270" y1="80" x2="310" y2="130" stroke="#3a4658" stroke-width="1.5"/>
+        <g font-family="monospace" font-size="13" text-anchor="middle">
+          <circle cx="190" cy="30" r="16" fill="#16323f" stroke="#56c2ff"/><text x="190" y="35" fill="#bdeaff">0</text>
+          <circle cx="110" cy="80" r="16" fill="#22303f" stroke="#5a6678"/><text x="110" y="85" fill="#cdd6e2">5</text>
+          <circle cx="270" cy="80" r="16" fill="#22303f" stroke="#5a6678"/><text x="270" y="85" fill="#cdd6e2">7</text>
+          <circle cx="70"  cy="130" r="16" fill="#22303f" stroke="#5a6678"/><text x="70"  y="135" fill="#cdd6e2">6</text>
+          <circle cx="230" cy="130" r="16" fill="#22303f" stroke="#5a6678"/><text x="230" y="135" fill="#cdd6e2">1</text>
+          <circle cx="310" cy="130" r="16" fill="#22303f" stroke="#5a6678"/><text x="310" y="135" fill="#cdd6e2">3</text>
+        </g>
+        <text x="350" y="35" fill="#56c2ff" font-size="11" font-family="monospace">L0</text>
+        <text x="350" y="85" fill="#7a8694" font-size="11" font-family="monospace">L1</text>
+        <text x="350" y="135" fill="#7a8694" font-size="11" font-family="monospace">L2</text>
+      </svg>
+      <div class="vcap">Depth in the bracket string maps directly to tree level. Level 2 here sums 6 + 1 + 3 (= 10), and so on.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="levelk"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(len)</div><div>💾 <b>Space:</b> O(1)</div></div>
+</section>
+<script type="text/x-java" data-code="levelk" data-file="SumAtLevelK.java">
+import java.util.*;
+
+public class SumAtLevelK {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int K = sc.nextInt();
+        String s = sc.next();
+
+        int depth = 0;
+        long sum = 0;
+        int i = 0, len = s.length();
+        while (i < len) {
+            char c = s.charAt(i);
+            if (c == '(') { depth++; i++; }
+            else if (c == ')') { depth--; i++; }
+            else if (c == '-' || Character.isDigit(c)) {
+                int sign = 1;
+                if (c == '-') { sign = -1; i++; }
+                int val = 0;
+                while (i < len && Character.isDigit(s.charAt(i)))
+                    val = val * 10 + (s.charAt(i++) - '0');
+                if (depth - 1 == K) sum += sign * val;     // value's level = depth - 1
+            } else i++;
+        }
+        System.out.println(sum);
+    }
+}
+</script>
+
+<!-- ================= 33 PAPER CUTTING (QUADTREE) ================= -->
+<section class="problem" id="p-paper" data-cat="math" data-title="Paper Cutting (Quadtree)">
+  <div class="phead">
+    <h3><span class="num">33</span>Paper Cutting — Count Colour Pieces (Quadtree)</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--math)">Divide &amp; Conquer</span>
+    <span class="tag">Quadtree Recursion</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>An <code class="inl">N×N</code> sheet (<code class="inl">N = 2ᵏ</code>) is coloured with 0 (white) / 1 (blue). Cutting rule: if a square isn't a single colour, cut it into four equal quadrants and repeat on each; stop when a square is uniform. Count how many white and how many blue pieces result.</p>
+    <div class="io"><b>Input</b>  (T; then N; then N×N of 0/1)
+<b>Output</b>  Case #i  then  whiteCount blueCount</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Textbook <b>quadtree divide &amp; conquer</b>. For a square, check if it's uniform; if yes it's one piece (tally its colour); if not, recurse into the 4 sub-squares of half the side. The recursion depth is <code class="inl">log₂N</code>.</p>
+    <div class="callout">Speed-up: a <b>2-D prefix sum</b> turns the "is this square uniform?" test into O(1) (sum is 0 ⇒ all white, sum = area ⇒ all blue), dropping total work to O(N²).</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 320 160" width="320" height="160">
+        <rect x="10" y="10" width="140" height="140" fill="none" stroke="#5a6678" stroke-width="2"/>
+        <line x1="80" y1="10" x2="80" y2="150" stroke="#5a6678"/><line x1="10" y1="80" x2="150" y2="80" stroke="#5a6678"/>
+        <rect x="10" y="10" width="70" height="70" fill="rgba(78,161,255,.25)"/>
+        <rect x="80" y="10" width="35" height="35" fill="rgba(78,161,255,.25)"/>
+        <line x1="115" y1="10" x2="115" y2="45" stroke="#5a6678"/><line x1="80" y1="45" x2="150" y2="45" stroke="#5a6678"/>
+        <text x="190" y="50" fill="#aab4c0" font-size="12" font-family="monospace">uniform → 1 piece</text>
+        <text x="190" y="90" fill="#aab4c0" font-size="12" font-family="monospace">mixed → split into 4</text>
+        <text x="190" y="130" fill="#aab4c0" font-size="12" font-family="monospace">recurse until uniform</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="paper"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(N²·logN) naïve / O(N²) with prefix sums</div><div>💾 <b>Space:</b> O(N²)</div></div>
+</section>
+<script type="text/x-java" data-code="paper" data-file="PaperCutting.java">
+import java.util.*;
+
+public class PaperCutting {
+    static int[][] g;
+    static int white, blue;
+
+    static boolean uniform(int si, int sj, int size) {
+        int c = g[si][sj];
+        for (int i = si; i < si + size; i++)
+            for (int j = sj; j < sj + size; j++)
+                if (g[i][j] != c) return false;
+        return true;
+    }
+
+    static void solve(int si, int sj, int size) {
+        if (uniform(si, sj, size)) {              // whole square is one colour
+            if (g[si][sj] == 1) blue++; else white++;
+            return;
+        }
+        int h = size / 2;                          // cut into 4 quadrants
+        solve(si,     sj,     h);
+        solve(si,     sj + h, h);
+        solve(si + h, sj,     h);
+        solve(si + h, sj + h, h);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int tc = 1; tc <= t; tc++) {
+            int size = sc.nextInt();
+            g = new int[size][size];
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    g[i][j] = sc.nextInt();
+            white = 0; blue = 0;
+            solve(0, 0, size);
+            System.out.println("Case #" + tc);
+            System.out.println(white + " " + blue);
+        }
+    }
+}
+</script>
+
+<!-- ================= 34 WORMHOLE FLOYD ================= -->
+<section class="problem" id="p-worm-floyd" data-cat="graph" data-title="Wormhole (Floyd–Warshall)">
+  <div class="phead">
+    <h3><span class="num">34</span>Wormhole — Min Distance (Floyd–Warshall)</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--graph)">Graph</span>
+    <span class="tag">All-Pairs Shortest Path</span><span class="tag">Modelling</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Same task as problem 12 — get from source to destination using bidirectional wormholes — but solved by <b>modelling it as a weighted graph</b> instead of backtracking. Far cleaner when the number of wormholes grows.</p>
+    <div class="io"><b>Input</b>  (T; then N; sX sY tX tY; then N lines x1 y1 x2 y2 w)
+<b>Output</b>  #t : minimum distance</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p>Create <code class="inl">2N + 2</code> nodes: the source, the destination, and the two mouths of every wormhole. Between any two nodes the base cost is the <b>Manhattan distance</b> (you can always just walk); additionally the two mouths of each wormhole are joined by an edge of weight <code class="inl">w</code> (cheaper teleport). Run <b>Floyd–Warshall</b> for all-pairs shortest paths and read off <code class="inl">cost[source][dest]</code>.</p>
+    <div class="callout"><b>Backtracking (12) vs Floyd (34):</b> identical answers. The DFS is fine for tiny N; the graph model is O((2N)³) but trivially correct and scales — knowing both is the lesson.</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 460 150" width="460" height="150">
+        <g font-family="monospace" font-size="11" text-anchor="middle">
+          <circle cx="40"  cy="75" r="13" fill="#1b3a5c" stroke="#4ea1ff"/><text x="40"  y="79" fill="#cfe6ff">S</text>
+          <circle cx="170" cy="40" r="13" fill="#2c2747" stroke="#7c5cff"/><text x="170" y="44" fill="#dcd3ff">A1</text>
+          <circle cx="170" cy="110" r="13" fill="#2c2747" stroke="#7c5cff"/><text x="170" y="114" fill="#dcd3ff">B1</text>
+          <circle cx="300" cy="40" r="13" fill="#2c2747" stroke="#7c5cff"/><text x="300" y="44" fill="#dcd3ff">A2</text>
+          <circle cx="300" cy="110" r="13" fill="#2c2747" stroke="#7c5cff"/><text x="300" y="114" fill="#dcd3ff">B2</text>
+          <circle cx="420" cy="75" r="13" fill="#4a1b30" stroke="#ff5c8a"/><text x="420" y="79" fill="#ffd0de">D</text>
+        </g>
+        <line x1="170" y1="53" x2="170" y2="97" stroke="#7c5cff" stroke-width="3"/>
+        <line x1="300" y1="53" x2="300" y2="97" stroke="#7c5cff" stroke-width="3"/>
+        <g stroke="#3a4658" stroke-width="1" stroke-dasharray="3 3">
+          <line x1="53" y1="70" x2="157" y2="45"/><line x1="183" y1="110" x2="287" y2="48"/><line x1="313" y1="110" x2="407" y2="78"/>
+        </g>
+        <text x="230" y="140" fill="#a99bff" font-size="11" text-anchor="middle" font-family="monospace">solid = wormhole edge (w) · dashed = walk (Manhattan)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="wormfloyd"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O((2N+2)³)</div><div>💾 <b>Space:</b> O((2N+2)²)</div></div>
+</section>
+<script type="text/x-java" data-code="wormfloyd" data-file="WormholeFloyd.java">
+import java.util.*;
+
+public class WormholeFloyd {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int tc = 1; tc <= t; tc++) {
+            int w = sc.nextInt();
+            int nodes = 2 * w + 2;                       // source + dest + 2 per wormhole
+            int[][] pt = new int[nodes][2];
+
+            int sx = sc.nextInt(), sy = sc.nextInt(), dx = sc.nextInt(), dy = sc.nextInt();
+            pt[0] = new int[]{sx, sy};                   // node 0 = source
+            pt[nodes - 1] = new int[]{dx, dy};           // last node = destination
+
+            int[][] cost = new int[nodes][nodes];
+            for (int[] row : cost) Arrays.fill(row, -1);
+
+            for (int i = 0; i < w; i++) {
+                int ax = sc.nextInt(), ay = sc.nextInt(), bx = sc.nextInt(), by = sc.nextInt(), ww = sc.nextInt();
+                pt[2*i + 1] = new int[]{ax, ay};
+                pt[2*i + 2] = new int[]{bx, by};
+                cost[2*i + 1][2*i + 2] = ww;             // teleport edge (both directions)
+                cost[2*i + 2][2*i + 1] = ww;
+            }
+
+            // any pair not joined by a wormhole costs the walk distance
+            for (int i = 0; i < nodes; i++)
+                for (int j = 0; j < nodes; j++)
+                    if (cost[i][j] == -1)
+                        cost[i][j] = Math.abs(pt[i][0]-pt[j][0]) + Math.abs(pt[i][1]-pt[j][1]);
+
+            // Floyd–Warshall: relax through every intermediate node k
+            for (int k = 0; k < nodes; k++)
+                for (int i = 0; i < nodes; i++)
+                    for (int j = 0; j < nodes; j++) {
+                        if (i == k || j == k) continue;
+                        if (cost[i][k] + cost[k][j] < cost[i][j])
+                            cost[i][j] = cost[i][k] + cost[k][j];
+                    }
+
+            System.out.println("#" + tc + " : " + cost[0][nodes - 1]);
+        }
+    }
+}
+</script>
+
+<!-- ================= 35 CONVEX HULL ================= -->
+<section class="problem" id="p-hull" data-cat="geometry" data-title="Convex Hull">
+  <div class="phead">
+    <h3><span class="num">35</span>Convex Hull — Gift Wrapping</h3>
+    <label class="done"><input type="checkbox"> learned</label>
+  </div>
+  <div class="tags"><span class="tag cat" style="background:var(--geometry)">Geometry</span>
+    <span class="tag">Jarvis March</span><span class="tag">Orientation Test</span><span class="diff med">Medium</span></div>
+
+  <div class="block"><h4><span class="ic">❓</span>Problem</h4>
+    <p>Given points in the plane, output the vertices of the smallest convex polygon enclosing them all (the <b>convex hull</b>). Print <code class="inl">-1</code> if a polygon can't be formed (fewer than 3 hull vertices).</p>
+    <div class="io"><b>Input</b>  (T; then n; then n "x y" points)
+<b>Output</b>  hull vertices, or -1</div>
+  </div>
+
+  <div class="block"><h4><span class="ic">💡</span>Key Idea</h4>
+    <p><b>Jarvis March (gift wrapping):</b> start at the leftmost point (definitely on the hull) and repeatedly pick the next point that is the <b>most counter-clockwise</b> relative to the current one — that's the point for which every other point lies to its left. Wrap around until you return to the start. The orientation of an ordered triple is found from the sign of a cross product (no floating point needed).</p>
+    <p style="text-align:center;font-family:var(--mono);color:#9ee3ff;font-size:12.5px">cross = (q.y−p.y)(r.x−q.x) − (q.x−p.x)(r.y−q.y)</p>
+  </div>
+
+  <div class="block"><h4><span class="ic">📈</span>Visualization</h4>
+    <div class="viz">
+      <svg viewBox="0 0 320 200" width="320" height="200">
+        <polygon points="40,160 90,40 220,30 290,120 180,180" fill="rgba(92,255,176,.10)" stroke="#5cffb0" stroke-width="2"/>
+        <g fill="#5cffb0">
+          <circle cx="40" cy="160" r="5"/><circle cx="90" cy="40" r="5"/><circle cx="220" cy="30" r="5"/>
+          <circle cx="290" cy="120" r="5"/><circle cx="180" cy="180" r="5"/>
+        </g>
+        <g fill="#7a8694"><circle cx="140" cy="100" r="4"/><circle cx="190" cy="90" r="4"/><circle cx="110" cy="120" r="4"/></g>
+        <text x="40" y="178" fill="#5cffb0" font-size="11" font-family="monospace">start (leftmost)</text>
+      </svg>
+      <div class="vcap"><span style="color:#5cffb0">Green</span> = hull vertices wrapped counter-clockwise; grey interior points are enclosed.</div>
+    </div>
+  </div>
+
+  <div class="codebox" data-code="hull"></div>
+  <div class="cx"><div>⏱ <b>Time:</b> O(n·h), h = hull size</div><div>💾 <b>Space:</b> O(n)</div></div>
+</section>
+<script type="text/x-java" data-code="hull" data-file="ConvexHull.java">
+import java.util.*;
+
+public class ConvexHull {
+    // 0 = collinear, 1 = clockwise, 2 = counter-clockwise
+    static int orientation(int[] p, int[] q, int[] r) {
+        int val = (q[1]-p[1])*(r[0]-q[0]) - (q[0]-p[0])*(r[1]-q[1]);
+        if (val == 0) return 0;
+        return (val > 0) ? 1 : 2;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int[][] pts = new int[n][2];
+            for (int i = 0; i < n; i++) { pts[i][0] = sc.nextInt(); pts[i][1] = sc.nextInt(); }
+            if (n < 3) { System.out.println("-1"); continue; }
+
+            int leftmost = 0;
+            for (int i = 1; i < n; i++)
+                if (pts[i][0] < pts[leftmost][0]) leftmost = i;
+
+            List<int[]> hull = new ArrayList<>();
+            int p = leftmost;
+            do {
+                hull.add(pts[p]);
+                int q = (p + 1) % n;
+                for (int i = 0; i < n; i++)           // find the most counter-clockwise point
+                    if (orientation(pts[p], pts[i], pts[q]) == 2) q = i;
+                p = q;
+            } while (p != leftmost);
+
+            if (hull.size() < 3) { System.out.println("-1"); continue; }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hull.size(); i++) {
+                sb.append(hull.get(i)[0]).append(' ').append(hull.get(i)[1]);
+                if (i != hull.size() - 1) sb.append(", ");
+            }
+            System.out.println(sb);
+        }
+    }
+}
+</script>
+
+      <!--PROBLEMS-END-->
+    </div>
+    <div class="empty" id="emptyMsg" style="display:none">No problems match your search.</div>
+  </main>
+</div>
+<button class="backtop" id="backtop" title="Back to top">↑</button>
+
+<script>
+/* ============================================================
+   1. JAVA SYNTAX HIGHLIGHTER (offline, dependency-free)
+   ============================================================ */
+const JAVA_KW = new Set(("abstract assert boolean break byte case catch char class const continue default do double "+
+  "else enum extends final finally float for goto if implements import instanceof int interface long native new "+
+  "package private protected public return short static strictfp super switch synchronized this throw throws "+
+  "transient try void volatile while var true false null").split(" "));
+const JAVA_TYPES = new Set(("String Integer Double Long Boolean Character List ArrayList LinkedList Map HashMap "+
+  "TreeMap Set HashSet TreeSet Queue Deque ArrayDeque PriorityQueue Stack Collections Arrays Math Scanner "+
+  "StringBuilder Object Comparable Comparator Iterator Optional System BufferedReader InputStreamReader "+
+  "StringTokenizer Node Point Pair State Pace Config Cell").split(" "));
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function highlightJava(src){
+  let out='', i=0, n=src.length;
+  const isIdS=c=>/[A-Za-z_$]/.test(c), isId=c=>/[A-Za-z0-9_$]/.test(c), isDig=c=>/[0-9]/.test(c);
+  while(i<n){
+    const c=src[i], c2=src.substr(i,2);
+    if(c2==='//'){let j=i;while(j<n&&src[j]!=='\n')j++;out+='<span class="tok-cmt">'+esc(src.slice(i,j))+'</span>';i=j;continue;}
+    if(c2==='/*'){let j=i+2;while(j<n&&src.substr(j,2)!=='*/')j++;j=Math.min(j+2,n);out+='<span class="tok-cmt">'+esc(src.slice(i,j))+'</span>';i=j;continue;}
+    if(c==='"'){let j=i+1;while(j<n&&src[j]!=='"'){if(src[j]==='\\')j++;j++;}j++;out+='<span class="tok-str">'+esc(src.slice(i,j))+'</span>';i=j;continue;}
+    if(c==="'"){let j=i+1;while(j<n&&src[j]!=="'"){if(src[j]==='\\')j++;j++;}j++;out+='<span class="tok-str">'+esc(src.slice(i,j))+'</span>';i=j;continue;}
+    if(c==='@'&&isIdS(src[i+1]||'')){let j=i+1;while(j<n&&isId(src[j]))j++;out+='<span class="tok-ann">'+esc(src.slice(i,j))+'</span>';i=j;continue;}
+    if(isDig(c)||(c==='.'&&isDig(src[i+1]||''))){let j=i;while(j<n&&/[0-9a-fA-FxXlLeE._]/.test(src[j]))j++;out+='<span class="tok-num">'+esc(src.slice(i,j))+'</span>';i=j;continue;}
+    if(isIdS(c)){let j=i;while(j<n&&isId(src[j]))j++;const w=src.slice(i,j);
+      let k=j;while(k<n&&/\s/.test(src[k]))k++;
+      if(JAVA_KW.has(w))out+='<span class="tok-kw">'+w+'</span>';
+      else if(src[k]==='(')out+='<span class="tok-fn">'+w+'</span>';
+      else if(JAVA_TYPES.has(w)||/^[A-Z]/.test(w))out+='<span class="tok-typ">'+w+'</span>';
+      else out+=esc(w);
+      i=j;continue;}
+    out+=esc(c);i++;
+  }
+  return out;
+}
+/* ============================================================
+   2. RENDER CODE BLOCKS from <script type="text/x-java">
+   ============================================================ */
+function renderCode(){
+  document.querySelectorAll('script[type="text/x-java"]').forEach(sc=>{
+    const id=sc.getAttribute('data-code');
+    const host=document.querySelector('.codebox[data-code="'+id+'"]');
+    if(!host)return;
+    let raw=sc.textContent.replace(/^\n/,'').replace(/\s+$/,'');
+    const fname=sc.getAttribute('data-file')||'Solution.java';
+    const pre=document.createElement('pre');pre.className='code';
+    const code=document.createElement('code');code.innerHTML=highlightJava(raw);
+    pre.appendChild(code);
+    const bar=document.createElement('div');bar.className='codebar';
+    bar.innerHTML='<span class="fname">'+fname+'</span>';
+    const btn=document.createElement('button');btn.className='copybtn';btn.textContent='Copy';
+    btn.onclick=()=>{navigator.clipboard.writeText(raw).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},1400);});};
+    bar.appendChild(btn);host.appendChild(bar);host.appendChild(pre);
+  });
+}
+/* ============================================================
+   3. CATEGORY META + DYNAMIC SIDEBAR + FILTERS
+   ============================================================ */
+const CATS={
+  graph:{name:'Graphs · BFS · DFS',color:'var(--graph)'},
+  backtrack:{name:'Backtracking · Recursion',color:'var(--backtrack)'},
+  dp:{name:'Dynamic Programming',color:'var(--dp)'},
+  binary:{name:'Binary Search',color:'var(--binary)'},
+  greedy:{name:'Greedy · Sorting',color:'var(--greedy)'},
+  math:{name:'Math · Strings · Trees',color:'var(--math)'},
+  geometry:{name:'Geometry',color:'var(--geometry)'}
+};
+let LEARNED=JSON.parse(localStorage.getItem('ppo_learned')||'{}');
+function saveLearned(){localStorage.setItem('ppo_learned',JSON.stringify(LEARNED));}
+function buildNav(){
+  const secs=[...document.querySelectorAll('section.problem')];
+  document.getElementById('totalCount').textContent=secs.length;
+  const sb=document.getElementById('sidebar');const byCat={};
+  secs.forEach(s=>{const c=s.dataset.cat;(byCat[c]=byCat[c]||[]).push(s);});
+  Object.keys(CATS).forEach(cat=>{
+    if(!byCat[cat])return;
+    const g=document.createElement('div');g.className='navgroup';
+    g.innerHTML='<div class="gh"><span class="dot" style="background:'+CATS[cat].color+'"></span>'+CATS[cat].name+'</div>';
+    byCat[cat].forEach(s=>{
+      const a=document.createElement('a');a.className='navlink';a.href='#'+s.id;a.dataset.id=s.id;
+      const num=s.querySelector('.num').textContent;
+      const title=s.querySelector('.phead h3').childNodes[2]?s.querySelector('.phead h3').lastChild.textContent.trim():s.dataset.title;
+      a.innerHTML='<span class="ix">'+num+'</span><span>'+(s.dataset.title||title)+'</span>';
+      g.appendChild(a);
+    });
+    sb.appendChild(g);
+  });
+  // filters
+  const fb=document.getElementById('filterbar');
+  const all=document.createElement('div');all.className='fbtn on';all.textContent='All';all.dataset.cat='all';fb.appendChild(all);
+  Object.keys(CATS).forEach(cat=>{if(!byCat[cat])return;
+    const b=document.createElement('div');b.className='fbtn';b.textContent=CATS[cat].name.split(' · ')[0];b.dataset.cat=cat;
+    b.style.borderColor=CATS[cat].color;fb.appendChild(b);});
+  fb.addEventListener('click',e=>{if(!e.target.dataset.cat)return;
+    [...fb.children].forEach(x=>x.classList.remove('on'));e.target.classList.add('on');
+    const c=e.target.dataset.cat;
+    secs.forEach(s=>s.classList.toggle('hide',c!=='all'&&s.dataset.cat!==c));
+    applySearch();});
+}
+/* ============================================================
+   4. PROGRESS CHECKBOXES
+   ============================================================ */
+function initProgress(){
+  document.querySelectorAll('section.problem').forEach(s=>{
+    const id=s.id, cb=s.querySelector('.done input');
+    if(LEARNED[id]){cb.checked=true;markNav(id,true);}
+    cb.addEventListener('change',()=>{
+      LEARNED[id]=cb.checked; if(!cb.checked)delete LEARNED[id];
+      saveLearned();markNav(id,cb.checked);updateCount();
+    });
+  });
+  updateCount();
+}
+function markNav(id,on){const a=document.querySelector('.navlink[data-id="'+id+'"]');if(a)a.classList.toggle('learned',on);}
+function updateCount(){document.getElementById('learnedCount').textContent=Object.keys(LEARNED).length;}
+/* ============================================================
+   5. SEARCH
+   ============================================================ */
+function applySearch(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const activeCat=document.querySelector('.fbtn.on').dataset.cat;
+  let shown=0;
+  document.querySelectorAll('section.problem').forEach(s=>{
+    const catOk=activeCat==='all'||s.dataset.cat===activeCat;
+    const txt=(s.dataset.title+' '+s.textContent).toLowerCase();
+    const ok=catOk&&(q===''||txt.includes(q));
+    s.classList.toggle('hide',!ok); if(ok)shown++;
+  });
+  document.getElementById('emptyMsg').style.display=shown?'none':'block';
+}
+/* ============================================================
+   6. SCROLL SPY + BACK TO TOP
+   ============================================================ */
+function initScrollSpy(){
+  const links=[...document.querySelectorAll('.navlink')];
+  const map={};links.forEach(l=>map[l.dataset.id]=l);
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const l=map[e.target.id];if(l){l.classList.add('active');}
+    }});
+  },{rootMargin:'-10% 0px -80% 0px'});
+  document.querySelectorAll('section.problem').forEach(s=>obs.observe(s));
+  const bt=document.getElementById('backtop');
+  window.addEventListener('scroll',()=>bt.classList.toggle('show',window.scrollY>600));
+  bt.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+}
+/* ============================================================
+   7. GENERIC STEP PLAYER  (data-driven visualizations)
+   frames: [{html, note}]   mounted on .stepviz[data-frames=id]
+   ============================================================ */
+const VIZ={};   // id -> {frames:[...], idx:0}
+function registerViz(id,frames){VIZ[id]={frames,idx:0};}
+function mountPlayers(){
+  document.querySelectorAll('.stepviz').forEach(host=>{
+    const id=host.dataset.frames;const v=VIZ[id];if(!v)return;
+    const stage=document.createElement('div');stage.className='vstage';
+    const note=document.createElement('div');note.className='framenote';
+    const ctr=document.createElement('div');ctr.className='player';
+    const bPrev=mkBtn('‹ Prev'),bNext=mkBtn('Next ›'),bPlay=mkBtn('▶ Play'),bReset=mkBtn('⟲');
+    const info=document.createElement('span');info.className='stepinfo';
+    function draw(){const f=v.frames[v.idx];stage.innerHTML=f.html;note.innerHTML=f.note||'';
+      info.textContent=(v.idx+1)+' / '+v.frames.length;
+      bPrev.disabled=v.idx===0;bNext.disabled=v.idx===v.frames.length-1;}
+    let timer=null;
+    bPrev.onclick=()=>{if(v.idx>0){v.idx--;draw();}};
+    bNext.onclick=()=>{if(v.idx<v.frames.length-1){v.idx++;draw();}};
+    bReset.onclick=()=>{v.idx=0;draw();};
+    bPlay.onclick=()=>{if(timer){clearInterval(timer);timer=null;bPlay.textContent='▶ Play';return;}
+      bPlay.textContent='⏸ Pause';timer=setInterval(()=>{if(v.idx<v.frames.length-1){v.idx++;draw();}
+        else{clearInterval(timer);timer=null;bPlay.textContent='▶ Play';}},900);};
+    ctr.append(bReset,bPrev,info,bNext,bPlay);
+    host.append(stage,note,ctr);draw();
+  });
+}
+function mkBtn(t){const b=document.createElement('button');b.textContent=t;return b;}
+/* ============================================================
+   8. BOOT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderCode();
+  buildNav();
+  initProgress();
+  initScrollSpy();
+  defineVisualizations();   // fills VIZ registry (defined later, after sections)
+  mountPlayers();
+  document.getElementById('search').addEventListener('input',applySearch);
+});
+</script>
+
+<script>
+/* ============================================================
+   INTERACTIVE VISUALIZATION FRAME GENERATORS
+   ============================================================ */
+function defineVisualizations(){
+  registerViz('knight', knightFrames());
+  registerViz('burst',  burstFrames());
+  registerViz('cow',    cowFrames());
+}
+
+/* ---- 1. Knight BFS rings on a 6x6 board ---- */
+function knightFrames(){
+  const R=6,C=6, sr=0,sc=0, gr=5,gc=5;
+  const MV=[[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1]];
+  const dist=Array.from({length:R},()=>Array(C).fill(-1));
+  dist[sr][sc]=0;
+  let frontier=[[sr,sc]], level=0; const rings=[[[sr,sc]]];
+  let reached=false;
+  while(frontier.length && !reached){
+    const next=[];
+    for(const cell of frontier){
+      for(const mv of MV){
+        const nx=cell[0]+mv[0], ny=cell[1]+mv[1];
+        if(nx<0||nx>=R||ny<0||ny>=C||dist[nx][ny]!==-1) continue;
+        dist[nx][ny]=level+1; next.push([nx,ny]);
+        if(nx===gr&&ny===gc) reached=true;
+      }
+    }
+    if(next.length){ rings.push(next); level++; frontier=next; } else break;
+  }
+  const frames=[];
+  for(let k=0;k<rings.length;k++){
+    let html='<table class="gridtbl" style="margin:auto">';
+    for(let i=0;i<R;i++){ html+='<tr>';
+      for(let j=0;j<C;j++){
+        let cls='', txt='·'; const d=dist[i][j];
+        if(i===sr&&j===sc){cls='start';txt='S';}
+        else if(i===gr&&j===gc){ if(d!==-1&&d<=k){cls='goal';txt=d;} else {cls='goal';txt='G';} }
+        else if(d!==-1&&d<k){cls='visit';txt=d;}
+        else if(d===k){cls='frontier';txt=d;}
+        html+='<td class="'+cls+'">'+txt+'</td>';
+      }
+      html+='</tr>';
+    }
+    html+='</table>';
+    let note;
+    if(k===0) note='Start at <b>S</b> (0 moves). The yellow cells are one knight-hop away.';
+    else if(dist[gr][gc]!==-1 && dist[gr][gc]<=k) note='Reached <b>G</b> in <b>'+dist[gr][gc]+'</b> moves. BFS visits in rings, so the first arrival is the minimum.';
+    else note='After move <b>'+k+'</b>: yellow = cells exactly '+k+' hops from S; green = already settled.';
+    frames.push({html:html, note:note});
+  }
+  return frames;
+}
+
+/* ---- 2. Burst Balloon interval-DP table for [3,1,5,8] ---- */
+function burstFrames(){
+  const arr=[3,1,5,8], n=arr.length;
+  const nums=[1].concat(arr).concat([1]);
+  const dp=Array.from({length:n+2},()=>Array(n+2).fill(0));
+  const done=Array.from({length:n+2},()=>Array(n+2).fill(false));
+  const frames=[];
+  for(let len=1;len<=n;len++){
+    for(let l=1;l+len-1<=n;l++){
+      const r=l+len-1; let bestK=l;
+      for(let k=l;k<=r;k++){
+        const coins=nums[l-1]*nums[k]*nums[r+1]+dp[l][k-1]+dp[k+1][r];
+        if(coins>dp[l][r]){dp[l][r]=coins;bestK=k;}
+      }
+      frames.push(renderBurst(dp,done,n,l,r,len,bestK));
+      done[l][r]=true;
+    }
+  }
+  const last=renderBurst(dp,done,n,1,n,n,-1);
+  frames.push({html:last.html, note:'Done — the answer is dp[1]['+n+'] = <b>'+dp[1][n]+'</b> coins.'});
+  return frames;
+}
+function renderBurst(dp,done,n,cl,cr,len,bestK){
+  let html='<table class="dptbl"><tr><th>l \\ r</th>';
+  for(let r=1;r<=n;r++) html+='<th>'+r+'</th>';
+  html+='</tr>';
+  for(let l=1;l<=n;l++){
+    html+='<tr><th>'+l+'</th>';
+    for(let r=1;r<=n;r++){
+      if(r<l){ html+='<td style="background:#10151d;color:#3a4452">·</td>'; continue; }
+      let cls='';
+      if(l===cl&&r===cr) cls='cur';
+      else if((l===cl&&r>=cl&&r<cr)||(r===cr&&l>cl&&l<=cr)) cls='dep';
+      else if(done[l][r]) cls='fill';
+      html+='<td class="'+cls+'">'+dp[l][r]+'</td>';
+    }
+    html+='</tr>';
+  }
+  html+='</table>';
+  const note=(bestK<0)?'':'Fill dp['+cl+']['+cr+'] (length '+len+'): best <b>last</b> balloon k=<b>'+bestK+'</b> → <b>'+dp[cl][cr]+'</b>. Purple cells are the sub-ranges combined.';
+  return {html:html, note:note};
+}
+
+/* ---- 3. Aggressive Cows binary search ---- */
+function cowFrames(){
+  const a=[1,2,8,4,9].sort((x,y)=>x-y);   // [1,2,4,8,9]
+  const n=a.length, cows=3, minP=a[0], maxP=a[n-1];
+  function canPlace(gap){
+    let cnt=1,last=a[0]; const placed=[a[0]];
+    for(let i=1;i<n;i++){ if(a[i]-last>=gap){cnt++;last=a[i];placed.push(a[i]); if(cnt===cows)break;} }
+    return {ok:cnt>=cows, placed:placed};
+  }
+  function render(res,note){
+    let html='<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">';
+    for(let pos=minP;pos<=maxP;pos++){
+      const isStall=a.indexOf(pos)>=0;
+      const isCow=res&&res.placed.indexOf(pos)>=0;
+      let bg='var(--line2)',col='var(--ink3)';
+      if(isStall){bg='#2a3340';col='var(--ink2)';}
+      if(isCow){bg='#37c98a';col='#06121f';}
+      html+='<div style="width:30px;height:30px;border-radius:6px;display:flex;align-items:center;'+
+            'justify-content:center;background:'+bg+';color:'+col+';font-size:12px;font-weight:700;font-family:var(--mono)">'+
+            (isStall?pos:'')+'</div>';
+    }
+    html+='</div>';
+    return {html:html, note:note};
+  }
+  const frames=[];
+  frames.push(render(null,'Sorted stalls [1, 2, 4, 8, 9], 3 cows. Binary-search the gap in [0, '+(maxP-a[0])+'].'));
+  let lo=0,hi=maxP-a[0],ans=0;
+  while(lo<=hi){
+    const mid=(lo+hi)>>1, res=canPlace(mid);
+    const note='gap=<b>'+mid+'</b> (lo='+lo+', hi='+hi+'): '+(res.ok
+      ? '<b style="color:#54d99a">seats '+cows+' cows ✓</b> → best='+mid+', search higher'
+      : '<b style="color:#ff7b9c">only '+res.placed.length+' fit ✗</b> → search lower');
+    frames.push(render(res,note));
+    if(res.ok){ans=mid;lo=mid+1;} else hi=mid-1;
+  }
+  frames.push(render(canPlace(ans),'Largest achievable minimum gap = <b>'+ans+'</b>.'));
+  return frames;
+}
+</script>
+</body>
+</html>
