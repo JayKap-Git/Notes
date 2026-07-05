@@ -1,0 +1,2278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samsung PRO — Learn the Patterns</title>
+<style>
+:root{
+  --paper:#eef2f6; --panel:#ffffff; --ink:#14202e; --muted:#5a6b7b;
+  --line:#d3dde6; --grid:#dfe7ee;
+  --accent:#2b6cb0; --accent-soft:#dbe8f4; --amber:#c8791f; --amber-soft:#f6e7cf;
+  --good:#2f855a; --bad:#c0392b;
+  --code-bg:#0f1b28; --code-ink:#d7e3ef;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --radius:10px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0d1622; --panel:#141f2d; --ink:#e6eef6; --muted:#8ba0b3;
+    --line:#26384a; --grid:#1a2735;
+    --accent:#5aa9e6; --accent-soft:#183247; --amber:#e0a04a; --amber-soft:#3a2f1c;
+    --good:#5ac48a; --bad:#e0736a;
+    --code-bg:#0a121c; --code-ink:#cddcec;
+  }
+}
+:root[data-theme="light"]{
+  --paper:#eef2f6; --panel:#ffffff; --ink:#14202e; --muted:#5a6b7b;
+  --line:#d3dde6; --grid:#dfe7ee;
+  --accent:#2b6cb0; --accent-soft:#dbe8f4; --amber:#c8791f; --amber-soft:#f6e7cf;
+  --good:#2f855a; --bad:#c0392b; --code-bg:#0f1b28; --code-ink:#d7e3ef;
+}
+:root[data-theme="dark"]{
+  --paper:#0d1622; --panel:#141f2d; --ink:#e6eef6; --muted:#8ba0b3;
+  --line:#26384a; --grid:#1a2735;
+  --accent:#5aa9e6; --accent-soft:#183247; --amber:#e0a04a; --amber-soft:#3a2f1c;
+  --good:#5ac48a; --bad:#e0736a; --code-bg:#0a121c; --code-ink:#cddcec;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans);
+  line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:248px 1fr;gap:34px}
+@media(max-width:880px){.wrap{grid-template-columns:1fr}}
+
+/* header */
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--panel) 82%,transparent);backdrop-filter:blur(6px);position:sticky;top:0;z-index:20}
+.top-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
+.brand{font-family:var(--mono);font-weight:700;letter-spacing:.02em;font-size:15px}
+.brand small{color:var(--muted);font-weight:500}
+.spacer{flex:1}
+.toggle{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:20px;padding:6px 12px;cursor:pointer}
+.toggle:hover{border-color:var(--accent)}
+
+/* nav */
+nav.rail{position:sticky;top:74px;align-self:start;max-height:calc(100vh - 90px);overflow:auto;padding:18px 0 40px;font-size:14px}
+@media(max-width:880px){nav.rail{position:static;max-height:none;border-bottom:1px solid var(--line);margin-bottom:10px}}
+.rail h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:18px 0 8px}
+.rail a{display:flex;gap:8px;align-items:baseline;padding:4px 8px;border-radius:6px;color:var(--ink)}
+.rail a:hover{background:var(--accent-soft);text-decoration:none}
+.rail a .n{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:20px}
+
+/* hero */
+.hero{padding:40px 0 26px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(28px,4.4vw,44px);line-height:1.08;margin:.32em 0;text-wrap:balance;letter-spacing:-.01em}
+.hero p{max-width:60ch;color:var(--muted);font-size:16.5px}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:13px;height:13px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+
+/* section headings */
+section{scroll-margin-top:78px;padding:16px 0}
+h2.sec{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:8px;margin:30px 0 18px}
+
+/* primer cards */
+.primer{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px}
+.pcard h3{margin:0 0 4px;font-size:15px}
+.pcard p{margin:0;font-size:13.5px;color:var(--muted)}
+.pcard .used{margin-top:9px;font-family:var(--mono);font-size:11px;color:var(--accent)}
+
+/* problem card */
+.prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:22px;box-shadow:0 1px 0 rgba(20,32,46,.03)}
+.prob-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.prob-num{font-family:var(--mono);font-size:12px;color:#fff;background:var(--accent);border-radius:6px;padding:2px 8px;font-weight:600}
+.prob h3{margin:0;font-size:21px;letter-spacing:-.01em}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.02em;padding:3px 9px;border-radius:20px;background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+.chip.diff{background:var(--amber-soft);color:var(--amber);border-color:color-mix(in srgb,var(--amber) 30%,transparent)}
+.statement{color:var(--ink);margin:12px 0}
+.statement .ex{font-family:var(--mono);font-size:13px;background:var(--paper);border:1px dashed var(--line);border-radius:8px;padding:8px 11px;color:var(--muted);display:inline-block;margin-top:4px}
+.idea{margin:14px 0 6px}
+.idea .lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.idea ol{margin:8px 0;padding-left:20px}
+.idea li{margin:5px 0}
+.idea code, .statement code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+.cx{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:10px;display:flex;gap:18px;flex-wrap:wrap}
+.cx b{color:var(--ink);font-weight:600}
+
+/* input/output boxes + pattern-trigger takeaway */
+.io{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media(max-width:560px){.io{grid-template-columns:1fr}}
+.iobox{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px}
+.iobox h5{margin:0 0 4px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.iobox p{margin:0;color:var(--muted)}
+.iobox code{background:var(--accent-soft);font-family:var(--mono);font-size:.88em;padding:1px 5px;border-radius:4px}
+.take{margin-top:14px;background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);border-radius:8px;padding:9px 13px;font-size:13.5px}
+.take b{color:var(--amber)}
+
+/* viz panel */
+.viz{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:14px;margin:16px 0}
+.viz .vtitle{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:10px}
+.viz .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px;font-family:var(--mono);font-size:13px}
+.viz input[type=text]{font-family:var(--mono);font-size:13px;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink);min-width:150px}
+.viz input[type=range]{accent-color:var(--accent)}
+.viz label{color:var(--muted)}
+.viz button{font-family:var(--mono);font-size:12px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:7px;padding:6px 12px;cursor:pointer}
+.viz button.ghost{background:transparent;color:var(--accent)}
+.viz button:hover{filter:brightness(1.06)}
+.viz canvas{max-width:100%;display:block;border-radius:8px}
+.readout{font-family:var(--mono);font-size:13px;margin-top:10px;color:var(--ink)}
+.readout b{color:var(--amber)}
+.tag-good{color:var(--good);font-weight:600}
+.tag-bad{color:var(--bad);font-weight:600}
+@keyframes fpulse{0%{background:var(--accent-soft)}100%{background:transparent}}
+.readout.flash{animation:fpulse .6s ease-out}
+@media(prefers-reduced-motion:reduce){.readout.flash{animation:none}}
+
+/* subset grid */
+.cells{display:flex;flex-wrap:wrap;gap:4px;font-family:var(--mono);font-size:11px}
+.cell{min-width:24px;height:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:5px;background:var(--panel);color:var(--muted);padding:0 3px}
+.cell .idx{font-size:9px;opacity:.7}
+.cell.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.cell.best{background:var(--amber);color:#fff;border-color:var(--amber)}
+
+/* code */
+details.code{margin-top:14px}
+details.code>summary{cursor:pointer;font-family:var(--mono);font-size:12px;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+details.code>summary::-webkit-details-marker{display:none}
+details.code>summary::before{content:"▸";transition:transform .15s}
+details.code[open]>summary::before{transform:rotate(90deg)}
+pre{margin:10px 0 0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.55}
+pre .cmt{color:#7f96ad}
+pre .kw{color:#7cb7ff}
+pre .str{color:#9ee6a6}
+pre .num{color:#e0a86b}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:40px 0 60px;border-top:1px solid var(--line);margin-top:30px;font-family:var(--mono)}
+.note{background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);border-radius:8px;padding:10px 13px;font-size:13.5px;margin-top:12px}
+.note b{color:var(--amber)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <span class="brand">SAMSUNG&nbsp;PRO&nbsp;<small>/ pattern lab</small></span>
+    <span class="spacer"></span>
+    <button class="toggle" id="themeBtn" aria-label="Toggle theme">◐ theme</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="rail" id="rail">
+    <h4>Start here</h4>
+    <a href="#patterns"><span class="n">§</span> The 9 patterns</a>
+    <h4>Problems · easy → hard</h4>
+    <div id="railList"></div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="eyebrow">SwC-Pro · study companion</div>
+      <h1>Every problem is one of nine patterns.</h1>
+      <p>17 Samsung PRO practice problems, rebuilt in clean Java and explained the way a
+      classmate would — plain English, a picture you can poke at, then the code. Learn the
+      pattern once and you recognise it everywhere. Play with the blue widgets; they run the
+      real algorithm live.</p>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--accent)"></i> pattern / active</span>
+        <span><i class="sw" style="background:var(--amber)"></i> the answer</span>
+        <span><i class="sw" style="background:var(--panel)"></i> untouched</span>
+      </div>
+    </div>
+
+    <section id="patterns">
+      <h2 class="sec">The 9 patterns you actually need</h2>
+      <div class="primer" id="primer"></div>
+    </section>
+
+    <section id="problems">
+      <h2 class="sec">Problems, worked out</h2>
+      <div id="probList"></div>
+    </section>
+
+    <footer>
+      Converted from C++ → Java · every solution compiled &amp; test-checked · open the
+      matching <span style="color:var(--accent)">*.java</span> file to run it yourself.
+    </footer>
+  </main>
+</div>
+
+<!-- ===================== FULL JAVA SOURCES (verbatim, read by source()) ===================== -->
+<script type="text/plain" id="src-p1">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+/*
+ * Equal Red / Blue necklace.
+ * You may remove stones ONLY from the left or right end. Make #R == #B using the
+ * fewest removals.
+ *
+ * Key idea: whatever you DON'T remove is a contiguous middle chunk. So we want the
+ * LONGEST contiguous substring that already has equal R and B, and remove the rest.
+ *   answer = n - (longest balanced substring length)
+ *
+ * Trick to find the longest balanced substring in O(n):
+ *   map R -> +1, B -> -1 and take a running prefix sum.
+ *   A substring (i, j] is balanced  <=>  prefix[j] == prefix[i].
+ *   So for each prefix value, remember the FIRST index it appeared; the distance to
+ *   any later repeat is a balanced substring. Keep the max.
+ *
+ * Time  O(n)      Space O(n)
+ */
+class RB {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String s = br.readLine().trim();
+        int n = s.length(), maxLen = 0, prefix = 0;
+
+        Map<Integer, Integer> firstSeen = new HashMap<>();
+        firstSeen.put(0, -1);                       // empty prefix sits "before" index 0
+
+        for (int i = 0; i < n; i++) {
+            prefix += (s.charAt(i) == 'R') ? 1 : -1;
+            Integer at = firstSeen.get(prefix);
+            if (at == null) firstSeen.put(prefix, i);   // first time we see this sum
+            else            maxLen = Math.max(maxLen, i - at); // balanced substring found
+        }
+        System.out.println(n - maxLen);
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p2">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+
+/*
+ * Two arrays a[], b[]. Pick a threshold D.
+ *   score(x) = 1 if x <= D, else 2.
+ *   value(arr) = sum of score over its elements.
+ * Find D maximising  value(a) - value(b).
+ *
+ * value(arr) = (#elements) + (#elements strictly greater than D)
+ *            = size + (size - count(<= D)).
+ * The difference only changes when D crosses an actual element value, so we only need
+ * to test D = {each distinct value, min-1, max+1}. For each candidate D we count, via
+ * binary search on the sorted arrays, how many are <= D.
+ *
+ * Time  O((n+m) log(n+m))
+ *
+ * This prints the optimal D. (If your judge wants the max difference instead, print
+ * `mx` -- both are computed below.)
+ */
+class Scores {
+    // number of elements <= d  (== C++ upper_bound index)
+    static int countLE(int[] sorted, int d) {
+        int lo = 0, hi = sorted.length;          // first index with value > d
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            if (sorted[mid] <= d) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
+    }
+
+    static int[] solve(int[] a, int[] b) {
+        int[] sa = a.clone(), sb = b.clone();
+        Arrays.sort(sa);
+        Arrays.sort(sb);
+
+        TreeSet<Integer> vals = new TreeSet<>();
+        for (int x : sa) vals.add(x);
+        for (int x : sb) vals.add(x);
+
+        // candidate thresholds: just below the smallest, every value, just above the largest
+        TreeSet<Integer> cand = new TreeSet<>(vals);
+        cand.add(vals.first() - 1);
+        cand.add(vals.last() + 1);
+
+        int mx = Integer.MIN_VALUE, bestD = 0;
+        for (int d : cand) {
+            int ca = countLE(sa, d), cb = countLE(sb, d);
+            int as = ca + (sa.length - ca) * 2;   // score of a
+            int bs = cb + (sb.length - cb) * 2;   // score of b
+            int diff = as - bs;
+            if (diff > mx) { mx = diff; bestD = d; }
+        }
+        return new int[]{bestD, mx};              // {optimal D, max difference}
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim());
+        StringBuilder sb = new StringBuilder();
+        while (t-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int n = Integer.parseInt(st.nextToken());
+            int m = Integer.parseInt(st.nextToken());
+            int[] a = readN(br, n), b = readN(br, m);
+            int[] r = solve(a, b);
+            sb.append("Optimal D: ").append(r[0]).append('\n');
+        }
+        System.out.print(sb);
+    }
+
+    static int[] readN(BufferedReader br, int n) throws IOException {
+        int[] arr = new int[n];
+        int filled = 0;
+        while (filled < n) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            while (st.hasMoreTokens() && filled < n) arr[filled++] = Integer.parseInt(st.nextToken());
+        }
+        return arr;
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p3">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * Split N cargo weights into two compartments A and B, every item used, minimising
+ * |sum(A) - sum(B)|.
+ *
+ * This is "minimum subset-sum partition". Let total = sum. If we can build a subset
+ * with sum s, the two sides are s and (total - s), difference |total - 2s|. So we find
+ * every reachable subset sum with a boolean DP and pick the s closest to total/2.
+ *
+ *   reachable[s] = can we pick some items that sum to exactly s?
+ *   start reachable[0] = true, then for each weight w: reachable[s] |= reachable[s-w].
+ *
+ * (This is the fast "bitset" style used in the C++ version; here a boolean[] does the
+ * same job. Great when the total sum is modest even if N is large.)
+ *
+ * Time  O(N * total)     Space O(total)
+ */
+class MinSubsetDiff2025 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine().trim());
+        int[] w = new int[n];
+        int total = 0, filled = 0;
+        while (filled < n) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            while (st.hasMoreTokens() && filled < n) {
+                w[filled] = Integer.parseInt(st.nextToken());
+                total += w[filled++];
+            }
+        }
+
+        boolean[] reachable = new boolean[total + 1];
+        reachable[0] = true;
+        for (int x : w)
+            for (int s = total; s >= x; s--)     // iterate downward: use each item once
+                if (reachable[s - x]) reachable[s] = true;
+
+        int best = 0;
+        for (int s = total / 2; s >= 0; s--)     // closest reachable sum to half
+            if (reachable[s]) { best = s; break; }
+
+        System.out.println("Minimum difference: " + Math.abs(total - 2 * best));
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p4">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * Minimum subset-sum partition (classic DP version).
+ * Same goal as Min_Subset_Diff_2025: split the array into two groups so |sumA - sumB|
+ * is smallest. The C++ file wrote it as a memoised subset-sum; this is the cleaner
+ * bottom-up form of the exact same DP.
+ *
+ *   reachable[s] = true if some subset sums to s.
+ *   answer       = min over reachable s of |total - 2s|.
+ *
+ * Time  O(N * total)     Space O(total)
+ */
+class MinSubsetDiff {
+    static int minSubsetSumDifference(int[] arr) {
+        int total = 0;
+        for (int x : arr) total += x;
+
+        boolean[] reachable = new boolean[total + 1];
+        reachable[0] = true;
+        for (int x : arr)
+            for (int s = total; s >= x; s--)
+                if (reachable[s - x]) reachable[s] = true;
+
+        int mini = Integer.MAX_VALUE;
+        for (int s = 0; s <= total; s++)
+            if (reachable[s]) mini = Math.min(mini, Math.abs(total - 2 * s));
+        return mini;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine().trim());
+        int[] arr = new int[n];
+        int filled = 0;
+        while (filled < n) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            while (st.hasMoreTokens() && filled < n) arr[filled++] = Integer.parseInt(st.nextToken());
+        }
+        System.out.println("The minimum absolute difference is: " + minSubsetSumDifference(arr));
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p5">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+// package-private so the numeric filename (1_segments.java) compiles with `javac 1_segments.java`
+class PointsOnPath {
+
+    // ---- Step 2: merge overlapping/adjacent intervals on one line ----
+    // Input: list of [lo, hi] intervals that live on the same vertical
+    // column (or horizontal row). Output: disjoint intervals, sorted by lo.
+    static List<int[]> mergeIntervals(List<int[]> raw) {
+        raw.sort(Comparator.comparingInt(a -> a[0]));       // sort by start
+        List<int[]> merged = new ArrayList<>();
+        int start = raw.get(0)[0];
+        int end   = raw.get(0)[1];
+        for (int i = 1; i < raw.size(); i++) {
+            if (raw.get(i)[0] <= end + 1) {                 // overlap OR adjacent
+                end = Math.max(end, raw.get(i)[1]);
+            } else {
+                merged.add(new int[]{start, end});          // flush block
+                start = raw.get(i)[0];
+                end   = raw.get(i)[1];
+            }
+        }
+        merged.add(new int[]{start, end});                  // flush last block
+        return merged;
+    }
+
+    // ---- Step 3: does `val` fall inside any of these disjoint sorted intervals? ----
+    // Binary search for the last interval whose start <= val, then check its end.
+    static boolean isInSegment(List<int[]> intervals, int val) {
+        if (intervals == null) return false;
+        int lo = 0, hi = intervals.size() - 1, cand = -1;
+        while (lo <= hi) {
+            int mid = (lo + hi) >>> 1;
+            if (intervals.get(mid)[0] <= val) {             // start <= val, keep looking right
+                cand = mid;
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        if (cand == -1) return false;
+        return val <= intervals.get(cand)[1];               // within that interval's end?
+    }
+
+    static int countPointsOnPath(int[] Xq, int[] Yq, int[] Xp, int[] Yp) {
+        int M = Xp.length, N = Xq.length;
+
+        // ---- Step 1: build raw segments, grouped by fixed coordinate ----
+        // vertical:   x-column  -> list of y-intervals
+        // horizontal: y-row     -> list of x-intervals
+        Map<Integer, List<int[]>> rawVertical = new HashMap<>();
+        Map<Integer, List<int[]>> rawHorizontal = new HashMap<>();
+
+        for (int i = 1; i < M; i++) {
+            int x1 = Xp[i - 1], y1 = Yp[i - 1];
+            int x2 = Xp[i],     y2 = Yp[i];
+            if (x1 == x2) {                                 // vertical segment
+                rawVertical
+                    .computeIfAbsent(x1, k -> new ArrayList<>())
+                    .add(new int[]{Math.min(y1, y2), Math.max(y1, y2)});
+            } else {                                        // horizontal segment
+                rawHorizontal
+                    .computeIfAbsent(y1, k -> new ArrayList<>())
+                    .add(new int[]{Math.min(x1, x2), Math.max(x1, x2)});
+            }
+        }
+
+        // Merge each group.
+        Map<Integer, List<int[]>> vertical = new HashMap<>();
+        Map<Integer, List<int[]>> horizontal = new HashMap<>();
+        for (Map.Entry<Integer, List<int[]>> e : rawVertical.entrySet())
+            vertical.put(e.getKey(), mergeIntervals(e.getValue()));
+        for (Map.Entry<Integer, List<int[]>> e : rawHorizontal.entrySet())
+            horizontal.put(e.getKey(), mergeIntervals(e.getValue()));
+
+        // ---- Step 4: a point is on the path if it sits on a vertical OR horizontal segment ----
+        int count = 0;
+        for (int i = 0; i < N; i++) {
+            boolean onVertical   = isInSegment(vertical.get(Xq[i]),   Yq[i]);
+            boolean onHorizontal = isInSegment(horizontal.get(Yq[i]), Xq[i]);
+            if (onVertical || onHorizontal) count++;
+        }
+        return count;
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Fast input: StreamTokenizer reads whitespace-separated ints quickly.
+        StreamTokenizer in = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+        StringBuilder sb = new StringBuilder();
+
+        in.nextToken(); int T = (int) in.nval;
+        while (T-- > 0) {
+            in.nextToken(); int N = (int) in.nval;
+            in.nextToken(); int M = (int) in.nval;
+
+            int[] Xq = new int[N], Yq = new int[N], Xp = new int[M], Yp = new int[M];
+            for (int i = 0; i < N; i++) { in.nextToken(); Xq[i] = (int) in.nval; }
+            for (int i = 0; i < N; i++) { in.nextToken(); Yq[i] = (int) in.nval; }
+            for (int i = 0; i < M; i++) { in.nextToken(); Xp[i] = (int) in.nval; }
+            for (int i = 0; i < M; i++) { in.nextToken(); Yp[i] = (int) in.nval; }
+
+            sb.append('#').append(countPointsOnPath(Xq, Yq, Xp, Yp)).append('\n');
+        }
+        System.out.print(sb);
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p6">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * N cars on a huge grid. Every car must end on the same target (p, q). All cars move
+ * SIMULTANEOUSLY. On drive k every car moves EXACTLY k steps (Manhattan) in directions
+ * of its choice (it may overshoot and come back). Minimum number of drives, or -1.
+ *
+ * For one car at Manhattan distance d, after t drives the total travel budget is
+ *   S = 1 + 2 + ... + t = t(t+1)/2.
+ * The car can sit exactly on the target at drive t  <=>  S >= d  AND  (S - d) is even
+ * (the surplus S-d must be cancelled by moving back and forth, which changes distance
+ * by an even amount).
+ *
+ * All cars share the SAME t. So:
+ *   - every distance must have the same parity (else -1, impossible),
+ *   - find the smallest t with S >= max distance,
+ *   - if S already has the right parity we're done, otherwise bump t by 1 or 2 until
+ *     S's parity matches.
+ *
+ * Time  O(N + log(maxDist))
+ */
+class Cars {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(nextLine(br).trim());
+        StringBuilder out = new StringBuilder();
+
+        for (int tc = 1; tc <= t; tc++) {
+            StringTokenizer st = new StringTokenizer(nextLine(br));
+            long n = Long.parseLong(st.nextToken());
+            long m = Long.parseLong(st.nextToken());  // grid size, not needed for the math
+
+            st = new StringTokenizer(nextLine(br));
+            long p = Long.parseLong(st.nextToken());
+            long q = Long.parseLong(st.nextToken());
+
+            long maxDist = 0;
+            long parity = -1;
+            boolean impossible = false;
+            for (int i = 0; i < n; i++) {
+                st = new StringTokenizer(nextLine(br));
+                long x = Long.parseLong(st.nextToken());
+                long y = Long.parseLong(st.nextToken());
+                long d = Math.abs(p - x) + Math.abs(q - y);
+                maxDist = Math.max(maxDist, d);
+                if (parity == -1) parity = d & 1;
+                else if ((d & 1) != parity) impossible = true;
+            }
+
+            if (impossible) { out.append("# ").append(tc).append(" -1\n"); continue; }
+
+            // smallest t with t(t+1)/2 >= maxDist
+            long lo = 0, hi = 2_000_000_000L, turns = hi;
+            while (lo <= hi) {
+                long mid = lo + (hi - lo) / 2;
+                if (mid * (mid + 1) / 2 >= maxDist) { turns = mid; hi = mid - 1; }
+                else lo = mid + 1;
+            }
+
+            long ans;
+            if (parityOfTri(turns) == parity)          ans = turns;
+            else if (parityOfTri(turns + 1) == parity) ans = turns + 1;
+            else                                       ans = turns + 2;
+
+            out.append("# ").append(tc).append(" ").append(ans).append('\n');
+        }
+        System.out.print(out);
+    }
+
+    static long parityOfTri(long t) { return (t * (t + 1) / 2) & 1; }
+
+    static String nextLine(BufferedReader br) throws IOException {
+        String s = br.readLine();
+        while (s != null && s.trim().isEmpty()) s = br.readLine();
+        return s;
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p7">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * N tiles, each (height, width). Choose K of them so that the LARGEST "distance"
+ * between any two chosen tiles is as small as possible, where
+ *   distance(i, j) = max(|h_i - h_j|, |w_i - w_j|)   (Chebyshev distance).
+ *
+ * Binary search the answer D. "Can we choose K tiles all within distance D?" means:
+ * do K tiles fit inside some axis-aligned (D+1) x (D+1) box in (height, width) space?
+ * With coordinates bounded by 400 we drop every tile into a 401x401 grid, build a 2D
+ * prefix-sum of counts, and for candidate D slide a (D x D) box over the grid asking
+ * "does any box contain >= K tiles?".
+ *
+ * Time  O(400^2 * log 400)     (coordinates assumed 0..400)
+ */
+class Tiles {
+    static int[][] freq = new int[401][401];
+
+    static boolean isValid(int mid, int k) {
+        for (int i = 0; i + mid < 401; i++) {
+            for (int j = 0; j + mid < 401; j++) {
+                int cnt = freq[i + mid][j + mid];
+                if (i > 0) cnt -= freq[i - 1][j + mid];
+                if (j > 0) cnt -= freq[i + mid][j - 1];
+                if (i > 0 && j > 0) cnt += freq[i - 1][j - 1];
+                if (cnt >= k) return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            freq[x][y]++;
+        }
+
+        // 2D prefix sum
+        for (int i = 0; i < 401; i++)
+            for (int j = 0; j < 401; j++) {
+                if (i > 0) freq[i][j] += freq[i - 1][j];
+                if (j > 0) freq[i][j] += freq[i][j - 1];
+                if (i > 0 && j > 0) freq[i][j] -= freq[i - 1][j - 1];
+            }
+
+        int low = 0, high = 400, ans = 400;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (isValid(mid, k)) { ans = mid; high = mid - 1; }
+            else                   low = mid + 1;
+        }
+        System.out.println(ans);
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p8">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * Stones in a row are removed one by one. Removing a stone costs money depending on how
+ * many of its (left / right) neighbours are STILL present at that moment:
+ *   0 neighbours  -> 0
+ *   1 neighbour   -> a[i]
+ *   2 neighbours  -> b[i]
+ * Find the minimum total cost to remove them all.
+ *
+ * The only thing that matters between two adjacent stones i and i+1 is which one is
+ * removed first. DP over the row with a 2-state flag:
+ *   dp[i][0] = min cost for stones 1..i when stone (i+1) is removed BEFORE stone i
+ *   dp[i][1] = min cost for stones 1..i when stone (i+1) is removed AFTER  stone i
+ * Transitions add a[i] / b[i] / 0 depending on how many neighbours of stone i are still
+ * around when it goes. Answer is dp[n][0] (there is no stone n+1).
+ *
+ * Time  O(n)     Space O(n)  (reference approach by vgtcross, CF blog 117311)
+ */
+class Stones {
+    static long minRemovalCost(int n, long[] a, long[] b) {
+        long[][] dp = new long[n + 1][2];
+        dp[1][0] = 0;
+        dp[1][1] = a[0];
+        for (int i = 2; i <= n; i++) {
+            dp[i][0] = Math.min(dp[i - 1][0] + a[i - 1], dp[i - 1][1]);
+            dp[i][1] = Math.min(dp[i - 1][0] + b[i - 1], dp[i - 1][1] + a[i - 1]);
+        }
+        return dp[n][0];
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine().trim());
+        long[] a = readN(br, n), b = readN(br, n);
+        System.out.println(minRemovalCost(n, a, b));
+    }
+
+    static long[] readN(BufferedReader br, int n) throws IOException {
+        long[] arr = new long[n];
+        int filled = 0;
+        while (filled < n) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            while (st.hasMoreTokens() && filled < n) arr[filled++] = Long.parseLong(st.nextToken());
+        }
+        return arr;
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p9">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * Array A[]: A[i] units of garbage at index i.
+ *   - Deploying a robot at any index costs m.
+ *   - A robot cleans its current index, then can only move to index+1 (one step / unit time).
+ *   - Every time unit, you pay the sum of garbage still uncleaned.
+ * Any number of robots may be deployed. Minimise total cost.
+ *
+ * DP over positions. Let solve(in, l) = min cost from index `in` onward, where the
+ * currently-active robot was deployed at index l (so it reaches index `in` after (in-l)
+ * time units, during which A[in] keeps costing).
+ *   solve(in, l) = min(
+ *       m           + solve(in+1, in),      // deploy a fresh robot right here at `in`
+ *       (in-l)*A[in] + solve(in+1, l)        // let the robot from l walk over and clean `in`
+ *   )
+ * We deploy the first robot at the first non-empty index i, so answer = m + solve(i+1, i).
+ * Written bottom-up to avoid deep recursion.
+ *
+ * Time  O(n^2)     Space O(n^2)
+ */
+class Robot {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        long m = Long.parseLong(st.nextToken());
+
+        long[] A = new long[n];
+        int filled = 0;
+        while (filled < n) {
+            st = new StringTokenizer(br.readLine());
+            while (st.hasMoreTokens() && filled < n) A[filled++] = Long.parseLong(st.nextToken());
+        }
+
+        int first = 0;
+        while (first < n && A[first] == 0) first++;
+        if (first == n) { System.out.println(0); return; }   // nothing to clean
+
+        // dp[in][l], rows n (base) .. 0
+        long[][] dp = new long[n + 1][n + 1];                 // dp[n][*] = 0
+        for (int in = n - 1; in >= 0; in--) {
+            for (int l = 0; l <= in; l++) {
+                long deploy = m + dp[in + 1][in];
+                long walk   = (long) (in - l) * A[in] + dp[in + 1][l];
+                dp[in][l] = Math.min(deploy, walk);
+            }
+        }
+        System.out.println(m + dp[first + 1][first]);
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p10">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * Array of numeric strings. You may glue arr[i] before arr[j] only if i < j AND the last
+ * char of arr[i] == the first char of arr[j] ("123" + "389" -> "123389"). The FINAL string
+ * must start and end with the same digit. Print the max possible final length.
+ *
+ * There are only 10 possible digits, so track the best chain by (startDigit, endDigit).
+ * Scan right-to-left; let best[f][e] = longest chain we can build that starts with digit f
+ * and ends with digit e using strings from index i onward.
+ *   For string i with first=f, last=l:
+ *     it can be prepended to any existing chain that starts with l:
+ *         best[f][e] = max(best[f][e], best[l][e] + len)   for every e
+ *     and it is itself a chain f..l:
+ *         best[f][l] = max(best[f][l], len)
+ * Answer = max over d of best[d][d].
+ *
+ * Time  O(N * 10)     Space O(100)   (much better than the naive O(N*100) memo DP)
+ */
+class Strings {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim());
+        StringBuilder out = new StringBuilder();
+
+        while (t-- > 0) {
+            int n = Integer.parseInt(br.readLine().trim());
+            String[] v = new String[n];
+            int filled = 0;
+            while (filled < n) {
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                while (st.hasMoreTokens() && filled < n) v[filled++] = st.nextToken();
+            }
+
+            long[][] best = new long[10][10];
+            for (int i = n - 1; i >= 0; i--) {
+                int f = v[i].charAt(0) - '0';
+                int l = v[i].charAt(v[i].length() - 1) - '0';
+                int len = v[i].length();
+                for (int e = 0; e < 10; e++)
+                    if (best[l][e] != 0)
+                        best[f][e] = Math.max(best[f][e], best[l][e] + len);
+                best[f][l] = Math.max(best[f][l], len);
+            }
+
+            long res = 0;
+            for (int d = 0; d < 10; d++) res = Math.max(res, best[d][d]);
+            out.append(res).append('\n');
+        }
+        System.out.print(out);
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p11">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.StringTokenizer;
+
+/*
+ * Warehouse of N items. Item i starts at A[i]. Each day: every item gains B[i]
+ * (A[i] += B[i]); then you export exactly ONE item, zeroing its stock. Minimum number
+ * of days so the total stock <= K (or -1 if impossible).
+ *
+ * If we run for `d` days we make d exports, one per day. Export item i on day t removes
+ * its current value (a_i + b_i*t). The final total with a chosen export schedule is
+ *   total = A_sum + B_sum*d  -  (sum of a_i over exported)  -  (sum of b_i*t over exported).
+ * Sorting items by b lets us assign later days (bigger t) to bigger b, which minimises
+ * what's left. We backtrack over "export this item or not"; because N is small this is
+ * fast, and we keep the smallest feasible d.
+ *
+ * Time  O(2^N) backtracking (intended for small N)
+ */
+class Days {
+    static int n;
+    static long M, aSum, bSum, best;
+    static long[] bArr, aArr;   // items sorted by b ascending; aArr[i] pairs with bArr[i]
+
+    // ind: current item, days: exports made so far, as: sum of exported a, bs: sum of exported b*day
+    static void solve(int ind, long days, long as, long bs) {
+        if (ind == n) {
+            long total = aSum + bSum * days;
+            if (total - as - bs <= M) best = Math.min(best, days);
+            return;
+        }
+        // export this item on day (days+1)
+        solve(ind + 1, days + 1, as + aArr[ind], bs + bArr[ind] * (days + 1));
+        // skip this item
+        solve(ind + 1, days, as, bs);
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        StringBuilder out = new StringBuilder();
+
+        for (int tc = 1; tc <= T; tc++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            n = Integer.parseInt(st.nextToken());
+            M = Long.parseLong(st.nextToken());
+
+            long[][] items = new long[n][2];   // {b, a}
+            aSum = 0; bSum = 0;
+            for (int i = 0; i < n; i++) {
+                st = new StringTokenizer(br.readLine());
+                long a = Long.parseLong(st.nextToken());
+                long b = Long.parseLong(st.nextToken());
+                items[i][0] = b; items[i][1] = a;
+                aSum += a; bSum += b;
+            }
+            Arrays.sort(items, Comparator.comparingLong((long[] p) -> p[0]).thenComparingLong(p -> p[1]));
+            bArr = new long[n]; aArr = new long[n];
+            for (int i = 0; i < n; i++) { bArr[i] = items[i][0]; aArr[i] = items[i][1]; }
+
+            long ans;
+            if (aSum <= M) ans = 0;
+            else {
+                best = Long.MAX_VALUE;
+                solve(0, 0, 0, 0);
+                ans = (best == Long.MAX_VALUE) ? -1 : best;
+            }
+            out.append('#').append(tc).append(' ').append(ans).append('\n');
+        }
+        System.out.print(out);
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p12">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/*
+ * Count serial numbers in [0 .. A] whose digit sum equals S. A can be up to 100 digits,
+ * so it is given as a string. Answer modulo 1e9+7.
+ *
+ * Classic DIGIT DP. Build the number left to right. State:
+ *   pos    = current digit position
+ *   remSum = digit sum still needed
+ *   tight  = are we still exactly matching A's prefix? (if yes this digit is capped by A[pos])
+ * At each position try digits 0..limit and recurse. Leading zeros are naturally allowed
+ * (they just contribute 0 to the sum).
+ *
+ * Time  O(len(A) * S * 10)
+ */
+class DigitSum {
+    static final int MOD = 1_000_000_007;
+    static String A;
+    static int[][][] dp;   // [pos][remSum][tight]  (-1 = not computed)
+
+    static int solve(int pos, int remSum, int tight) {
+        if (remSum < 0) return 0;
+        if (pos == A.length()) return remSum == 0 ? 1 : 0;
+        if (dp[pos][remSum][tight] != -1) return dp[pos][remSum][tight];
+
+        int limit = (tight == 1) ? (A.charAt(pos) - '0') : 9;
+        int ans = 0;
+        for (int d = 0; d <= limit; d++) {
+            int nextTight = (tight == 1 && d == limit) ? 1 : 0;
+            ans = (ans + solve(pos + 1, remSum - d, nextTight)) % MOD;
+        }
+        return dp[pos][remSum][tight] = ans;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        A = st.nextToken();
+        int S = Integer.parseInt(st.hasMoreTokens() ? st.nextToken()
+                                                     : new StringTokenizer(br.readLine()).nextToken());
+
+        if (S > A.length() * 9) { System.out.println(0); return; }   // impossible fast-exit
+
+        dp = new int[A.length() + 1][S + 1][2];
+        for (int[][] a : dp) for (int[] b : a) { b[0] = -1; b[1] = -1; }
+
+        System.out.println(solve(0, S, 1));
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p13">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.StringTokenizer;
+
+/*
+ * Apple Game (right turns only). N x N grid: 0 empty, -1 trap, positive = apple number.
+ * Start at (0,0) facing RIGHT. You must eat apples strictly in order 1,2,3,...  You keep
+ * moving straight; the only turn allowed is a RIGHT turn (each right turn "costs" 1).
+ * Minimise the number of right turns to eat every apple, or -1 if impossible.
+ *
+ * This is a 0-1 BFS. A state is (row, col, applesEatenSoFar, facingDir).
+ *   - moving straight one cell = edge weight 0  -> push to FRONT of the deque
+ *   - turning right (dir+1)%4  = edge weight 1  -> push to BACK of the deque
+ * dp[r][c][cnt][dir] = fewest right turns to reach that state. Answer = min over all
+ * cells/dirs of dp[..][totalApples][..].
+ *
+ * dirs: 0=right,1=down,2=left,3=up.
+ * Time  O(N*N*M*4)
+ */
+class Apples {
+    static final int[] dx = {0, 1, 0, -1};
+    static final int[] dy = {1, 0, -1, 0};
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(firstToken(br));
+        StringBuilder out = new StringBuilder();
+
+        for (int tc = 1; tc <= T; tc++) {
+            int n = Integer.parseInt(firstToken(br));
+            int[][] v = new int[n][n];
+            int apples = 0;
+            for (int i = 0; i < n; i++) {
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                for (int j = 0; j < n; j++) {
+                    v[i][j] = Integer.parseInt(st.nextToken());
+                    apples = Math.max(apples, v[i][j]);
+                }
+            }
+
+            int[][][][] dp = new int[n][n][apples + 1][4];
+            for (int[][][] a : dp) for (int[][] b : a) for (int[] c : b)
+                java.util.Arrays.fill(c, Integer.MAX_VALUE);
+
+            Deque<int[]> dq = new ArrayDeque<>();
+            int startCnt = (v[0][0] == 1) ? 1 : 0;
+            dp[0][0][startCnt][0] = 0;
+            dq.addFirst(new int[]{0, 0, startCnt, 0});
+
+            while (!dq.isEmpty()) {
+                int[] cur = dq.pollFirst();
+                int x = cur[0], y = cur[1], cnt = cur[2], dir = cur[3];
+                int base = dp[x][y][cnt][dir];
+                // go straight (cost 0)
+                relax(dp, dq, v, n, apples, x, y, cnt, dir, base, false);
+                // turn right then that state (cost 1)
+                relax(dp, dq, v, n, apples, x, y, cnt, (dir + 1) % 4, base + 1, true);
+            }
+
+            int ans = Integer.MAX_VALUE;
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    for (int k = 0; k < 4; k++)
+                        ans = Math.min(ans, dp[i][j][apples][k]);
+
+            out.append('#').append(tc).append(' ')
+               .append(ans == Integer.MAX_VALUE ? -1 : ans).append('\n');
+        }
+        System.out.print(out);
+    }
+
+    // move one cell in direction `dir`; `back` = push to back (weight 1) vs front (weight 0)
+    static void relax(int[][][][] dp, Deque<int[]> dq, int[][] v, int n, int apples,
+                      int x, int y, int cnt, int dir, int d, boolean back) {
+        int nx = x + dx[dir], ny = y + dy[dir];
+        if (nx < 0 || nx >= n || ny < 0 || ny >= n || v[nx][ny] == -1) return;
+        int ncnt = cnt + ((v[nx][ny] == cnt + 1) ? 1 : 0);
+        if (dp[nx][ny][ncnt][dir] > d) {
+            dp[nx][ny][ncnt][dir] = d;
+            if (back) dq.addLast(new int[]{nx, ny, ncnt, dir});
+            else      dq.addFirst(new int[]{nx, ny, ncnt, dir});
+        }
+    }
+
+    static String firstToken(BufferedReader br) throws IOException {
+        String s = br.readLine();
+        while (s != null && s.trim().isEmpty()) s = br.readLine();
+        return new StringTokenizer(s).nextToken();
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p14">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+/*
+ * Logging robot on a road of length N. At each unit position there may be a tree on the
+ * left and/or right with some length. Trees can only be loaded in NON-INCREASING length
+ * order, so we must chop all trees of the largest length first, then the next, etc.
+ * Moving one unit = 1 min, chopping one tree = 1 min. Robot starts at 0 and must finish
+ * at N. Minimise total minutes.
+ *
+ * Group tree positions by length. For a length L whose trees sit between the leftmost
+ * position `lo` and rightmost `ro`:
+ *   count[L] = (#trees of length L) + (ro - lo)     // chops + the sweep across them
+ * Process lengths from largest to smallest. At each length the robot enters at some pos,
+ * goes to one end, sweeps to the other end, then moves on to the next smaller length.
+ *   f(idx, pos) = min(
+ *       |pos - lo| + count[L] + f(idx+1, ro),        // hit left end first, exit at right
+ *       |pos - ro| + count[L] + f(idx+1, lo)         // hit right end first, exit at left
+ *   )
+ *   base: no lengths left -> |pos - N| to reach the end.
+ *
+ * (Fixes two bugs in the C++: a stray debug print, and stepping through lengths that have
+ * no trees. Here we only visit lengths that actually occur.)
+ *
+ * Time  O(#distinctLengths * N)
+ */
+class LoggingTrees {
+    static int n;
+    static int[] lengthsDesc;                 // distinct tree lengths, largest first
+    static int[] loArr, roArr, countArr;      // per distinct length
+    static int[][] dp;                         // memo [idxInLengthsDesc][pos]
+
+    static int f(int idx, int pos) {
+        if (idx == lengthsDesc.length) return Math.abs(pos - n);
+        if (dp[idx][pos] != Integer.MIN_VALUE) return dp[idx][pos];
+        int lo = loArr[idx], ro = roArr[idx], c = countArr[idx];
+        int res = Math.min(
+            Math.abs(pos - lo) + c + f(idx + 1, ro),
+            Math.abs(pos - ro) + c + f(idx + 1, lo)
+        );
+        return dp[idx][pos] = res;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine().trim());
+
+        Map<Integer, List<Integer>> byLen = new HashMap<>();  // length -> list of positions
+        for (int i = 0; i < n; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int l = Integer.parseInt(st.nextToken());
+            int r = Integer.parseInt(st.nextToken());
+            if (l != 0) byLen.computeIfAbsent(l, k -> new ArrayList<>()).add(i);
+            if (r != 0) byLen.computeIfAbsent(r, k -> new ArrayList<>()).add(i);
+        }
+
+        List<Integer> lens = new ArrayList<>(byLen.keySet());
+        lens.sort(Collections.reverseOrder());               // largest length first
+        int k = lens.size();
+        lengthsDesc = new int[k];
+        loArr = new int[k]; roArr = new int[k]; countArr = new int[k];
+        for (int i = 0; i < k; i++) {
+            int len = lens.get(i);
+            List<Integer> pos = byLen.get(len);
+            Collections.sort(pos);
+            int lo = pos.get(0), ro = pos.get(pos.size() - 1);
+            lengthsDesc[i] = len;
+            loArr[i] = lo; roArr[i] = ro;
+            countArr[i] = pos.size() + (ro - lo);            // chops + sweep span
+        }
+
+        dp = new int[k][n + 1];
+        for (int[] row : dp) java.util.Arrays.fill(row, Integer.MIN_VALUE);
+
+        System.out.println(k == 0 ? n : f(0, 0));            // no trees -> just walk to N
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p15">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+/*
+ * A tree of military units; unit i holds soldiers[i]. We must balance the tree so that
+ * all children of the SAME parent have equal subtree-sums. We may only DELETE soldiers
+ * (never add). Minimise the total removed; print the total number of soldiers left.
+ *
+ * Because we can only decrease, all siblings must be brought DOWN to the smallest
+ * sibling's subtree sum. So do a post-order DFS:
+ *   - leaf  -> its subtree sum is its own soldier count.
+ *   - internal node -> compute each child's balanced subtree sum, take the minimum,
+ *     reduce every child to that minimum (that's forced and optimal), and this node's
+ *     subtree sum becomes soldiers[node] + min * (#children).
+ *
+ * Time  O(N)
+ */
+class Soldiers {
+    static List<Integer>[] tree;
+    static int[] soldiers;
+
+    @SuppressWarnings("unchecked")
+    static void init(int n) {
+        tree = new List[n];
+        for (int i = 0; i < n; i++) tree[i] = new ArrayList<>();
+        soldiers = new int[n];
+    }
+
+    static long dfs(int u) {
+        if (tree[u].isEmpty()) return soldiers[u];          // leaf
+
+        long min = Long.MAX_VALUE;
+        long[] childSums = new long[tree[u].size()];
+        int idx = 0;
+        for (int v : tree[u]) {
+            long s = dfs(v);
+            childSums[idx++] = s;
+            min = Math.min(min, s);                          // forced target = smallest sibling
+        }
+        return soldiers[u] + min * tree[u].size();
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine().trim());
+        init(n);
+        int root = -1;
+        for (int i = 0; i < n; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int parent = Integer.parseInt(st.nextToken());
+            soldiers[i] = Integer.parseInt(st.nextToken());
+            if (parent == -1) root = i;
+            else tree[parent].add(i);
+        }
+        System.out.println(dfs(root));
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p16">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+/*
+ * Tree with n vertices, value a_i on each vertex. Choose a vertex v to maximise
+ *   sum over i of dist(v, i) * a_i
+ * where dist is the number of edges between v and i. Print that maximum.
+ *
+ * REROOTING DP in O(n):
+ *   1) Root at 1. precalc computes for each node:
+ *        subSum[node]  = sum of values in its subtree
+ *        cost[node]    = weighted distance sum answer if the tree were rooted here,
+ *                        counting only its subtree.
+ *      cost[node] = sum over children c of (cost[c] + subSum[c])   // every subtree node
+ *                                                                   // gets +1 distance
+ *   2) reroot moves the root along each edge. When we move the root from `node` to child
+ *      `x`, everything in x's subtree gets 1 closer and everything else gets 1 farther:
+ *        cost[x]_full = cost[x] + (cost[node] - (cost[x] + subSum[x])) + (totalSum - subSum[x])
+ *      We do this with in-place add/undo so each node's full answer is seen once.
+ *
+ * Runs the DFS on a big-stack thread because n can be up to 2e5.
+ * Time  O(n)
+ */
+class MinCost {
+    static List<Integer>[] g;
+    static long[] value, subSum, cost;
+    static long maxi = 0;
+
+    static void precalc(int node, int parent) {
+        subSum[node] = value[node];
+        cost[node] = 0;
+        for (int x : g[node]) {
+            if (x == parent) continue;
+            precalc(x, node);
+            subSum[node] += subSum[x];
+            cost[node] += cost[x] + subSum[x];
+        }
+    }
+
+    static void reroot(int node, int parent) {
+        maxi = Math.max(maxi, cost[node]);
+        for (int x : g[node]) {
+            if (x == parent) continue;
+            // remove x's contribution from node
+            subSum[node] -= subSum[x];
+            cost[node]   -= cost[x] + subSum[x];
+            // add node's (now everything-else) contribution into x
+            subSum[x] += subSum[node];
+            cost[x]   += cost[node] + subSum[node];
+
+            reroot(x, node);
+
+            // undo
+            subSum[x] -= subSum[node];
+            cost[x]   -= cost[node] + subSum[node];
+            subSum[node] += subSum[x];
+            cost[node]   += cost[x] + subSum[x];
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    static void run() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine().trim());
+        value = new long[n + 1];
+        subSum = new long[n + 1];
+        cost = new long[n + 1];
+        g = new List[n + 1];
+        for (int i = 1; i <= n; i++) g[i] = new ArrayList<>();
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 1; i <= n; i++) value[i] = Long.parseLong(st.nextToken());
+        for (int i = 0; i < n - 1; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            g[x].add(y);
+            g[y].add(x);
+        }
+
+        precalc(1, -1);
+        reroot(1, -1);
+        System.out.println(maxi);
+    }
+
+    public static void main(String[] args) throws Exception {
+        // large stack for deep recursion (n up to 2e5)
+        Thread t = new Thread(null, () -> {
+            try { run(); } catch (IOException e) { throw new RuntimeException(e); }
+        }, "main", 1 << 26);
+        t.start();
+        t.join();
+    }
+}
+</script>
+
+<script type="text/plain" id="src-p17">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+/*
+ * City grid h x w. Cells: 0 road, 1 tree (blocked), 2 garage (start), 3 warehouse,
+ * 4 airport. A truck leaves the garage, picks goods from a warehouse, drops them at the
+ * airport. Moving one block costs (1 + goodsCarried). With a total budget C, how many
+ * goods (max) can be delivered?
+ *
+ * For a single warehouse trip:
+ *   garage -> warehouse : empty, cost = 1 per block = ds (shortest steps garage->wh)
+ *   warehouse -> airport: carrying g goods, cost = (1+g) per block = dd*(1+g)
+ *   total = ds + dd*(1+g) <= C   =>   g <= (C - ds)/dd - 1
+ * BFS gives ds (from garage) and dd (from airport) to every cell. We try each warehouse
+ * and keep the largest feasible g.
+ *
+ * NOTE: this maximises goods from the best SINGLE warehouse trip (which is optimal when
+ * one trip is allowed, since carrying everything at once beats repeated trips). Problems
+ * that let you chain several warehouses in one route need a heavier state-search DP.
+ *
+ * Time  O(T * h * w)
+ */
+class Warehouse {
+    static final long INF = Long.MAX_VALUE / 4;
+    static final int[] dx = {0, 1, -1, 0}, dy = {1, 0, 0, -1};
+
+    static void bfs(int sx, int sy, long[][] dist, int[][] mat) {
+        int h = mat.length, w = mat[0].length;
+        for (long[] row : dist) java.util.Arrays.fill(row, INF);
+        Queue<int[]> q = new ArrayDeque<>();
+        dist[sx][sy] = 0;
+        q.add(new int[]{sx, sy});
+        while (!q.isEmpty()) {
+            int[] c = q.poll();
+            int x = c[0], y = c[1];
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i], ny = y + dy[i];
+                if (nx >= 0 && ny >= 0 && nx < h && ny < w && mat[nx][ny] != 1
+                        && dist[nx][ny] > dist[x][y] + 1) {
+                    dist[nx][ny] = dist[x][y] + 1;
+                    q.add(new int[]{nx, ny});
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        StringBuilder out = new StringBuilder();
+
+        while (T-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int h = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            long c = Long.parseLong(st.nextToken());
+
+            int[][] mat = new int[h][w];
+            int gx = 0, gy = 0, ax = 0, ay = 0;
+            List<int[]> warehouses = new ArrayList<>();
+            for (int i = 0; i < h; i++) {
+                st = new StringTokenizer(br.readLine());
+                for (int j = 0; j < w; j++) {
+                    mat[i][j] = Integer.parseInt(st.nextToken());
+                    if (mat[i][j] == 2) { gx = i; gy = j; }
+                    if (mat[i][j] == 4) { ax = i; ay = j; }
+                    if (mat[i][j] == 3) warehouses.add(new int[]{i, j});
+                }
+            }
+
+            long[][] ds = new long[h][w], dd = new long[h][w];
+            bfs(gx, gy, ds, mat);
+            bfs(ax, ay, dd, mat);
+
+            long maxGoods = 0;
+            for (int[] wh : warehouses) {
+                int x = wh[0], y = wh[1];
+                if (ds[x][y] >= INF || dd[x][y] >= INF) continue;   // unreachable
+                long budget = c - ds[x][y];
+                if (budget > 0) {
+                    long g = budget / dd[x][y] - 1;
+                    if (g > 0) maxGoods = Math.max(maxGoods, g);
+                }
+            }
+            out.append(maxGoods).append('\n');
+        }
+        System.out.print(out);
+    }
+}
+</script>
+
+<script>
+/* ---------- tiny helpers ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+
+/* ---------- theme ---------- */
+(function(){
+  const root=document.documentElement, btn=$('#themeBtn');
+  btn.onclick=()=>{
+    const cur=root.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+    root.setAttribute('data-theme', cur==='dark'?'light':'dark');
+  };
+})();
+
+/* ---------- content data ---------- */
+const patterns=[
+ {h:"Prefix sums",p:"A running total lets you ask “what’s the sum between i and j?” in O(1). Balance tricks (+1/−1) turn ‘equal counts’ into ‘sum = 0’.",u:"#p1 · #p5"},
+ {h:"Binary search on the answer",p:"If “is answer ≤ X feasible?” gets easier as X grows, binary-search X instead of computing it directly.",u:"#p7 · #p6 · #p2"},
+ {h:"Subset-sum DP",p:"Which totals can a subset reach? A boolean array fills in O(N·sum). Backbone of partition / min-difference problems.",u:"#p3 · #p4"},
+ {h:"Digit DP",p:"Count numbers ≤ A with a property by building them digit-by-digit, tracking a ‘tight’ flag against A.",u:"#p12"},
+ {h:"BFS & 0-1 BFS",p:"Shortest steps on a grid/graph. When edges cost 0 or 1, a deque (push-front for 0, push-back for 1) beats Dijkstra.",u:"#p13 · #p17"},
+ {h:"Tree DP / rerooting",p:"Compute an answer for one root in O(N), then slide the root along each edge to get all roots — still O(N).",u:"#p16 · #p15"},
+ {h:"Greedy",p:"Make the locally-forced choice when it can’t hurt: reduce siblings to the smallest, sort before pairing, etc.",u:"#p15 · #p2"},
+ {h:"Parity & triangular numbers",p:"1+2+…+t = t(t+1)/2. Reachability on a line often comes down to ‘enough distance’ + ‘right parity’.",u:"#p6"},
+ {h:"Interval merging",p:"Sort segments, sweep once, glue overlapping/adjacent ones. Then membership is a binary search.",u:"#p5"},
+];
+
+const problems=[
+ { id:"p1", num:1, title:"Equal Red / Blue Necklace", file:"3_RB.java",
+   chips:["Prefix sums","Balanced substring"], diff:"Easiest",
+   statement:`Remove stones only from the <b>ends</b> of a necklace of R/B until reds equal blues. Fewest removals?`,
+   ex:`BBRRBRBRBRBBR  →  1`,
+   idea:["Whatever you keep is a <b>middle chunk</b>. So find the <b>longest middle with equal R and B</b> and delete the rest.",
+         "Map <code>R→+1, B→−1</code> and take a running <code>prefix</code> sum.",
+         "A stretch is balanced when its two ends have the <b>same prefix value</b>. Remember where each value first appeared; the gap to a repeat is a balanced stretch.",
+         "Answer = <code>n − longest balanced stretch</code>."],
+   cx:["Time <b>O(n)</b>","Space <b>O(n)</b>"], viz:"balance" },
+
+ { id:"p2", num:2, title:"Best Threshold D (two arrays)", file:"5_2_scores.java",
+   chips:["Sorting","Binary search"], diff:"Easy",
+   statement:`Score an element <b>1 if ≤ D, 2 if &gt; D</b>. Pick D so <code>value(a) − value(b)</code> is largest.`,
+   ex:`a=[1..5], b=[6..10] → D=0`,
+   idea:["<code>value(arr) = size + (how many are &gt; D)</code>.",
+         "The difference only changes when D crosses a real value — so only test D = each distinct value (plus min−1, max+1).",
+         "For each candidate D, count ‘how many ≤ D’ in each array with <b>binary search</b> on the sorted arrays, and keep the best."],
+   cx:["Time <b>O((n+m)·log)</b>","Space <b>O(n+m)</b>"], viz:null },
+
+ { id:"p3", num:3, title:"Split Cargo — Min Difference (fast)", file:"Min_Subset_Diff_2025.java",
+   chips:["Subset-sum DP","Bitset idea"], diff:"Easy",
+   statement:`Put every weight into compartment A or B so <code>|sum(A) − sum(B)|</code> is smallest.`,
+   ex:`[3,3,7,3,1] → 1  (3+3+3 vs 7+1)`,
+   idea:["If a subset sums to <code>s</code>, the two sides are <code>s</code> and <code>total−s</code>, difference <code>|total − 2s|</code>.",
+         "Mark every reachable subset sum with a boolean array: <code>reach[s] |= reach[s−w]</code> (loop s downward so each item is used once).",
+         "Pick the reachable <code>s</code> closest to <code>total/2</code>. (The C++ ‘bitset’ is the same idea, just packed into machine words.)"],
+   cx:["Time <b>O(N·total)</b>","Space <b>O(total)</b>"], viz:"subset" },
+
+ { id:"p4", num:4, title:"Split Cargo — Min Difference (DP)", file:"min_subset_diff.java",
+   chips:["Subset-sum DP"], diff:"Easy",
+   statement:`Same goal as #3, written as the textbook subset-sum DP (use when N is small / for clarity).`,
+   ex:`[1,2,3,4] → 0`,
+   idea:["Build the exact same <code>reach[]</code> table of achievable subset sums.",
+         "Answer = smallest <code>|total − 2s|</code> over every reachable <code>s</code>.",
+         "The original C++ used memoised recursion; this bottom-up version is the clean equivalent."],
+   cx:["Time <b>O(N·total)</b>","Space <b>O(total)</b>"], viz:"subset" },
+
+ { id:"p5", num:5, title:"Points on a Polyline Path", file:"1_segments.java (class PointsOnPath)",
+   chips:["Interval merging","Binary search"], diff:"Medium",
+   statement:`A path is made of horizontal/vertical segments. How many of the query points lie <b>on</b> it?`,
+   ex:`turns (1,1)-(1,5)-(2,5) …`,
+   idea:["Split the path into <b>vertical</b> segments (grouped by their x) and <b>horizontal</b> ones (grouped by their y).",
+         "Within each group, <b>merge overlapping/adjacent</b> intervals so lookups are clean.",
+         "A point is on the path if it sits inside a vertical interval at its x <b>or</b> a horizontal interval at its y — found with binary search."],
+   cx:["Time <b>O((M+N)·log M)</b>","Space <b>O(M)</b>"], viz:"merge" },
+
+ { id:"p6", num:6, title:"Park All Cars Simultaneously", file:"6_1_cars.java",
+   chips:["Parity","Triangular numbers","Binary search"], diff:"Medium",
+   statement:`On drive <code>k</code> every car moves exactly <code>k</code> steps. Fewest drives so all reach <code>(p,q)</code>, else −1.`,
+   ex:`distances {3,1} → 2 drives`,
+   idea:["A car needing Manhattan distance <code>d</code> can land exactly at drive <code>t</code> when <code>S=t(t+1)/2 ≥ d</code> <b>and</b> <code>S−d</code> is even (overshoot is cancelled by going back & forth).",
+         "All cars share one <code>t</code>, so every distance must have the <b>same parity</b> — otherwise −1.",
+         "Binary-search the smallest <code>t</code> with <code>S ≥ maxDist</code>; if parity is off, bump <code>t</code> by 1 or 2."],
+   cx:["Time <b>O(N + log)</b>","Space <b>O(1)</b>"], viz:"triangular" },
+
+ { id:"p7", num:7, title:"Choose K Tiles — Minimize Spread", file:"4_2_tiles.java",
+   chips:["Binary search on answer","2D prefix sum"], diff:"Medium",
+   statement:`Pick K tiles so the largest <code>max(|Δh|,|Δw|)</code> between any two is as small as possible.`,
+   ex:`k=2 of (1,1)(2,2)(5,5) → 1`,
+   idea:["Guess the answer <code>D</code> and ask: <b>do K tiles fit in some D×D box</b> in (height,width) space?",
+         "Drop tiles into a 401×401 grid, build a <b>2D prefix sum</b> of counts.",
+         "For a guess D, slide the box over the grid; if any box holds ≥K tiles, D works. Binary-search the smallest such D."],
+   cx:["Time <b>O(400²·log400)</b>","Space <b>O(400²)</b>"], viz:"tiles" },
+
+ { id:"p8", num:8, title:"Remove Stones — Neighbour Cost", file:"4_3_stones.java",
+   chips:["DP (2-state)"], diff:"Medium",
+   statement:`Removing a stone costs by how many neighbours remain: 0 / <code>a[i]</code> (one) / <code>b[i]</code> (two). Min total.`,
+   ex:`order of removal decides cost`,
+   idea:["Between adjacent stones, all that matters is <b>which is removed first</b>.",
+         "DP left→right with a flag: <code>dp[i][0/1]</code> = min cost of stones 1..i when stone i+1 is removed <b>before / after</b> stone i.",
+         "Transitions add <code>a</code>, <code>b</code> or 0 depending on neighbours still present. Answer <code>dp[n][0]</code>."],
+   cx:["Time <b>O(n)</b>","Space <b>O(n)</b>"], viz:null },
+
+ { id:"p9", num:9, title:"Garbage-Cleaning Robots", file:"7_1_robot.java",
+   chips:["DP"], diff:"Medium",
+   statement:`Deploying a robot costs <code>m</code>; it cleans left→right one step at a time. Each tick you pay all uncleaned garbage. Min total.`,
+   ex:`[3,1,4,1,5], m=2 → 8`,
+   idea:["<code>solve(in,l)</code> = min cost from index <code>in</code>, current robot deployed at <code>l</code>.",
+         "Two choices: <b>deploy a fresh robot</b> here (<code>m + solve(in+1,in)</code>), or <b>let the robot from l walk over</b> (garbage <code>in</code> waits <code>(in−l)</code> ticks: <code>(in−l)·A[in] + solve(in+1,l)</code>).",
+         "Start by deploying at the first non-empty index. Filled bottom-up to avoid deep recursion."],
+   cx:["Time <b>O(n²)</b>","Space <b>O(n²)</b>"], viz:null },
+
+ { id:"p10", num:10, title:"Merge Strings into a Loop", file:"5_1_strings.java",
+   chips:["DP over digit pairs"], diff:"Medium",
+   statement:`Glue <code>arr[i]</code> before <code>arr[j]</code> (i&lt;j) only if last char of i = first char of j. Final string must start = end. Max length?`,
+   ex:`[14,123,323,321,421,535] → 9`,
+   idea:["Only 10 digits exist, so track chains by <code>(startDigit, endDigit)</code>.",
+         "Scan right→left. <code>best[f][e]</code> = longest chain starting with <code>f</code>, ending with <code>e</code>.",
+         "String i (first f, last l) can lead any chain that starts with l: <code>best[f][e] = best[l][e] + len</code>. Answer = max <code>best[d][d]</code>.",
+         "This O(N·10) table replaces the original O(N·100) memo — same answer, far less memory."],
+   cx:["Time <b>O(N·10)</b>","Space <b>O(100)</b>"], viz:null },
+
+ { id:"p11", num:11, title:"Days to Clear the Warehouse", file:"2_days.java",
+   chips:["Backtracking","Sort by growth"], diff:"Medium",
+   statement:`Each day every item grows by <code>B[i]</code>, then you zero one item. Fewest days until total ≤ K?`,
+   ex:`export the fast-growers last`,
+   idea:["Run <code>d</code> days ⇒ <code>d</code> exports. Final total = <code>Asum + Bsum·d − (exported a) − (exported b·day)</code>.",
+         "Sort by growth <code>b</code> so bigger growers get the later days (bigger savings).",
+         "Backtrack ‘export this item or not’ and keep the smallest feasible <code>d</code>. N is small, so this is fast."],
+   cx:["Time <b>O(2^N)</b>","Space <b>O(N)</b>"], viz:null },
+
+ { id:"p12", num:12, title:"Serial Numbers with Digit Sum S", file:"7_2_digit_sum.java",
+   chips:["Digit DP"], diff:"Hard",
+   statement:`Count numbers in <code>[0..A]</code> whose digits sum to S. A can be 100 digits. Answer mod 1e9+7.`,
+   ex:`A=101, S=3 → 4  (3,12,21,30)`,
+   idea:["Build the number left→right. State = <code>(pos, sumLeft, tight)</code>.",
+         "<code>tight</code> means the prefix still equals A’s prefix, so this digit is capped by <code>A[pos]</code>; once you go lower, later digits are free 0–9.",
+         "Sum the ways over digit choices, memoise. Leading zeros are fine — they add 0 to the sum."],
+   cx:["Time <b>O(len·S·10)</b>","Space <b>O(len·S)</b>"], viz:null },
+
+ { id:"p13", num:13, title:"Apple Game — Right Turns Only", file:"apples.java",
+   chips:["0-1 BFS","Grid state"], diff:"Hard",
+   statement:`Eat apples in order 1,2,3… You always go straight; only <b>right turns</b> allowed (each costs 1). Fewest turns, else −1.`,
+   ex:`state = (row,col,eaten,facing)`,
+   idea:["Model a <b>state</b> as <code>(row, col, applesEaten, facing)</code>.",
+         "Going straight costs 0 ⇒ push to the <b>front</b> of a deque; a right turn costs 1 ⇒ push to the <b>back</b>. That’s 0-1 BFS.",
+         "Answer = fewest turns to reach any state where all apples are eaten. (Fixes the original, which printed a huge number instead of −1 when impossible.)"],
+   cx:["Time <b>O(N²·M·4)</b>","Space <b>O(N²·M·4)</b>"], viz:"apples" },
+
+ { id:"p14", num:14, title:"Logging Roadside Trees", file:"logging_trees.java",
+   chips:["DP","Greedy order"], diff:"Hard",
+   statement:`Cut all trees; they must be loaded in <b>non-increasing length</b>. Move 1 = 1 min, cut 1 = 1 min. Start 0, end N. Min time.`,
+   ex:`Fig.2 → 11`,
+   idea:["Group tree positions by length; process lengths <b>largest first</b> (forced by the loading rule).",
+         "For one length, <code>cost = #trees + (rightPos − leftPos)</code> (the chops plus the sweep across them).",
+         "<code>f(idx,pos)</code>: enter, go to one end, sweep to the other, continue. Take the cheaper of ‘left-first’ vs ‘right-first’.",
+         "Two bugs fixed: a stray debug print, and stepping through lengths that have no trees."],
+   cx:["Time <b>O(#lengths·N)</b>","Space <b>O(#lengths·N)</b>"], viz:null },
+
+ { id:"p15", num:15, title:"Balance the Army Tree", file:"soldiers.java",
+   chips:["Tree DFS","Greedy"], diff:"Hard",
+   statement:`Siblings must have equal subtree-sums; you may only <b>delete</b> soldiers. Min removed — print total left.`,
+   ex:`children 5 & 3 → both 3`,
+   idea:["Post-order DFS. A leaf’s subtree sum is its own count.",
+         "At an internal node you can only <b>lower</b> siblings, so bring them all down to the <b>smallest</b> sibling (forced ⇒ optimal).",
+         "This node’s subtree sum becomes <code>own + min·(#children)</code>, and that bubbles up."],
+   cx:["Time <b>O(N)</b>","Space <b>O(N)</b>"], viz:"tree15" },
+
+ { id:"p16", num:16, title:"Best Vertex — Weighted Distances", file:"min_cost.java",
+   chips:["Rerooting DP"], diff:"Harder",
+   statement:`Pick a vertex v maximising <code>Σ dist(v,i)·a[i]</code> over the tree.`,
+   ex:`try every root in O(N) total`,
+   idea:["Root once. <code>subSum[u]</code> = values in u’s subtree; <code>cost[u]</code> = the weighted-distance sum for u’s subtree.",
+         "<b>Reroot</b>: moving the root across edge u→x, x’s subtree gets 1 closer and everything else 1 farther. Update <code>cost</code> in O(1), recurse, undo.",
+         "Every vertex’s full answer is seen exactly once ⇒ O(N). (Runs on a big-stack thread since N can be 2·10⁵.)"],
+   cx:["Time <b>O(N)</b>","Space <b>O(N)</b>"], viz:"tree16" },
+
+ { id:"p17", num:17, title:"Warehouse → Airport Deliveries", file:"4_1_warehouse.java",
+   chips:["BFS","Cost arithmetic"], diff:"Hardest",
+   statement:`Truck: garage→warehouse (empty) →airport (carrying g). Moving 1 block costs <code>1+g</code>. Max goods within budget C.`,
+   ex:`grid BFS gives the distances`,
+   idea:["BFS from the <b>garage</b> and from the <b>airport</b> to get shortest steps to every cell.",
+         "One trip through warehouse w: <code>cost = ds + dd·(1+g) ≤ C</code> ⇒ <code>g ≤ (C−ds)/dd − 1</code>.",
+         "Try each warehouse, keep the biggest feasible g.",
+         "<b>Note:</b> this is optimal for one trip per warehouse. Chaining several warehouses in a single route needs a heavier state-search DP."],
+   cx:["Time <b>O(T·h·w)</b>","Space <b>O(h·w)</b>"], viz:null },
+];
+
+/* full Java sources live in the <script type="text/plain" id="src-pN"> blocks above */
+function source(id){const nd=document.getElementById('src-'+id);return nd?nd.textContent.replace(/^\n/,'').replace(/\s+$/,''):'';}
+
+/* input/output format + pattern-trigger takeaway, keyed by problem id */
+const extra={
+ p1:{io:{in:'One line: the necklace string of <code>R</code> / <code>B</code> characters.',
+        out:'A single integer — the minimum number of end-removals.'},
+     take:'When a problem asks about <b>equal counts of two symbols in a subarray</b>, reach for the <code>+1 / −1</code> balance trick plus a first-occurrence map. Same move as “longest subarray with equal 0s and 1s”.'},
+ p2:{io:{in:'<code>T</code> test cases. Each: a line <code>n m</code>, then the <code>n</code> values of <code>a</code>, then the <code>m</code> values of <code>b</code>.',
+        out:'Per case: <code>Optimal D: &lt;value&gt;</code> (the max difference is also computed, in <code>mx</code>).'},
+     take:'Optimising a threshold over a <b>piecewise-constant objective</b>? Never test every real number — only the breakpoints where the function can change. Sort, then sweep the candidates.'},
+ p3:{io:{in:'<code>N</code>, then the <code>N</code> weights (whitespace-separated).',
+        out:'<code>Minimum difference: &lt;value&gt;</code>.'},
+     take:'“Partition into two groups with minimum difference” is the canonical <b>subset-sum</b>. Burn <code>reach[s] |= reach[s−w]</code> with a downward sum-loop into muscle memory.'},
+ p4:{io:{in:'<code>N</code>, then the <code>N</code> values.',
+        out:'<code>The minimum absolute difference is: &lt;value&gt;</code>.'},
+     take:'Two files, one algorithm: a packed version (#3) and a readable version (#4). Recognising they are the <b>same DP dressed differently</b> stops you memorising four “different” solutions to one idea.'},
+ p5:{io:{in:'<code>T</code> cases. Each: <code>N M</code>, then <code>N</code> query x’s, <code>N</code> query y’s, then the <code>M</code> path-vertex x’s and <code>M</code> path-vertex y’s.',
+        out:'Per case: <code>#&lt;count&gt;</code>.'},
+     take:'“Is this point on any of thousands of axis-aligned segments?” → <b>bucket by the fixed coordinate, merge intervals, binary search</b>. Grouping collapses a 2-D question into many independent 1-D ones.'},
+ p6:{io:{in:'<code>T</code> cases. Each: <code>n m</code> (count, grid size), then target <code>p q</code>, then <code>n</code> lines of car coordinates <code>x y</code>.',
+        out:'Per case: <code># &lt;tc&gt; &lt;answer&gt;</code>.'},
+     take:'Reachability along a line collapses to two questions: <b>“enough distance?”</b> and <b>“right parity?”</b> Triangular numbers <code>t(t+1)/2</code> are the signature of “step k on move k”.'},
+ p7:{io:{in:'<code>n k</code>, then <code>n</code> lines of <code>height width</code> (coordinates 0..400).',
+        out:'A single integer — the minimised maximum distance.'},
+     take:'Two triggers fire: <b>“minimise the max” → binary-search the answer</b>, and <b>“count points in a rectangle repeatedly” → 2D prefix sum</b>. Chebyshev distance is the hint that boxes, not circles, are the region.'},
+ p8:{io:{in:'<code>n</code>, then the <code>n</code> values of <code>a</code>, then the <code>n</code> values of <code>b</code>.',
+        out:'A single integer — the minimum total removal cost.'},
+     take:'When an action’s cost depends on <b>which of two neighbours goes first</b>, a linear DP carrying a tiny “relation to the next element” flag usually cracks it. State design beats cleverness.'},
+ p9:{io:{in:'<code>n m</code>, then the <code>n</code> garbage amounts.',
+        out:'A single integer — the minimum total cost.'},
+     take:'When a running cost is paid “every step for everything still pending”, <b>re-attribute it to each item as (amount × waiting time)</b>. That per-item decomposition turns a messy global cost into a clean DP.'},
+ p10:{io:{in:'<code>T</code> cases. Each: <code>n</code>, then <code>n</code> numeric strings.',
+        out:'Per case: the maximum achievable length.'},
+     take:'A <b>small, fixed alphabet</b> is a superpower: index the DP by “endpoint symbol” to shrink <code>O(N²)</code> pairing into <code>O(N × alphabet)</code>. Watch for “only the ends connect”.'},
+ p11:{io:{in:'<code>T</code> cases. Each: <code>n K</code>, then <code>n</code> lines <code>a b</code>.',
+        out:'Per case: <code>#&lt;tc&gt; &lt;answer&gt;</code>.'},
+     take:'Two-part pattern: an <b>exchange argument</b> fixes the optimal order (sort by growth), then a small <b>backtracking search</b> handles the discrete “which ones”. Prove the ordering first, brute-force second.'},
+ p12:{io:{in:'<code>A</code> (a big number as a string) and <code>S</code>.',
+        out:'A single integer — the count mod 1e9+7.'},
+     take:'Any “how many numbers up to N satisfy …” screams <b>digit DP</b>: build left-to-right over <code>(position, running property, tight)</code>. The <code>tight</code> flag is what makes the bound N tractable.'},
+ p13:{io:{in:'<code>T</code> cases. Each: <code>n</code>, then the <code>n×n</code> grid.',
+        out:'Per case: <code>#&lt;tc&gt; &lt;turns or −1&gt;</code>.'},
+     take:'Shortest path where every edge costs <b>0 or 1</b> → <b>0-1 BFS with a deque</b> (front for 0, back for 1). When legal moves depend on history, <b>fold that history into the state</b>.'},
+ p14:{io:{in:'<code>n</code>, then <code>n</code> lines <code>leftLen rightLen</code> (0 = no tree).',
+        out:'A single integer — the minimum minutes.'},
+     take:'When a constraint <b>removes your ordering freedom</b>, don’t fight it — process in the forced order and DP over the small remaining choice (here, “which end do I exit?”). Reduce each phase to enter-point → exit-point.'},
+ p15:{io:{in:'<code>n</code>, then <code>n</code> lines <code>parent soldiers</code> (parent <code>−1</code> = root).',
+        out:'A single integer — total soldiers remaining after balancing.'},
+     take:'Equality constraints under a <b>one-directional operation</b> (“only delete”, “only decrease”) collapse to a forced target — usually the min or max — propagated by a clean <b>post-order tree DP</b>.'},
+ p16:{io:{in:'<code>n</code>, then the <code>n</code> values, then <code>n−1</code> edges <code>x y</code>.',
+        out:'A single integer — the maximum weighted-distance sum.'},
+     take:'Need the <b>same aggregate for every possible root</b> of a tree? Compute it once and <b>reroot</b>: derive the neighbour’s answer from yours in O(1) with add/undo bookkeeping. The go-to for “sum of distances from all nodes”.'},
+ p17:{io:{in:'<code>T</code> cases. Each: <code>h w C</code>, then the <code>h×w</code> grid.',
+        out:'Per case: the maximum goods deliverable.'},
+     take:'Grid problems with a <b>fixed start and end</b> reduce to “<b>BFS from each anchor, then arithmetic per candidate</b>”. Precomputed distance fields turn a routing question into a formula you evaluate in a loop.'}
+};
+
+/* ---------- LEGACY abbreviated snippets (no longer rendered; full sources are the text/plain blocks above) ---------- */
+const code={};
+code.p1=`class RB {
+  public static void main(String[] a) throws Exception {
+    String s = new java.io.BufferedReader(
+        new java.io.InputStreamReader(System.in)).readLine().trim();
+    int n = s.length(), maxLen = 0, prefix = 0;
+    java.util.Map<Integer,Integer> firstSeen = new java.util.HashMap<>();
+    firstSeen.put(0, -1);                       // empty prefix sits before index 0
+    for (int i = 0; i < n; i++) {
+      prefix += (s.charAt(i) == 'R') ? 1 : -1;
+      Integer at = firstSeen.get(prefix);
+      if (at == null) firstSeen.put(prefix, i);         // first time we see this sum
+      else            maxLen = Math.max(maxLen, i - at);// balanced stretch found
+    }
+    System.out.println(n - maxLen);
+  }
+}`;
+code.p2=`// value(arr) = size + (#elements > D). Test D at each distinct value.
+static int countLE(int[] sorted, int d){          // #elements <= d  (upper_bound)
+  int lo=0, hi=sorted.length;
+  while(lo<hi){ int mid=(lo+hi)>>>1; if(sorted[mid]<=d) lo=mid+1; else hi=mid; }
+  return lo;
+}
+static int bestD(int[] a, int[] b){
+  int[] sa=a.clone(), sb=b.clone(); java.util.Arrays.sort(sa); java.util.Arrays.sort(sb);
+  java.util.TreeSet<Integer> cand=new java.util.TreeSet<>();
+  for(int x:sa) cand.add(x); for(int x:sb) cand.add(x);
+  cand.add(cand.first()-1); cand.add(cand.last()+1);
+  int mx=Integer.MIN_VALUE, best=0;
+  for(int d:cand){
+    int ca=countLE(sa,d), cb=countLE(sb,d);
+    int diff=(ca+(sa.length-ca)*2) - (cb+(sb.length-cb)*2);
+    if(diff>mx){ mx=diff; best=d; }
+  }
+  return best;
+}`;
+code.p3=`// difference |total - 2s| minimised over reachable subset sums s
+boolean[] reach = new boolean[total + 1];
+reach[0] = true;
+for (int x : w)
+  for (int s = total; s >= x; s--)      // downward => each item used once
+    if (reach[s - x]) reach[s] = true;
+int best = 0;
+for (int s = total/2; s >= 0; s--)       // reachable sum closest to half
+  if (reach[s]) { best = s; break; }
+System.out.println("Minimum difference: " + Math.abs(total - 2*best));`;
+code.p4=`static int minSubsetSumDifference(int[] arr){
+  int total = 0; for (int x : arr) total += x;
+  boolean[] reach = new boolean[total + 1]; reach[0] = true;
+  for (int x : arr)
+    for (int s = total; s >= x; s--)
+      if (reach[s - x]) reach[s] = true;
+  int mini = Integer.MAX_VALUE;
+  for (int s = 0; s <= total; s++)
+    if (reach[s]) mini = Math.min(mini, Math.abs(total - 2*s));
+  return mini;
+}`;
+code.p5=`// group segments; merge overlapping; membership by binary search
+static List<int[]> mergeIntervals(List<int[]> raw){
+  raw.sort(java.util.Comparator.comparingInt(a -> a[0]));
+  List<int[]> merged = new ArrayList<>();
+  int start = raw.get(0)[0], end = raw.get(0)[1];
+  for (int i = 1; i < raw.size(); i++){
+    if (raw.get(i)[0] <= end + 1) end = Math.max(end, raw.get(i)[1]); // overlap/adjacent
+    else { merged.add(new int[]{start,end}); start=raw.get(i)[0]; end=raw.get(i)[1]; }
+  }
+  merged.add(new int[]{start,end});
+  return merged;
+}
+static boolean isInSegment(List<int[]> iv, int val){
+  if (iv == null) return false;
+  int lo=0, hi=iv.size()-1, cand=-1;                 // last interval with start <= val
+  while(lo<=hi){ int mid=(lo+hi)>>>1;
+    if(iv.get(mid)[0]<=val){ cand=mid; lo=mid+1; } else hi=mid-1; }
+  return cand!=-1 && val<=iv.get(cand)[1];
+}
+// a point is on the path if it lies on a vertical OR horizontal merged interval`;
+code.p6=`// parity + triangular reach + binary search on t
+long maxDist = 0, parity = -1; boolean bad = false;
+for (each car){
+  long d = Math.abs(p-x) + Math.abs(q-y);
+  maxDist = Math.max(maxDist, d);
+  if (parity == -1) parity = d & 1;
+  else if ((d & 1) != parity) bad = true;            // mixed parity => impossible
+}
+if (bad) { print(-1); return; }
+long lo=0, hi=2_000_000_000L, t=hi;                  // smallest t with t(t+1)/2 >= maxDist
+while(lo<=hi){ long m=lo+(hi-lo)/2;
+  if (m*(m+1)/2 >= maxDist){ t=m; hi=m-1; } else lo=m+1; }
+long tri = t*(t+1)/2;
+long ans = (tri&1)==parity ? t
+         : ((t+1)*(t+2)/2 & 1)==parity ? t+1 : t+2;  // fix parity by bumping t`;
+code.p7=`// binary search the answer D; feasibility via 2D prefix-sum sliding box
+static boolean isValid(int mid, int k, int[][] pre){
+  for (int i=0; i+mid<401; i++)
+    for (int j=0; j+mid<401; j++){
+      int cnt = pre[i+mid][j+mid]
+              - (i>0? pre[i-1][j+mid]:0)
+              - (j>0? pre[i+mid][j-1]:0)
+              + (i>0&&j>0? pre[i-1][j-1]:0);
+      if (cnt >= k) return true;                      // K tiles fit in a mid x mid box
+    }
+  return false;
+}
+int low=0, high=400, ans=400;
+while(low<=high){ int mid=(low+high)/2;
+  if (isValid(mid,k,freq)){ ans=mid; high=mid-1; } else low=mid+1; }`;
+code.p8=`static long minRemovalCost(int n, long[] a, long[] b){
+  long[][] dp = new long[n+1][2];
+  dp[1][0] = 0;                 // stone 2 removed before stone 1
+  dp[1][1] = a[0];              // stone 2 removed after  stone 1
+  for (int i = 2; i <= n; i++){
+    dp[i][0] = Math.min(dp[i-1][0] + a[i-1], dp[i-1][1]);
+    dp[i][1] = Math.min(dp[i-1][0] + b[i-1], dp[i-1][1] + a[i-1]);
+  }
+  return dp[n][0];              // no stone n+1 exists
+}`;
+code.p9=`// solve(in,l): min cost from index in, current robot deployed at l
+int first = 0; while (first<n && A[first]==0) first++;
+if (first==n){ System.out.println(0); return; }
+long[][] dp = new long[n+1][n+1];               // dp[n][*] = 0
+for (int in=n-1; in>=0; in--)
+  for (int l=0; l<=in; l++){
+    long deploy = m + dp[in+1][in];             // start a fresh robot here
+    long walk   = (long)(in-l)*A[in] + dp[in+1][l]; // robot from l walks over
+    dp[in][l] = Math.min(deploy, walk);
+  }
+System.out.println(m + dp[first+1][first]);`;
+code.p10=`long[][] best = new long[10][10];               // best[start][end] = longest chain
+for (int i = n-1; i >= 0; i--){
+  int f = v[i].charAt(0)-'0', l = v[i].charAt(v[i].length()-1)-'0', len = v[i].length();
+  for (int e = 0; e < 10; e++)
+    if (best[l][e] != 0)                          // prepend string i to a chain starting at l
+      best[f][e] = Math.max(best[f][e], best[l][e] + len);
+  best[f][l] = Math.max(best[f][l], len);         // string i alone
+}
+long res = 0; for (int d=0; d<10; d++) res = Math.max(res, best[d][d]);`;
+code.p11=`// items sorted by growth b; export bigger-b later
+static void solve(int ind, long days, long as, long bs){
+  if (ind == n){
+    long total = aSum + bSum*days;
+    if (total - as - bs <= M) best = Math.min(best, days);
+    return;
+  }
+  solve(ind+1, days+1, as + aArr[ind], bs + bArr[ind]*(days+1)); // export on day days+1
+  solve(ind+1, days,   as,             bs);                       // skip
+}`;
+code.p12=`static int solve(int pos, int remSum, int tight){
+  if (remSum < 0) return 0;
+  if (pos == A.length()) return remSum == 0 ? 1 : 0;
+  if (dp[pos][remSum][tight] != -1) return dp[pos][remSum][tight];
+  int limit = (tight==1) ? (A.charAt(pos)-'0') : 9, ans = 0;
+  for (int d = 0; d <= limit; d++){
+    int nextTight = (tight==1 && d==limit) ? 1 : 0;
+    ans = (ans + solve(pos+1, remSum-d, nextTight)) % MOD;
+  }
+  return dp[pos][remSum][tight] = ans;
+}`;
+code.p13=`// 0-1 BFS: straight = weight 0 (push front), right turn = weight 1 (push back)
+Deque<int[]> dq = new ArrayDeque<>();
+int startCnt = (v[0][0]==1)?1:0;
+dp[0][0][startCnt][0] = 0; dq.addFirst(new int[]{0,0,startCnt,0});
+while(!dq.isEmpty()){
+  int[] c = dq.pollFirst(); int x=c[0],y=c[1],cnt=c[2],dir=c[3];
+  int base = dp[x][y][cnt][dir];
+  relax(x,y,cnt, dir,          base,   false);  // go straight, cost 0
+  relax(x,y,cnt,(dir+1)%4,     base+1, true);   // right turn, cost 1
+}
+// answer = min over cells/dirs of dp[..][totalApples][..], else -1`;
+code.p14=`// process lengths largest-first; f(idx,pos) sweeps each length's span
+static int f(int idx, int pos){
+  if (idx == lengthsDesc.length) return Math.abs(pos - n);   // walk to the end
+  if (dp[idx][pos] != MIN) return dp[idx][pos];
+  int lo=loArr[idx], ro=roArr[idx], c=countArr[idx];         // c = #trees + (ro-lo)
+  int res = Math.min(
+      Math.abs(pos-lo) + c + f(idx+1, ro),   // hit left end, exit right
+      Math.abs(pos-ro) + c + f(idx+1, lo));  // hit right end, exit left
+  return dp[idx][pos] = res;
+}`;
+code.p15=`static long dfs(int u){
+  if (tree[u].isEmpty()) return soldiers[u];        // leaf
+  long min = Long.MAX_VALUE;
+  for (int v : tree[u]) min = Math.min(min, dfs(v));// smallest sibling subtree sum
+  return soldiers[u] + min * tree[u].size();        // pull every sibling down to min
+}`;
+code.p16=`static void precalc(int node, int p){
+  subSum[node] = value[node]; cost[node] = 0;
+  for (int x : g[node]) if (x!=p){
+    precalc(x, node);
+    subSum[node] += subSum[x];
+    cost[node]   += cost[x] + subSum[x];            // every subtree node is +1 farther
+  }
+}
+static void reroot(int node, int p){
+  maxi = Math.max(maxi, cost[node]);
+  for (int x : g[node]) if (x!=p){
+    subSum[node]-=subSum[x];  cost[node]-=cost[x]+subSum[x];   // detach x
+    subSum[x]+=subSum[node];  cost[x]+=cost[node]+subSum[node];// x becomes the root
+    reroot(x, node);
+    subSum[x]-=subSum[node];  cost[x]-=cost[node]+subSum[node];// undo
+    subSum[node]+=subSum[x];  cost[node]+=cost[x]+subSum[x];
+  }
+}`;
+code.p17=`static void bfs(int sx,int sy,long[][] dist,int[][] mat){    // shortest steps, trees blocked
+  for (long[] r:dist) java.util.Arrays.fill(r, INF);
+  Queue<int[]> q=new ArrayDeque<>(); dist[sx][sy]=0; q.add(new int[]{sx,sy});
+  while(!q.isEmpty()){ int[] c=q.poll(); int x=c[0],y=c[1];
+    for(int i=0;i<4;i++){ int nx=x+dx[i],ny=y+dy[i];
+      if(inside(nx,ny)&&mat[nx][ny]!=1&&dist[nx][ny]>dist[x][y]+1){
+        dist[nx][ny]=dist[x][y]+1; q.add(new int[]{nx,ny}); } } }
+}
+long maxGoods=0;
+for (int[] w:warehouses){ int x=w[0],y=w[1];
+  long budget=c-ds[x][y];
+  if(budget>0){ long g=budget/dd[x][y]-1; if(g>0) maxGoods=Math.max(maxGoods,g); } }`;
+
+/* ---------- render primer ---------- */
+const primer=$('#primer');
+patterns.forEach(p=>{
+  const c=el('div','pcard');
+  c.append(el('h3',null,p.h), el('p',null,p.p));
+  const u=el('div','used',p.u); c.append(u);
+  primer.append(c);
+});
+
+/* ---------- render problems + rail ---------- */
+const probList=$('#probList'), railList=$('#railList');
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+const KW=/\b(abstract|boolean|break|byte|case|catch|char|class|continue|default|do|double|else|enum|extends|final|finally|float|for|if|implements|import|instanceof|int|interface|long|new|package|private|protected|public|return|short|static|super|switch|this|throw|throws|try|void|while|true|false|null)\b/;
+function highlight(src){
+  const RE=/(\/\*[\s\S]*?\*\/|\/\/[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(\d[\d_]*L?)\b|([A-Za-z_$][\w$]*)/g;
+  let out='',last=0,m;
+  while((m=RE.exec(src))){
+    out+=esc(src.slice(last,m.index));
+    if(m[1])                     out+='<span class="cmt">'+esc(m[1])+'</span>';
+    else if(m[2])                out+='<span class="str">'+esc(m[2])+'</span>';
+    else if(m[3])                out+='<span class="num">'+esc(m[3])+'</span>';
+    else if(m[4]&&KW.test(m[4])) out+='<span class="kw">'+esc(m[4])+'</span>';
+    else                         out+=esc(m[0]);
+    last=RE.lastIndex;
+  }
+  out+=esc(src.slice(last));
+  return out;
+}
+problems.forEach(pr=>{
+  // rail entry
+  const ra=el('a'); ra.href='#'+pr.id;
+  ra.append(el('span','n',String(pr.num)), el('span',null,pr.title));
+  railList.append(ra);
+
+  // card
+  const card=el('section','prob'); card.id=pr.id;
+  const head=el('div','prob-head');
+  head.append(el('span','prob-num','#'+pr.num), el('h3',null,pr.title));
+  card.append(head);
+
+  const chips=el('div','chips');
+  chips.append(el('span','chip diff',pr.diff));
+  pr.chips.forEach(c=>chips.append(el('span','chip',c)));
+  card.append(chips);
+
+  const ext=extra[pr.id]||{};
+
+  const st=el('div','statement'); st.innerHTML=pr.statement;
+  if(pr.ex){ const e=el('span','ex',pr.ex); st.append(document.createElement('br'), e); }
+  card.append(st);
+
+  if(ext.io){
+    const io=el('div','io');
+    const mk=(label,txt)=>{const d=el('div','iobox');d.innerHTML='<h5>'+label+'</h5><p>'+txt+'</p>';return d;};
+    io.append(mk('Input',ext.io.in), mk('Output',ext.io.out));
+    card.append(io);
+  }
+
+  const idea=el('div','idea');
+  idea.append(el('div','lbl','Build the intuition'));
+  const ol=el('ol'); pr.idea.forEach(s=>{const li=el('li');li.innerHTML=s;ol.append(li);});
+  idea.append(ol); card.append(idea);
+  if(ext.take){ const tk=el('div','take'); tk.innerHTML='<b>Pattern trigger — </b>'+ext.take; card.append(tk); }
+
+  if(pr.viz){ const v=buildViz(pr.viz); if(v) card.append(v); }
+
+  const cx=el('div','cx'); pr.cx.forEach(s=>{const b=el('span');b.innerHTML=s;cx.append(b);});
+  card.append(cx);
+
+  const full=source(pr.id);
+  if(full){
+    const d=el('details','code');
+    d.append(el('summary',null,'Java  ·  '+pr.file+'  ·  full solution with main'));
+    const pre=el('pre'); pre.innerHTML=highlight(full);
+    d.append(pre); card.append(d);
+  }
+  probList.append(card);
+});
+
+/* ================= INTERACTIVE VISUALS ================= */
+function panel(title){
+  const w=el('div','viz'); w.append(el('div','vtitle',title)); return w;
+}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function flash(node){ if(!node) return; node.classList.remove('flash'); void node.offsetWidth; node.classList.add('flash'); }
+const rint=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
+
+function buildViz(kind){
+  if(kind==='balance')   return vizBalance();
+  if(kind==='subset')    return vizSubset();
+  if(kind==='triangular')return vizTriangular();
+  if(kind==='tiles')     return vizTiles();
+  if(kind==='apples')    return vizApples();
+  return null;
+}
+
+/* ---- #1 prefix-sum balance walk ---- */
+function vizBalance(){
+  const w=panel('Interactive · prefix-sum walk');
+  const ctrls=el('div','controls');
+  const inp=el('input'); inp.type='text'; inp.value='BBRRBRBRBRBBR';
+  const btn=el('button',null,'🎲 example'); btn.type='button';
+  ctrls.append(el('label',null,'necklace'), inp, btn);
+  const cv=el('canvas'); cv.width=760; cv.height=200;
+  const out=el('div','readout');
+  w.append(ctrls,cv,out);
+  function run(){
+    const s=inp.value.replace(/[^RBrb]/g,'').toUpperCase()||'';
+    const n=s.length; const pre=[0]; for(let i=0;i<n;i++) pre.push(pre[i]+(s[i]==='R'?1:-1));
+    // longest balanced
+    const first={0:-1}; let maxLen=0,bi=0,bj=0;
+    for(let i=0;i<n;i++){const v=pre[i+1];
+      if(first[v]===undefined) first[v]=i;
+      else if(i-first[v]>maxLen){maxLen=i-first[v];bi=first[v]+1;bj=i;}}
+    draw(s,pre,bi,bj,maxLen);
+    out.innerHTML = n? `longest balanced stretch = <b>${maxLen}</b> (indices ${maxLen?bi+'…'+bj:'—'}) &nbsp;→&nbsp; remove <b>${n-maxLen}</b>` : 'type some R/B letters';
+    flash(out);
+  }
+  const example=()=>{let s='';for(let i=rint(8,16);i>0;i--)s+=Math.random()<0.5?'R':'B';inp.value=s;run();};
+  function draw(s,pre,bi,bj,maxLen){
+    const ctx=cv.getContext('2d'), W=cv.width,H=cv.height; ctx.clearRect(0,0,W,H);
+    const n=s.length; if(!n) return;
+    const padL=30,padR=20,padT=20,padB=30; const gw=W-padL-padR, gh=H-padT-padB;
+    let mn=Math.min(...pre),mx=Math.max(...pre); if(mn===mx){mn--;mx++;}
+    const x=i=>padL+gw*i/n, y=v=>padT+gh*(mx-v)/(mx-mn);
+    // zero line
+    ctx.strokeStyle=css('--line'); ctx.lineWidth=1; ctx.beginPath();
+    ctx.moveTo(padL,y(0)); ctx.lineTo(W-padR,y(0)); ctx.stroke();
+    ctx.fillStyle=css('--muted'); ctx.font='11px ui-monospace';
+    ctx.fillText('sum 0',2,y(0)+3);
+    // highlight balanced band
+    if(maxLen){ctx.fillStyle=css('--amber-soft');ctx.fillRect(x(bi),padT,x(bj+1)-x(bi),gh);}
+    // walk line
+    ctx.strokeStyle=css('--accent'); ctx.lineWidth=2; ctx.beginPath();
+    for(let i=0;i<=n;i++){const px=x(i),py=y(pre[i]); i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.stroke();
+    // dots + letters
+    for(let i=0;i<n;i++){
+      const px=x(i+0.0),py=y(pre[i+1]);
+      ctx.fillStyle=s[i]==='R'?css('--accent'):css('--muted');
+      ctx.beginPath();ctx.arc(x(i+1),py,3,0,7);ctx.fill();
+      ctx.fillStyle=css('--ink');ctx.font='11px ui-monospace';
+      ctx.fillText(s[i], x(i)+ (x(1)-x(0))/2 -3, H-10);
+    }
+  }
+  btn.onclick=example; inp.oninput=run; setTimeout(run,0);
+  return w;
+}
+
+/* ---- #3/#4 subset-sum reachable table ---- */
+function vizSubset(){
+  const w=panel('Interactive · reachable subset sums');
+  const ctrls=el('div','controls');
+  const inp=el('input'); inp.type='text'; inp.value='3 3 7 3 1';
+  const btn=el('button',null,'🎲 example'); btn.type='button';
+  ctrls.append(el('label',null,'weights'), inp, btn);
+  const cells=el('div','cells'); const out=el('div','readout');
+  w.append(ctrls,cells,out);
+  function run(){
+    const nums=inp.value.split(/[^0-9]+/).filter(x=>x).map(Number).filter(x=>x>0);
+    const total=nums.reduce((a,b)=>a+b,0);
+    if(!total){cells.innerHTML='';out.textContent='enter some positive numbers';flash(out);return;}
+    const reach=new Array(total+1).fill(false); reach[0]=true;
+    const parent=new Array(total+1).fill(-1);
+    for(const x of nums) for(let s=total;s>=x;s--) if(reach[s-x]&&!reach[s]){reach[s]=true;parent[s]=x;}
+    let best=0; for(let s=Math.floor(total/2);s>=0;s--) if(reach[s]){best=s;break;}
+    // reconstruct subset for best
+    const sub=[]; let cur=best; while(cur>0){sub.push(parent[cur]);cur-=parent[cur];}
+    cells.innerHTML='';
+    for(let s=0;s<=total;s++){
+      const c=el('div','cell'+(reach[s]?' on':'')+(s===best?' best':''));
+      c.append(el('div','idx',String(s)));
+      c.append(el('div',null, reach[s]?'✓':'·'));
+      cells.append(c);
+    }
+    out.innerHTML=`total ${total} · best half-sum <b>${best}</b> (group ${JSON.stringify(sub)}) · other side ${total-best} → difference <b>${Math.abs(total-2*best)}</b>`;
+    flash(out);
+  }
+  const example=()=>{let a=[];for(let i=rint(4,6);i>0;i--)a.push(rint(1,9));inp.value=a.join(' ');run();};
+  btn.onclick=example; inp.oninput=run; setTimeout(run,0);
+  return w;
+}
+
+/* ---- #6 triangular reach ---- */
+function vizTriangular(){
+  const w=panel('Interactive · triangular reach & parity');
+  const ctrls=el('div','controls');
+  const inp=el('input'); inp.type='text'; inp.value='3 1';
+  const btn=el('button',null,'🎲 example'); btn.type='button';
+  ctrls.append(el('label',null,'distances'), inp, btn);
+  const cv=el('canvas'); cv.width=760; cv.height=120; const out=el('div','readout');
+  const sl=el('input'); sl.type='range'; sl.min=0; sl.max=12; sl.value=0;
+  const slab=el('span'); slab.style.fontFamily='var(--mono)';
+  const srow=el('div','controls'); srow.append(el('label',null,'drives t'),sl,slab);
+  w.append(ctrls,cv,srow,out);
+  let maxD=0,parity=0,bad=false,ans=0;
+  function compute(){
+    const ds=inp.value.split(/[^0-9]+/).filter(x=>x).map(Number);
+    maxD=Math.max(0,...ds); bad=false; parity=ds.length?ds[0]&1:0;
+    for(const d of ds){ if((d&1)!==parity) bad=true; }
+    // smallest t with tri>=maxD
+    let t=0; while(t*(t+1)/2<maxD) t++;
+    while(!bad && ((t*(t+1)/2)&1)!==parity) t++;
+    ans=bad?-1:t; sl.max=Math.max(6,t+2); sl.value=t;
+    render();
+  }
+  function render(){
+    const t=+sl.value, tri=t*(t+1)/2;
+    const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);
+    const maxTri=(+sl.max)*(+sl.max+1)/2||1; const scale=(W-20)/Math.max(maxTri,maxD,1);
+    // target marker
+    const tx=10+maxD*scale;
+    ctx.fillStyle=css('--amber');ctx.fillRect(tx-1,15,2,H-45);
+    ctx.font='11px ui-monospace';ctx.fillStyle=css('--amber');ctx.fillText('maxDist '+maxD,tx+4,14);
+    // stacked drives
+    let acc=0; const y=45,h=26;
+    for(let k=1;k<=t;k++){
+      const x0=10+acc*scale, ww=k*scale; acc+=k;
+      ctx.fillStyle= k%2? css('--accent'):css('--accent-soft');
+      ctx.fillRect(x0,y,Math.max(ww-1,1),h);
+      if(ww>16){ctx.fillStyle=css('--ink');ctx.fillText(String(k),x0+ww/2-3,y+17);}
+    }
+    ctx.fillStyle=css('--muted');ctx.font='11px ui-monospace';
+    ctx.fillText('reach S = t(t+1)/2 = '+tri,10,H-14);
+    slab.textContent=' = '+tri;
+    const reachOK=tri>=maxD, parOK=(tri&1)===parity;
+    out.innerHTML = bad
+      ? `distances have <span class="tag-bad">mixed parity</span> → impossible, answer <b>-1</b>`
+      : `at t=${t}: reach ${reachOK?'<span class="tag-good">≥ maxDist</span>':'<span class="tag-bad">&lt; maxDist</span>'} · parity ${parOK?'<span class="tag-good">matches</span>':'<span class="tag-bad">off</span>'} — minimum drives = <b>${ans}</b>`;
+  }
+  const example=()=>{let a=[];for(let i=rint(2,4);i>0;i--)a.push(rint(1,12));inp.value=a.join(' ');compute();flash(out);};
+  btn.onclick=example; inp.oninput=compute; sl.oninput=render; setTimeout(compute,0);
+  return w;
+}
+
+/* ---- #7 binary search on 2D box ---- */
+function vizTiles(){
+  const w=panel('Interactive · fit K tiles in a D×D box');
+  const pts=[[2,3],[3,2],[4,7],[7,6],[8,8],[3,6],[6,3],[5,5],[9,4],[1,9]];
+  const ctrls=el('div','controls');
+  const kIn=el('input'); kIn.type='text'; kIn.value='4'; kIn.style.minWidth='50px';
+  const sl=el('input'); sl.type='range'; sl.min=0; sl.max=9; sl.value=3;
+  const slab=el('span'); slab.style.fontFamily='var(--mono)';
+  ctrls.append(el('label',null,'K'),kIn,el('label',null,'box side D'),sl,slab);
+  const cv=el('canvas'); cv.width=360; cv.height=360; const out=el('div','readout');
+  w.append(ctrls,cv,out);
+  const GS=10, pad=30, cell=(cv.width-2*pad)/GS;
+  function bestBoxAt(D,k){ // returns [i,j] of a box (top-left in grid coords) with >=k, else null
+    let hit=null,hc=0;
+    for(let i=0;i+D<GS;i++)for(let j=0;j+D<GS;j++){
+      let c=0; for(const[a,b]of pts) if(a>=i&&a<=i+D&&b>=j&&b<=j+D)c++;
+      if(c>hc){hc=c;if(c>=k){hit=[i,j];}}
+      if(c>=k && !hit) hit=[i,j];
+      if(c>=k){return[i,j];}
+    }
+    return null;
+  }
+  function minD(k){for(let D=0;D<GS;D++) if(bestBoxAt(D,k))return D; return null;}
+  function render(){
+    const D=+sl.value, k=Math.max(1,parseInt(kIn.value)||1);
+    const ctx=cv.getContext('2d'),W=cv.width;ctx.clearRect(0,0,W,W);
+    // grid
+    ctx.strokeStyle=css('--grid');ctx.lineWidth=1;
+    for(let i=0;i<=GS;i++){const p=pad+i*cell;
+      ctx.beginPath();ctx.moveTo(p,pad);ctx.lineTo(p,W-pad);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(pad,p);ctx.lineTo(W-pad,p);ctx.stroke();}
+    const gx=a=>pad+a*cell, gy=b=>W-pad-b*cell;
+    const box=bestBoxAt(D,k);
+    if(box){const[i,j]=box;
+      ctx.fillStyle=css('--amber-soft');ctx.strokeStyle=css('--amber');ctx.lineWidth=2;
+      ctx.fillRect(gx(i),gy(j+D),cell*D,cell*D);ctx.strokeRect(gx(i),gy(j+D),cell*D,cell*D);}
+    for(const[a,b]of pts){const inBox=box&&a>=box[0]&&a<=box[0]+D&&b>=box[1]&&b<=box[1]+D;
+      ctx.fillStyle=inBox?css('--amber'):css('--accent');
+      ctx.beginPath();ctx.arc(gx(a),gy(b),5,0,7);ctx.fill();}
+    ctx.fillStyle=css('--muted');ctx.font='11px ui-monospace';
+    ctx.fillText('height →',W-70,W-10);
+    slab.textContent=' = '+D;
+    const md=minD(k);
+    out.innerHTML = box
+      ? `a ${D}×${D} box holds ≥ K=${k} tiles <span class="tag-good">✓ feasible</span> · smallest feasible D = <b>${md}</b>`
+      : `no ${D}×${D} box holds K=${k} tiles <span class="tag-bad">✗</span> · smallest feasible D = <b>${md==null?'—':md}</b>`;
+  }
+  sl.oninput=render; kIn.oninput=render; setTimeout(render,0);
+  return w;
+}
+
+/* ---- #13 apples 0-1 BFS animated ---- */
+function vizApples(){
+  const w=panel('Interactive · 0-1 BFS, right turns only');
+  const grid=[
+    [1, 0, 0, 0,-1, 0],
+    [0,-1, 0, 0, 0, 0],
+    [0, 0, 0,-1, 2, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]];
+  const N=6, apples=3;
+  const ctrls=el('div','controls');
+  const btn=el('button',null,'▶ play path'); btn.type='button';
+  const rst=el('button','ghost','reset'); rst.type='button';
+  ctrls.append(btn,rst);
+  const cv=el('canvas'); cv.width=360; cv.height=360; const out=el('div','readout');
+  w.append(ctrls,cv,out);
+  const dx=[0,1,0,-1], dy=[1,0,-1,0];
+  // 0-1 BFS with parent for path reconstruction
+  function solve(){
+    const dp={}, par={};
+    const key=(x,y,c,d)=>x+','+y+','+c+','+d;
+    const startC = grid[0][0]===1?1:0;
+    const dq=[]; const sK=key(0,0,startC,0); dp[sK]=0; dq.push([0,0,startC,0]);
+    let head=0;
+    // use deque via array with unshift/push; for correctness process by dist we rebuild
+    const deque=[[0,0,startC,0]];
+    while(deque.length){
+      const [x,y,c,d]=deque.shift();
+      const base=dp[key(x,y,c,d)];
+      for(const[turn,nd,cost] of [[false,d,0],[true,(d+1)%4,1]]){
+        const nx=x+dx[nd], ny=y+dy[nd];
+        if(nx<0||ny<0||nx>=N||ny>=N||grid[nx][ny]===-1) continue;
+        const nc=c+((grid[nx][ny]===c+1)?1:0);
+        const nk=key(nx,ny,nc,nd), val=base+cost;
+        if(dp[nk]===undefined||dp[nk]>val){dp[nk]=val;par[nk]=[key(x,y,c,d),x,y,c,d];
+          if(cost===0) deque.unshift([nx,ny,nc,nd]); else deque.push([nx,ny,nc,nd]);}
+      }
+    }
+    // best end
+    let bK=null,bv=Infinity;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++)for(let k=0;k<4;k++){
+      const kk=key(i,j,apples,k); if(dp[kk]!==undefined&&dp[kk]<bv){bv=dp[kk];bK=kk;}}
+    if(bK==null) return {turns:-1,path:[]};
+    const path=[]; let cur=bK;
+    while(cur){const p=par[cur]; const parts=cur.split(',').map(Number);
+      path.push({x:parts[0],y:parts[1],c:parts[2],d:parts[3]}); cur=p?p[0]:null;}
+    path.reverse();
+    return {turns:bv,path};
+  }
+  const res=solve();
+  function cellXY(i,j){const pad=24,cs=(cv.width-2*pad)/N;return [pad+j*cs+cs/2, pad+i*cs+cs/2, cs];}
+  function drawBase(upto){
+    const ctx=cv.getContext('2d'),W=cv.width;ctx.clearRect(0,0,W,W);
+    const pad=24,cs=(W-2*pad)/N;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+      const x=pad+j*cs,y=pad+i*cs;
+      ctx.fillStyle = grid[i][j]===-1?css('--code-bg'):css('--panel');
+      ctx.strokeStyle=css('--line');ctx.lineWidth=1;
+      ctx.fillRect(x,y,cs-2,cs-2);ctx.strokeRect(x,y,cs-2,cs-2);
+      ctx.font='13px ui-monospace';ctx.textAlign='center';
+      if(grid[i][j]>0){ctx.fillStyle=css('--amber');ctx.fillText('🍎'+grid[i][j],x+cs/2,y+cs/2+4);}
+      else if(grid[i][j]===-1){ctx.fillStyle=css('--muted');ctx.fillText('✕',x+cs/2,y+cs/2+4);}
+    }
+    // path so far
+    const path=res.path; if(path.length){
+      ctx.strokeStyle=css('--accent');ctx.lineWidth=3;ctx.beginPath();
+      for(let s=0;s<=upto&&s<path.length;s++){const[cx,cy]=cellXY(path[s].x,path[s].y);
+        s?ctx.lineTo(cx,cy):ctx.moveTo(cx,cy);}
+      ctx.stroke();
+      const cur=path[Math.min(upto,path.length-1)];const[cx,cy]=cellXY(cur.x,cur.y);
+      ctx.fillStyle=css('--accent');ctx.beginPath();ctx.arc(cx,cy,6,0,7);ctx.fill();
+    }
+    ctx.textAlign='start';
+  }
+  let timer=null;
+  function play(){
+    if(res.turns<0){out.innerHTML='<span class="tag-bad">impossible → -1</span>';drawBase(0);return;}
+    clearInterval(timer);let s=0;
+    timer=setInterval(()=>{drawBase(s);
+      let turns=0;for(let k=1;k<=s&&k<res.path.length;k++) if(res.path[k].d!==res.path[k-1].d) turns++;
+      out.innerHTML=`step ${s}/${res.path.length-1} · apples eaten ${res.path[Math.min(s,res.path.length-1)].c}/${apples} · right turns so far <b>${turns}</b>`;
+      if(s>=res.path.length-1){clearInterval(timer);
+        out.innerHTML=`done · total right turns = <b>${res.turns}</b>`;}
+      s++;},420);
+  }
+  btn.onclick=play; rst.onclick=()=>{clearInterval(timer);drawBase(0);out.textContent='press play';};
+  setTimeout(()=>drawBase(0),0);
+  return w;
+}
+</script>
+</body>
+</html>
