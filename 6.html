@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SRIB · Interview Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#15181e; --surface:#1c2027; --surface-2:#242932; --code-bg:#12151b;
+  --ink:#e7e3d9; --ink-2:#a9aeb7; --ink-3:#767c86; --line:#2b313b;
+  --gold:#d9b562; --gold-2:#e8c877; --mark:rgba(214,175,90,.20);
+  --teal:#57b6ae; --teal-2:#6fc7bf; --brick:#d07a6a; --violet:#9c8ad1;
+  --syn-key:#e0a657; --syn-type:#5fbdb4; --syn-str:#a7c079; --syn-num:#e58e73;
+  --syn-com:#6b7280; --syn-anno:#b49ce0; --syn-fn:#7aa2e3;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 26px -18px rgba(0,0,0,.7);
+  --easy:var(--teal); --med:var(--gold); --hard:var(--brick);
+}
+html[data-theme="light"]{
+  --bg:#e8e4db; --surface:#f1eee7; --surface-2:#ddd8cd; --code-bg:#f4f1ea;
+  --ink:#22252a; --ink-2:#4e525a; --ink-3:#7a7f88; --line:#d0cabc;
+  --gold:#9c7420; --gold-2:#b98d2c; --mark:rgba(210,170,80,.34);
+  --teal:#1c655f; --teal-2:#227a72; --brick:#9a4436; --violet:#5b4b8a;
+  --syn-key:#b0530a; --syn-type:#1b655f; --syn-str:#5e7a2e; --syn-num:#a2452b;
+  --syn-com:#a29a88; --syn-anno:#6a4e9c; --syn-fn:#2a5aa0;
+  --shadow:0 1px 2px rgba(120,110,90,.14), 0 10px 30px -20px rgba(90,80,60,.5);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:82px}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(60rem 60rem at 108% -10%, color-mix(in srgb, var(--gold) 7%, transparent), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 108%, color-mix(in srgb, var(--teal) 7%, transparent), transparent 55%);
+  background-attachment:fixed;
+}
+a{color:var(--teal); text-decoration:none}
+a:hover{color:var(--teal-2)}
+mark.mk{background:linear-gradient(180deg,transparent 8%,var(--mark) 8% 88%,transparent 88%); color:inherit; padding:0 .06em; border-radius:2px}
+code.ic{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace; font-size:.9em; background:var(--surface-2); border:1px solid var(--line); padding:.05em .35em; border-radius:5px; color:var(--ink)}
+::selection{background:color-mix(in srgb,var(--gold) 40%, transparent)}
+:focus-visible{outline:2px solid var(--gold); outline-offset:3px; border-radius:4px}
+
+/* reading progress */
+#read{position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--gold),var(--teal)); z-index:60}
+
+/* ============ HEADER ============ */
+header.top{
+  position:sticky; top:0; z-index:50; backdrop-filter:blur(10px);
+  background:color-mix(in srgb,var(--bg) 82%, transparent);
+  border-bottom:1px solid var(--line);
+}
+.top-in{max-width:1240px; margin:0 auto; padding:12px 22px; display:flex; align-items:center; gap:16px}
+.brand{display:flex; align-items:baseline; gap:10px; font-family:'IBM Plex Mono',monospace}
+.brand .mark{color:var(--gold); font-weight:600; letter-spacing:.5px}
+.brand .sub{color:var(--ink-2); font-size:.82rem; letter-spacing:.14em; text-transform:uppercase}
+.brand .tag{margin-left:2px; font-size:.66rem; color:var(--ink-3); border:1px solid var(--line); padding:1px 6px; border-radius:20px; letter-spacing:.1em}
+.top-sp{flex:1}
+.top-tools{display:flex; align-items:center; gap:10px}
+.searchbox{display:flex; align-items:center; gap:7px; background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:6px 10px; min-width:190px}
+.searchbox input{border:0; background:transparent; color:var(--ink); font-family:inherit; font-size:.9rem; width:100%; outline:none}
+.searchbox svg{flex:none; opacity:.6}
+.iconbtn{display:grid; place-items:center; width:38px; height:38px; border-radius:9px; border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer; transition:transform .15s, border-color .15s}
+.iconbtn:hover{border-color:var(--gold); transform:translateY(-1px)}
+.navtoggle{display:none}
+
+/* ============ LAYOUT ============ */
+.shell{max-width:1240px; margin:0 auto; padding:0 22px; display:grid; grid-template-columns:236px minmax(0,1fr); gap:40px; align-items:start}
+nav.side{position:sticky; top:74px; align-self:start; max-height:calc(100vh - 90px); overflow:auto; padding:22px 8px 40px 0; font-family:'IBM Plex Mono',monospace; font-size:.82rem}
+nav.side .grp{color:var(--ink-3); text-transform:uppercase; letter-spacing:.16em; font-size:.68rem; margin:18px 0 7px 10px}
+nav.side a{display:block; color:var(--ink-2); padding:5px 10px; border-left:2px solid transparent; border-radius:0 6px 6px 0; margin:1px 0; transition:background .15s,color .15s,border-color .15s}
+nav.side a:hover{background:var(--surface); color:var(--ink)}
+nav.side a.active{color:var(--gold); border-left-color:var(--gold); background:color-mix(in srgb,var(--gold) 9%, transparent)}
+main{padding:30px 0 90px; min-width:0}
+
+/* ============ HERO ============ */
+.hero{padding:26px 0 8px}
+.hero .eyebrow{display:inline-flex; align-items:center; gap:9px; font-family:'IBM Plex Mono',monospace; font-size:.76rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); margin-bottom:18px}
+.hero .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 22%, transparent)}
+.hero h1{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(2.1rem,5vw,3.35rem); line-height:1.04; letter-spacing:-.02em; margin:0 0 18px}
+.hero h1 .g{color:var(--gold)}
+.hero .lede{font-size:1.12rem; color:var(--ink-2); max-width:64ch; margin:0 0 26px}
+.hero .lede b{color:var(--ink); font-weight:600}
+
+.grid4{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:8px 0 8px}
+.acard{display:block; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 17px; box-shadow:var(--shadow); transition:transform .16s,border-color .16s}
+.acard:hover{transform:translateY(-3px); border-color:var(--gold)}
+.acard .no{font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--gold); letter-spacing:.1em}
+.acard h3{font-family:'Space Grotesk',sans-serif; font-size:1.08rem; margin:6px 0 6px; color:var(--ink)}
+.acard p{margin:0; font-family:'IBM Plex Mono',monospace; font-size:.78rem; color:var(--ink-2); line-height:1.5}
+.acard .trg{color:var(--teal)}
+
+.statrow{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px}
+.stat{background:var(--surface-2); border:1px solid var(--line); border-radius:20px; padding:6px 14px; font-family:'IBM Plex Mono',monospace; font-size:.78rem; color:var(--ink-2)}
+.stat b{color:var(--gold); font-weight:600}
+
+/* ============ SECTIONS ============ */
+section.sec{padding:52px 0 8px; scroll-margin-top:80px}
+.sechead{display:flex; align-items:flex-end; gap:14px; margin-bottom:8px; border-bottom:1px solid var(--line); padding-bottom:14px}
+.sechead .idx{font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--gold); letter-spacing:.1em; padding-bottom:4px; white-space:nowrap}
+.sechead h2{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(1.5rem,3.2vw,2.05rem); letter-spacing:-.01em; margin:0; line-height:1.1}
+.sechead .meta{margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-3); text-align:right; padding-bottom:4px}
+.lead{color:var(--ink-2); font-size:1.03rem; margin:18px 0}
+.lead b{color:var(--ink)}
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin:18px 0; box-shadow:var(--shadow)}
+.panel h4{font-family:'Space Grotesk',sans-serif; font-size:1.12rem; margin:2px 0 10px; color:var(--ink)}
+.panel p{margin:9px 0}
+.panel p:first-of-type{margin-top:0}
+
+.callout{border-left:3px solid var(--gold); background:color-mix(in srgb,var(--gold) 8%, var(--surface)); border-radius:0 12px 12px 0; padding:14px 18px; margin:18px 0}
+.callout .lab{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:6px}
+.callout.teal{border-left-color:var(--teal); background:color-mix(in srgb,var(--teal) 8%, var(--surface))}
+.callout.teal .lab{color:var(--teal)}
+.callout.brick{border-left-color:var(--brick); background:color-mix(in srgb,var(--brick) 9%, var(--surface))}
+.callout.brick .lab{color:var(--brick)}
+.callout p{margin:6px 0}
+.callout p:last-child{margin-bottom:0}
+
+ul.tick{list-style:none; padding:0; margin:14px 0}
+ul.tick li{position:relative; padding:5px 0 5px 26px; color:var(--ink-2)}
+ul.tick li::before{content:"›"; position:absolute; left:6px; top:5px; color:var(--gold); font-weight:600}
+ul.tick li b{color:var(--ink)}
+
+.ladder{counter-reset:step; margin:16px 0; padding:0; list-style:none}
+.ladder li{position:relative; padding:12px 0 12px 44px; border-bottom:1px dashed var(--line)}
+.ladder li:last-child{border-bottom:0}
+.ladder li::before{counter-increment:step; content:counter(step); position:absolute; left:0; top:11px; width:28px; height:28px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line); color:var(--gold); font-family:'IBM Plex Mono',monospace; font-size:.85rem; font-weight:600; display:grid; place-items:center}
+.ladder li b{color:var(--ink)}
+
+/* problem pills */
+.probs{display:flex; flex-wrap:wrap; gap:9px; margin:16px 0}
+.prob{display:inline-flex; align-items:center; gap:8px; background:var(--surface-2); border:1px solid var(--line); border-radius:9px; padding:6px 11px; font-size:.86rem}
+.pill{font-family:'IBM Plex Mono',monospace; font-size:.64rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:2px 6px; border-radius:5px; color:#12151b}
+html[data-theme="dark"] .pill{color:#12151b}
+.pill.e{background:var(--easy)} .pill.m{background:var(--med)} .pill.h{background:var(--hard)}
+.prob .nm{color:var(--ink)}
+
+/* code block */
+.codewrap{margin:16px 0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--code-bg)}
+.codebar{display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--surface-2); border-bottom:1px solid var(--line)}
+.codebar .lang{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2)}
+.codebar .fn{font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-3)}
+.copybtn{margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--line); color:var(--ink-2); font-family:'IBM Plex Mono',monospace; font-size:.72rem; padding:4px 9px; border-radius:7px; cursor:pointer; transition:.15s}
+.copybtn:hover{border-color:var(--gold); color:var(--gold)}
+.copybtn.done{border-color:var(--teal); color:var(--teal)}
+pre{margin:0; padding:15px 16px; overflow-x:auto}
+pre code{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace; font-size:.83rem; line-height:1.62; color:var(--ink); white-space:pre; tab-size:4}
+.tk-key{color:var(--syn-key)} .tk-type{color:var(--syn-type)} .tk-str{color:var(--syn-str)}
+.tk-num{color:var(--syn-num)} .tk-com{color:var(--syn-com); font-style:italic} .tk-anno{color:var(--syn-anno)} .tk-fn{color:var(--syn-fn)}
+
+.cx{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
+.cx span{font-family:'IBM Plex Mono',monospace; font-size:.76rem; background:var(--surface-2); border:1px solid var(--line); border-radius:7px; padding:4px 9px; color:var(--ink-2)}
+.cx span b{color:var(--teal); font-weight:600}
+
+/* accordion Q&A */
+.qa{margin:12px 0}
+details.q{background:var(--surface); border:1px solid var(--line); border-radius:11px; margin:9px 0; overflow:hidden; transition:border-color .15s}
+details.q[open]{border-color:color-mix(in srgb,var(--gold) 45%, var(--line))}
+details.q summary{cursor:pointer; list-style:none; padding:13px 16px; display:flex; align-items:flex-start; gap:12px; font-weight:500; color:var(--ink)}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .qmark{font-family:'IBM Plex Mono',monospace; color:var(--gold); font-size:.86rem; flex:none; margin-top:1px; transition:transform .2s}
+details.q[open] summary .qmark{transform:rotate(90deg)}
+details.q summary .qt{flex:1}
+details.q .ans{padding:2px 16px 16px 40px; color:var(--ink-2); border-top:1px solid transparent}
+details.q .ans p{margin:8px 0}
+details.q .ans p:first-child{margin-top:6px}
+details.q .ans b{color:var(--ink)}
+.qtag{font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); border:1px solid var(--line); border-radius:5px; padding:1px 6px; margin-left:8px; white-space:nowrap}
+
+table.tb{width:100%; border-collapse:collapse; margin:12px 0; font-size:.9rem}
+table.tb th,table.tb td{text-align:left; padding:9px 11px; border-bottom:1px solid var(--line); vertical-align:top}
+table.tb th{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
+table.tb td b{color:var(--ink)}
+table.tb tr:last-child td{border-bottom:0}
+
+/* checklist / battle plan */
+.plan{display:grid; gap:14px; margin:18px 0}
+.day{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow)}
+.day h4{font-family:'Space Grotesk',sans-serif; display:flex; align-items:center; gap:10px; margin:0 0 6px; color:var(--ink)}
+.day h4 .badge{font-family:'IBM Plex Mono',monospace; font-size:.68rem; color:var(--gold); border:1px solid var(--line); border-radius:20px; padding:2px 9px; letter-spacing:.06em}
+.chk{display:flex; align-items:flex-start; gap:10px; padding:6px 0; color:var(--ink-2)}
+.chk input{appearance:none; width:19px; height:19px; border:1.6px solid var(--line); border-radius:5px; flex:none; margin-top:2px; cursor:pointer; position:relative; transition:.15s}
+.chk input:checked{background:var(--gold); border-color:var(--gold)}
+.chk input:checked::after{content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:#15181e; font-size:.8rem; font-weight:700}
+.chk label{cursor:pointer}
+.chk input:checked + label{color:var(--ink-3); text-decoration:line-through}
+.progwrap{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:8px 0 20px; display:flex; align-items:center; gap:14px}
+.progwrap .bar{flex:1; height:8px; background:var(--surface-2); border-radius:20px; overflow:hidden}
+.progwrap .bar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--teal)); transition:width .3s}
+.progwrap .pct{font-family:'IBM Plex Mono',monospace; font-size:.82rem; color:var(--gold); min-width:44px; text-align:right}
+
+footer{border-top:1px solid var(--line); margin-top:60px; padding:26px 0 50px; color:var(--ink-3); font-size:.85rem}
+footer .fin{max-width:1240px; margin:0 auto; padding:0 22px}
+footer b{color:var(--ink-2)}
+
+.hide{display:none !important}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1024px){
+  .shell{grid-template-columns:1fr}
+  nav.side{position:fixed; top:0; left:0; height:100vh; width:270px; background:var(--surface); border-right:1px solid var(--line); z-index:70; transform:translateX(-100%); transition:transform .25s; padding:20px 14px 40px; max-height:none}
+  nav.side.open{transform:translateX(0)}
+  .navtoggle{display:grid}
+  .backdrop{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:65; opacity:0; pointer-events:none; transition:opacity .2s}
+  .backdrop.show{opacity:1; pointer-events:auto}
+}
+@media(max-width:680px){
+  body{font-size:16px}
+  .top-in{padding:10px 14px; gap:10px}
+  .searchbox{display:none}
+  .shell{padding:0 14px}
+  .grid4{grid-template-columns:1fr}
+  main{padding:20px 0 70px}
+  .sechead{flex-wrap:wrap}
+  .sechead .meta{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none !important; scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+<div id="read"></div>
+
+<header class="top">
+  <div class="top-in">
+    <button class="iconbtn navtoggle" id="navToggle" aria-label="Open navigation">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="brand">
+      <span class="mark">SRIB</span>
+      <span class="sub">Interview Dossier</span>
+      <span class="tag">v1 · Java</span>
+    </div>
+    <div class="top-sp"></div>
+    <div class="top-tools">
+      <div class="searchbox">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+        <input id="search" type="text" placeholder="Filter questions…" aria-label="Filter questions" />
+      </div>
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle theme" title="Toggle day / night">
+        <svg id="ic-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg id="ic-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="backdrop" id="backdrop"></div>
+
+<div class="shell">
+  <nav class="side" id="side">
+    <div class="grp">Start here</div>
+    <a href="#hero">Mission brief</a>
+    <a href="#strategy">How Samsung interviews</a>
+    <div class="grp">Core patterns</div>
+    <a href="#tries">1 · Tries &amp; bitwise</a>
+    <a href="#trees">2 · Trees &amp; binary lifting</a>
+    <a href="#strings">3 · String matching</a>
+    <a href="#grids">4 · 2D prefix sums</a>
+    <div class="grp">Question banks</div>
+    <a href="#dsa">Core DSA</a>
+    <a href="#bits">Bit manipulation</a>
+    <a href="#os">Operating systems</a>
+    <a href="#dbms">DBMS</a>
+    <a href="#cpp">C++ &amp; internals</a>
+    <a href="#net">Networks</a>
+    <div class="grp">The room</div>
+    <a href="#project">Project &amp; behavioral</a>
+    <a href="#puzzles">Puzzles</a>
+    <a href="#plan">Battle plan</a>
+  </nav>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <span class="eyebrow"><span class="dot"></span>PRO test cleared · technical round next</span>
+      <h1>You passed the filter.<br>Now win the <span class="g">room.</span></h1>
+      <p class="lede">The written test was the hard gate — the interview is conversational and <b>very winnable</b>. Real field notes from cleared SRIB candidates point to the same handful of patterns every time. Below is everything, mapped to what actually gets asked, with <b>clean Java</b> you can reproduce on paper.</p>
+
+      <div class="grid4">
+        <a class="acard" href="#tries">
+          <span class="no">PATTERN 01</span>
+          <h3>Tries &amp; bitwise</h3>
+          <p><span class="trg">seen:</span> sum of prefix scores · max subarray XOR</p>
+        </a>
+        <a class="acard" href="#trees">
+          <span class="no">PATTERN 02</span>
+          <h3>Trees &amp; binary lifting</h3>
+          <p><span class="trg">seen:</span> LCA → "optimize past O(n)"</p>
+        </a>
+        <a class="acard" href="#strings">
+          <span class="no">PATTERN 03</span>
+          <h3>String matching</h3>
+          <p><span class="trg">seen:</span> p codes inside a huge binary string</p>
+        </a>
+        <a class="acard" href="#grids">
+          <span class="no">PATTERN 04</span>
+          <h3>2D prefix sums</h3>
+          <p><span class="trg">seen:</span> subgrid-sum queries in O(1)</p>
+        </a>
+      </div>
+
+      <div class="statrow">
+        <span class="stat"><b>1</b> DSA problem, live-coded &amp; explained</span>
+        <span class="stat"><b>15–35 min</b> on your project</span>
+        <span class="stat"><b>OS · COA · C++</b> rapid-fire</span>
+        <span class="stat"><b>Approach &gt; answer</b></span>
+      </div>
+    </section>
+
+    <!-- ============ STRATEGY ============ -->
+    <section class="sec" id="strategy">
+      <div class="sechead">
+        <span class="idx">§ 00</span>
+        <h2>How Samsung actually interviews</h2>
+        <span class="meta">read this first</span>
+      </div>
+      <p class="lead">SRIB technical rounds run <b>60–90 minutes</b> and are calm by design. The interviewer wants to watch you <b>think</b>, not catch you out. From cleared candidates, the shape is consistent: a warm "tell me about yourself", then a long project deep-dive, then 1 DSA problem you code live and explain, then rapid-fire fundamentals from OS / COA / C++ / DBMS, and a couple of curiosity questions ("do you know about Starlink?").</p>
+
+      <div class="callout">
+        <span class="lab">The one meta-skill they test</span>
+        <p>Almost every problem follows a ladder: <b>you give brute force → they ask "can you optimize?" → you name the right data structure</b>. Your senior's LCA question was exactly this — an O(n) answer, then "optimize further", then binary lifting. So for every problem below, rehearse the <i>optimization ladder out loud</i>, not just the final code.</p>
+      </div>
+
+      <div class="panel">
+        <h4>The rounds, in order</h4>
+        <ol class="ladder">
+          <li><b>Tell me about yourself (~3 min).</b> A tight 90-second narrative: who you are, the internship, one flagship project, one line on what you want to build. Rehearse it cold.</li>
+          <li><b>Project deep-dive (15–35 min — the biggest chunk).</b> They will ask you to walk the full workflow and sometimes open the codebase. This is where your KnowHow AI / act-vs-ask work is a genuine edge. Own every design decision.</li>
+          <li><b>Live DSA (1 problem).</b> Code editor or on paper. They care that your approach is clean and that you can optimize when pushed. Talk while you code.</li>
+          <li><b>Fundamentals rapid-fire.</b> OS (semaphores, spinlocks, paging), COA/microprocessor basics, C++ internals (vptr/vtable, singleton), DBMS. Crisp 2–4 line answers win.</li>
+          <li><b>Curiosity &amp; fit.</b> A general-tech question and light behavioral. Stay relaxed and genuinely interested.</li>
+        </ol>
+      </div>
+
+      <div class="callout teal">
+        <span class="lab">On-paper coding</span>
+        <p>Several candidates were asked to write code <b>on paper</b> with no compiler. Practice writing 2–3 of the templates below by hand — clean indentation, correct edge cases, no "// fill later". Muscle memory beats recall under pressure.</p>
+      </div>
+
+      <div class="callout brick">
+        <span class="lab">Don't over-index on speed</span>
+        <p>In the written test, any working solution passes — but in the interview the <b>reasoning</b> is graded. Narrate trade-offs, state complexity, and mention the alternative even when you've solved it. "There's also an Euler-tour + sparse-table way" is exactly the kind of line that lands.</p>
+      </div>
+    </section>
+
+    <!-- ============ PATTERN 1: TRIES & BITWISE ============ -->
+    <section class="sec" id="tries">
+      <div class="sechead">
+        <span class="idx">§ 01</span>
+        <h2>Tries &amp; bitwise optimization</h2>
+        <span class="meta">priority: highest</span>
+      </div>
+      <p class="lead">Two of your senior's problems — <b>sum of prefix scores</b> and <b>maximum subarray XOR</b> — are both tries. The trie shows up in three forms here, and mastering all three is the single highest-ROI thing you can do: a normal character trie, a <b>bit trie</b> (numbers stored MSB→LSB), and Aho-Corasick (in §3). Learn the Java once; reuse it everywhere.</p>
+
+      <div class="probs">
+        <span class="prob"><span class="pill m">Med</span><span class="nm">Maximum XOR of Two Numbers · LC 421</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Sum of Prefix Scores of Strings · LC 2416</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Maximum XOR With an Element · LC 1707</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Word Search II · LC 212</span></span>
+      </div>
+
+      <div class="panel">
+        <h4>A · Character trie — Sum of Prefix Scores</h4>
+        <p>Every node keeps a <code class="ic">cnt</code> of how many words pass through it. Insert all words bumping <code class="ic">cnt</code> on each node; then a word's score is just the sum of <code class="ic">cnt</code> along its own path. This is the whole trick — no extra structure.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Sum of Prefix Scores · LC 2416"><script type="text/plain">
+class Solution {
+    static class Node {
+        Node[] ch = new Node[26];
+        int cnt = 0;                       // words passing through this node
+    }
+    public int[] sumPrefixScores(String[] words) {
+        Node root = new Node();
+        for (String w : words) {           // build trie, bump cnt everywhere
+            Node cur = root;
+            for (char c : w.toCharArray()) {
+                int i = c - 'a';
+                if (cur.ch[i] == null) cur.ch[i] = new Node();
+                cur = cur.ch[i];
+                cur.cnt++;
+            }
+        }
+        int[] ans = new int[words.length];
+        for (int k = 0; k < words.length; k++) {
+            Node cur = root;
+            int sum = 0;
+            for (char c : words[k].toCharArray()) {
+                cur = cur.ch[c - 'a'];
+                sum += cur.cnt;            // score = sum of prefix counts
+            }
+            ans[k] = sum;
+        }
+        return ans;
+    }
+}
+</script></div>
+      <div class="cx"><span>Time <b>O(total chars)</b></span><span>Space <b>O(total chars · 26)</b></span></div>
+
+      <div class="panel">
+        <h4>B · Bit trie — Maximum XOR (reusable)</h4>
+        <p>Store each number's 32 bits from the most-significant down. To maximise XOR with some value, greedily walk the <i>opposite</i> bit at each level (that sets the bit in the result); fall back to the same bit if the opposite branch is missing. This <code class="ic">BitTrie</code> is the workhorse for LC 421, LC 1707, and the subarray-XOR problem.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Reusable BitTrie + LC 421"><script type="text/plain">
+class BitTrie {
+    static final int B = 31;                     // 32-bit ints (bit 31 = MSB)
+    BitTrie[] ch = new BitTrie[2];
+
+    void insert(int x) {
+        BitTrie n = this;
+        for (int b = B; b >= 0; b--) {
+            int bit = (x >> b) & 1;
+            if (n.ch[bit] == null) n.ch[bit] = new BitTrie();
+            n = n.ch[bit];
+        }
+    }
+    int maxXor(int x) {                          // best XOR of x with any inserted value
+        BitTrie n = this; int res = 0;
+        for (int b = B; b >= 0; b--) {
+            int bit = (x >> b) & 1, want = bit ^ 1;
+            if (n.ch[want] != null) { res |= (1 << b); n = n.ch[want]; }  // opposite bit -> set it
+            else                     n = n.ch[bit];                       // forced same bit
+        }
+        return res;
+    }
+}
+
+// LC 421 — Maximum XOR of Two Numbers in an Array
+public int findMaximumXOR(int[] nums) {
+    BitTrie t = new BitTrie();
+    for (int x : nums) t.insert(x);
+    int max = 0;
+    for (int x : nums) max = Math.max(max, t.maxXor(x));
+    return max;
+}
+</script></div>
+
+      <div class="panel">
+        <h4>C · Maximum subarray XOR (the senior's question)</h4>
+        <p>Key identity: <code class="ic">xor(l..r) = prefix[r] ^ prefix[l-1]</code>. So maximising a subarray XOR = maximising <code class="ic">prefix[i] ^ prefix[j]</code> over pairs. Feed prefix XORs into the same <code class="ic">BitTrie</code> — insert the empty prefix (0) first, then for each prefix query the best partner already inside.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Maximum subarray XOR"><script type="text/plain">
+// Largest XOR of any (contiguous) subarray — O(n · 32)
+public int maxSubarrayXor(int[] a) {
+    BitTrie t = new BitTrie();
+    t.insert(0);                         // empty prefix
+    int pre = 0, best = 0;
+    for (int x : a) {
+        pre ^= x;                        // prefix XOR up to i
+        best = Math.max(best, t.maxXor(pre));   // pair with an earlier prefix
+        t.insert(pre);
+    }
+    return best;
+}
+</script></div>
+      <div class="callout teal">
+        <span class="lab">If pushed further</span>
+        <p><b>LC 1707</b> adds a constraint (<code class="ic">nums[j] &le; m</code> per query). The move is <i>offline queries</i>: sort both nums and queries ascending, and insert numbers into the trie only up to the current limit as you sweep. Mentioning "I'd sort the queries and build the trie incrementally" signals real CP maturity.</p>
+      </div>
+    </section>
+
+    <!-- ============ PATTERN 2: TREES & BINARY LIFTING ============ -->
+    <section class="sec" id="trees">
+      <div class="sechead">
+        <span class="idx">§ 02</span>
+        <h2>Trees &amp; binary lifting</h2>
+        <span class="meta">the "optimize the LCA" ask</span>
+      </div>
+      <p class="lead">Your senior gave an O(n)-per-query LCA and was told to optimize — the expected answer is <b>binary lifting</b>: precompute the 2<sup>j</sup>-th ancestor of every node so each query is O(log n). Same table answers "k-th ancestor" directly (LC 1483). Also drill <b>max path sum</b> — it tests returning state from DFS cleanly.</p>
+
+      <div class="probs">
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Kth Ancestor of a Tree Node · LC 1483</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Binary Tree Maximum Path Sum · LC 124</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Min/Max edge weight on a tree path</span></span>
+      </div>
+
+      <div class="panel">
+        <h4>A · Binary lifting — build once, query in O(log n)</h4>
+        <p><code class="ic">up[j][v]</code> = the 2<sup>j</sup>-th ancestor of <code class="ic">v</code>. The recurrence is the whole idea: a 2<sup>j</sup> jump = two 2<sup>j-1</sup> jumps, so <code class="ic">up[j][v] = up[j-1][ up[j-1][v] ]</code>. To find the k-th ancestor, jump along the set bits of <code class="ic">k</code>.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Binary lifting · LC 1483"><script type="text/plain">
+class TreeAncestor {                          // LC 1483 (parent[root] = -1)
+    int LOG;
+    int[][] up;                               // up[j][v] = 2^j-th ancestor of v
+
+    public TreeAncestor(int n, int[] parent) {
+        LOG = 1; while ((1 << LOG) < n) LOG++;
+        up = new int[LOG][n];
+        up[0] = parent.clone();               // 2^0-th ancestor = direct parent
+        for (int j = 1; j < LOG; j++)
+            for (int v = 0; v < n; v++) {
+                int mid = up[j-1][v];
+                up[j][v] = (mid == -1) ? -1 : up[j-1][mid];
+            }
+    }
+    public int getKthAncestor(int node, int k) {
+        for (int j = 0; j < LOG; j++) {
+            if (node == -1) return -1;
+            if (((k >> j) & 1) == 1) node = up[j][node];   // take this power-of-two jump
+        }
+        return node;
+    }
+}
+</script></div>
+
+      <div class="panel">
+        <h4>B · LCA — what they actually wanted</h4>
+        <p>With <code class="ic">depth[]</code> (from one DFS/BFS) plus the same <code class="ic">up[][]</code>: first lift the deeper node to equal depth, then lift both together while their ancestors differ. Whatever they land just below is the LCA. This is the O(log n) upgrade the interviewer was fishing for.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="LCA via binary lifting"><script type="text/plain">
+// needs: depth[] filled by a DFS/BFS, and up[][] as built above
+int lca(int u, int v) {
+    if (depth[u] < depth[v]) { int t = u; u = v; v = t; }   // u is the deeper one
+    int d = depth[u] - depth[v];
+    for (int j = 0; j < LOG; j++)                           // lift u up to v's depth
+        if (((d >> j) & 1) == 1) u = up[j][u];
+    if (u == v) return u;
+    for (int j = LOG - 1; j >= 0; j--)                      // lift both while ancestors differ
+        if (up[j][u] != up[j][v]) { u = up[j][u]; v = up[j][v]; }
+    return up[0][u];                                        // parent is the LCA
+}
+</script></div>
+      <div class="callout teal">
+        <span class="lab">Know the alternative</span>
+        <p>The other clean O(1)-per-query approach is <b>Euler tour + sparse table (RMQ)</b>: flatten the tree by an Euler walk and the LCA of u,v is the shallowest node between their first occurrences. Naming both approaches is a strong signal.</p>
+      </div>
+
+      <div class="panel">
+        <h4>C · Binary Tree Maximum Path Sum</h4>
+        <p>One DFS returns the best <i>downward</i> gain from a node (drop negative branches with <code class="ic">max(…, 0)</code>). At each node the best path that <i>peaks</i> there is <code class="ic">val + left + right</code> — update the global best with it — but you can only <i>extend to the parent</i> through one side.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Max path sum · LC 124"><script type="text/plain">
+class Solution {
+    int best = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+        gain(root);
+        return best;
+    }
+    private int gain(TreeNode node) {                 // max downward gain from node
+        if (node == null) return 0;
+        int left  = Math.max(gain(node.left),  0);    // ignore negative branches
+        int right = Math.max(gain(node.right), 0);
+        best = Math.max(best, node.val + left + right);   // path peaking here
+        return node.val + Math.max(left, right);          // extend up: one side only
+    }
+}
+</script></div>
+      <div class="callout">
+        <span class="lab">If they say "no global variable"</span>
+        <p>Return a small record from each call — e.g. <code class="ic">{maxThrough, maxDown}</code> — and combine at the parent. Being ready to refactor away the field is a common follow-up.</p>
+      </div>
+    </section>
+
+    <!-- ============ PATTERN 3: STRING MATCHING ============ -->
+    <section class="sec" id="strings">
+      <div class="sechead">
+        <span class="idx">§ 03</span>
+        <h2>Advanced string matching</h2>
+        <span class="meta">"p codes in a huge string"</span>
+      </div>
+      <p class="lead">"Find the positions of <b>p</b> codes (≤ k bits) in a very large binary string" is textbook <b>multi-pattern matching</b> — the tool is <b>Aho-Corasick</b> (a trie with failure links, one O(n) pass over the text). The streaming cousin is LC 1032 (a reversed trie), and single-pattern search plus the palindrome trick both come from <b>KMP</b>'s LPS array.</p>
+
+      <div class="probs">
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Stream of Characters · LC 1032</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Shortest Palindrome · LC 214</span></span>
+        <span class="prob"><span class="pill m">Med</span><span class="nm">Find the Index (strStr / KMP) · LC 28</span></span>
+      </div>
+
+      <div class="panel">
+        <h4>A · KMP — LPS array, then linear scan</h4>
+        <p><code class="ic">lps[i]</code> = length of the longest proper prefix of the pattern that is also a suffix ending at <code class="ic">i</code>. On a mismatch you fall back to <code class="ic">lps[j-1]</code> instead of restarting — that's what makes search O(n+m).</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="KMP: LPS + search"><script type="text/plain">
+int[] buildLps(String p) {
+    int[] lps = new int[p.length()];
+    int len = 0;
+    for (int i = 1; i < p.length(); ) {
+        if (p.charAt(i) == p.charAt(len)) lps[i++] = ++len;
+        else if (len > 0)                 len = lps[len - 1];   // fall back
+        else                              lps[i++] = 0;
+    }
+    return lps;
+}
+// every start index where p occurs in t  — O(n + m)
+List<Integer> search(String t, String p) {
+    int[] lps = buildLps(p);
+    List<Integer> res = new ArrayList<>();
+    for (int i = 0, j = 0; i < t.length(); ) {
+        if (t.charAt(i) == p.charAt(j)) {
+            i++; j++;
+            if (j == p.length()) { res.add(i - j); j = lps[j - 1]; }
+        } else if (j > 0) j = lps[j - 1];
+        else i++;
+    }
+    return res;
+}
+</script></div>
+
+      <div class="panel">
+        <h4>B · Aho-Corasick — many patterns, one pass</h4>
+        <p>Build a trie of all patterns, then BFS to set <b>failure links</b> (where to jump on a mismatch = longest suffix that is a trie prefix) and turn it into a goto automaton. Scanning the text, follow the suffix-link chain at each position to report every match. For a binary string just set the alphabet to 2. <b>O(Σ|pattern| + |text| + matches)</b>.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Aho-Corasick (lowercase; set A=2 for binary)"><script type="text/plain">
+class AhoCorasick {
+    static final int A = 26;                 // set A = 2 and map '0','1' for a binary string
+    int[][] next   = new int[1][A];          // goto automaton
+    int[]   fail   = new int[1];             // failure links
+    int[]   endLen = new int[1];             // pattern length ending here (0 = none)
+    int cnt = 1;                             // node count; node 0 = root
+
+    private void grow() {
+        int cap = next.length * 2;
+        next   = Arrays.copyOf(next, cap);
+        fail   = Arrays.copyOf(fail, cap);
+        endLen = Arrays.copyOf(endLen, cap);
+        for (int i = cnt; i < cap; i++) next[i] = new int[A];
+    }
+    void insert(String p) {
+        int cur = 0;
+        for (int i = 0; i < p.length(); i++) {
+            int c = p.charAt(i) - 'a';
+            if (next[cur][c] == 0) { if (cnt == next.length) grow(); next[cur][c] = cnt++; }
+            cur = next[cur][c];
+        }
+        endLen[cur] = p.length();
+    }
+    void build() {                           // BFS: failure links + automaton transitions
+        Deque<Integer> q = new ArrayDeque<>();
+        for (int c = 0; c < A; c++) if (next[0][c] != 0) q.add(next[0][c]);
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            for (int c = 0; c < A; c++) {
+                int v = next[u][c];
+                if (v != 0) { fail[v] = next[fail[u]][c]; q.add(v); }
+                else        next[u][c] = next[fail[u]][c];      // shortcut through fail link
+            }
+        }
+    }
+    void match(String text) {                // print start index of every occurrence
+        int cur = 0;
+        for (int i = 0; i < text.length(); i++) {
+            cur = next[cur][text.charAt(i) - 'a'];
+            for (int t = cur; t != 0; t = fail[t])
+                if (endLen[t] > 0)
+                    System.out.println("start=" + (i - endLen[t] + 1) + " end=" + i);
+        }
+    }
+}
+</script></div>
+      <div class="callout">
+        <span class="lab">The streaming variant — LC 1032</span>
+        <p>If characters arrive one at a time and you must answer "does any word match a current suffix?", insert every word <b>reversed</b> into a trie and walk the stream backwards from the newest char. First <code class="ic">end</code> node hit = match. Same trie idea, no failure links needed.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="StreamChecker · LC 1032"><script type="text/plain">
+class StreamChecker {
+    static class Node { Node[] ch = new Node[26]; boolean end; }
+    Node root = new Node();
+    StringBuilder sb = new StringBuilder();
+
+    public StreamChecker(String[] words) {
+        for (String w : words) {                     // insert each word REVERSED
+            Node c = root;
+            for (int i = w.length() - 1; i >= 0; i--) {
+                int k = w.charAt(i) - 'a';
+                if (c.ch[k] == null) c.ch[k] = new Node();
+                c = c.ch[k];
+            }
+            c.end = true;
+        }
+    }
+    public boolean query(char letter) {
+        sb.append(letter);
+        Node c = root;
+        for (int i = sb.length() - 1; i >= 0 && c != null; i--) {   // walk stream backwards
+            c = c.ch[sb.charAt(i) - 'a'];
+            if (c == null) return false;
+            if (c.end)     return true;              // a suffix matched a word
+        }
+        return false;
+    }
+}
+</script></div>
+
+      <div class="panel">
+        <h4>C · Shortest Palindrome — LPS in disguise</h4>
+        <p>To find the longest palindromic <i>prefix</i> of <code class="ic">s</code>, build <code class="ic">s + "#" + reverse(s)</code> and take the last LPS value. Prepend the leftover suffix, reversed.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Shortest Palindrome · LC 214"><script type="text/plain">
+public String shortestPalindrome(String s) {
+    String rev  = new StringBuilder(s).reverse().toString();
+    String comb = s + "#" + rev;                    // '#' stops overlap across the join
+    int[] lps   = buildLps(comb);
+    int pal     = lps[comb.length() - 1];           // length of palindromic prefix of s
+    String add  = s.substring(pal);                 // the part that isn't yet symmetric
+    return new StringBuilder(add).reverse().toString() + s;
+}
+</script></div>
+    </section>
+
+    <!-- ============ PATTERN 4: 2D PREFIX SUMS ============ -->
+    <section class="sec" id="grids">
+      <div class="sechead">
+        <span class="idx">§ 04</span>
+        <h2>2D prefix sums &amp; grid queries</h2>
+        <span class="meta">subgrid sum in O(1)</span>
+      </div>
+      <p class="lead">"Answer subgrid-sum queries in O(1)" is a 2D prefix table plus <b>inclusion–exclusion</b>. The only thing that trips people up under pressure is the four-term formula and its signs — get that automatic and the harder variants (target-sum counting, maximal rectangle) fall out of it.</p>
+
+      <div class="probs">
+        <span class="prob"><span class="pill m">Med</span><span class="nm">Range Sum Query 2D Immutable · LC 304</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Submatrices That Sum to Target · LC 1074</span></span>
+        <span class="prob"><span class="pill h">Hard</span><span class="nm">Maximal Rectangle · LC 85</span></span>
+      </div>
+
+      <div class="panel">
+        <h4>A · The prefix table + inclusion–exclusion</h4>
+        <p><code class="ic">pre[i][j]</code> = sum of the block strictly above-and-left. Any region is then four lookups: total minus the strip above minus the strip left, <b>plus the top-left corner back</b> (it was subtracted twice). Padding by one row/col removes all the edge-case branching.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Range Sum Query 2D · LC 304"><script type="text/plain">
+class NumMatrix {
+    int[][] pre;                                     // pre[i][j] = sum of rows<i, cols<j
+
+    public NumMatrix(int[][] m) {
+        int R = m.length, C = m[0].length;
+        pre = new int[R + 1][C + 1];                 // 1-based padding
+        for (int i = 0; i < R; i++)
+            for (int j = 0; j < C; j++)
+                pre[i+1][j+1] = m[i][j] + pre[i][j+1] + pre[i+1][j] - pre[i][j];
+    }
+    public int sumRegion(int r1, int c1, int r2, int c2) {          // inclusive, O(1)
+        return pre[r2+1][c2+1] - pre[r1][c2+1] - pre[r2+1][c1] + pre[r1][c1];
+    }
+}
+</script></div>
+
+      <div class="panel">
+        <h4>B · Submatrices summing to target</h4>
+        <p>Fix a <i>top</i> and <i>bottom</i> row, collapse those rows into a 1D column-sum array, and the 2D problem becomes the 1D "count subarrays with sum == k" — solved with a prefix-count hashmap. This 2D→1D compression is a recurring Samsung move.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Submatrices sum to target · LC 1074"><script type="text/plain">
+public int numSubmatrixSumTarget(int[][] mat, int target) {
+    int R = mat.length, C = mat[0].length, ans = 0;
+    for (int top = 0; top < R; top++) {
+        int[] col = new int[C];
+        for (int bot = top; bot < R; bot++) {              // rows top..bot
+            for (int c = 0; c < C; c++) col[c] += mat[bot][c];   // running column sums
+            // count subarrays of col[] with sum == target
+            Map<Integer,Integer> seen = new HashMap<>();
+            seen.put(0, 1);
+            int run = 0;
+            for (int c = 0; c < C; c++) {
+                run += col[c];
+                ans += seen.getOrDefault(run - target, 0);
+                seen.merge(run, 1, Integer::sum);
+            }
+        }
+    }
+    return ans;                                            // O(R^2 · C)
+}
+</script></div>
+
+      <div class="panel">
+        <h4>C · Maximal Rectangle</h4>
+        <p>This one is monotonic-stack, not prefix-sum, but it's the staple matrix problem: for each row build a histogram of consecutive 1s, then run "largest rectangle in a histogram". Reducing a 2D problem to a series of 1D ones is the pattern worth verbalising.</p>
+      </div>
+      <div class="code" data-lang="Java" data-fn="Maximal Rectangle · LC 85"><script type="text/plain">
+public int maximalRectangle(char[][] g) {
+    if (g.length == 0) return 0;
+    int C = g[0].length, best = 0;
+    int[] h = new int[C];
+    for (char[] row : g) {
+        for (int c = 0; c < C; c++) h[c] = (row[c] == '1') ? h[c] + 1 : 0;  // heights so far
+        best = Math.max(best, largestInHist(h));
+    }
+    return best;
+}
+private int largestInHist(int[] h) {
+    Deque<Integer> st = new ArrayDeque<>();      // indices with increasing heights
+    int best = 0, n = h.length;
+    for (int i = 0; i <= n; i++) {
+        int cur = (i == n) ? 0 : h[i];           // sentinel 0 flushes the stack
+        while (!st.isEmpty() && h[st.peek()] >= cur) {
+            int height = h[st.pop()];
+            int width  = st.isEmpty() ? i : i - st.peek() - 1;
+            best = Math.max(best, height * width);
+        }
+        st.push(i);
+    }
+    return best;
+}
+</script></div>
+    </section>
+
+    <!-- ============ CORE DSA BANK ============ -->
+    <section class="sec" id="dsa">
+      <div class="sechead">
+        <span class="idx">§ 05</span>
+        <h2>Core DSA question bank</h2>
+        <span class="meta">tap to expand</span>
+      </div>
+      <p class="lead">The classics from the SRIB question sheet. Each is code-on-paper friendly — tight, correct, and with the one-line insight the interviewer wants to hear you say out loud.</p>
+
+      <div class="qa">
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Write heap sort and its complexity in different cases<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> build a max-heap in O(n), then repeatedly swap the root (max) to the end and sift down over the shrinking prefix.</p>
+            <div class="code" data-lang="Java" data-fn="Heap sort — in place"><script type="text/plain">
+void heapSort(int[] a) {
+    int n = a.length;
+    for (int i = n/2 - 1; i >= 0; i--) siftDown(a, n, i);   // build max-heap  O(n)
+    for (int end = n - 1; end > 0; end--) {
+        int t = a[0]; a[0] = a[end]; a[end] = t;            // move max to the end
+        siftDown(a, end, 0);                                // restore heap on [0, end)
+    }
+}
+void siftDown(int[] a, int n, int i) {
+    while (true) {
+        int l = 2*i + 1, r = 2*i + 2, big = i;
+        if (l < n && a[l] > a[big]) big = l;
+        if (r < n && a[r] > a[big]) big = r;
+        if (big == i) break;
+        int t = a[i]; a[i] = a[big]; a[big] = t;
+        i = big;
+    }
+}
+</script></div>
+            <div class="cx"><span>Best <b>O(n log n)</b></span><span>Average <b>O(n log n)</b></span><span>Worst <b>O(n log n)</b></span><span>Space <b>O(1)</b></span><span><b>not stable</b></span></div>
+            <p>Unlike quicksort, heap sort has <b>no O(n²) worst case</b> and needs no extra memory — but it isn't adaptive and isn't stable.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Implement Kadane's algorithm<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> at each index, either extend the running subarray or restart at the current element.</p>
+            <div class="code" data-lang="Java" data-fn="Kadane — max subarray sum"><script type="text/plain">
+int maxSubArray(int[] a) {
+    int best = a[0], cur = a[0];
+    for (int i = 1; i < a.length; i++) {
+        cur  = Math.max(a[i], cur + a[i]);   // extend or restart
+        best = Math.max(best, cur);
+    }
+    return best;
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(n)</b></span><span>Space <b>O(1)</b></span></div>
+            <p>To also return indices, track a <code class="ic">start</code> that resets whenever <code class="ic">cur</code> restarts.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Kahn's algorithm for topological sort<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> repeatedly remove nodes with in-degree 0. If you can't remove all n, the graph has a cycle.</p>
+            <div class="code" data-lang="Java" data-fn="Kahn's topological sort (BFS)"><script type="text/plain">
+List<Integer> topoSort(int n, List<List<Integer>> adj) {
+    int[] indeg = new int[n];
+    for (int u = 0; u < n; u++)
+        for (int v : adj.get(u)) indeg[v]++;
+    Queue<Integer> q = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) if (indeg[i] == 0) q.add(i);
+    List<Integer> order = new ArrayList<>();
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        order.add(u);
+        for (int v : adj.get(u))
+            if (--indeg[v] == 0) q.add(v);
+    }
+    return order.size() == n ? order : new ArrayList<>();   // empty => cycle exists
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(V + E)</b></span><span>Detects cycles for free</span></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Write Dijkstra's algorithm<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> greedily settle the closest unsettled node using a min-heap; skip stale heap entries. No negative edges allowed.</p>
+            <div class="code" data-lang="Java" data-fn="Dijkstra — PQ based"><script type="text/plain">
+int[] dijkstra(int n, List<int[]>[] adj, int src) {   // adj[u] holds {v, weight}
+    int[] dist = new int[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = 0;
+    PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> x[1] - y[1]);  // {node, dist}
+    pq.add(new int[]{src, 0});
+    while (!pq.isEmpty()) {
+        int[] top = pq.poll();
+        int u = top[0], d = top[1];
+        if (d > dist[u]) continue;                    // stale entry, skip
+        for (int[] e : adj[u]) {
+            int v = e[0], w = e[1];
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.add(new int[]{v, dist[v]});
+            }
+        }
+    }
+    return dist;
+}
+</script></div>
+            <div class="cx"><span>Time <b>O((V + E) log V)</b></span><span>use Bellman-Ford for negative edges</span></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Find the k-th smallest element in a BST<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> an in-order traversal of a BST visits values in sorted order — stop at the k-th.</p>
+            <div class="code" data-lang="Java" data-fn="Kth smallest in BST — iterative in-order"><script type="text/plain">
+int kthSmallest(TreeNode root, int k) {
+    Deque<TreeNode> st = new ArrayDeque<>();
+    TreeNode cur = root;
+    while (cur != null || !st.isEmpty()) {
+        while (cur != null) { st.push(cur); cur = cur.left; }   // dive left
+        cur = st.pop();
+        if (--k == 0) return cur.val;                           // k-th in-order node
+        cur = cur.right;
+    }
+    return -1;
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(h + k)</b></span><span>Space <b>O(h)</b></span></div>
+            <p>If the tree is modified often, augment each node with its subtree size for O(log n) queries.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Detect and remove a loop in a linked list<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight (Floyd):</b> slow/fast pointers meet inside the loop. The distance from head to the loop start equals the distance from the meeting point to the loop start — so advance one pointer from head and one from the meeting point until they align.</p>
+            <div class="code" data-lang="Java" data-fn="Floyd cycle detect + remove"><script type="text/plain">
+void detectAndRemoveLoop(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next; fast = fast.next.next;
+        if (slow == fast) break;                       // meeting point inside the loop
+    }
+    if (fast == null || fast.next == null) return;     // no loop
+
+    slow = head;
+    if (slow == fast) {                                // loop starts at the head
+        while (fast.next != slow) fast = fast.next;
+    } else {
+        while (slow.next != fast.next) { slow = slow.next; fast = fast.next; }
+    }
+    fast.next = null;                                  // break the loop
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(n)</b></span><span>Space <b>O(1)</b></span></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Design an LRU cache<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> HashMap for O(1) lookup + a doubly linked list for O(1) recency reordering. Most-recent at the front, evict from the back.</p>
+            <div class="code" data-lang="Java" data-fn="LRU cache — HashMap + DLL"><script type="text/plain">
+class LRUCache {
+    class Node { int key, val; Node prev, next; Node(int k, int v){ key=k; val=v; } }
+    private final int cap;
+    private final Map<Integer, Node> map = new HashMap<>();
+    private final Node head = new Node(0, 0), tail = new Node(0, 0);   // dummies
+
+    public LRUCache(int capacity) {
+        cap = capacity;
+        head.next = tail; tail.prev = head;
+    }
+    private void remove(Node n)  { n.prev.next = n.next; n.next.prev = n.prev; }
+    private void addFront(Node n){ n.next = head.next; n.prev = head;
+                                   head.next.prev = n; head.next = n; }
+
+    public int get(int key) {
+        Node n = map.get(key);
+        if (n == null) return -1;
+        remove(n); addFront(n);                        // mark most-recent
+        return n.val;
+    }
+    public void put(int key, int value) {
+        Node n = map.get(key);
+        if (n != null) { n.val = value; remove(n); addFront(n); return; }
+        if (map.size() == cap) {                       // evict least-recent
+            Node lru = tail.prev; remove(lru); map.remove(lru.key);
+        }
+        Node fresh = new Node(key, value);
+        map.put(key, fresh); addFront(fresh);
+    }
+}
+</script></div>
+            <div class="cx"><span>get / put <b>O(1)</b></span><span>Shortcut: Java's <b>LinkedHashMap</b>(…, true)</span></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">k-th largest in an N×M matrix where each row is sorted<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> keep a min-heap of the k largest seen so far — the heap's top is the answer. Simple and works even without the sorted-row property.</p>
+            <div class="code" data-lang="Java" data-fn="Kth largest in a matrix"><script type="text/plain">
+int kthLargest(int[][] mat, int k) {
+    PriorityQueue<Integer> pq = new PriorityQueue<>();   // min-heap
+    for (int[] row : mat)
+        for (int x : row) {
+            pq.add(x);
+            if (pq.size() > k) pq.poll();                // keep only k largest
+        }
+    return pq.peek();                                    // smallest of the k largest
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(N·M log k)</b></span></div>
+            <p>If <b>both</b> rows and columns are sorted, upgrade to <b>binary search on the value</b> plus a monotone count: O(N log(max−min)).</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Implement a circular queue<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> a fixed array with a <code class="ic">head</code> index and a <code class="ic">count</code>; wrap with modulo. Tracking count (instead of a tail) avoids the "full vs empty" ambiguity.</p>
+            <div class="code" data-lang="Java" data-fn="Circular queue"><script type="text/plain">
+class CircularQueue {
+    int[] a; int head = 0, count = 0, cap;
+    CircularQueue(int k) { cap = k; a = new int[k]; }
+
+    boolean enqueue(int x) {
+        if (count == cap) return false;
+        a[(head + count) % cap] = x; count++; return true;
+    }
+    boolean dequeue() {
+        if (count == 0) return false;
+        head = (head + 1) % cap; count--; return true;
+    }
+    int front() { return count == 0 ? -1 : a[head]; }
+    int rear()  { return count == 0 ? -1 : a[(head + count - 1) % cap]; }
+    boolean isEmpty() { return count == 0; }
+    boolean isFull()  { return count == cap; }
+}
+</script></div>
+            <div class="cx"><span>All ops <b>O(1)</b></span></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Print the sum of all primes in a given range<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> Sieve of Eratosthenes marks composites; a prime's multiples start at p².</p>
+            <div class="code" data-lang="Java" data-fn="Sieve — sum of primes in [lo, hi]"><script type="text/plain">
+long sumPrimes(int lo, int hi) {
+    boolean[] comp = new boolean[hi + 1];        // comp[x] = true  => composite
+    for (int p = 2; (long) p * p <= hi; p++)
+        if (!comp[p])
+            for (int m = p * p; m <= hi; m += p) comp[m] = true;
+    long sum = 0;
+    for (int x = Math.max(2, lo); x <= hi; x++)
+        if (!comp[x]) sum += x;
+    return sum;
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(n log log n)</b></span></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Multiply two polynomials (given as coefficient arrays)<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> index = power, value = coefficient. Powers add, coefficients multiply, results accumulate.</p>
+            <div class="code" data-lang="Java" data-fn="Polynomial multiplication"><script type="text/plain">
+int[] multiply(int[] A, int[] B) {               // A[i], B[i] = coefficient of x^i
+    int[] C = new int[A.length + B.length - 1];
+    for (int i = 0; i < A.length; i++)
+        for (int j = 0; j < B.length; j++)
+            C[i + j] += A[i] * B[j];             // x^i · x^j -> x^(i+j)
+    return C;
+}
+</script></div>
+            <div class="cx"><span>Time <b>O(n·m)</b></span><span>huge degrees: <b>FFT</b> → O(n log n)</span></div>
+            <p>The linked-list version stores <code class="ic">(coeff, power)</code> nodes; multiply pairwise into a map keyed by power, then rebuild a sorted list.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Find the largest and second-largest — give 4 approaches<span class="qtag">theory</span></span></summary>
+          <div class="ans">
+            <p><b>1 · Sort:</b> sort descending, take the first two distinct — O(n log n). Wasteful but trivial.</p>
+            <p><b>2 · Two passes:</b> find the max, then scan again for the max that isn't it — O(n), 2 passes.</p>
+            <p><b>3 · Single pass:</b> track <code class="ic">first</code> and <code class="ic">second</code>; on each element, if it beats <code class="ic">first</code>, push <code class="ic">first</code> down to <code class="ic">second</code> — O(n), 1 pass. This is the answer they want.</p>
+            <p><b>4 · Tournament method:</b> pair up and compare like a knockout bracket; the runner-up must have lost only to the champion, so it's among ~log n candidates — <code class="ic">n + ⌈log n⌉ − 2</code> comparisons, the comparison-optimal approach.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Which data structure manages files and folders in your mobile?<span class="qtag">theory</span></span></summary>
+          <div class="ans">
+            <p>A <b>tree</b> — the directory hierarchy is an N-ary tree (each folder is a node with child files/folders). On disk, the filesystem indexes directory entries with a <b>B-tree / B+ tree</b> (e.g., ext4's HTree, NTFS) because they keep lookups shallow and are disk-block friendly. Path resolution walks the tree like a trie.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is a memory leak and how do you avoid it?<span class="qtag">theory</span></span></summary>
+          <div class="ans">
+            <p>Memory that was allocated but never released and is no longer reachable, so it can't be reused — usage grows over time. In <b>C/C++</b> it's a <code class="ic">malloc</code>/<code class="ic">new</code> with no matching <code class="ic">free</code>/<code class="ic">delete</code>.</p>
+            <p><b>Avoid:</b> RAII and smart pointers (<code class="ic">unique_ptr</code>/<code class="ic">shared_ptr</code>), pair every allocation with a deallocation on all paths (including exceptions), and check with Valgrind/ASan. In <b>Java</b>, "leaks" are unintended live references — static collections, un-removed listeners, unclosed resources — that keep the GC from collecting.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Difference between dynamic programming and divide &amp; conquer<span class="qtag">theory</span></span></summary>
+          <div class="ans">
+            <p>Both split a problem into subproblems. In <b>divide &amp; conquer</b> the subproblems are <b>independent</b> and solved once (merge sort, binary search). In <b>DP</b> the subproblems <b>overlap</b>, so you memoize/tabulate to avoid recomputation (Fibonacci, edit distance). DP additionally requires <b>optimal substructure</b>.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Disadvantages of a stack &amp; when recursion overflows it<span class="qtag">theory</span></span></summary>
+          <div class="ans">
+            <p><b>Disadvantages:</b> only LIFO access (no random access or search), fixed capacity in an array implementation, and no efficient traversal of the middle.</p>
+            <p><b>Stack overflow with recursion:</b> every call pushes an activation frame (params, locals, return address). A missing or wrong base case — or legitimately very deep recursion like <code class="ic">factorial(1_000_000)</code> — exhausts the call-stack region and throws <code class="ic">StackOverflowError</code>. Fix with a correct base case, tail-recursion → iteration, or an explicit stack.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ BIT MANIPULATION ============ -->
+    <section class="sec" id="bits">
+      <div class="sechead">
+        <span class="idx">§ 06</span>
+        <h2>Bit manipulation</h2>
+        <span class="meta">a SRIB favourite</span>
+      </div>
+      <p class="lead">Samsung Bangalore reliably slips in a bit-twiddling question — cleared candidates report "<b>swap the first 16 and last 16 bits of a 32-bit number</b>" and "<b>how many bits must change to turn A into B</b>". Keep these one-liners loaded.</p>
+
+      <div class="code" data-lang="Java" data-fn="Bit manipulation toolkit"><script type="text/plain">
+// bits differing between a and b   (turn A into B)  — SRIB classic
+int diffBits(int a, int b) { return Integer.bitCount(a ^ b); }
+
+// swap the first 16 bits with the last 16 bits of a 32-bit number
+int swap16(int n) { return (n >>> 16) | (n << 16); }     // >>> = unsigned right shift
+
+// count set bits — Brian Kernighan (n & (n-1) clears the lowest set bit)
+int countSetBits(int n) {
+    int c = 0;
+    while (n != 0) { n &= (n - 1); c++; }
+    return c;
+}
+
+// power of two? — exactly one set bit
+boolean isPow2(int n) { return n > 0 && (n & (n - 1)) == 0; }
+
+int lowestSetBit(int n) { return n & -n; }               // isolate rightmost 1-bit
+int setBit   (int n, int i) { return n |  (1 << i); }
+int clearBit (int n, int i) { return n & ~(1 << i); }
+int toggleBit(int n, int i) { return n ^  (1 << i); }
+int getBit   (int n, int i) { return (n >> i) & 1; }
+</script></div>
+      <div class="callout teal">
+        <span class="lab">Say the trick, not just the code</span>
+        <p>For "swap first/last 16 bits", the line that impresses is: "shift the high half down with an <b>unsigned</b> shift (<code class="ic">&gt;&gt;&gt;</code>, so sign bits don't leak in), shift the low half up, then OR them." For counting differing bits: "XOR gives a 1 exactly where they differ, so I just popcount the XOR."</p>
+      </div>
+    </section>
+
+    <!-- ============ OPERATING SYSTEMS ============ -->
+    <section class="sec" id="os">
+      <div class="sechead">
+        <span class="idx">§ 07</span>
+        <h2>Operating systems</h2>
+        <span class="meta">semaphores · paging · scheduling</span>
+      </div>
+      <p class="lead">Rapid-fire territory. Your senior noted friends were grilled on <b>semaphores</b> and <b>spinlocks</b>; the SRIB sheet leans on paging, IPC, and scheduling. Two crisp sentences each, plus the producer–consumer you may be asked to write.</p>
+
+      <div class="qa">
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is a page fault and why does it occur?</span></summary>
+          <div class="ans"><p>A trap raised when a process accesses a page that isn't currently in physical memory. The MMU can't translate it, so the OS's fault handler fetches the page from disk (or allocates it). It occurs on first touch under demand paging, after the page was swapped out, or on an invalid access (which becomes a segfault).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is virtual memory?</span></summary>
+          <div class="ans"><p>An abstraction giving each process its own large, contiguous address space that can exceed physical RAM, backed by disk. It enables isolation between processes, and lets more processes run than would fit in RAM by paging inactive pages out.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is demand paging?</span></summary>
+          <div class="ans"><p>Loading a page into memory only when it's actually referenced, rather than loading the whole program upfront. It cuts startup time and memory footprint; the cost is a page fault on the first access to each page.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Explain semaphores</span></summary>
+          <div class="ans"><p>An integer synchronization primitive with two atomic operations: <code class="ic">wait/P</code> (decrement; block if it would go negative) and <code class="ic">signal/V</code> (increment; wake a waiter). A <b>counting</b> semaphore guards N identical resources; a <b>binary</b> semaphore (value 0/1) acts like a lock.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Semaphore vs mutex vs spinlock<span class="qtag">asked</span></span></summary>
+          <div class="ans">
+            <p><b>Mutex:</b> a lock with ownership — only the locker unlocks; a blocked thread sleeps.</p>
+            <p><b>Semaphore:</b> a counter for N resources, no ownership; used for signalling between threads too.</p>
+            <p><b>Spinlock:</b> busy-waits in a tight loop instead of sleeping — great for very short critical sections on multicore (no context-switch cost), terrible if held long or on a single core.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">During a context switch, what's saved and where?</span></summary>
+          <div class="ans"><p>The kernel saves the outgoing process's <b>CPU register context</b> — program counter, stack pointer, general registers — into its <b>PCB</b> (in kernel memory), then loads the next process's context. The process's own <b>stack and heap stay in RAM untouched</b>; only the pointers/registers are swapped, which is why the resumed process finds its frames exactly as it left them.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Write the producer–consumer solution<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> three semaphores — <code class="ic">empty</code> counts free slots, <code class="ic">full</code> counts filled slots, and <code class="ic">mutex</code> protects the buffer indices.</p>
+            <div class="code" data-lang="Java" data-fn="Bounded buffer with semaphores"><script type="text/plain">
+import java.util.concurrent.Semaphore;
+
+class BoundedBuffer {
+    final int[] buf; int in = 0, out = 0;
+    final Semaphore empty, full;
+    final Semaphore mutex = new Semaphore(1);
+
+    BoundedBuffer(int size) {
+        buf   = new int[size];
+        empty = new Semaphore(size);   // free slots
+        full  = new Semaphore(0);      // filled slots
+    }
+    void produce(int item) throws InterruptedException {
+        empty.acquire();               // wait for a free slot
+        mutex.acquire();
+        buf[in] = item; in = (in + 1) % buf.length;
+        mutex.release();
+        full.release();                // signal: one more item
+    }
+    int consume() throws InterruptedException {
+        full.acquire();                // wait for an item
+        mutex.acquire();
+        int item = buf[out]; out = (out + 1) % buf.length;
+        mutex.release();
+        empty.release();               // signal: one more free slot
+        return item;
+    }
+}
+</script></div>
+            <p><b>Order matters:</b> acquire the counting semaphore <i>before</i> the mutex, never the reverse — the opposite order deadlocks.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What are swap-in and swap-out?</span></summary>
+          <div class="ans"><p><b>Swap-out:</b> the OS moves a page/process from RAM to the swap area on disk to free memory. <b>Swap-in:</b> it brings that data back into RAM when needed again. This is how the system runs more than physical memory can hold.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Starvation vs aging</span></summary>
+          <div class="ans"><p><b>Starvation:</b> a process waits indefinitely because higher-priority (or shorter) jobs keep jumping ahead. <b>Aging:</b> the remedy — gradually raise the priority of long-waiting processes so they eventually run.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Explain LRU page replacement</span></summary>
+          <div class="ans"><p>On a page fault with memory full, evict the page that has gone <b>unused for the longest time</b> — the assumption being recently used pages will be used again (locality). Exact LRU needs timestamps/a stack; real systems approximate it with reference bits (the clock/second-chance algorithm).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">IPC types — and which is fastest, and why?</span></summary>
+          <div class="ans"><p>Pipes/FIFOs, message queues, <b>shared memory</b>, sockets, and signals. <b>Shared memory is the fastest</b>: once the region is mapped, processes read/write it directly with no kernel copying per message — the kernel is only involved in setup. The trade-off is you must add your own synchronization (semaphores) since the OS doesn't mediate access.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is fragmentation? Define external fragmentation.</span></summary>
+          <div class="ans"><p><b>Fragmentation</b> is wasted memory from imperfect allocation. <b>External:</b> enough total free memory exists but it's split into small non-contiguous holes, so a large request can't be satisfied — fixed by compaction or paging. <b>Internal:</b> a fixed block is larger than the request, wasting the remainder inside it.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">How many processes does N fork() statements create?</span></summary>
+          <div class="ans"><p><b>2<sup>N</sup> processes total</b> (i.e. 2<sup>N</sup> − 1 new children), since each existing process splits into two at every <code class="ic">fork()</code>. With three forks: 8 processes, 7 children.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What problem does priority scheduling cause?</span></summary>
+          <div class="ans"><p><b>Starvation</b> of low-priority processes — if high-priority jobs keep arriving, the low-priority ones never get the CPU. The standard fix is <b>aging</b>.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is a real-time OS?</span></summary>
+          <div class="ans"><p>An OS that guarantees tasks complete within strict time bounds (deadlines), where correctness depends on timing. <b>Hard RTOS</b> allows no deadline miss (avionics, pacemakers); <b>soft RTOS</b> tolerates occasional misses with degraded quality (media streaming).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Preemptive vs non-preemptive scheduling</span></summary>
+          <div class="ans"><p><b>Preemptive:</b> the scheduler can forcibly take the CPU from a running process (Round Robin, preemptive priority, SRTF) — better responsiveness. <b>Non-preemptive:</b> a process holds the CPU until it finishes or blocks (FCFS, non-preemptive SJF) — simpler but a long job can hog the CPU.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">If the time slice exceeds the largest burst, Round Robin behaves like…?</span></summary>
+          <div class="ans"><p><b>FCFS.</b> No process is ever preempted (each finishes within its quantum), so it degenerates to first-come-first-served.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Grant access so only 2 processes can write and 1 can read a file at a time</span></summary>
+          <div class="ans"><p>Use two counting semaphores: a <b>write semaphore initialized to 2</b> (each writer does <code class="ic">P</code> before writing, <code class="ic">V</code> after) and a <b>read semaphore initialized to 1</b> (each reader does <code class="ic">P/V</code> around reading). The semaphore value caps the number of concurrent holders at exactly 2 and 1 respectively.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Stack pointer vs frame pointer</span></summary>
+          <div class="ans"><p>The <b>stack pointer (SP)</b> always points to the current top of the stack and moves on every push/pop. The <b>frame pointer (FP / base pointer)</b> is fixed for the duration of a function call and anchors access to that frame's parameters and locals at constant offsets — even as SP keeps moving during the call.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ DBMS ============ -->
+    <section class="sec" id="dbms">
+      <div class="sechead">
+        <span class="idx">§ 08</span>
+        <h2>DBMS</h2>
+        <span class="meta">indexing · decomposition · SQL</span>
+      </div>
+      <p class="lead">Compact but frequently asked. Know the indexing family cold and be ready to write the group-wise-max query on paper.</p>
+
+      <div class="qa">
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is a view?</span></summary>
+          <div class="ans"><p>A <b>virtual table</b> defined by a stored query — it holds no data of its own; the query runs when the view is accessed. Views simplify complex joins, enforce security (expose only some columns/rows), and provide logical data independence. A <b>materialized view</b> physically stores the result and must be refreshed.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What is indexing?</span></summary>
+          <div class="ans"><p>An auxiliary structure (usually a <b>B+ tree</b>, sometimes a hash) that maps a search key to the location of matching rows, turning full-table scans into logarithmic lookups. The cost is extra storage and slower inserts/updates/deletes, since indexes must be maintained.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Subject-wise maximum marks — subjects ascending, marks descending<span class="qtag">SQL</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> group by subject, take <code class="ic">MAX(marks)</code>, then order.</p>
+            <div class="code" data-lang="SQL" data-fn="Group-wise maximum"><script type="text/plain">
+SELECT subject, MAX(marks) AS max_marks
+FROM   student
+GROUP  BY subject
+ORDER  BY subject ASC, max_marks DESC;
+</script></div>
+            <p>If they also want <b>which student</b> scored it, use a window function:</p>
+            <div class="code" data-lang="SQL" data-fn="…and the top student per subject"><script type="text/plain">
+SELECT subject, student_name, marks
+FROM (
+    SELECT subject, student_name, marks,
+           RANK() OVER (PARTITION BY subject ORDER BY marks DESC) AS rk
+    FROM student
+) t
+WHERE rk = 1
+ORDER BY subject ASC, marks DESC;
+</script></div>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Primary vs secondary vs clustering vs multilevel indexing</span></summary>
+          <div class="ans">
+            <p><b>Primary index:</b> built on the ordering key of a sorted file — one entry per block (sparse), fastest and smallest.</p>
+            <p><b>Clustering index:</b> on a non-key ordering field, so records with the same value are stored together.</p>
+            <p><b>Secondary index:</b> on a non-ordering field; must be <b>dense</b> (an entry per record/bucket) because the file isn't sorted on it.</p>
+            <p><b>Multilevel index:</b> an index over the index (the levels of a B+ tree), keeping the top level small enough to sit in memory.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Sparse vs dense indexing</span></summary>
+          <div class="ans"><p><b>Dense:</b> one index entry for every record — supports existence checks without touching the data, but larger. <b>Sparse:</b> one entry per block/group — smaller, but only works when the file is <b>ordered on the key</b> (you land near the record and scan). Sparse trades a little search time for much less space.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Lossless vs lossy decomposition</span></summary>
+          <div class="ans"><p>Splitting relation R into R1 and R2 is <b>lossless</b> if their natural join reconstructs <b>exactly</b> R — guaranteed when the common attributes form a <b>superkey of at least one</b> of R1 or R2. It's <b>lossy</b> if the join yields <b>spurious extra tuples</b> (information is effectively lost because you can't tell the originals apart). Good normalization always uses lossless decomposition.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ C++ / OOP / INTERNALS ============ -->
+    <section class="sec" id="cpp">
+      <div class="sechead">
+        <span class="idx">§ 09</span>
+        <h2>C++ &amp; language internals</h2>
+        <span class="meta">the biggest rapid-fire pool</span>
+      </div>
+      <p class="lead">The SRIB "general questions for SDE" list is almost entirely this: <b>vptr/vtable</b>, pointers, memory model, and C++ mechanics. Even as a Java-first candidate, have crisp answers here — cleared candidates got singleton, vptr, and templates. Code where it earns its place.</p>
+
+      <div class="qa">
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Explain VTABLE and VPTR<span class="qtag">key</span></span></summary>
+          <div class="ans">
+            <p>Every class with virtual functions has <b>one shared vtable</b> — an array of pointers to that class's virtual function implementations. Every <b>object</b> of such a class carries a hidden <b>vptr</b> that points to its class's vtable. A virtual call is resolved at runtime: dereference the object's vptr → index into the vtable → jump to the correct override. That indirection is exactly what makes runtime polymorphism work.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Implement a thread-safe singleton<span class="qtag">code · asked</span></span></summary>
+          <div class="ans">
+            <p><b>Best answer (C++11+):</b> the Meyers singleton — a function-local <code class="ic">static</code> whose initialization is guaranteed thread-safe by the standard.</p>
+            <div class="code" data-lang="C++" data-fn="Meyers singleton — thread-safe"><script type="text/plain">
+class Singleton {
+public:
+    static Singleton& instance() {
+        static Singleton inst;          // initialized once, atomically (C++11)
+        return inst;
+    }
+    Singleton(const Singleton&)            = delete;   // no copy
+    Singleton& operator=(const Singleton&) = delete;   // no assign
+private:
+    Singleton() = default;
+};
+</script></div>
+            <p><b>Pre-C++11 / if asked to show locking:</b> double-checked locking with an atomic pointer and a mutex — check the pointer, lock only if null, check again inside the lock. Mention that a naive DCL without atomics is broken due to instruction reordering.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Function pointer — write one for a function taking int, returning char<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <div class="code" data-lang="C" data-fn="Function pointer int -> char"><script type="text/plain">
+char grade(int marks) { return marks >= 40 ? 'P' : 'F'; }
+
+char (*fp)(int);        // fp: pointer to a function (int) -> char
+fp = grade;             // or &grade
+char g = fp(55);        // or (*fp)(55)  -> 'P'
+</script></div>
+            <p>Read it inside-out: <code class="ic">(*fp)</code> is a pointer, <code class="ic">(int)</code> its parameters, <code class="ic">char</code> its return type. Useful for callbacks and dispatch tables.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Implement your own strcat() without &lt;string.h&gt;<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <div class="code" data-lang="C" data-fn="myStrcat"><script type="text/plain">
+char* myStrcat(char* dest, const char* src) {
+    char* p = dest;
+    while (*p) p++;               // walk to dest's null terminator
+    while (*src) *p++ = *src++;   // copy src over it
+    *p = '\0';                    // re-terminate
+    return dest;
+}
+</script></div>
+            <p>Caller must ensure <code class="ic">dest</code> has room for both strings plus the terminator.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Big vs little endian — and how to detect it<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Big-endian</b> stores the most-significant byte at the lowest address; <b>little-endian</b> stores the least-significant byte first (x86, most ARM).</p>
+            <div class="code" data-lang="C" data-fn="Endianness check"><script type="text/plain">
+int isLittleEndian() {
+    unsigned int x = 1;          // little-endian memory: 01 00 00 00
+    char* c = (char*) &x;
+    return (*c == 1);            // first byte is 1 -> little-endian
+}
+</script></div>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Implement 3 stacks in 1 array<span class="qtag">code</span></span></summary>
+          <div class="ans">
+            <p><b>Insight:</b> keep a <b>free list</b> of unused cells and a <code class="ic">next[]</code> array of links; each stack is a linked chain through the same array, so all space is shared with no fixed partitions.</p>
+            <div class="code" data-lang="Java" data-fn="k stacks in one array (k = 3)"><script type="text/plain">
+class KStacks {
+    int[] arr, next, top;
+    int free;
+    KStacks(int k, int n) {
+        arr = new int[n]; next = new int[n]; top = new int[k];
+        Arrays.fill(top, -1);
+        for (int i = 0; i < n - 1; i++) next[i] = i + 1;   // build free list
+        next[n - 1] = -1; free = 0;
+    }
+    void push(int s, int x) {
+        if (free == -1) return;               // array full
+        int i = free; free = next[i];         // pop a free cell
+        arr[i] = x; next[i] = top[s]; top[s] = i;
+    }
+    int pop(int s) {
+        if (top[s] == -1) return -1;          // stack s empty
+        int i = top[s]; top[s] = next[i];
+        next[i] = free; free = i;             // return cell to free list
+        return arr[i];
+    }
+}
+</script></div>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Virtual function &amp; virtual destructor</span></summary>
+          <div class="ans">
+            <p><b>Virtual function:</b> a member marked <code class="ic">virtual</code> so calls dispatch on the object's <i>runtime</i> type via the vtable — the basis of polymorphism.</p>
+            <p><b>Virtual destructor:</b> make the base destructor <code class="ic">virtual</code> so that <code class="ic">delete basePtr;</code> on a derived object runs the <b>derived</b> destructor first. Omitting it → the derived part isn't cleaned up → undefined behaviour / leaks.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Abstract class vs pure virtual function</span></summary>
+          <div class="ans"><p>A <b>pure virtual function</b> — <code class="ic">virtual void f() = 0;</code> — has no body and must be overridden. A class with at least one pure virtual is an <b>abstract class</b>: it can't be instantiated and serves as an interface. "Abstract function" is just the pure virtual.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Early vs late binding</span></summary>
+          <div class="ans"><p><b>Early (static) binding</b> resolves the call at compile time — normal functions, overloads, non-virtual calls. <b>Late (dynamic) binding</b> resolves at runtime through the vtable — virtual functions. Late binding costs one indirection but enables polymorphism.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Deep copy vs shallow copy</span></summary>
+          <div class="ans"><p><b>Shallow copy</b> duplicates member values including pointers, so both objects share the same underlying buffer — leading to aliasing and double-free. <b>Deep copy</b> also duplicates the pointed-to data, giving fully independent objects. In C++ this is the <b>Rule of Three/Five</b> (define copy ctor, copy assign, destructor — and move versions).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">void, smart, wild, null, and dangling pointers</span></summary>
+          <div class="ans">
+            <p><b>void*</b> — typeless pointer; must be cast before dereferencing. <b>Smart pointer</b> — RAII wrapper that owns and auto-frees memory (<code class="ic">unique_ptr</code>, <code class="ic">shared_ptr</code>, <code class="ic">weak_ptr</code>). <b>Wild pointer</b> — uninitialized, points somewhere unknown. <b>Null pointer</b> — points to nothing (<code class="ic">nullptr</code>). <b>Dangling pointer</b> — points to memory that has been freed or gone out of scope.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Diamond problem</span></summary>
+          <div class="ans"><p>With multiple inheritance, if D inherits from both B and C which each inherit from A, D gets <b>two copies</b> of A's subobject and calls to A's members become ambiguous. Fix with <b>virtual inheritance</b> — <code class="ic">class B : virtual public A</code> — so a single shared A subobject exists.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Friend class and friend function</span></summary>
+          <div class="ans"><p>A <code class="ic">friend</code> is a non-member function or another class granted access to a class's <b>private/protected</b> members. It deliberately relaxes encapsulation for tightly coupled code — e.g. an overloaded <code class="ic">operator&lt;&lt;</code> that needs internal access. Friendship isn't inherited or transitive.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">L-value vs R-value reference</span></summary>
+          <div class="ans"><p>An <b>l-value</b> has an identifiable address (can sit on the left of <code class="ic">=</code>); an <b>r-value</b> is a temporary. <code class="ic">T&amp;</code> binds l-values; <code class="ic">T&amp;&amp;</code> (an r-value reference, C++11) binds temporaries and powers <b>move semantics</b> — stealing resources from a soon-to-die object instead of copying.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Principles of OOP</span></summary>
+          <div class="ans"><p><b>Encapsulation</b> (bundle data + behaviour, hide internals), <b>Abstraction</b> (expose intent, not implementation), <b>Inheritance</b> (derive and reuse), <b>Polymorphism</b> (one interface, many runtime forms). The four pillars.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Multilevel inheritance</span></summary>
+          <div class="ans"><p>A <b>chain</b> of inheritance: C derives from B, and B derives from A — grandparent → parent → child, each level extending or overriding the previous. Distinct from <b>multiple</b> inheritance (one class, several direct bases).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Inline functions</span></summary>
+          <div class="ans"><p>A <b>request</b> to the compiler to expand the function body at each call site, eliminating call overhead — best for tiny, hot functions. It's only a hint (the compiler may decline), and over-inlining causes code bloat.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">static vs const variable</span></summary>
+          <div class="ans"><p>They control <b>different things</b>. <code class="ic">static</code> affects <b>storage and linkage</b> — a single instance that lives for the whole program (and, at file scope, internal linkage). <code class="ic">const</code> affects <b>mutability</b> — the value can't change after initialization. A variable can be both.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Where are local / global / static / auto / register / extern / const / volatile stored?</span></summary>
+          <div class="ans">
+            <p><b>Local/auto</b> → stack. <b>Global &amp; static</b> → data segment (initialized in <code class="ic">.data</code>, zero-initialized in <code class="ic">.bss</code>). <b>Dynamic (new/malloc)</b> → heap. <b>register</b> → a CPU register if honoured (a hint). <b>extern</b> → just a declaration; the definition lives in the data segment elsewhere. <b>const</b> → often read-only data (<code class="ic">.rodata</code>). <b>volatile</b> → wherever it normally lives; the keyword only tells the compiler not to cache/optimize its accesses.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Memory layout of a C program</span></summary>
+          <div class="ans"><p>From low to high addresses: <b>text/code</b> (instructions, read-only) → <b>initialized data (.data)</b> → <b>uninitialized data (.bss)</b> → <b>heap</b> (grows upward) → … free gap … → <b>stack</b> (grows downward) → command-line args &amp; environment at the top.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Structure padding</span></summary>
+          <div class="ans"><p>The compiler inserts unused bytes so each member starts on its natural <b>alignment</b> boundary and the whole struct's size is a multiple of its largest member's alignment — trading a little space for faster aligned access. Reorder members largest → smallest to shrink padding; <code class="ic">#pragma pack</code> forces tighter packing.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Name mangling</span></summary>
+          <div class="ans"><p>The compiler encodes a function's name together with its parameter types (and class/namespace) into a unique linker symbol, so overloaded and namespaced names don't collide. <code class="ic">extern "C"</code> turns it off so C code can link to the symbol by its plain name.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Segmentation fault</span></summary>
+          <div class="ans"><p>A memory-access violation the hardware/OS flags as <b>SIGSEGV</b> — dereferencing a null/wild/dangling pointer, writing to read-only memory, or overflowing the stack. The program is trying to touch memory it isn't allowed to.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Do namespaces interact? If so, how?</span></summary>
+          <div class="ans"><p><b>Yes, but only when you opt in.</b> Via <code class="ic">using</code> declarations/directives, <b>argument-dependent lookup</b> (ADL/Koenig — the compiler also searches the namespaces of a call's arguments), and nesting. Namespaces are also <b>open</b> — you can add names to the same namespace across multiple files. They don't silently merge otherwise.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">sizeof(void) vs sizeof(void*)</span></summary>
+          <div class="ans"><p><code class="ic">sizeof(void)</code> is <b>ill-formed in standard C++</b> because <code class="ic">void</code> is an incomplete type (GCC returns 1 as an extension). <code class="ic">sizeof(void*)</code> is the <b>pointer size</b> — 8 bytes on a 64-bit build, 4 on 32-bit.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">What does malloc(0) return?</span></summary>
+          <div class="ans"><p><b>Implementation-defined:</b> either <code class="ic">NULL</code>, or a unique non-null pointer that you may legally pass to <code class="ic">free()</code> but must <b>not dereference</b>. Don't rely on either behaviour.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">NULL vs NIL</span></summary>
+          <div class="ans"><p><b>NULL</b> is C/C++'s null-pointer constant (traditionally <code class="ic">0</code>; prefer <code class="ic">nullptr</code> in modern C++). <b>NIL</b> is the "no value / empty" notion from other languages (Lisp, Pascal, Objective-C's <code class="ic">nil</code>) — not standard C++. Also distinguish both from the null character <code class="ic">'\0'</code>.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Describe Java's garbage collection</span></summary>
+          <div class="ans"><p>The JVM automatically reclaims objects no longer <b>reachable</b> from GC roots (stack refs, statics). It's <b>generational</b>: most objects die young, so a fast minor GC sweeps the young generation (Eden/survivor) and survivors get promoted to the old generation, collected less often by a major/full GC. Modern collectors (G1, ZGC, Shenandoah) mark → sweep → compact with low pauses.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Templates &amp; STL<span class="qtag">v.v. asked</span></span></summary>
+          <div class="ans"><p><b>Templates</b> are compile-time generics — the compiler generates a concrete version per type used (function and class templates). <b>STL</b> is the Standard Template Library built on them: containers (<code class="ic">vector</code>, <code class="ic">map</code>, <code class="ic">unordered_map</code>), iterators, and algorithms. Know the internals: <code class="ic">vector</code> doubles its capacity on growth; <code class="ic">map</code> is a red-black tree (O(log n), ordered); <code class="ic">unordered_map</code> is a hash table (O(1) average).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">MFC, COM, and DCOM</span></summary>
+          <div class="ans"><p><b>MFC</b> — Microsoft Foundation Classes, a C++ library wrapping the Win32 API for building Windows GUIs. <b>COM</b> — Component Object Model, a binary interface standard letting components interoperate regardless of language. <b>DCOM</b> — Distributed COM, COM extended so components can communicate across networked machines.</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Pointer to an array vs typedef vs conio</span></summary>
+          <div class="ans">
+            <p><b>Pointer to an array of 10 ints:</b> <code class="ic">int (*p)[10];</code> — mind the parentheses; <code class="ic">int* p[10]</code> is instead an array of 10 pointers.</p>
+            <p><b>Your own typedef:</b> <code class="ic">typedef unsigned long ulong;</code> (modern: <code class="ic">using ulong = unsigned long;</code>). A complex one names a function-pointer type: <code class="ic">typedef char (*Fp)(int);</code>.</p>
+            <p><b>conio</b> = <b>Console Input/Output</b> (<code class="ic">conio.h</code>) — a non-standard DOS/Turbo-C header.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Scheduling — and which data structure is used?</span></summary>
+          <div class="ans"><p>Scheduling decides which ready process gets the CPU next. The <b>ready queue</b> is the structure: a plain FIFO <b>queue</b> for Round Robin, a <b>priority queue / heap</b> for priority scheduling, and a <b>red-black tree</b> in Linux's CFS (keyed by virtual runtime).</p></div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Exceptions that try/catch can't catch — can we still avoid a crash?</span></summary>
+          <div class="ans"><p>Some failures aren't C++ exceptions: <b>OS faults</b> like a segfault (SIGSEGV) or divide-by-zero, and exceptions thrown <b>during stack unwinding</b> (which call <code class="ic">std::terminate</code>). You can intercept OS-level faults with platform mechanisms — <b>SEH</b> (<code class="ic">__try/__except</code>) on Windows, <b>signal handlers</b> on POSIX — and install a <code class="ic">std::set_terminate</code> handler, so you can <b>log and shut down gracefully</b>, but you generally can't safely resume. In Java the analogue is <code class="ic">Error</code> (e.g. <code class="ic">StackOverflowError</code>): technically catchable, but not something to rely on.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ NETWORKS ============ -->
+    <section class="sec" id="net">
+      <div class="sechead">
+        <span class="idx">§ 10</span>
+        <h2>Computer networks</h2>
+        <span class="meta">TCP/IP essentials</span>
+      </div>
+      <p class="lead">Light but expected — TCP vs UDP and the TCP/IP stack come up in almost every list.</p>
+
+      <div class="panel">
+        <h4>TCP vs UDP</h4>
+        <table class="tb">
+          <tr><th>Aspect</th><th>TCP</th><th>UDP</th></tr>
+          <tr><td><b>Connection</b></td><td>Connection-oriented (handshake)</td><td>Connectionless</td></tr>
+          <tr><td><b>Reliability</b></td><td>Reliable — acks, retransmission, ordered</td><td>Best-effort — no guarantee, may reorder/drop</td></tr>
+          <tr><td><b>Control</b></td><td>Flow + congestion control</td><td>None</td></tr>
+          <tr><td><b>Speed / overhead</b></td><td>Slower, heavier header (20 B)</td><td>Fast, light header (8 B)</td></tr>
+          <tr><td><b>Unit</b></td><td>Byte stream</td><td>Datagrams</td></tr>
+          <tr><td><b>Used by</b></td><td>HTTP(S), FTP, SMTP, SSH</td><td>DNS, DHCP, VoIP, streaming, games</td></tr>
+        </table>
+      </div>
+
+      <div class="qa">
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Protocols at each layer of the TCP/IP model</span></summary>
+          <div class="ans">
+            <p><b>Application:</b> HTTP(S), FTP, SMTP, DNS, DHCP. <b>Transport:</b> TCP, UDP. <b>Internet:</b> IP, ICMP, ARP, routing. <b>Network Access / Link:</b> Ethernet, Wi-Fi (802.11), MAC.</p>
+          </div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">▸</span><span class="qt">Explain client-server architecture</span></summary>
+          <div class="ans"><p>A model where <b>clients</b> request services and a central <b>server</b> provides them (data, compute, files). Resources are centralized — easier to manage and secure, but the server is a single point of failure and a scaling bottleneck. Contrast with peer-to-peer, where every node is both client and server.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ PROJECT & BEHAVIORAL ============ -->
+    <section class="sec" id="project">
+      <div class="sechead">
+        <span class="idx">§ 11</span>
+        <h2>Project deep-dive &amp; behavioral</h2>
+        <span class="meta">the biggest scoring chunk</span>
+      </div>
+      <p class="lead">Field notes are unanimous: <b>15–35 minutes go to your project</b>, sometimes with the interviewer reading your code. This is your home turf — you're interviewing at the exact org whose product (Bixby) your KnowHow AI work targets. Own every decision and you separate yourself from every rote-DSA candidate.</p>
+
+      <div class="callout">
+        <span class="lab">Your unfair advantage</span>
+        <p>Your <b>act-vs-ask</b> problem — teaching a small on-device model when to act on an ambiguous smart-home command vs ask for clarification — is directly relevant to Bixby. Lead with it. Very few candidates walk in with a project that <i>is</i> the interviewer's roadmap.</p>
+      </div>
+
+      <div class="panel">
+        <h4>1 · "Tell me about yourself" — the 90-second open</h4>
+        <p>Rehearse this cold. A clean shape: <b>who you are</b> (final-year dual-degree CS at BITS Pilani) → <b>what you're doing now</b> (SRIB intern on the KnowHow AI project, improving Bixby's handling of implicit commands) → <b>one flagship result</b> (distilling a black-box teacher into an on-device Gemma student that knows when to act vs ask) → <b>what you want</b> (build applied-ML / agentic systems at scale). Land it in under two minutes and stop.</p>
+      </div>
+
+      <div class="panel">
+        <h4>2 · The project narrative — hit these beats in order</h4>
+        <ol class="ladder">
+          <li><b>Problem, in one line.</b> Bixby mishandles implicit smart-home commands — goal-stated, routine-implied, deictic. The model must resolve them without over-acting on ambiguity.</li>
+          <li><b>Why it's hard.</b> On-device constraints (a small Gemma student), a black-box teacher (Gemini 2.5 Pro — no logits, no gradients), and the safety asymmetry: acting wrongly is worse than asking.</li>
+          <li><b>Your pipeline.</b> Knowledge distillation into Gemma 4 E4B, a bi-temporal knowledge graph (FalkorDB + Graphiti) for home context, and calibrated selective prediction — the act-vs-ask decision head.</li>
+          <li><b>The key trade-off.</b> Sequence-level SFT + rationale distillation + counterfactual minimal pairs, with GRPO deprioritized <i>because</i> the teacher is a black box — no reward signal to optimize against cleanly.</li>
+          <li><b>How you measured it.</b> HomeBench / SimuHome, calibration under ambiguity, and the act-vs-ask decision quality.</li>
+        </ol>
+      </div>
+
+      <div class="panel">
+        <h4>3 · Anticipate the deep-dive questions</h4>
+        <ul class="tick">
+          <li><b>"Why distillation and not just fine-tuning?"</b> — The teacher encodes reasoning the small model can't learn from labels alone; rationale distillation transfers the <i>why</i>, not just the answer.</li>
+          <li><b>"Why did you drop GRPO / RL?"</b> — A black-box teacher gives no clean reward; SFT + counterfactual pairs was higher signal-per-compute for the on-device target.</li>
+          <li><b>"Why a knowledge graph and not RAG over text?"</b> — Home state is relational and <b>temporal</b> (devices, routines, who did what when); a bi-temporal graph answers "what's true now vs what was true" that flat retrieval can't.</li>
+          <li><b>"How do you decide act vs ask?"</b> — Calibrated selective prediction: act only when confidence clears a threshold tuned to the cost asymmetry; otherwise ask. Frame it as precision/recall on the "act" decision.</li>
+          <li><b>"Walk me through the code."</b> — Have the orchestration (the agent loop over the graph) and the training script clear in your head. Be able to point to one thing you'd refactor.</li>
+        </ul>
+      </div>
+
+      <div class="callout teal">
+        <span class="lab">Curiosity questions (the "Starlink" type)</span>
+        <p>These aren't gotchas — they check whether you're genuinely curious about tech. The night before, skim a little recent AI/systems news so you can chat about <i>something</i> current with real interest. If you don't know the specific thing, say so and reason about it out loud — that's the actual test.</p>
+      </div>
+
+      <div class="panel">
+        <h4>4 · Behavioral — keep answers STAR and short</h4>
+        <ul class="tick">
+          <li><b>Why Samsung / SRIB?</b> Tie it to the work — on-device intelligence, Bixby, applied research that ships to real devices. You've already been doing it as an intern.</li>
+          <li><b>A hard bug / conflict / failure.</b> Use <b>Situation → Task → Action → Result</b>. One concrete story, quantified result, one line on what you learned.</li>
+          <li><b>Strength / weakness.</b> A real weakness plus the concrete thing you do to manage it — not a humblebrag.</li>
+          <li><b>Questions for them.</b> Always have two ready — about the team's roadmap or how research transfers to product. It signals you see yourself there.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ PUZZLES ============ -->
+    <section class="sec" id="puzzles">
+      <div class="sechead">
+        <span class="idx">§ 12</span>
+        <h2>Puzzles</h2>
+        <span class="meta">occasional, low-stakes</span>
+      </div>
+      <p class="lead">Some candidates get a logic puzzle. They're low-weight and reasoning is what's graded — think aloud, state assumptions, and don't freeze. Skim a handful the night before.</p>
+      <div class="panel">
+        <h4>The categories worth one pass</h4>
+        <ul class="tick">
+          <li><b>Measuring / pouring:</b> the 3L &amp; 5L jug to get 4L — classic BFS-on-states logic.</li>
+          <li><b>Weighing:</b> find the odd coin / heavier ball in the fewest weighings (ternary thinking).</li>
+          <li><b>Egg drop:</b> minimum trials to find the breaking floor — a DP flavour.</li>
+          <li><b>Probability:</b> Bayes-style ("Monty Hall", two-children), and expected-value questions — relevant since you're on an ML track.</li>
+          <li><b>Bit / number puzzles:</b> swap without a temp, detect power of two, count bits — overlaps §06.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ BATTLE PLAN ============ -->
+    <section class="sec" id="plan">
+      <div class="sechead">
+        <span class="idx">§ 13</span>
+        <h2>Battle plan</h2>
+        <span class="meta">tick as you go</span>
+      </div>
+      <p class="lead">Pick the track that matches your runway. Progress saves in your browser, so you can close this and come back.</p>
+
+      <div class="progwrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--ink-2)">Prep progress</span>
+        <div class="bar"><i id="progBar"></i></div>
+        <span class="pct" id="progPct">0%</span>
+      </div>
+
+      <div class="callout brick">
+        <span class="lab">If the interview is tomorrow</span>
+        <p>Do only the highest-yield: the <b>character trie</b> + <b>bit trie</b> + <b>2D prefix sum</b> templates (most likely to appear), rote the OS/C++ one-liners (semaphore vs spinlock, vptr/vtable, thread-safe singleton), and rehearse your <b>90-second project open</b> out loud twice. Skip Aho-Corasick's code but be able to name it.</p>
+      </div>
+
+      <div class="plan">
+        <div class="day">
+          <h4><span class="badge">Day 1–2</span> Core patterns, coded by hand</h4>
+          <div class="chk"><input type="checkbox" id="c1"><label for="c1">Character trie — Sum of Prefix Scores (LC 2416)</label></div>
+          <div class="chk"><input type="checkbox" id="c2"><label for="c2">Bit trie — Max XOR (LC 421) + Max Subarray XOR</label></div>
+          <div class="chk"><input type="checkbox" id="c3"><label for="c3">Binary lifting — Kth Ancestor (LC 1483) + LCA</label></div>
+          <div class="chk"><input type="checkbox" id="c4"><label for="c4">2D prefix sum (LC 304) + submatrix target (LC 1074)</label></div>
+          <div class="chk"><input type="checkbox" id="c5"><label for="c5">Write 2 of these on paper, no compiler</label></div>
+        </div>
+        <div class="day">
+          <h4><span class="badge">Day 3</span> String matching + DSA bank</h4>
+          <div class="chk"><input type="checkbox" id="c6"><label for="c6">KMP (LPS + search) &amp; Shortest Palindrome (LC 214)</label></div>
+          <div class="chk"><input type="checkbox" id="c7"><label for="c7">Aho-Corasick — understand + name it; StreamChecker (LC 1032)</label></div>
+          <div class="chk"><input type="checkbox" id="c8"><label for="c8">Heap sort, Kadane, Kahn, Dijkstra, LRU, Floyd loop</label></div>
+          <div class="chk"><input type="checkbox" id="c9"><label for="c9">Bit toolkit: swap-16, diff-bits, count-set-bits</label></div>
+        </div>
+        <div class="day">
+          <h4><span class="badge">Day 4</span> Fundamentals rapid-fire</h4>
+          <div class="chk"><input type="checkbox" id="c10"><label for="c10">OS: semaphore vs spinlock, paging, producer-consumer, fork count</label></div>
+          <div class="chk"><input type="checkbox" id="c11"><label for="c11">C++: vptr/vtable, virtual destructor, singleton, diamond problem</label></div>
+          <div class="chk"><input type="checkbox" id="c12"><label for="c12">DBMS: indexing family, lossless decomposition, group-wise-max SQL</label></div>
+          <div class="chk"><input type="checkbox" id="c13"><label for="c13">Networks: TCP vs UDP, TCP/IP layers</label></div>
+        </div>
+        <div class="day">
+          <h4><span class="badge">Day 5</span> The room</h4>
+          <div class="chk"><input type="checkbox" id="c14"><label for="c14">90-second "tell me about yourself" — rehearsed twice, out loud</label></div>
+          <div class="chk"><input type="checkbox" id="c15"><label for="c15">Project narrative: 5 beats + every trade-off answered</label></div>
+          <div class="chk"><input type="checkbox" id="c16"><label for="c16">Anticipate deep-dive Qs (why distillation, why not GRPO, why KG)</label></div>
+          <div class="chk"><input type="checkbox" id="c17"><label for="c17">2 questions ready to ask them + skim recent AI news</label></div>
+          <div class="chk"><input type="checkbox" id="c18"><label for="c18">One light mock: narrate an optimization ladder end-to-end</label></div>
+        </div>
+      </div>
+
+      <div class="callout teal">
+        <span class="lab">In the room — the three habits</span>
+        <p><b>1.</b> Think out loud; give brute force first, then optimize. <b>2.</b> State complexity and name the alternative approach even when you've solved it. <b>3.</b> Stay calm and curious — the interviewers are relaxed by design, so match that energy. You already cleared the hard part.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="fin">
+    <p>Built from cleared-candidate field notes, the SRIB question sheet, and curated pattern analysis. Code is Java-first and paper-friendly. <b>Go get the PPO.</b></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var root = document.documentElement;
+
+  /* ---------- theme ---------- */
+  function setTheme(t){
+    root.setAttribute('data-theme', t);
+    document.getElementById('ic-moon').style.display = (t==='dark') ? '' : 'none';
+    document.getElementById('ic-sun').style.display  = (t==='dark') ? 'none' : '';
+    try{ localStorage.setItem('srib-theme', t); }catch(e){}
+  }
+  (function(){
+    var t=null;
+    try{ t=localStorage.getItem('srib-theme'); }catch(e){}
+    if(!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+    setTheme(t);
+  })();
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    setTheme(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+  });
+
+  /* ---------- reading progress ---------- */
+  var readBar = document.getElementById('read');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    readBar.style.width = (max>0 ? (h.scrollTop/max)*100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- mobile nav ---------- */
+  var side=document.getElementById('side'), backdrop=document.getElementById('backdrop'), navToggle=document.getElementById('navToggle');
+  function openNav(o){ side.classList.toggle('open', o); backdrop.classList.toggle('show', o); }
+  navToggle.addEventListener('click', function(){ openNav(!side.classList.contains('open')); });
+  backdrop.addEventListener('click', function(){ openNav(false); });
+  Array.prototype.forEach.call(side.querySelectorAll('a'), function(a){ a.addEventListener('click', function(){ openNav(false); }); });
+
+  /* ---------- syntax highlighter ---------- */
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escAttr(s){ return esc(s).replace(/"/g,'&quot;'); }
+
+  var kw = 'abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while|true|false|null|nullptr|auto|register|unsigned|signed|struct|union|typedef|sizeof|template|typename|namespace|using|operator|friend|virtual|inline|delete|explicit|mutable|constexpr|SELECT|FROM|WHERE|GROUP|BY|ORDER|MAX|MIN|AS|ASC|DESC|RANK|OVER|PARTITION|AND|OR|NOT|INSERT|UPDATE|JOIN|ON';
+  var ty = 'String|Integer|List|ArrayList|Map|HashMap|LinkedHashMap|Queue|Deque|ArrayDeque|PriorityQueue|StringBuilder|Arrays|Math|Semaphore|TreeNode|ListNode|Node|Object|Set|HashSet|TreeSet|LinkedList|Collections|Comparator|Optional|Long|Double|Boolean|Character|Byte|Short|Float|Number|Runnable|Thread|size_t|vector|unique_ptr|shared_ptr|weak_ptr|std';
+
+  var RE = new RegExp(
+    '(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)' +
+    '|("(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\')' +
+    '|(@\\w+)' +
+    '|(\\b0[xX][0-9a-fA-F]+\\b|\\b\\d[\\d_]*(?:\\.\\d+)?[fFlLdD]?\\b)' +
+    '|\\b(' + kw + ')\\b' +
+    '|\\b(' + ty + ')\\b' +
+    '|([A-Za-z_]\\w*)(?=\\s*\\()',
+    'g'
+  );
+
+  function highlight(src){
+    var out='', last=0, m;
+    RE.lastIndex=0;
+    while((m=RE.exec(src))){
+      out += esc(src.slice(last, m.index));
+      var tok=m[0], cls=null;
+      if(m[1]) cls='tk-com';
+      else if(m[2]) cls='tk-str';
+      else if(m[3]) cls='tk-anno';
+      else if(m[4]) cls='tk-num';
+      else if(m[5]) cls='tk-key';
+      else if(m[6]) cls='tk-type';
+      else if(m[7]) cls='tk-fn';
+      out += cls ? '<span class="'+cls+'">'+esc(tok)+'</span>' : esc(tok);
+      last = m.index + tok.length;
+      if(RE.lastIndex===m.index) RE.lastIndex++;   // safety against zero-width
+    }
+    out += esc(src.slice(last));
+    return out;
+  }
+
+  var copySvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+
+  Array.prototype.forEach.call(document.querySelectorAll('.code'), function(el){
+    var s = el.querySelector('script');
+    var raw = (s ? s.textContent : el.textContent).replace(/^\n+/, '').replace(/\s+$/, '');
+    var lang = el.getAttribute('data-lang') || 'Java';
+    var fn = el.getAttribute('data-fn') || '';
+
+    var wrap=document.createElement('div'); wrap.className='codewrap';
+    var bar=document.createElement('div'); bar.className='codebar';
+    bar.innerHTML = '<span class="lang">'+escAttr(lang)+'</span>' + (fn ? '<span class="fn">'+escAttr(fn)+'</span>' : '') + '<button class="copybtn" type="button">'+copySvg+'Copy</button>';
+    var pre=document.createElement('pre');
+    var code=document.createElement('code');
+    code.innerHTML = highlight(raw);
+    pre.appendChild(code);
+    wrap.appendChild(bar); wrap.appendChild(pre);
+    el.parentNode.replaceChild(wrap, el);
+
+    var btn=bar.querySelector('.copybtn');
+    btn.addEventListener('click', function(){
+      function done(){ btn.classList.add('done'); btn.textContent='Copied';
+        setTimeout(function(){ btn.classList.remove('done'); btn.innerHTML=copySvg+'Copy'; }, 1600); }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(raw).then(done, function(){ fallback(); });
+      } else { fallback(); }
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=raw;
+        t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(t); done();
+      }
+    });
+  });
+
+  /* ---------- scrollspy ---------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('nav.side a'));
+  var map={};
+  navLinks.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          navLinks.forEach(function(a){ a.classList.remove('active'); });
+          var a=map[e.target.id]; if(a) a.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    sections.forEach(function(s){ obs.observe(s); });
+  }
+
+  /* ---------- search filter ---------- */
+  var search=document.getElementById('search');
+  if(search){
+    search.addEventListener('input', function(){
+      var q=search.value.trim().toLowerCase();
+      Array.prototype.forEach.call(document.querySelectorAll('details.q'), function(d){
+        var hit = q==='' || d.textContent.toLowerCase().indexOf(q) !== -1;
+        d.classList.toggle('hide', !hit);
+        if(q!=='' && hit) d.open=true;
+      });
+    });
+  }
+
+  /* ---------- progress checklist ---------- */
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk input[type=checkbox]'));
+  var progBar=document.getElementById('progBar'), progPct=document.getElementById('progPct');
+  function updateProg(){
+    var done=boxes.filter(function(b){ return b.checked; }).length;
+    var pct = boxes.length ? Math.round(done/boxes.length*100) : 0;
+    if(progBar) progBar.style.width=pct+'%';
+    if(progPct) progPct.textContent=pct+'%';
+  }
+  function saveProg(){
+    var state={}; boxes.forEach(function(b){ state[b.id]=b.checked; });
+    try{ localStorage.setItem('srib-prog', JSON.stringify(state)); }catch(e){}
+  }
+  (function(){
+    var s=null;
+    try{ s=JSON.parse(localStorage.getItem('srib-prog')||'null'); }catch(e){}
+    if(s) boxes.forEach(function(b){ if(s[b.id]) b.checked=true; });
+    updateProg();
+  })();
+  boxes.forEach(function(b){ b.addEventListener('change', function(){ saveProg(); updateProg(); }); });
+})();
+</script>
+</body>
+</html>
