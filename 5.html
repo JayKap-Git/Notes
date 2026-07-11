@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS Interview Revision — OOPS · OS · DBMS · CN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  // Run theme check immediately to prevent Flash of Unstyled Content (FOUC)
+  const savedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+</script>
+<style>
+  :root{
+    --paper:#F5F6F8;
+    --ink:#161A22;
+    --ink-soft:#5A6072;
+    --ink-faint:#8B909E;
+    --card:#FFFFFF;
+    --line:#E4E7EC;
+    --line-soft:#EEF0F3;
+    --text:#2C313D;
+    
+    --header-bg:rgba(245,246,248,.86);
+    --focus-ring:rgba(90,96,114,.08);
+    --code-ic-bg:var(--line-soft);
+    --code-ic-color:#33384a;
+    --pre-bg:#14171F;
+    --chk-check:#fff;
+
+    --oops:#6C4CE0;
+    --os:#E0821F;
+    --dbms:#0F9B8E;
+    --cn:#2D7FF0;
+    --oops-wash:#F2EEFD;
+    --os-wash:#FDF3E7;
+    --dbms-wash:#E7F6F4;
+    --cn-wash:#E9F2FE;
+
+    --radius:14px;
+    --shadow:0 1px 2px rgba(20,24,34,.04), 0 6px 20px rgba(20,24,34,.05);
+    --shadow-lift:0 2px 6px rgba(20,24,34,.06), 0 14px 40px rgba(20,24,34,.10);
+    
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+    --display:'Space Grotesk',system-ui,sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --paper:#0B0E14;
+    --ink:#F0F2F6;
+    --ink-soft:#9BA1B0;
+    --ink-faint:#62687A;
+    --card:#14171F;
+    --line:#232836;
+    --line-soft:#1A1D27;
+    --text:#C3C7D4;
+    
+    --header-bg:rgba(11,14,20,.86);
+    --focus-ring:rgba(240,242,246,.1);
+    --code-ic-bg:#1E2330;
+    --code-ic-color:#A3A9B8;
+    --pre-bg:#080A0E;
+    --chk-check:#000;
+
+    --oops-wash:color-mix(in srgb, var(--oops) 15%, transparent);
+    --os-wash:color-mix(in srgb, var(--os) 15%, transparent);
+    --dbms-wash:color-mix(in srgb, var(--dbms) 15%, transparent);
+    --cn-wash:color-mix(in srgb, var(--cn) 15%, transparent);
+
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.4);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.4), 0 14px 40px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    padding-bottom:80px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* ---------- Command bar ---------- */
+  header.console{
+    position:sticky;top:0;z-index:50;
+    background:var(--header-bg);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .console-inner{max-width:1080px;margin:0 auto;padding:16px 22px 0}
+  .masthead{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .brand{display:flex;flex-direction:column;gap:2px}
+  .brand h1{
+    font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.02em;
+    display:flex;align-items:center;gap:10px;line-height:1.1;
+  }
+  .brand h1 .tag{
+    font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-faint);border:1px solid var(--line);border-radius:6px;padding:3px 7px;
+  }
+  .brand p{font-size:12.5px;color:var(--ink-soft);font-family:var(--mono);letter-spacing:.01em}
+
+  .masthead-actions {
+    display: flex; align-items: center; gap: 10px; flex: 1; justify-content: flex-end; min-width: 260px;
+  }
+  .searchwrap{position:relative;flex:1;max-width:340px}
+  .searchwrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--ink-faint)}
+  #search{
+    width:100%;font-family:var(--mono);font-size:13px;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:9px 12px 9px 34px;outline:none;transition:border-color .15s, box-shadow .15s, background .15s, color .15s;
+  }
+  #search::placeholder{color:var(--ink-faint)}
+  #search:focus{border-color:var(--ink-soft);box-shadow:0 0 0 3px var(--focus-ring)}
+  .clearbtn{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:var(--ink-faint);font-family:var(--mono);font-size:11px;padding:4px 6px;border-radius:6px;display:none}
+  .clearbtn:hover{background:var(--line-soft);color:var(--ink)}
+
+  .theme-btn {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--ink-soft); transition: all 0.15s; flex: none;
+  }
+  .theme-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
+  .theme-btn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .theme-btn .sun { display: none; }
+  [data-theme="dark"] .theme-btn .sun { display: block; }
+  [data-theme="dark"] .theme-btn .moon { display: none; }
+
+  /* ---------- Subject modules (nav + progress) ---------- */
+  .modules{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 0 14px}
+  .module{
+    position:relative;text-align:left;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:11px 13px 12px;transition:transform .14s, box-shadow .14s, border-color .14s, background .15s;
+    display:flex;flex-direction:column;gap:9px;overflow:hidden;font-family:var(--sans);
+  }
+  .module:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .module:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .module::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.5;transition:opacity .14s}
+  .module[aria-selected="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent), var(--shadow)}
+  .module[aria-selected="true"]::before{opacity:1}
+  .module .m-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .module .m-name{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em;color:var(--ink)}
+  .module .m-count{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+  .module .m-pct{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent)}
+  .bar{height:5px;border-radius:99px;background:var(--line-soft);overflow:hidden}
+  .bar > span{display:block;height:100%;width:0;border-radius:99px;background:var(--accent);transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+  /* ---------- Sub-toolbar ---------- */
+  .subbar{max-width:1080px;margin:0 auto;padding:18px 22px 4px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .subbar .lead{display:flex;align-items:center;gap:11px;min-width:0}
+  .subbar .dot{width:11px;height:11px;border-radius:4px;background:var(--accent);flex:none}
+  .subbar h2{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.02em}
+  .subbar .desc{font-size:13px;color:var(--ink-soft);font-family:var(--mono)}
+  .controls{display:flex;align-items:center;gap:8px}
+  .ctrl{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 11px;
+    transition:background .13s,color .13s,border-color .13s;white-space:nowrap;
+  }
+  .ctrl:hover{background:var(--line-soft);color:var(--ink)}
+  .ctrl.accent{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+
+  /* ---------- Topic list ---------- */
+  main{max-width:1080px;margin:0 auto;padding:14px 22px 0}
+  .searchmeta{font-family:var(--mono);font-size:12px;color:var(--ink-soft);padding:4px 2px 14px}
+  .searchmeta b{color:var(--ink)}
+  .list{display:flex;flex-direction:column;gap:10px}
+
+  .topic{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .16s,border-color .16s, background .15s;
+    scroll-margin-top:230px;
+  }
+  .topic.open{box-shadow:var(--shadow-lift);border-color:color-mix(in srgb,var(--accent) 26%,var(--line))}
+  .t-head{display:flex;align-items:center;gap:13px;padding:15px 17px;cursor:pointer;user-select:none}
+  .t-idx{
+    font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);
+    background:var(--accent-wash);border-radius:7px;min-width:30px;height:26px;
+    display:flex;align-items:center;justify-content:center;flex:none;padding:0 6px;
+  }
+  .t-titles{flex:1;min-width:0}
+  .t-title{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em;line-height:1.3}
+  .t-hint{font-size:13px;color:var(--ink-soft);margin-top:1px;line-height:1.45}
+  .topic.open .t-hint{display:none}
+  .t-tools{display:flex;align-items:center;gap:6px;flex:none}
+  .chk{
+    width:24px;height:24px;border-radius:7px;border:1.6px solid var(--line);background:var(--card);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s;flex:none;
+  }
+  .chk svg{width:13px;height:13px;stroke:var(--chk-check);stroke-width:3;opacity:0;transform:scale(.5);transition:all .14s}
+  .chk:hover{border-color:var(--accent)}
+  .topic.done .chk{background:var(--accent);border-color:var(--accent)}
+  .topic.done .chk svg{opacity:1;transform:scale(1)}
+  .caret{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);transition:transform .2s}
+  .caret svg{width:16px;height:16px;stroke:currentColor;stroke-width:2}
+  .topic.open .caret{transform:rotate(90deg);color:var(--accent)}
+  .topic.done .t-title{color:var(--ink-soft)}
+  .badge{
+    font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-wash);border-radius:5px;padding:3px 6px;flex:none;
+  }
+
+  .t-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .t-body-inner{padding:2px 18px 20px 61px;border-top:1px solid var(--line-soft)}
+  @media (max-width:560px){.t-body-inner{padding:2px 16px 18px 18px}}
+  .block{margin-top:15px}
+  .block:first-child{margin-top:13px}
+  .block .lbl{
+    font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:5px;display:flex;align-items:center;gap:6px;
+  }
+  .block .lbl::before{content:"";width:12px;height:1.5px;background:var(--accent);border-radius:2px}
+  .block p{font-size:14.5px;color:var(--text);line-height:1.62}
+  .block.tip p{color:var(--ink-soft)}
+  .block strong{font-weight:600;color:var(--ink)}
+  code.ic{font-family:var(--mono);font-size:.86em;background:var(--code-ic-bg);color:var(--code-ic-color);padding:1.5px 5px;border-radius:5px}
+  pre.code{
+    font-family:var(--mono);font-size:12.5px;line-height:1.6;background:var(--pre-bg);color:#E6E8EE;
+    border-radius:10px;padding:13px 15px;margin-top:9px;overflow-x:auto;
+  }
+  pre.code .cm{color:#7F8598}
+  .block.tip{background:var(--accent-wash);border-radius:10px;padding:12px 14px;margin-top:16px}
+  .block.tip .lbl{margin-bottom:4px}
+
+  .empty{text-align:center;padding:70px 20px;color:var(--ink-soft);font-family:var(--mono);font-size:13.5px}
+  .empty b{color:var(--ink);font-size:15px;display:block;margin-bottom:6px;font-family:var(--display)}
+
+  footer{max-width:1080px;margin:40px auto 0;padding:22px;border-top:1px solid var(--line);text-align:center}
+  footer p{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);line-height:1.8}
+
+  ::selection{background:color-mix(in srgb,var(--accent,#6C4CE0) 22%,transparent)}
+
+  @media (max-width:720px){
+    .modules{grid-template-columns:repeat(2,1fr)}
+    .masthead{gap:14px}
+    .masthead-actions {flex: 1 1 100%; justify-content: space-between;}
+    .searchwrap{max-width:none}
+    .brand h1{font-size:18px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="console">
+  <div class="console-inner">
+    <div class="masthead">
+      <div class="brand">
+        <h1>Core CS Revision <span class="tag">interview prep</span></h1>
+        <p>Recall first, then expand to check &nbsp;·&nbsp; OOPS · OS · DBMS · CN</p>
+      </div>
+      <div class="masthead-actions">
+        <div class="searchwrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="search" type="text" placeholder="Search all topics…" autocomplete="off" spellcheck="false">
+          <button class="clearbtn" id="clearbtn">esc</button>
+        </div>
+        <button id="themeToggle" class="theme-btn" aria-label="Toggle dark mode">
+          <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="modules" id="modules" role="tablist" aria-label="Subjects"></nav>
+  </div>
+</header>
+
+<div class="subbar" id="subbar">
+  <div class="lead">
+    <span class="dot"></span>
+    <div>
+      <h2 id="subjectTitle"></h2>
+    </div>
+    <span class="desc" id="subjectDesc"></span>
+  </div>
+  <div class="controls">
+    <button class="ctrl" id="expandAll">Expand all</button>
+    <button class="ctrl" id="collapseAll">Collapse all</button>
+    <button class="ctrl accent" id="resetProg">Reset progress</button>
+  </div>
+</div>
+
+<main>
+  <div class="searchmeta" id="searchmeta" style="display:none"></div>
+  <div class="list" id="list"></div>
+  <div class="empty" id="empty" style="display:none"></div>
+</main>
+
+<footer>
+  <p>80 topics across four subjects · progress saved on this device</p>
+</footer>
+
+<script>
+/* ============================================================
+   CONTENT MODEL
+   ============================================================ */
+const SUBJECTS = [
+  { key:"oops", name:"OOPS",  color:"var(--oops)", wash:"var(--oops-wash)",
+    desc:"Objects, inheritance, polymorphism & design", topics:[
+    {t:"The Four Pillars", h:"The 4 ideas OOP is built on — and why each exists.",
+     simple:"OOP organizes code around **objects** (data + behaviour bundled together) instead of loose functions. It stands on four pillars: **Encapsulation** (hide internal state behind methods), **Abstraction** (expose only what matters, hide the how), **Inheritance** (reuse a parent's traits in a child), and **Polymorphism** (one interface, many behaviours).",
+     ex:"A <c>Car</c> object hides its engine internals (encapsulation), you just call <c>start()</c> without knowing the mechanics (abstraction), a <c>SportsCar</c> reuses <c>Car</c> (inheritance), and <c>start()</c> can behave differently per car type (polymorphism).",
+     tip:"If asked to define OOP in one line: 'a paradigm that models software as interacting objects, each bundling state and behaviour, built on encapsulation, abstraction, inheritance and polymorphism.'"},
+    {t:"Class vs Object", h:"Blueprint vs the actual thing built from it.",
+     simple:"A **class** is a blueprint/template that defines what data (fields) and behaviour (methods) its instances will have. An **object** is a concrete **instance** of that class, living in memory with its own field values. The class is a design; objects are the real occupants.",
+     ex:"<c>class Dog { String name; void bark(){} }</c> is the class. <c>Dog d = new Dog();</c> creates an object <c>d</c> — one actual dog with its own <c>name</c>.",
+     tip:"Common gotcha: a class occupies (almost) no runtime memory for fields until you instantiate. Each object gets its own copy of instance fields but shares one copy of static fields."},
+    {t:"Encapsulation", h:"Bundling data with the methods that guard it.",
+     simple:"Encapsulation means wrapping fields and the methods that operate on them into one unit, and **restricting direct access** to the fields. You make fields <c>private</c> and expose controlled **getters/setters**, so invalid states can't be set from outside. It's about **data protection and controlled access**.",
+     ex:"A <c>BankAccount</c> keeps <c>balance</c> private. You can't do <c>account.balance = -500</c>; you must call <c>withdraw()</c>, which checks funds first.",
+     tip:"Interviewers love: 'encapsulation is the mechanism (private + accessors); abstraction is the goal (hiding complexity).' Encapsulation is *how*, abstraction is *what/why*."},
+    {t:"Abstraction (vs Encapsulation)", h:"Show the essentials, hide the messy 'how'.",
+     simple:"Abstraction means exposing only the **relevant, essential features** of something and hiding the implementation details. The user works with a simple interface and doesn't care how it's done internally. Achieved via **abstract classes** and **interfaces**.",
+     ex:"You call <c>list.sort()</c> — you don't know or care if it's TimSort inside. When you drive, the steering wheel is the abstraction; the steering mechanism is hidden.",
+     tip:"The classic compare: **Abstraction** = hiding complexity to show only essentials (design level). **Encapsulation** = hiding data by binding it with methods and restricting access (implementation level). Abstraction solves design-side problems, encapsulation solves data-side problems."},
+    {t:"Inheritance & its types", h:"Child class reuses and extends a parent.",
+     simple:"Inheritance lets a **child (subclass)** acquire fields and methods of a **parent (superclass)**, promoting code reuse and an 'is-a' relationship. Types: **single** (one parent), **multilevel** (A→B→C), **hierarchical** (one parent, many children), **multiple** (many parents — not in Java classes), and **hybrid** (a mix).",
+     ex:"<c>Dog extends Animal</c> — Dog is-a Animal and reuses <c>eat()</c>. Multilevel: <c>Puppy extends Dog extends Animal</c>.",
+     tip:"Java doesn't allow multiple inheritance of classes (to avoid the diamond problem) but allows it via interfaces. Favour **composition over inheritance** when the relationship is 'has-a', not 'is-a'."},
+    {t:"Polymorphism (compile vs runtime)", h:"One name, many forms — decided early or late.",
+     simple:"Polymorphism = 'many forms': the same call behaves differently depending on context. **Compile-time (static)** polymorphism is **method overloading** — resolved by the compiler using signatures. **Runtime (dynamic)** polymorphism is **method overriding** — resolved at runtime based on the actual object type via dynamic dispatch.",
+     ex:"Overloading: <c>add(int,int)</c> and <c>add(double,double)</c> — compiler picks by arguments. Overriding: <c>Animal a = new Dog(); a.sound();</c> calls Dog's version at runtime.",
+     tip:"Runtime polymorphism needs inheritance + overriding + a base-type reference pointing to a derived object. In C++ the base method must be <c>virtual</c> for this to work."},
+    {t:"Overloading vs Overriding", h:"The comparison interviewers ask constantly.",
+     simple:"**Overloading**: same method name, **different parameter list**, within the same class — compile-time, no inheritance needed. **Overriding**: subclass provides a **new implementation** of a parent method with the **same signature** — runtime, needs inheritance. Overloading = compile-time polymorphism; overriding = runtime polymorphism.",
+     ex:"Overload: <c>print(int)</c> vs <c>print(String)</c>. Override: parent <c>Shape.area()</c> redefined in <c>Circle.area()</c>.",
+     tip:"Return type alone can't overload a method. When overriding, you can't reduce visibility (a public method can't become private) and (in Java) can't throw broader checked exceptions."},
+    {t:"Constructors", h:"Special method that initializes a new object.",
+     simple:"A constructor runs automatically when an object is created, to initialize its state. It has the **same name as the class** and **no return type**. Types: **default** (no-arg, auto-provided if you write none), **parameterized**, and **copy constructor** (builds a new object from an existing one). Constructors can be overloaded; **constructor chaining** calls one from another (<c>this()</c> / <c>super()</c>).",
+     ex:"<c>Point(int x, int y){ this.x=x; this.y=y; }</c>. Copy constructor (C++): <c>Point(const Point& p){ x=p.x; y=p.y; }</c>.",
+     tip:"If you define any parameterized constructor, the compiler stops giving you a free default one. In Java, <c>super()</c> is implicitly the first line of a constructor unless you call another constructor."},
+    {t:"Destructors & Garbage Collection", h:"Cleaning up an object's resources.",
+     simple:"A **destructor** (C++: <c>~ClassName()</c>) runs when an object is destroyed, to release resources (memory, files, sockets). C++ requires manual memory management, so destructors matter a lot. **Java/C#** have no destructors; a **garbage collector** automatically reclaims objects that are no longer reachable.",
+     ex:"C++: <c>~FileHandler(){ file.close(); }</c>. Java: you just stop referencing an object and the GC frees it later.",
+     tip:"Know GC basics for Java roles: it works on **reachability** (from GC roots), uses **mark-and-sweep** / generational collection (young + old gen). <c>finalize()</c> is deprecated and unreliable — use <c>try-with-resources</c> instead."},
+    {t:"Abstract Class vs Interface", h:"Two ways to enforce a contract — when to use which.",
+     simple:"An **abstract class** can have both abstract (unimplemented) and concrete methods, fields, and constructors; it models an **'is-a'** relationship and shares common code. An **interface** is a pure contract of method signatures (traditionally no implementation); a class can implement **many** interfaces. Use an abstract class for shared base behaviour, an interface for a capability/ability multiple unrelated classes can have.",
+     ex:"<c>abstract class Bird</c> with a concrete <c>eat()</c> and abstract <c>fly()</c>. Interface <c>Comparable</c> — any class that can be ordered implements it.",
+     tip:"Modern Java blurs this: interfaces now allow <c>default</c> and <c>static</c> methods. Key differences to state: multiple inheritance (interfaces: yes), state/fields (abstract class: yes), constructors (only abstract class)."},
+    {t:"Access Modifiers", h:"Who is allowed to see this member.",
+     simple:"Access modifiers control the **visibility** of classes and members. In Java: **public** (everywhere), **protected** (same package + subclasses), **default/package-private** (same package only), **private** (same class only). They're the mechanism that makes encapsulation enforceable.",
+     ex:"A <c>private</c> field <c>balance</c> is invisible outside the class; a <c>protected</c> method is accessible to subclasses even in other packages.",
+     tip:"Order most→least open: public > protected > default > private. C++ uses public/protected/private too, but 'default' there means private (class) or public (struct)."},
+    {t:"Static members & methods", h:"Belong to the class, not any single object.",
+     simple:"A **static** member belongs to the **class itself**, shared across all instances — there's exactly one copy. Static **methods** can be called without an object and can only directly access other static members (no <c>this</c>). Used for counters, utility functions, and constants.",
+     ex:"<c>static int count;</c> incremented in every constructor tracks how many objects exist. <c>Math.sqrt()</c> is a static utility — no <c>Math</c> object needed.",
+     tip:"Static methods can't be overridden (they're hidden, not overridden) and can't access instance fields directly. This 'static binding' is why they're resolved at compile time."},
+    {t:"Association, Aggregation, Composition", h:"Three flavours of 'objects related to objects'.",
+     simple:"**Association** is any 'uses-a' link between two independent objects. **Aggregation** is a weak 'has-a' where the part can exist without the whole (shared ownership). **Composition** is a strong 'has-a' where the part **cannot exist without** the whole (exclusive ownership; destroy the whole, the parts die).",
+     ex:"Association: a Teacher and a Student. Aggregation: a Team **has** Players, but players survive if the team disbands. Composition: a House **has** Rooms — demolish the house and the rooms are gone.",
+     tip:"Memory hook: Composition = 'death relationship' (parts die with the whole). Aggregation = parts outlive the whole."},
+    {t:"SOLID Principles", h:"Five rules for maintainable OO design.",
+     simple:"**S**ingle Responsibility (a class should have one reason to change). **O**pen/Closed (open for extension, closed for modification). **L**iskov Substitution (subtypes must be usable wherever the base type is expected). **I**nterface Segregation (many small interfaces beat one fat one). **D**ependency Inversion (depend on abstractions, not concrete classes).",
+     ex:"DIP: a <c>NotificationService</c> depends on an <c>IMessageSender</c> interface, not directly on <c>EmailSender</c>, so you can swap in <c>SmsSender</c> without changing it.",
+     tip:"LSP is the trick question: the classic violation is <c>Square extends Rectangle</c> — setting width on a Square breaks the expectation that width and height are independent."},
+    {t:"Design Patterns (the essential 5)", h:"Reusable solutions to recurring design problems.",
+     simple:"**Singleton**: exactly one instance globally (e.g., config, logger). **Factory**: a method decides which subclass to instantiate, hiding <c>new</c> from the caller. **Observer**: subjects notify a list of subscribers on state change (event systems). **Strategy**: encapsulate interchangeable algorithms behind a common interface, chosen at runtime. **Decorator**: wrap an object to add behaviour without changing its class.",
+     ex:"Observer: a YouTube channel (subject) notifies all subscribers (observers) when a video drops. Strategy: a <c>PaymentContext</c> takes a <c>PaymentStrategy</c> (card/UPI/wallet) at runtime.",
+     tip:"Categories worth naming: **Creational** (Singleton, Factory, Builder), **Structural** (Decorator, Adapter, Proxy), **Behavioural** (Observer, Strategy, Iterator). Thread-safe Singleton often uses double-checked locking or an enum."},
+    {t:"Shallow vs Deep Copy", h:"Copying references vs copying the actual data.",
+     simple:"A **shallow copy** duplicates the top-level object but **shares** references to nested objects — both copies point to the same inner data. A **deep copy** recursively duplicates everything, so the two objects are fully independent. Shallow is faster but changes leak between copies.",
+     ex:"Shallow-copy a <c>Person</c> whose <c>address</c> is an object: editing the copy's address also changes the original's, because both share one <c>Address</c>. Deep copy clones the address too.",
+     tip:"In Java, <c>Object.clone()</c> is shallow by default. Deep copy via copy constructors, serialization, or manually cloning each nested object."},
+    {t:"Virtual functions & the vtable", h:"How runtime dispatch actually works under the hood.",
+     simple:"A **virtual function** is a method marked to be resolved at **runtime** based on the object's actual type (C++ keyword <c>virtual</c>; in Java all non-static, non-final methods are virtual by default). The compiler builds a **vtable** (virtual table) per class — an array of function pointers — and each object holds a hidden **vptr** to its class's vtable. A virtual call looks up the vtable at runtime.",
+     ex:"<c>Shape* s = new Circle(); s->draw();</c> — via the vptr, the vtable routes to <c>Circle::draw()</c>, not <c>Shape::draw()</c>.",
+     tip:"This is the mechanism behind runtime polymorphism. A **pure virtual** function (<c>virtual void f()=0;</c>) makes the class abstract. Always give base classes a <c>virtual</c> destructor when deleting via a base pointer."},
+    {t:"this, super, final", h:"Three keywords that trip people up.",
+     simple:"**this** refers to the current object — used to disambiguate fields from parameters or chain constructors. **super** refers to the parent class — call parent constructors/methods. **final** locks something: a final variable is a constant, a final method can't be overridden, a final class can't be extended.",
+     ex:"<c>this.name = name;</c> (field vs param). <c>super.draw();</c> calls the parent's version. <c>final int MAX = 100;</c> can't be reassigned.",
+     tip:"C++ equivalent of final for methods is <c>final</c> (C++11) and for constants is <c>const</c>. In Java, <c>String</c> is a final class — that's why it's immutable and safe to share."},
+    {t:"== vs equals() & hashCode()", h:"Reference identity vs logical equality (Java favourite).",
+     simple:"<c>==</c> compares **references** (are these the same object in memory?) for objects, and values for primitives. <c>.equals()</c> compares **logical equality** (do these represent the same value?) — you override it for meaningful comparison. If you override <c>equals()</c>, you **must** override <c>hashCode()</c> so that equal objects share a hash code.",
+     ex:"Two <c>new String(\"hi\")</c> objects: <c>==</c> is false (different objects) but <c>.equals()</c> is true (same content).",
+     tip:"The **hashCode contract**: equal objects must have equal hash codes (converse not required). Break it and <c>HashMap</c>/<c>HashSet</c> misbehave — a very common bug interviewers probe."},
+    {t:"The Diamond Problem", h:"Why multiple inheritance is dangerous.",
+     simple:"The diamond problem occurs with **multiple inheritance**: class D inherits from both B and C, which both inherit from A. If B and C override the same method differently, D faces ambiguity about which version to inherit. Java forbids multiple class inheritance to avoid this; C++ solves it with **virtual inheritance**.",
+     ex:"<c>A</c> has <c>greet()</c>; <c>B</c> and <c>C</c> both override it; <c>D extends B, C</c> — which <c>greet()</c> does D get? Ambiguous.",
+     tip:"In Java you *can* hit a mild version with interfaces having conflicting <c>default</c> methods — the class is then forced to override and explicitly pick via <c>B.super.method()</c>."},
+  ]},
+
+  { key:"os", name:"OS", color:"var(--os)", wash:"var(--os-wash)",
+    desc:"Processes, scheduling, memory & deadlock", topics:[
+    {t:"Process vs Thread", h:"Independent program vs lightweight unit inside it.",
+     simple:"A **process** is a program in execution with its **own address space** (code, data, heap, stack) and resources — isolated from other processes. A **thread** is the smallest unit of execution **within** a process; threads of the same process **share** its code, data and heap but have their **own stack and registers**. Threads are lighter and communicate more easily than processes.",
+     ex:"A browser is a process; each tab may be a thread (or process) rendering in parallel while sharing bookmarks data.",
+     tip:"Context switching between threads is cheaper than between processes (no address-space swap). Processes are isolated (a crash in one doesn't kill another); a thread crash can bring down the whole process."},
+    {t:"Process states & PCB", h:"The lifecycle of a process and where its info lives.",
+     simple:"A process moves through states: **New → Ready → Running → Waiting (Blocked) → Terminated**. Ready means waiting for CPU; Waiting means blocked on I/O or an event. The OS tracks each process in a **Process Control Block (PCB)** — a data structure holding the PID, process state, program counter, CPU registers, memory limits, open files, and scheduling info.",
+     ex:"A process doing a disk read moves Running→Waiting; when the read finishes it goes Waiting→Ready, then the scheduler may pick it to run again.",
+     tip:"The PCB is what gets saved/restored on a context switch. 'Suspended' states (swapped to disk) sometimes get added: Ready-Suspended, Blocked-Suspended."},
+    {t:"Context Switching", h:"Saving one process's state to run another.",
+     simple:"A context switch is the OS **saving the state** (registers, program counter, PCB info) of the currently running process and **loading the state** of the next one, so the CPU can switch between processes/threads. It enables multitasking but is **pure overhead** — no useful work happens during the switch.",
+     ex:"Process A's turn ends (timer interrupt); the OS saves A's context to its PCB, loads B's context, and B resumes exactly where it left off.",
+     tip:"Triggered by interrupts, system calls, or the scheduler (e.g., time-slice expiry in Round Robin). Frequent switching = high overhead, which is why very small time quanta hurt performance."},
+    {t:"CPU Scheduling Algorithms", h:"How the OS decides who runs next.",
+     simple:"**FCFS**: first come first served (non-preemptive, simple, can cause convoy effect). **SJF**: shortest job first (optimal average wait, but needs burst prediction; can starve long jobs). **SRTF**: preemptive SJF. **Priority**: highest priority first (risk of starvation, fixed by aging). **Round Robin**: each process gets a fixed **time quantum** in turn (fair, good for time-sharing). **Multilevel Queue / Feedback**: multiple queues by priority, feedback lets processes move between them.",
+     ex:"Round Robin with quantum 4: P1 runs 4ms, pauses, P2 runs 4ms, and so on — great responsiveness for interactive systems.",
+     tip:"Know **preemptive vs non-preemptive**: preemptive can interrupt a running process (RR, SRTF, Priority-preemptive); non-preemptive runs to completion (FCFS, basic SJF). Be ready to compute waiting/turnaround from a table."},
+    {t:"Scheduling Metrics (compute these)", h:"Turnaround, waiting, response — and the formulas.",
+     simple:"**Arrival time** = when a process enters. **Burst time** = CPU time it needs. **Completion time** = when it finishes. **Turnaround Time = Completion − Arrival**. **Waiting Time = Turnaround − Burst**. **Response Time = first CPU time − Arrival**. Throughput = processes completed per unit time.",
+     ex:"P1: arrival 0, burst 5, completes at 5 → TAT=5, WT=5−5=0. P2: arrival 0, burst 3, runs after P1, completes at 8 → TAT=8, WT=8−3=5.",
+     tip:"Draw a **Gantt chart** first, then read off completion times — this prevents arithmetic slips. Average waiting time is the metric interviewers most often want."},
+    {t:"User vs Kernel Threads", h:"Where threads are managed and the mapping models.",
+     simple:"**User-level threads** are managed by a library in user space — fast to create, but the kernel sees only one process, so one blocking call blocks all of them. **Kernel-level threads** are managed by the OS — true parallelism and independent blocking, but heavier. **Mapping models**: many-to-one, one-to-one, and many-to-many map user threads onto kernel threads.",
+     ex:"Java threads today map one-to-one to OS threads. A pure user-thread library (green threads) multiplexes many user threads onto a single kernel thread.",
+     tip:"Many-to-one: fast but no real parallelism and blocking issue. One-to-one: real parallelism, more overhead. Many-to-many: best of both, more complex."},
+    {t:"Race Condition & Critical Section", h:"When shared data goes wrong under concurrency.",
+     simple:"A **race condition** happens when the outcome depends on the **timing/interleaving** of threads accessing shared data — results become unpredictable. The **critical section** is the code region that accesses shared resources; only **one** thread should be in it at a time. A correct solution needs **mutual exclusion**, **progress**, and **bounded waiting**.",
+     ex:"Two threads run <c>count++</c> (read, add, write) simultaneously; both read 5, both write 6 — one increment is lost.",
+     tip:"The fix is synchronization (locks/semaphores) around the critical section. Name the three requirements — mutual exclusion, progress, bounded waiting — for full marks."},
+    {t:"Mutex vs Semaphore", h:"Locking vs signalling — the classic distinction.",
+     simple:"A **mutex** is a **lock** owned by one thread — only the thread that locked it can unlock it; it enforces mutual exclusion (binary: locked/unlocked). A **semaphore** is a **counter** used for signalling and controlling access to N resources; **binary semaphore** (0/1) resembles a mutex, **counting semaphore** allows up to N concurrent accesses. Semaphores have no ownership.",
+     ex:"Mutex: one key to one bathroom — whoever locked it must unlock it. Counting semaphore initialized to 3: a parking lot with 3 spots; <c>wait()</c> takes a spot, <c>signal()</c> frees one.",
+     tip:"Key line: 'a mutex is a **locking** mechanism (ownership), a semaphore is a **signalling** mechanism (no ownership).' <c>wait()</c>=P=down, <c>signal()</c>=V=up."},
+    {t:"Classic Synchronization Problems", h:"Producer-Consumer, Readers-Writers, Dining Philosophers.",
+     simple:"**Producer-Consumer**: producers add to a bounded buffer, consumers remove — sync so producers wait when full, consumers wait when empty (uses two counting semaphores + a mutex). **Readers-Writers**: many readers OR one writer at a time — avoid reader/writer starvation. **Dining Philosophers**: 5 philosophers, 5 forks — illustrates deadlock/starvation when each grabs one fork and waits for the next.",
+     ex:"Dining Philosophers deadlocks if all five pick up their left fork simultaneously and wait forever for the right — a live picture of circular wait.",
+     tip:"Solutions to mention: for Dining Philosophers — allow at most 4 at the table, or make one philosopher pick right-then-left (break symmetry), or pick up both forks atomically."},
+    {t:"Deadlock: conditions & handling", h:"When processes wait on each other forever.",
+     simple:"Deadlock is a state where processes are each **waiting for a resource held by another**, so none can proceed. It needs **four conditions simultaneously**: **Mutual Exclusion**, **Hold and Wait**, **No Preemption**, **Circular Wait**. Handling strategies: **Prevention** (break one condition), **Avoidance** (Banker's algorithm), **Detection & Recovery**, or **Ignore** (the 'ostrich' approach most OSes use).",
+     ex:"P1 holds resource A and wants B; P2 holds B and wants A — circular wait, neither releases, both stuck.",
+     tip:"Prevention attacks a condition: e.g., request all resources up front (no hold-and-wait), or impose a global ordering on resource requests (no circular wait). Break **any one** of the four and deadlock can't occur."},
+    {t:"Banker's Algorithm", h:"Deadlock avoidance by staying in safe states.",
+     simple:"Banker's algorithm **avoids** deadlock by only granting a resource request if the system stays in a **safe state** — meaning there exists at least one sequence in which all processes can finish. It tracks **Available**, **Max** (each process's maximum need), **Allocation** (currently held), and **Need = Max − Allocation**. A request is granted only if it can lead to a safe sequence.",
+     ex:"Like a banker lending cash only if remaining funds can still satisfy every client's worst-case credit line — so everyone eventually repays.",
+     tip:"'Safe state' ≠ 'no deadlock possible forever' — it means a safe completion sequence *exists*. Be ready to run a safety check: repeatedly find a process whose Need ≤ Available, finish it, add its Allocation back to Available."},
+    {t:"Paging", h:"Splitting memory into fixed-size blocks.",
+     simple:"Paging divides **logical memory** into fixed-size **pages** and **physical memory** into equal-size **frames**. A **page table** maps each page to a frame, so a process's memory need not be contiguous in RAM. This **eliminates external fragmentation** and simplifies allocation. A logical address = page number + offset.",
+     ex:"A 16 KB process with 4 KB pages = 4 pages, which the OS can scatter into any 4 free frames anywhere in RAM.",
+     tip:"Paging causes **internal** fragmentation (last page partly empty) but not external. The **TLB** caches recent page-table lookups to speed address translation."},
+    {t:"Segmentation", h:"Splitting memory by logical units, not fixed blocks.",
+     simple:"Segmentation divides a program into **variable-size, logical segments** (code, stack, heap, functions) that match the programmer's view. Each segment has a base and a limit; a logical address = segment number + offset. Unlike paging, sizes vary, so it suffers **external fragmentation** but preserves logical grouping.",
+     ex:"A program split into a code segment, a data segment, and a stack segment — each sized to its actual content.",
+     tip:"Paging = fixed size, physical view, internal fragmentation. Segmentation = variable size, logical view, external fragmentation. **Segmented paging** combines both: segments made of pages."},
+    {t:"Fragmentation", h:"Wasted memory — the two kinds.",
+     simple:"**Internal fragmentation**: allocated memory is slightly **larger** than requested, so the unused space **inside** a block is wasted (happens with fixed-size allocation like paging). **External fragmentation**: enough total free memory exists but it's **scattered** in non-contiguous holes, so a large contiguous request can't be satisfied (happens with variable-size allocation).",
+     ex:"Internal: a 4 KB page holds a 3.2 KB piece → 0.8 KB wasted inside. External: three 2 KB holes exist but a 5 KB block won't fit any single one.",
+     tip:"External fragmentation is fixed by **compaction** (shuffling memory to merge holes) or by paging (which removes the contiguity requirement)."},
+    {t:"Virtual Memory & Demand Paging", h:"Running programs larger than physical RAM.",
+     simple:"**Virtual memory** lets a process use an address space **larger than physical RAM** by keeping only the needed parts in memory and the rest on disk (swap). **Demand paging** loads a page **only when it's referenced**; if the page isn't in RAM, a **page fault** traps to the OS, which fetches it from disk. This gives the illusion of huge, contiguous memory.",
+     ex:"You open a 2 GB application on an 8 GB machine alongside others; only the active pages sit in RAM, the rest wait in swap until needed.",
+     tip:"A page fault is not an error — it's a normal mechanism. Too many of them (thrashing) is the problem. Handling a fault: trap → find the page on disk → load into a free frame → update page table → restart the instruction."},
+    {t:"Page Replacement Algorithms", h:"Choosing which page to evict on a fault.",
+     simple:"When memory is full and a new page is needed, the OS evicts one using a policy. **FIFO**: evict the oldest-loaded page (simple, can be poor). **Optimal**: evict the page not needed for the longest future time (best possible, but needs the future — theoretical baseline). **LRU**: evict the **least recently used** page (good approximation of optimal, uses recency). **LFU**: evict the least frequently used.",
+     ex:"With frames [1,2,3] full and a request for 4 under LRU, evict whichever of 1/2/3 was accessed longest ago.",
+     tip:"LRU is the practical favourite. **Belady's anomaly** — more frames causing *more* faults — can happen with FIFO but **never** with LRU/Optimal (they're 'stack algorithms')."},
+    {t:"Thrashing & Belady's Anomaly", h:"Two named phenomena worth knowing cold.",
+     simple:"**Thrashing** is when a process spends **more time paging (swapping) than executing**, because it doesn't have enough frames for its working set — CPU utilization collapses. Fixed via the **working-set model** or **page-fault frequency** control, and by reducing the degree of multiprogramming. **Belady's anomaly** is the counterintuitive case where **increasing the number of frames increases the number of page faults** (only under FIFO).",
+     ex:"Thrashing: too many processes loaded → each gets too few frames → constant page faults → the disk light stays on and nothing progresses.",
+     tip:"Working set = the set of pages a process is actively using in a time window. If total working sets exceed RAM, thrashing is inevitable regardless of the replacement policy."},
+    {t:"Disk Scheduling", h:"Ordering disk requests to reduce seek time.",
+     simple:"Disk scheduling orders pending I/O requests to minimize **seek time** (head movement). **FCFS**: serve in arrival order (fair, lots of movement). **SSTF**: shortest seek time first (greedy, can starve far requests). **SCAN (elevator)**: head sweeps in one direction serving requests, then reverses. **C-SCAN**: sweeps one way, then jumps back to the start (more uniform wait). **LOOK / C-LOOK**: like SCAN/C-SCAN but only go as far as the last request.",
+     ex:"Head at 50, requests at 20 and 80: SSTF serves 20 first (nearer); SCAN keeps moving toward one end serving everything on the way.",
+     tip:"SCAN is called the 'elevator algorithm' — like a lift serving floors in one direction before reversing. Be ready to compute total head movement for a request sequence."},
+    {t:"Inter-Process Communication (IPC)", h:"How isolated processes exchange data.",
+     simple:"Since processes have separate address spaces, they need IPC mechanisms. **Shared memory**: a common memory region both map (fastest, needs sync). **Message passing**: send/receive messages via the kernel (easier, slower). Other mechanisms: **pipes** (unidirectional stream), **named pipes/FIFOs**, **message queues**, **sockets** (across machines), and **signals** (async notifications).",
+     ex:"A shell pipeline <c>ls | grep txt</c> uses a **pipe** — <c>ls</c>'s output becomes <c>grep</c>'s input via the kernel.",
+     tip:"Shared memory is fastest but you manage synchronization yourself; message passing is safer but has kernel overhead. Sockets work both within and across machines."},
+    {t:"fork, Zombie & Orphan Processes", h:"Process creation and its two edge cases.",
+     simple:"<c>fork()</c> creates a **child** process that's a copy of the parent; it returns the child's PID to the parent and 0 to the child. A **zombie** is a process that has **terminated but whose exit status hasn't been read** by the parent (via <c>wait()</c>) — it lingers in the process table. An **orphan** is a process whose **parent died first**; it gets re-parented to <c>init</c>/<c>systemd</c> (PID 1), which reaps it.",
+     ex:"If a parent forks a child, the child finishes, but the parent never calls <c>wait()</c> — the child becomes a zombie holding a table entry.",
+     tip:"Zombies waste PIDs, not memory. Orphans are harmless (adopted by init). <c>exec()</c> replaces the current process image with a new program — often used right after <c>fork()</c>."},
+  ]},
+
+  { key:"dbms", name:"DBMS", color:"var(--dbms)", wash:"var(--dbms-wash)",
+    desc:"Design, SQL, transactions & concurrency", topics:[
+    {t:"DBMS vs RDBMS", h:"Data store vs relational, table-based store.",
+     simple:"A **DBMS** is software to store and manage data, not necessarily with relationships between data. An **RDBMS** is a DBMS that stores data in **tables (relations)** with rows and columns, enforces **relationships via keys**, and follows the relational model plus **ACID**. All RDBMS are DBMS, not vice versa.",
+     ex:"MySQL, PostgreSQL, Oracle are RDBMS (tables + foreign keys). Older/file-based or simple key-value stores are DBMS but not relational.",
+     tip:"Over a plain file system, a DBMS gives you concurrency control, integrity constraints, security, reduced redundancy, and crash recovery — good points to list if asked 'why not just use files?'"},
+    {t:"ER Model", h:"Diagramming entities and their relationships.",
+     simple:"The **Entity-Relationship model** designs a database visually. **Entities** are real-world objects (Student, Course) drawn as rectangles; **attributes** are their properties (name, id) as ellipses; **relationships** connect entities (diamonds). **Cardinality** (1:1, 1:N, M:N) states how many of one entity relate to another. It's later mapped to relational tables.",
+     ex:"Student —enrolls in→ Course is an M:N relationship; each Student has attributes like <c>roll_no</c> and <c>name</c>.",
+     tip:"Know attribute types: **simple/composite**, **single/multi-valued**, **derived** (e.g., age from DOB), and **key** attribute. An M:N relationship maps to a **separate junction table** in the relational schema."},
+    {t:"Keys", h:"The identifiers that keep rows unique and linked.",
+     simple:"**Super key**: any set of columns that uniquely identifies a row. **Candidate key**: a minimal super key (no redundant column). **Primary key**: the chosen candidate key — unique + not null. **Alternate key**: candidate keys not chosen as primary. **Composite key**: a key made of multiple columns. **Foreign key**: a column referencing another table's primary key, enforcing referential integrity.",
+     ex:"In a Student table, <c>roll_no</c> and <c>email</c> are both candidate keys; pick <c>roll_no</c> as primary, <c>email</c> becomes alternate. In Enrollment, <c>student_id</c> is a foreign key to Student.",
+     tip:"Every candidate key is a super key, but not every super key is a candidate key (candidate = minimal). A foreign key can be null; a primary key cannot."},
+    {t:"Normalization & Functional Dependencies", h:"Removing redundancy by decomposing tables.",
+     simple:"Normalization organizes tables to **reduce redundancy** and avoid **update, insert, and delete anomalies**, by decomposing them based on **functional dependencies (FDs)**. An FD **X → Y** means X's value determines Y's value. Normal forms progressively tighten the rules on what dependencies are allowed.",
+     ex:"If <c>student_id → student_name</c>, storing the name in every enrollment row is redundant — normalization splits it into a separate Student table.",
+     tip:"Anomalies are the *why*: **update** (change a value in many rows, miss one → inconsistency), **insert** (can't add data without unrelated data), **delete** (removing a row loses unrelated facts). FDs are the *how*."},
+    {t:"1NF → 2NF → 3NF → BCNF", h:"The normal-form ladder, with the rule of each.",
+     simple:"**1NF**: atomic values only — no repeating groups or multi-valued cells. **2NF**: 1NF + **no partial dependency** (no non-key attribute depends on part of a composite key). **3NF**: 2NF + **no transitive dependency** (non-key attributes don't depend on other non-key attributes). **BCNF**: stricter 3NF — for every FD X→Y, **X must be a super key**.",
+     ex:"3NF violation: <c>student_id → dept_id → dept_name</c> — <c>dept_name</c> depends transitively via <c>dept_id</c>; split departments into their own table.",
+     tip:"Memory hook: 1NF (atomic), 2NF (no partial — 'the whole key'), 3NF (no transitive — 'nothing but the key'). Summary: 'each attribute depends on **the key, the whole key, and nothing but the key**.' BCNF handles edge cases 3NF misses."},
+    {t:"Denormalization", h:"Deliberately adding redundancy for speed.",
+     simple:"Denormalization is the **reverse** of normalization: intentionally introducing redundancy (merging tables, storing derived/duplicate data) to **improve read performance** by reducing expensive joins. It trades storage and write-consistency effort for faster queries — common in read-heavy analytics/reporting systems.",
+     ex:"Storing a precomputed <c>total_amount</c> on an Order row instead of summing line items on every read.",
+     tip:"The tradeoff: faster reads, but writes must update duplicated data and you risk inconsistency. Normalize for OLTP (transactional), denormalize for OLAP (analytical/reporting)."},
+    {t:"SQL Sub-languages (DDL/DML/DCL/TCL)", h:"The four command families of SQL.",
+     simple:"**DDL** (Data Definition): defines schema — <c>CREATE</c>, <c>ALTER</c>, <c>DROP</c>, <c>TRUNCATE</c>. **DML** (Data Manipulation): works with data — <c>SELECT</c>, <c>INSERT</c>, <c>UPDATE</c>, <c>DELETE</c>. **DCL** (Data Control): permissions — <c>GRANT</c>, <c>REVOKE</c>. **TCL** (Transaction Control): manages transactions — <c>COMMIT</c>, <c>ROLLBACK</c>, <c>SAVEPOINT</c>.",
+     ex:"<c>CREATE TABLE</c> (DDL) defines the table; <c>INSERT</c> (DML) adds a row; <c>GRANT SELECT</c> (DCL) gives read access; <c>COMMIT</c> (TCL) makes changes permanent.",
+     tip:"Trick point: **DELETE** is DML (row-by-row, can rollback, fires triggers); **TRUNCATE** is DDL (removes all rows fast, auto-commits, resets identity, can't be rolled back easily). **DROP** removes the whole table structure."},
+    {t:"Joins", h:"Combining rows from multiple tables.",
+     simple:"**INNER JOIN**: only rows matching in both tables. **LEFT (OUTER) JOIN**: all rows from the left table + matches from the right (nulls where no match). **RIGHT JOIN**: all from the right + matches from the left. **FULL OUTER JOIN**: all rows from both, matched where possible. **CROSS JOIN**: Cartesian product (every combination). **SELF JOIN**: a table joined to itself.",
+     ex:"<c>SELECT * FROM Employees e LEFT JOIN Departments d ON e.dept_id=d.id;</c> — keeps every employee even those with no department (department columns null).",
+     tip:"Self join example: finding each employee's manager where both are rows in the same Employees table (<c>e.manager_id = m.emp_id</c>). Cross join of an m-row and n-row table yields m×n rows."},
+    {t:"GROUP BY, HAVING & Aggregates", h:"Summarizing rows into groups.",
+     simple:"Aggregate functions compute a single value over rows: <c>COUNT</c>, <c>SUM</c>, <c>AVG</c>, <c>MIN</c>, <c>MAX</c>. <c>GROUP BY</c> collapses rows into groups so aggregates apply per group. <c>WHERE</c> filters **rows before** grouping; <c>HAVING</c> filters **groups after** aggregation.",
+     ex:"<c>SELECT dept, AVG(salary) FROM Emp GROUP BY dept HAVING AVG(salary) > 50000;</c> — average salary per department, keeping only departments above 50k.",
+     tip:"The key exam distinction: **WHERE can't use aggregates, HAVING can.** WHERE runs before grouping, HAVING after. Logical order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY."},
+    {t:"Subqueries (incl. Correlated)", h:"A query nested inside another query.",
+     simple:"A **subquery** is a query inside another, often in <c>WHERE</c>, <c>FROM</c>, or <c>SELECT</c>. A **non-correlated** subquery runs once independently. A **correlated** subquery references the **outer** query's row and runs **once per outer row**, making it slower but powerful for row-by-row comparisons.",
+     ex:"Correlated: <c>SELECT name FROM Emp e WHERE salary > (SELECT AVG(salary) FROM Emp WHERE dept=e.dept);</c> — employees earning above their **own department's** average.",
+     tip:"Correlated subqueries can often be rewritten as joins for better performance. <c>EXISTS</c> is typically used with correlated subqueries and short-circuits on the first match."},
+    {t:"Indexing (Clustered vs Non-clustered)", h:"Speeding up lookups — with tradeoffs.",
+     simple:"An **index** is a data structure (usually a **B+ tree**) that speeds up reads by avoiding full-table scans, at the cost of slower writes and extra storage. A **clustered index** determines the **physical order** of rows in the table — one per table (usually the primary key). A **non-clustered index** is a separate structure with pointers to rows — many allowed per table.",
+     ex:"A clustered index on <c>id</c> stores rows physically sorted by id; a non-clustered index on <c>email</c> is a separate sorted list of emails pointing back to rows.",
+     tip:"**B+ tree vs B tree**: B+ stores all data in leaf nodes with leaves linked in a list (great for range scans), while B tree stores data in internal nodes too. DBMS indexes use B+ trees mainly for efficient range queries and sequential access."},
+    {t:"Transactions & ACID", h:"The guarantees that keep data correct.",
+     simple:"A **transaction** is a unit of work executed as a whole — all or nothing. **ACID**: **Atomicity** (all operations succeed or none do), **Consistency** (moves the DB from one valid state to another, respecting constraints), **Isolation** (concurrent transactions don't interfere), **Durability** (committed changes survive crashes).",
+     ex:"Bank transfer: debit A and credit B must **both** happen (atomicity); if the system crashes after debit, atomicity rolls it back so money isn't lost.",
+     tip:"Atomicity/Durability come from the **transaction log (WAL)** and recovery; Isolation from **concurrency control** (locks/MVCC); Consistency from constraints + the other three. This mapping impresses interviewers."},
+    {t:"Concurrency Control & 2PL", h:"Locking so parallel transactions stay correct.",
+     simple:"Concurrency control lets many transactions run at once without corrupting data, mainly via **locks**: **shared (read)** locks allow concurrent readers; **exclusive (write)** locks are exclusive. **Two-Phase Locking (2PL)** guarantees serializability with a **growing phase** (acquire locks, release none) then a **shrinking phase** (release locks, acquire none). **Strict 2PL** holds all exclusive locks until commit (prevents cascading rollback).",
+     ex:"In 2PL, a transaction grabs all the locks it needs first (growing), does its work, then releases them (shrinking) — never re-acquiring after the first release.",
+     tip:"2PL ensures conflict-serializability but can cause **deadlocks**. Strict/Rigorous 2PL avoids cascading aborts. Alternative: **MVCC** (multi-version), used by PostgreSQL, lets readers see a snapshot without blocking writers."},
+    {t:"Isolation Levels & Read Phenomena", h:"How much concurrency anomaly you tolerate.",
+     simple:"Isolation levels trade consistency for concurrency, defined by which read anomalies they permit. Anomalies: **Dirty read** (reading uncommitted data), **Non-repeatable read** (same query gives different rows because another txn updated), **Phantom read** (new rows appear between reads). Levels, weakest→strongest: **Read Uncommitted** (allows all), **Read Committed** (no dirty), **Repeatable Read** (no dirty/non-repeatable), **Serializable** (no anomalies).",
+     ex:"Under Read Committed you won't see uncommitted data, but running the same <c>SELECT</c> twice might return different values if another transaction committed in between (non-repeatable read).",
+     tip:"Memorize the grid: Read Uncommitted (dirty ✓), Read Committed (dirty ✗), Repeatable Read (non-repeatable ✗), Serializable (phantom ✗). Higher isolation = safer but less concurrency."},
+    {t:"Serializability (Conflict vs View)", h:"When a concurrent schedule is 'as good as serial'.",
+     simple:"A schedule is **serializable** if it produces the **same result as some serial (one-at-a-time) execution** — the correctness gold standard for concurrency. **Conflict serializability**: reorderable into a serial schedule by swapping non-conflicting operations (checked via a **precedence graph** — serializable iff it's acyclic). **View serializability** is a broader, weaker condition based on read-from and final-write equivalence.",
+     ex:"Two transactions writing different rows don't conflict, so their operations can be reordered into a serial order — the schedule is conflict-serializable.",
+     tip:"Conflict serializable ⇒ view serializable, but not the reverse. Two operations conflict if they're from different transactions, on the **same data item**, and **at least one is a write**."},
+    {t:"Recovery & Logging", h:"Getting back to a correct state after a crash.",
+     simple:"Recovery restores the database to a consistent state after failure, primarily using a **transaction log** with **write-ahead logging (WAL)** — the log record is written **before** the actual data change. On recovery, committed transactions are **redone** and uncommitted ones are **undone**. **Checkpoints** periodically flush state to limit how much log must be replayed.",
+     ex:"After a crash, the recovery manager scans the log: it redoes transactions that committed and rolls back (undoes) those still in progress.",
+     tip:"WAL is the core idea (used to guarantee Atomicity + Durability). **Shadow paging** is an alternative that keeps a shadow copy of pages and switches atomically — no undo/redo needed but harder to do concurrently."},
+    {t:"Views", h:"A virtual, saved query that acts like a table.",
+     simple:"A **view** is a virtual table defined by a stored <c>SELECT</c> query — it holds no data itself but presents data from underlying tables. Uses: **simplify** complex joins, provide **security** (expose only certain columns/rows), and give a stable interface if underlying tables change. A **materialized view** actually stores the result for speed.",
+     ex:"<c>CREATE VIEW ActiveUsers AS SELECT name, email FROM Users WHERE active=1;</c> — query it like a table without exposing sensitive columns.",
+     tip:"Standard views are always up-to-date (computed on access) but slower; materialized views are fast but can go stale and need refreshing. Some views are updatable, some (with joins/aggregates) are read-only."},
+    {t:"Triggers & Stored Procedures", h:"Code that lives in the database.",
+     simple:"A **stored procedure** is a saved, reusable set of SQL statements you call explicitly (with parameters) — reduces network traffic and centralizes logic. A **trigger** is code that runs **automatically** in response to an event (<c>INSERT</c>/<c>UPDATE</c>/<c>DELETE</c>), <c>BEFORE</c> or <c>AFTER</c> it — used for auditing, enforcing rules, and maintaining derived data.",
+     ex:"A trigger logs every salary change into an audit table automatically after an <c>UPDATE</c> on Employees; a stored procedure <c>transferFunds(a,b,amt)</c> bundles the whole transfer logic.",
+     tip:"Key difference: a stored procedure is **called manually**; a trigger **fires automatically** on an event. Triggers can hurt performance and hide logic, so use them judiciously."},
+    {t:"CAP Theorem & SQL vs NoSQL", h:"The tradeoff behind distributed databases.",
+     simple:"**CAP theorem**: a distributed system can guarantee only **two** of **Consistency** (every read sees the latest write), **Availability** (every request gets a response), and **Partition tolerance** (works despite network splits). Since partitions are unavoidable, real systems choose **CP** or **AP**. **SQL** databases are relational, schema-strict, ACID, and scale vertically; **NoSQL** (document/key-value/column/graph) is flexible-schema, often BASE, and scales horizontally.",
+     ex:"A banking system chooses **CP** (consistency over availability); a social feed chooses **AP** (stay available, accept slightly stale data).",
+     tip:"NoSQL types: **document** (MongoDB), **key-value** (Redis), **column-family** (Cassandra), **graph** (Neo4j). Use SQL for structured data + complex queries + strong consistency; NoSQL for scale, flexible schemas, and high write throughput."},
+    {t:"Relational Algebra basics", h:"The formal operations behind SQL.",
+     simple:"Relational algebra is the theoretical query language of the relational model. Core operations: **Selection (σ)** picks rows by a condition; **Projection (π)** picks columns; **Union / Intersection / Difference** on compatible relations; **Cartesian Product (×)**; **Join (⋈)** combines related rows; **Rename (ρ)**.",
+     ex:"σ(salary>50000)(Employee) selects high earners; π(name, dept)(Employee) keeps only those two columns.",
+     tip:"Selection ≈ SQL <c>WHERE</c> (rows), Projection ≈ SQL <c>SELECT columns</c> (columns) — a common point of confusion. These operations are the formal foundation SQL is built on."},
+  ]},
+
+  { key:"cn", name:"CN", color:"var(--cn)", wash:"var(--cn-wash)",
+    desc:"Layers, TCP/IP, routing & protocols", topics:[
+    {t:"OSI vs TCP/IP Model", h:"The two layered reference models.",
+     simple:"The **OSI model** has **7 layers**: Physical, Data Link, Network, Transport, Session, Presentation, Application — a conceptual reference. The **TCP/IP model** has **4 (or 5) layers**: Link, Internet, Transport, Application — the practical model the internet runs on. TCP/IP merges OSI's top three (Session/Presentation/Application) into one Application layer.",
+     ex:"Sending an email: the Application layer (SMTP) hands data down through Transport (TCP), Internet (IP), to the Link layer for physical transmission.",
+     tip:"Mnemonic for OSI top-down: 'All People Seem To Need Data Processing' (Application→Physical). Know which protocols/PDUs sit at each layer — bits (Physical), frames (Data Link), packets (Network), segments (Transport)."},
+    {t:"Layer Functions & Protocols", h:"What each layer does and its protocols.",
+     simple:"**Physical**: raw bits over a medium (cables, signals). **Data Link**: node-to-node delivery, framing, MAC addressing, error detection (Ethernet, switches). **Network**: logical addressing + routing across networks (IP, routers). **Transport**: end-to-end delivery, reliability, ports (TCP, UDP). **Session/Presentation/Application**: sessions, encryption/formatting, and user services (HTTP, DNS, SMTP).",
+     ex:"A router works at the **Network** layer (IP, routing); a switch works at the **Data Link** layer (MAC addresses).",
+     tip:"Match device to layer: hub/repeater = Physical, switch/bridge = Data Link, router = Network, gateway = up to Application. This device-to-layer mapping is a very common question."},
+    {t:"TCP vs UDP", h:"Reliable & ordered vs fast & connectionless.",
+     simple:"**TCP** is **connection-oriented** and **reliable**: it sets up a connection (3-way handshake), guarantees **ordered, error-checked** delivery with acknowledgements and retransmission, and does flow + congestion control — but with more overhead. **UDP** is **connectionless** and **unreliable**: no handshake, no ordering or delivery guarantee, just fast, low-overhead datagrams.",
+     ex:"TCP for web pages, email, file transfer (correctness matters). UDP for live video/voice, gaming, DNS (speed matters, occasional loss is OK).",
+     tip:"Must-know line: 'TCP guarantees delivery and order at the cost of speed; UDP is fast and lightweight but makes no guarantees.' UDP has an 8-byte header vs TCP's 20+ bytes."},
+    {t:"TCP Handshake & Termination", h:"Opening (3-way) and closing (4-way) a connection.",
+     simple:"TCP opens with a **3-way handshake**: client sends **SYN**, server replies **SYN-ACK**, client sends **ACK** — now both agree on initial sequence numbers and the connection is established. It closes with a **4-way handshake**: each side sends a **FIN** and receives an **ACK** (both directions closed independently, since TCP is full-duplex).",
+     ex:"Client: 'SYN (let's talk, seq=x)' → Server: 'SYN-ACK (ok, seq=y, ack=x+1)' → Client: 'ACK (ack=y+1)' → connection ready.",
+     tip:"Why 3-way not 2-way? To synchronize sequence numbers **both ways** and confirm both sides can send and receive. Closing needs 4 steps because each direction is closed separately (the TIME_WAIT state guards against delayed packets)."},
+    {t:"Flow Control vs Congestion Control", h:"Protecting the receiver vs protecting the network.",
+     simple:"**Flow control** prevents a fast sender from **overwhelming the receiver** — TCP uses a **sliding window** advertised by the receiver (its buffer space). **Congestion control** prevents overwhelming the **network** itself — TCP uses algorithms like **slow start** (exponential growth), **congestion avoidance** (linear growth, AIMD), and reacts to loss by shrinking the window.",
+     ex:"Flow control: the receiver advertises a small window so the sender slows down. Congestion control: on detecting packet loss, the sender cuts its sending rate to ease network load.",
+     tip:"One-liner: 'flow control is receiver-driven; congestion control is network-driven.' AIMD = Additive Increase, Multiplicative Decrease (grow slowly, back off sharply on loss)."},
+    {t:"IP Addressing & Classes", h:"How devices are addressed on a network.",
+     simple:"An **IP address** uniquely identifies a device on a network. **IPv4** is 32-bit (e.g., 192.168.1.1), split into **network** and **host** portions. Classful addressing: **Class A** (large networks, /8), **Class B** (/16), **Class C** (small, /24), plus D (multicast) and E (reserved). **Private ranges** (10.x, 172.16–31.x, 192.168.x) aren't routable on the public internet.",
+     ex:"192.168.1.1 is a private Class C address used inside home/office LANs; a public site has a globally unique routable IP.",
+     tip:"Classful addressing is largely replaced by **CIDR** (classless). Loopback is 127.0.0.1. Know why NAT exists — IPv4 exhaustion pushed private addressing + NAT."},
+    {t:"Subnetting & CIDR", h:"Splitting a network into smaller sub-networks.",
+     simple:"**Subnetting** divides a large network into smaller **subnets** by borrowing bits from the host portion, improving organization and reducing broadcast traffic. A **subnet mask** (e.g., 255.255.255.0) marks which bits are network vs host. **CIDR** notation (e.g., /24) replaces classful addressing, stating the number of network bits for flexible sizing.",
+     ex:"192.168.1.0/24 has 256 addresses (254 usable). Splitting into two /25 subnets gives two networks of 128 addresses each.",
+     tip:"Formulas: hosts per subnet = 2^(host bits) − 2 (subtract network + broadcast addresses). /24 = 254 usable hosts. Be ready to compute usable hosts and network/broadcast addresses from a CIDR block."},
+    {t:"IPv4 vs IPv6", h:"Why we needed a bigger address space.",
+     simple:"**IPv4** is 32-bit (~4.3 billion addresses), written as dotted decimal — now exhausted. **IPv6** is **128-bit** (a practically unlimited number), written as eight hex groups (e.g., 2001:0db8::1). IPv6 also removes the need for NAT, has built-in security (IPsec), simpler headers, and no broadcast (uses multicast/anycast).",
+     ex:"IPv4: 192.168.1.1 · IPv6: 2001:0db8:85a3::8a2e:0370:7334 (double colon <c>::</c> compresses consecutive zero groups).",
+     tip:"Core driver: **IPv4 address exhaustion**. Extras: IPv6 has no header checksum (faster routing), supports auto-configuration (SLAAC), and vastly larger address space (2^128)."},
+    {t:"ARP", h:"Mapping an IP address to a MAC address.",
+     simple:"**ARP (Address Resolution Protocol)** finds the **MAC (physical) address** for a known **IP address** on a local network. When a device wants to send to an IP on its LAN, it **broadcasts** an ARP request ('who has this IP?'); the owner replies with its MAC. Results are cached in an **ARP table**.",
+     ex:"Your PC knows the router's IP (192.168.1.1) but needs its MAC to send a frame; it ARP-broadcasts and the router answers with its hardware address.",
+     tip:"ARP operates at the boundary of Data Link and Network layers, only within a LAN. **RARP** does the reverse (MAC→IP, now obsolete, replaced by DHCP/BOOTP)."},
+    {t:"DNS", h:"Translating domain names to IP addresses.",
+     simple:"**DNS (Domain Name System)** is the internet's phonebook — it resolves human-readable domain names (google.com) into IP addresses. Resolution is **hierarchical**: a resolver queries the **root** server → **TLD** server (.com) → **authoritative** server for the domain, caching results along the way. Mostly uses **UDP** on port 53 (TCP for large responses).",
+     ex:"Typing google.com triggers a DNS lookup that returns an IP like 142.250.x.x, which the browser then connects to.",
+     tip:"Know record types: **A** (IPv4), **AAAA** (IPv6), **CNAME** (alias), **MX** (mail), **NS** (name server). Recursive vs iterative resolution and caching (TTL) are common follow-ups."},
+    {t:"DHCP", h:"Automatically handing out IP configuration.",
+     simple:"**DHCP (Dynamic Host Configuration Protocol)** automatically assigns IP addresses and network settings (subnet mask, gateway, DNS) to devices when they join a network — no manual config. It uses the **DORA** process: **Discover** (client broadcasts), **Offer** (server offers an IP), **Request** (client requests it), **Acknowledge** (server confirms and leases it).",
+     ex:"Connecting your phone to Wi-Fi: it broadcasts a DHCP Discover, the router offers an address, and your phone leases it — all in a second.",
+     tip:"Remember **DORA**. Addresses are **leased** for a duration, then renewed. DHCP uses UDP ports 67 (server) and 68 (client)."},
+    {t:"HTTP/HTTPS, Methods & Status Codes", h:"The protocol of the web, plus its verbs and codes.",
+     simple:"**HTTP** is the stateless request-response protocol for the web; **HTTPS** is HTTP over **TLS/SSL** (encrypted). **Methods**: <c>GET</c> (read), <c>POST</c> (create/submit), <c>PUT</c> (replace), <c>PATCH</c> (partial update), <c>DELETE</c> (remove). **Status codes** by class: **2xx** success (200 OK, 201 Created), **3xx** redirect (301, 304), **4xx** client error (400, 401, 403, 404), **5xx** server error (500, 503).",
+     ex:"A browser sends <c>GET /index.html</c>; the server responds <c>200 OK</c> with the page, or <c>404 Not Found</c> if it's missing.",
+     tip:"**GET vs POST**: GET is idempotent, cacheable, params in the URL, size-limited; POST sends data in the body, not idempotent. Idempotent methods (GET, PUT, DELETE) give the same result if repeated; POST does not."},
+    {t:"SSL/TLS Handshake", h:"How an encrypted HTTPS connection is set up.",
+     simple:"The **TLS handshake** establishes a secure channel: the client sends **ClientHello** (supported ciphers), the server responds **ServerHello** + its **certificate** (with public key). The client verifies the certificate, they agree on a **session key** (via asymmetric key exchange), then switch to **symmetric encryption** for the actual data — combining security with speed.",
+     ex:"Visiting an https:// site: your browser validates the server's certificate against a trusted CA, then a shared secret is negotiated to encrypt the session.",
+     tip:"Key idea: **asymmetric** encryption is used to safely exchange a **symmetric** session key, then symmetric encryption handles the bulk data (much faster). Certificates + Certificate Authorities provide authentication and trust."},
+    {t:"Cookies vs Sessions", h:"Adding state to a stateless protocol.",
+     simple:"HTTP is stateless, so cookies/sessions track users across requests. A **cookie** is small data stored **on the client (browser)** and sent with each request — good for preferences, tracking, and holding a session ID. A **session** stores data **on the server**, identified by a session ID (usually kept in a cookie) — more secure for sensitive data.",
+     ex:"After login, the server creates a session and sends a session-ID cookie; each later request carries that cookie so the server knows who you are.",
+     tip:"Cookies = client-side storage (less secure, size-limited ~4KB); sessions = server-side storage (more secure, uses server memory). Cookies can be persistent or session-scoped; flags like <c>HttpOnly</c> and <c>Secure</c> harden them."},
+    {t:"Routing (Distance Vector vs Link State)", h:"How routers learn the best paths.",
+     simple:"Routing determines the path packets take across networks. **Distance Vector** (e.g., RIP): each router shares its whole routing table with neighbours; knows distance + direction ('routing by rumour'), simple but slow to converge. **Link State** (e.g., OSPF): each router floods link info so everyone builds a full network map, then runs **Dijkstra** for shortest paths — faster convergence, more resource-heavy. **BGP** routes **between** autonomous systems (the internet's backbone protocol).",
+     ex:"RIP uses hop count as its metric (max 15 hops); OSPF computes shortest paths from a complete topology map.",
+     tip:"Distance vector shares tables with neighbours only (Bellman-Ford); link state shares link status with everyone (Dijkstra). BGP is a **path-vector** protocol used between ISPs/ASes."},
+    {t:"Switching (Circuit vs Packet)", h:"Two fundamentally different ways to move data.",
+     simple:"**Circuit switching** reserves a **dedicated path** for the whole session (like a traditional phone call) — guaranteed bandwidth but wasteful if idle. **Packet switching** breaks data into **packets** routed **independently**, sharing links efficiently — the basis of the internet. Packet switching subtypes: **datagram** (each packet routed independently, e.g., IP) and **virtual circuit** (a preplanned path, packets follow it).",
+     ex:"Old landline calls = circuit switching (a line held open the whole call). The internet = packet switching (packets take whatever route is best, reassembled at the destination).",
+     tip:"Circuit switching: dedicated, guaranteed bandwidth, setup delay, inefficient. Packet switching: shared, efficient, resilient (reroutes around failures), possible variable delay/jitter."},
+    {t:"Error Detection (Parity, Checksum, CRC)", h:"Catching corrupted bits in transmission.",
+     simple:"Error-detection methods add redundant bits so the receiver can spot corruption. **Parity bit**: one extra bit making the total number of 1s even/odd — catches single-bit errors only. **Checksum**: sum data blocks, send the sum; receiver re-sums and compares (used in TCP/IP). **CRC (Cyclic Redundancy Check)**: treats data as a polynomial divided by a generator; the remainder is appended — powerful, detects burst errors (used in Ethernet).",
+     ex:"CRC appends a few check bits computed by polynomial division; if the receiver's recomputed remainder isn't zero, the frame is corrupt and discarded.",
+     tip:"Parity is weakest (single-bit only). CRC is strongest and standard at the Data Link layer. **Hamming code** goes further — it can **correct** single-bit errors, not just detect them."},
+    {t:"Network Devices", h:"Hub, switch, router and friends — by layer.",
+     simple:"**Hub** (Physical layer): dumb repeater, broadcasts to all ports, one collision domain. **Switch** (Data Link): forwards frames to the **specific** port by MAC address, separate collision domains — smart. **Router** (Network layer): connects **different networks**, routes by IP. **Bridge**: connects two LAN segments. **Gateway**: connects different network architectures/protocols (works up to the Application layer). **Repeater**: regenerates signals to extend range.",
+     ex:"A home router combines routing (to the internet), switching (LAN ports), and a wireless access point in one box.",
+     tip:"Core distinction: a **hub broadcasts** to everyone (inefficient); a **switch** learns MACs and forwards **only to the target port**; a **router** works across networks using IP addresses."},
+    {t:"NAT", h:"Sharing one public IP among many devices.",
+     simple:"**NAT (Network Address Translation)** lets multiple devices on a private network share a **single public IP** by translating private IPs to the public one (and back) at the router. It conserves scarce IPv4 addresses and adds a layer of security by hiding internal addresses. **PAT** (port-based NAT) distinguishes devices by port number.",
+     ex:"Ten devices on 192.168.1.x all reach the internet through the router's one public IP; the router tracks which internal device each connection belongs to via ports.",
+     tip:"NAT is a major reason IPv4 survived exhaustion. It breaks true end-to-end connectivity (a reason IPv6, with abundant addresses, reduces the need for it)."},
+    {t:"What happens when you type a URL", h:"The end-to-end walkthrough interviewers love.",
+     simple:"The full journey: (1) **DNS resolution** — browser resolves the domain to an IP (checking caches, then DNS servers). (2) **TCP connection** — a 3-way handshake to the server's IP on port 80/443. (3) **TLS handshake** if HTTPS — negotiate encryption. (4) **HTTP request** — browser sends <c>GET</c> for the page. (5) **Server responds** with HTML. (6) **Rendering** — browser parses HTML, fetches CSS/JS/images, builds the DOM, and paints the page.",
+     ex:"Typing google.com: DNS → IP, TCP handshake, TLS, <c>GET /</c>, server returns HTML, browser renders and fires more requests for assets.",
+     tip:"This one question touches **every** layer — DNS, TCP/IP, TLS, HTTP, routing, and rendering. Structure your answer as clear numbered steps; interviewers use it to probe breadth across the whole stack."},
+  ]},
+];
+
+/* ============================================================
+   RENDER + STATE
+   ============================================================ */
+const DONE = new Set();
+let activeKey = SUBJECTS[0].key;
+let query = "";
+let storageOK = false;
+
+const $ = s => document.querySelector(s);
+const listEl = $("#list"), emptyEl = $("#empty"), searchEl = $("#search");
+const modulesEl = $("#modules"), metaEl = $("#searchmeta");
+
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function fmt(s){
+  let out = esc(s);
+  out = out.replace(/&lt;c&gt;/g,'<code class="ic">').replace(/&lt;\/c&gt;/g,'</code>');
+  out = out.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  return out;
+}
+const idOf = (k,i) => k + "-" + i;
+
+/* ---- Theme Toggle Listener ---- */
+$("#themeToggle").addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const newTheme = isDark ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+});
+
+/* ---- storage (persist across sessions; graceful fallback) ---- */
+async function loadProgress(){
+  try{
+    const saved = localStorage.getItem("cs_prep_done");
+    if(saved){
+      JSON.parse(saved).forEach(k => DONE.add(k));
+    }
+    storageOK = true;
+  }catch(e){ storageOK = false; }
+}
+async function saveOne(id, done){
+  if(!storageOK) return;
+  try{
+    localStorage.setItem("cs_prep_done", JSON.stringify(Array.from(DONE)));
+  }catch(e){}
+}
+async function clearAllStorage(){
+  if(!storageOK) return;
+  try{ localStorage.removeItem("cs_prep_done"); }catch(e){}
+}
+
+/* ---- subject modules (nav) ---- */
+function renderModules(){
+  modulesEl.innerHTML = "";
+  SUBJECTS.forEach(sub=>{
+    const total = sub.topics.length;
+    const done = sub.topics.filter((_,i)=>DONE.has(idOf(sub.key,i))).length;
+    const pct = Math.round(done/total*100);
+    const b = document.createElement("button");
+    b.className = "module";
+    b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", sub.key===activeKey ? "true":"false");
+    b.style.setProperty("--accent", sub.color);
+    b.style.setProperty("--accent-wash", sub.wash);
+    b.innerHTML =
+      '<div class="m-top"><span class="m-name">'+sub.name+'</span><span class="m-pct">'+pct+'%</span></div>'+
+      '<div class="bar"><span style="width:'+pct+'%"></span></div>'+
+      '<span class="m-count">'+done+' / '+total+' revised</span>';
+    b.addEventListener("click", ()=>{
+      activeKey = sub.key;
+      if(query){ searchEl.value=""; query=""; toggleClear(); }
+      renderModules(); renderSubbar(); renderList();
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+    modulesEl.appendChild(b);
+  });
+}
+
+/* ---- sub-toolbar ---- */
+function renderSubbar(){
+  const sub = SUBJECTS.find(s=>s.key===activeKey);
+  document.documentElement.style.setProperty("--accent", sub.color);
+  document.documentElement.style.setProperty("--accent-wash", sub.wash);
+  $("#subbar").style.setProperty("--accent", sub.color);
+  $("#subbar").style.setProperty("--accent-wash", sub.wash);
+  $("#subjectTitle").textContent = sub.name;
+  $("#subjectDesc").textContent = sub.desc;
+}
+
+/* ---- topic card ---- */
+function topicCard(sub, topic, i){
+  const id = idOf(sub.key,i);
+  const done = DONE.has(id);
+  const el = document.createElement("article");
+  el.className = "topic" + (done?" done":"");
+  el.style.setProperty("--accent", sub.color);
+  el.style.setProperty("--accent-wash", sub.wash);
+  el.id = "topic-"+id;
+
+  let body = '<div class="block"><div class="lbl">In simple words</div><p>'+fmt(topic.simple)+'</p></div>';
+  body += '<div class="block"><div class="lbl">Example</div><p>'+fmt(topic.ex)+'</p></div>';
+  if(topic.code){
+    body += '<pre class="code">'+esc(topic.code).replace(/\/\/(.*)/g,'<span class="cm">//$1</span>')+'</pre>';
+  }
+  if(topic.tip){
+    body += '<div class="block tip"><div class="lbl">Interview tip</div><p>'+fmt(topic.tip)+'</p></div>';
+  }
+
+  const badge = query ? '<span class="badge">'+sub.name+'</span>' : '';
+
+  el.innerHTML =
+    '<div class="t-head">'+
+      '<span class="t-idx">'+String(i+1).padStart(2,"0")+'</span>'+
+      '<div class="t-titles"><div class="t-title">'+esc(topic.t)+'</div>'+
+        '<div class="t-hint">'+esc(topic.h)+'</div></div>'+
+      '<div class="t-tools">'+badge+
+        '<button class="chk" title="Mark revised" aria-label="Mark revised">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'+
+        '</button>'+
+        '<span class="caret"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>'+
+      '</div>'+
+    '</div>'+
+    '<div class="t-body"><div class="t-body-inner">'+body+'</div></div>';
+
+  const head = el.querySelector(".t-head");
+  const bodyEl = el.querySelector(".t-body");
+  const chk = el.querySelector(".chk");
+
+  head.addEventListener("click", e=>{
+    if(e.target.closest(".chk") || e.target.closest(".chk svg") || e.target.closest(".chk path")) return;
+    const open = el.classList.toggle("open");
+    bodyEl.style.maxHeight = open ? bodyEl.scrollHeight + "px" : "0";
+  });
+  chk.addEventListener("click", e=>{
+    e.stopPropagation();
+    const nowDone = !el.classList.contains("done");
+    el.classList.toggle("done", nowDone);
+    if(nowDone) DONE.add(id); else DONE.delete(id);
+    saveOne(id, nowDone);
+    renderModules();
+  });
+  return el;
+}
+
+/* ---- list ---- */
+function matches(topic){
+  if(!query) return true;
+  const q = query.toLowerCase();
+  return (topic.t+" "+topic.h+" "+topic.simple+" "+topic.ex+" "+(topic.tip||"")).toLowerCase().includes(q);
+}
+function renderList(){
+  listEl.innerHTML = "";
+  let shown = 0;
+
+  if(query){
+    metaEl.style.display = "block";
+    SUBJECTS.forEach(sub=>{
+      sub.topics.forEach((t,i)=>{
+        if(matches(t)){ listEl.appendChild(topicCard(sub,t,i)); shown++; }
+      });
+    });
+    metaEl.innerHTML = shown
+      ? 'Found <b>'+shown+'</b> topic'+(shown>1?"s":"")+' matching "<b>'+esc(query)+'</b>" across all subjects'
+      : '';
+  }else{
+    metaEl.style.display = "none";
+    const sub = SUBJECTS.find(s=>s.key===activeKey);
+    sub.topics.forEach((t,i)=>{ listEl.appendChild(topicCard(sub,t,i)); shown++; });
+  }
+
+  emptyEl.style.display = shown ? "none" : "block";
+  if(!shown){
+    emptyEl.innerHTML = '<b>No topics matched</b>Try a different keyword — e.g. deadlock, normalization, TCP, polymorphism.';
+  }
+}
+
+/* ---- expand / collapse all (visible) ---- */
+function setAll(open){
+  document.querySelectorAll(".topic").forEach(el=>{
+    const b = el.querySelector(".t-body");
+    el.classList.toggle("open", open);
+    b.style.maxHeight = open ? b.scrollHeight + "px" : "0";
+  });
+}
+$("#expandAll").addEventListener("click", ()=>setAll(true));
+$("#collapseAll").addEventListener("click", ()=>setAll(false));
+
+$("#resetProg").addEventListener("click", async ()=>{
+  if(!confirm("Clear all revision progress on this device?")) return;
+  DONE.clear();
+  await clearAllStorage();
+  renderModules(); renderList();
+});
+
+/* ---- search ---- */
+function toggleClear(){ $("#clearbtn").style.display = searchEl.value ? "block":"none"; }
+searchEl.addEventListener("input", ()=>{ query = searchEl.value.trim(); toggleClear(); renderList(); });
+searchEl.addEventListener("keydown", e=>{ if(e.key==="Escape"){ searchEl.value=""; query=""; toggleClear(); renderList(); searchEl.blur(); }});
+$("#clearbtn").addEventListener("click", ()=>{ searchEl.value=""; query=""; toggleClear(); renderList(); searchEl.focus(); });
+document.addEventListener("keydown", e=>{
+  if(e.key==="/" && document.activeElement!==searchEl){ e.preventDefault(); searchEl.focus(); }
+});
+
+/* ---- init ---- */
+(async function init(){
+  await loadProgress();
+  renderModules();
+  renderSubbar();
+  renderList();
+})();
+</script>
+</body>
+</html>
