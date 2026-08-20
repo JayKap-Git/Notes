@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Interview — scratch to advanced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#EDF0F6;
+  --paper:#FFFFFF;
+  --ink:#0E1428;
+  --ink-2:#3B4666;
+  --ink-3:#6C7899;
+  --rule:#D2D9E8;
+  --rule-2:#E5EAF3;
+  --violet:#4F2AE0;
+  --violet-wash:#EFEBFE;
+  --teal:#0F7B6C;
+  --teal-wash:#E4F3F0;
+  --crimson:#B01B4E;
+  --crimson-wash:#FCEAF0;
+  --ochre:#9A6B00;
+  --ochre-wash:#FBF2DC;
+  --code-bg:#131A31;
+  --code-fg:#DDE3F2;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --rail:286px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{
+  margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--rule-2) 1px,transparent 1px),linear-gradient(90deg,var(--rule-2) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.shell{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0;max-width:1440px;margin:0 auto}
+
+/* ---------- rail ---------- */
+.rail{position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 20px 40px;border-right:1px solid var(--rule);background:rgba(237,240,246,.92);backdrop-filter:blur(6px)}
+.rail-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.rail-title{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1.25;margin:0 0 18px}
+.meter{background:var(--paper);border:1px solid var(--rule);padding:12px 13px;margin-bottom:20px}
+.meter-h{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.meter-bar{height:7px;background:var(--rule-2);margin:9px 0 7px;display:flex;overflow:hidden}
+.meter-solid{background:var(--teal);width:0;transition:width .3s}
+.meter-shaky{background:var(--crimson);width:0;transition:width .3s}
+.meter-sub{font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.meter-sub b{color:var(--ink)}
+nav ol{list-style:none;margin:0;padding:0;counter-reset:s}
+nav a{display:flex;gap:9px;text-decoration:none;color:var(--ink-2);padding:5px 7px;border-left:2px solid transparent;font-size:13.5px;line-height:1.35}
+nav a:hover{background:var(--paper);color:var(--ink)}
+nav a.on{border-left-color:var(--violet);color:var(--violet);font-weight:600;background:var(--violet-wash)}
+nav a span{font-family:var(--mono);font-size:11px;color:var(--ink-3);padding-top:2px}
+nav a.on span{color:var(--violet)}
+.rail-note{margin-top:22px;font-size:12px;color:var(--ink-3);line-height:1.5;border-top:1px solid var(--rule);padding-top:12px}
+
+/* ---------- main ---------- */
+main{padding:0 clamp(20px,4vw,64px) 120px;min-width:0}
+.hero{padding:72px 0 46px;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet);margin-bottom:16px}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(38px,5.6vw,62px);line-height:1.02;letter-spacing:-.022em;margin:0 0 20px;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--violet)}
+.hero p{max-width:62ch;font-size:17.5px;color:var(--ink-2);margin:0 0 14px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.tag{font-family:var(--mono);font-size:11.5px;padding:4px 10px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2)}
+.tag.hot{border-color:var(--violet);color:var(--violet);background:var(--violet-wash)}
+
+section{padding:56px 0 8px;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;margin-bottom:10px}
+.sec-num{font-family:var(--mono);font-size:13px;color:var(--violet);padding-top:12px;letter-spacing:.06em}
+h2{font-family:var(--serif);font-size:clamp(27px,3.3vw,38px);font-weight:700;letter-spacing:-.018em;line-height:1.1;margin:0}
+.sec-lede{max-width:66ch;color:var(--ink-2);font-size:16.5px;margin:0 0 26px 0}
+h3{font-family:var(--serif);font-size:21px;font-weight:600;margin:36px 0 10px;letter-spacing:-.01em}
+h4{font-family:var(--mono);font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin:26px 0 8px;font-weight:600}
+p,li{max-width:74ch}
+ul,ol{padding-left:20px}
+li{margin:5px 0}
+strong{font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--violet-wash);color:var(--violet);padding:1px 5px;border-radius:2px}
+a.ext{color:var(--violet)}
+
+.f{font-family:var(--mono);font-size:14.5px;background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--violet);padding:14px 16px;margin:14px 0;overflow-x:auto;line-height:1.85;color:var(--ink)}
+.f .lbl{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.f .why{display:block;font-family:var(--sans);font-size:13.5px;color:var(--ink-2);margin-top:9px;border-top:1px dashed var(--rule);padding-top:8px}
+
+pre{background:var(--code-bg);color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.65;padding:16px 18px;overflow-x:auto;margin:14px 0;border-left:3px solid var(--teal)}
+pre .c{color:#7E8CB5}
+pre .k{color:#C39BFF}
+pre .s{color:#8FE0C4}
+pre b{color:#FFD98A;font-weight:400}
+
+.box{border:1px solid var(--rule);background:var(--paper);padding:16px 18px;margin:16px 0}
+.box .h{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;margin-bottom:7px;font-weight:600}
+.trap{border-color:var(--crimson);background:var(--crimson-wash)}
+.trap .h{color:var(--crimson)}
+.tip{border-color:var(--teal);background:var(--teal-wash)}
+.tip .h{color:var(--teal)}
+.note{border-color:var(--ochre);background:var(--ochre-wash)}
+.note .h{color:var(--ochre)}
+
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14.5px;background:var(--paper)}
+th,td{border:1px solid var(--rule);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--ink);color:#fff;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+td code{font-size:.86em}
+
+.drill{border:1px solid var(--rule);background:var(--paper);margin:14px 0}
+.drill summary{cursor:pointer;padding:12px 15px;font-weight:600;font-size:15.5px;display:flex;gap:11px;align-items:baseline;list-style:none}
+.drill summary::-webkit-details-marker{display:none}
+.drill summary::before{content:"Q";font-family:var(--mono);font-size:11px;color:#fff;background:var(--violet);padding:2px 6px;flex:none;position:relative;top:-1px}
+.drill[open] summary{border-bottom:1px solid var(--rule-2);background:var(--violet-wash)}
+.drill .ans{padding:14px 15px 6px 15px}
+.drill .ans>*:first-child{margin-top:0}
+.cal{display:flex;gap:8px;align-items:center;padding:9px 15px 13px;border-top:1px dashed var(--rule)}
+.cal span{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+.cal button{font-family:var(--mono);font-size:11.5px;padding:4px 11px;border:1px solid var(--rule);background:#fff;color:var(--ink-2);cursor:pointer}
+.cal button:hover{border-color:var(--ink-3)}
+.cal button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.cal button.pick-s{background:var(--teal);border-color:var(--teal);color:#fff}
+.cal button.pick-k{background:var(--crimson);border-color:var(--crimson);color:#fff}
+
+figure{margin:22px 0;background:var(--paper);border:1px solid var(--rule);padding:14px}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+figcaption b{color:var(--violet);font-weight:500}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:16px 0}
+.grid2 .box{margin:0}
+
+#revisit{background:var(--ink);color:#fff;padding:30px 32px;margin:40px 0 0;border:none}
+#revisit h3{color:#fff;margin-top:0}
+#revisit ul{color:#C9D2E8}
+#revisit li{margin:7px 0}
+#revisit .empty{color:#8C99BC;font-family:var(--mono);font-size:13.5px}
+#revisit button{font-family:var(--mono);font-size:12px;padding:7px 14px;background:var(--violet);color:#fff;border:none;cursor:pointer;margin-top:14px}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}
+  .rail nav{max-height:220px;overflow-y:auto}
+  main{padding:0 20px 80px}
+  .hero{padding:40px 0 32px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="rail">
+  <div class="rail-brand">Cram sheet · 16 Aug</div>
+  <div class="rail-title">Machine Learning<br>interview, tomorrow</div>
+  <div class="meter">
+    <div class="meter-h"><span>Calibration</span><span id="m-pct">0%</span></div>
+    <div class="meter-bar"><div class="meter-solid" id="m-solid"></div><div class="meter-shaky" id="m-shaky"></div></div>
+    <div class="meter-sub"><b id="m-s">0</b> solid · <b id="m-k">0</b> shaky · <b id="m-t">0</b> untested</div>
+  </div>
+  <nav>
+    <ol>
+      <li><a href="#s0"><span>00</span>The night-before plan</a></li>
+      <li><a href="#s1"><span>01</span>Math you'll actually be asked</a></li>
+      <li><a href="#s2"><span>02</span>Learning theory &amp; generalization</a></li>
+      <li><a href="#s3"><span>03</span>Evaluation &amp; metrics</a></li>
+      <li><a href="#s4"><span>04</span>Classical supervised models</a></li>
+      <li><a href="#s5"><span>05</span>Ensembles &amp; boosting</a></li>
+      <li><a href="#s6"><span>06</span>Unsupervised &amp; dimensionality</a></li>
+      <li><a href="#s7"><span>07</span>Neural nets from scratch</a></li>
+      <li><a href="#s8"><span>08</span>Training deep nets</a></li>
+      <li><a href="#s9"><span>09</span>CNNs &amp; sequence models</a></li>
+      <li><a href="#s10"><span>10</span>Transformers, in full</a></li>
+      <li><a href="#s11"><span>11</span>LLMs: train, align, serve</a></li>
+      <li><a href="#s12"><span>12</span>Applied ML &amp; system design</a></li>
+      <li><a href="#s13"><span>13</span>Code it from scratch</a></li>
+      <li><a href="#s14"><span>14</span>Rapid-fire bank</a></li>
+      <li><a href="#s15"><span>15</span>Defending your own work</a></li>
+      <li><a href="#s16"><span>16</span>Walk-in checklist</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note">Mark each drill <b>Solid</b> or <b>Shaky</b>. Everything shaky collects into a revisit list at the bottom. Marks live in the page only — don't reload before you copy them out.</div>
+</aside>
+
+<main>
+<header class="hero">
+  <div class="eyebrow">Scratch → advanced · one sitting</div>
+  <h1>Everything they can<br>reasonably ask, <em>derived</em>.</h1>
+  <p>Not a flashcard dump. Each idea is built from the assumption underneath it, because the follow-up question is always <i>"why does that work?"</i> — and the answer to that is where offers are decided.</p>
+  <p>Weighted for your profile: classical ML is developed in full from first principles, deep learning and LLM sections run past standard interview depth since your paper invites it.</p>
+  <div class="hero-meta">
+    <span class="tag hot">17 sections</span>
+    <span class="tag">46 drills, self-marked</span>
+    <span class="tag">Derivations, not definitions</span>
+    <span class="tag">NumPy implementations</span>
+    <span class="tag">Failure modes flagged</span>
+  </div>
+</header>
+
+<section id="s0">
+  <div class="sec-head"><div class="sec-num">00</div><h2>The night-before plan</h2></div>
+  <p class="sec-lede">You cannot learn ML tonight. You can make what you already know retrievable under stress, and close the two or three gaps most likely to be probed.</p>
+
+  <table>
+    <tr><th>Block</th><th>Do this</th><th>Why</th></tr>
+    <tr><td><b>Hours 1–2</b></td><td>§02, §03, §04 — bias-variance, regularization, metrics, logistic regression derivation</td><td>These appear in almost every ML screen and they're the part your coursework skipped</td></tr>
+    <tr><td><b>Hour 3</b></td><td>§05 ensembles + §06 PCA/k-means/EM</td><td>Classic "explain gradient boosting" and "derive PCA" territory</td></tr>
+    <tr><td><b>Hour 4</b></td><td>§07–§08 backprop by hand, optimizers, normalization</td><td>Whiteboard favourites; you know these — this is retrieval practice</td></tr>
+    <tr><td><b>Hour 5</b></td><td>§10–§11 attention, KV cache, decoding, RLHF/DPO, calibration</td><td>Your resume promises this. They will push until you're at the edge</td></tr>
+    <tr><td><b>Hour 6</b></td><td>§15 — say your paper's contribution and its weakness out loud, three times</td><td>The single highest-leverage 30 minutes on this page</td></tr>
+    <tr><td><b>Morning</b></td><td>§14 rapid-fire + §16 checklist only</td><td>Warm the cache; don't open new material</td></tr>
+  </table>
+
+  <div class="box tip"><div class="h">The one habit that raises your score</div>
+  <p style="margin:0">Answer in three beats: <b>(1) the one-line definition, (2) the mechanism or derivation, (3) when it breaks.</b> Beat 3 is what separates a candidate who read a blog post from one who has trained models. Almost nobody volunteers it. You should, every single time.</p></div>
+
+  <div class="box trap"><div class="h">When you don't know</div>
+  <p style="margin:0">Never bluff — interviewers detect it instantly and it retroactively discounts everything you said before. Say: <i>"I haven't worked with that directly. My guess from first principles is X, because Y — is that the right intuition?"</i> This scores nearly as well as knowing, because it demonstrates the thing they're actually testing.</p></div>
+</section>
+
+<section id="s1">
+  <div class="sec-head"><div class="sec-num">01</div><h2>Math you'll actually be asked</h2></div>
+  <p class="sec-lede">Interviewers don't test linear algebra for its own sake. They test the four or five results that keep reappearing inside models — and they test whether you can connect the symbol to the thing.</p>
+
+  <h3>Linear algebra: the five facts</h3>
+  <p><b>1. A matrix is a function.</b> <code>y = Ax</code> maps ℝⁿ → ℝᵐ. Rank = dimension of the output space actually reachable. If rank &lt; n, the map destroys information and is not invertible — this is exactly why collinear features break ordinary least squares.</p>
+
+  <p><b>2. Eigen-decomposition.</b> For symmetric <code>A</code>, <code>A = QΛQᵀ</code> with <code>Q</code> orthonormal. Eigenvectors are directions the matrix only stretches; eigenvalues are the stretch. Covariance matrices are symmetric PSD, so they always decompose this way — that is the whole of PCA.</p>
+
+  <p><b>3. SVD</b> generalises this to any matrix: <code>A = UΣVᵀ</code>. Always exists. Truncating to the top-k singular values gives the best rank-k approximation in Frobenius norm (Eckart–Young). This single fact underlies PCA, LSA, recommender factorization, and <b>LoRA</b>.</p>
+
+  <div class="f"><span class="lbl">Positive semi-definite</span>xᵀAx ≥ 0  for all x   ⟺  all eigenvalues λᵢ ≥ 0
+<span class="why">Why you care: a Hessian that is PSD everywhere means the function is convex, which means one global minimum and gradient descent cannot get stuck. Covariance and kernel (Gram) matrices must be PSD — a "kernel" that isn't PSD isn't a valid kernel.</span></div>
+
+  <p><b>4. Norms.</b> L2 = √Σxᵢ², smooth, penalises large values quadratically. L1 = Σ|xᵢ|, non-differentiable at 0, and that kink is precisely why it produces exact zeros. L∞ = max|xᵢ|.</p>
+
+  <p><b>5. Gradients of the things you'll write on a whiteboard:</b></p>
+  <div class="f"><span class="lbl">Memorise these four</span>∇ₓ (aᵀx) = a
+∇ₓ (xᵀAx) = (A + Aᵀ)x  = 2Ax if A symmetric
+∇ₓ ‖x‖²  = 2x
+∇_W ‖Wx − y‖² = 2(Wx − y)xᵀ
+<span class="why">The last one is the entire gradient of a linear layer. Every backprop derivation you'll ever do reduces to it plus the chain rule.</span></div>
+
+  <h3>Probability: the parts that bite</h3>
+  <div class="f"><span class="lbl">Bayes</span>P(θ | D) = P(D | θ) · P(θ) / P(D)
+posterior  ∝   likelihood  ×  prior
+<span class="why">MLE maximises the likelihood alone. MAP maximises likelihood × prior. A Gaussian prior on weights → L2 penalty. A Laplace prior → L1 penalty. That equivalence is a very common interview question.</span></div>
+
+  <ul>
+    <li><b>Expectation / variance:</b> 𝔼[aX+b] = a𝔼[X]+b; Var(aX+b) = a²Var(X). Var(X) = 𝔼[X²] − 𝔼[X]².</li>
+    <li><b>Independence vs uncorrelated:</b> independent ⟹ uncorrelated; the converse fails (X ~ N(0,1), Y = X² has zero correlation, total dependence). Interviewers love this one.</li>
+    <li><b>CLT:</b> the mean of n i.i.d. samples → Normal with variance σ²/n, whatever the source distribution. This is why standard errors shrink as 1/√n, and why you need 4× the data to halve a confidence interval.</li>
+    <li><b>Covariance matrix:</b> Σ = 𝔼[(x−μ)(x−μ)ᵀ]. Diagonal = variances, off-diagonal = covariances. Always symmetric PSD.</li>
+  </ul>
+
+  <h3>Information theory (you need this for losses)</h3>
+  <div class="f"><span class="lbl">Entropy, cross-entropy, KL</span>H(p)     = −Σ p(x) log p(x)              "bits to encode p, optimally"
+H(p,q)   = −Σ p(x) log q(x)              "bits to encode p using q's code"
+KL(p‖q)  = Σ p(x) log[p(x)/q(x)] = H(p,q) − H(p)   "the waste"
+<span class="why">Minimising cross-entropy = minimising KL(true ‖ predicted), because H(p) is a constant w.r.t. your parameters. KL is NOT symmetric and NOT a distance. Forward KL(p‖q) is mass-covering (blurry averages); reverse KL(q‖p) is mode-seeking (picks one mode) — this is exactly why RLHF's reverse-KL penalty causes mode collapse and reduced output diversity.</span></div>
+
+  <details class="drill"><summary>Why is squared error the "right" loss for regression and cross-entropy the "right" loss for classification?</summary>
+    <div class="ans"><p>Both fall out of maximum likelihood under different noise assumptions.</p>
+    <p>Assume <code>y = f(x) + ε</code> with <code>ε ~ N(0, σ²)</code>. The log-likelihood of the data is <code>−Σ(yᵢ − f(xᵢ))²/2σ² + const</code>. Maximising it is identical to minimising squared error. <b>MSE assumes Gaussian noise.</b></p>
+    <p>For classification, assume <code>y ~ Bernoulli(p)</code> with <code>p = σ(f(x))</code>. Log-likelihood is <code>Σ[y log p + (1−y) log(1−p)]</code>. Maximising it is minimising binary cross-entropy. <b>Cross-entropy assumes a categorical/Bernoulli likelihood.</b></p>
+    <p><b>Beat 3 — when it breaks:</b> if your noise is heavy-tailed, the Gaussian assumption makes MSE wildly outlier-sensitive; switch to Huber or MAE (which is MLE under a Laplace noise model). And if you use MSE on a sigmoid output, the gradient contains a σ′(z) factor that vanishes when the model is confidently wrong — cross-entropy cancels it, which is why it trains far faster.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Derive why an L2 penalty is equivalent to a Gaussian prior on the weights.</summary>
+    <div class="ans"><p>MAP estimation maximises <code>log P(D|w) + log P(w)</code>. Put a prior <code>w ~ N(0, τ²I)</code>. Then</p>
+    <div class="f">log P(w) = −‖w‖² / (2τ²) + const</div>
+    <p>Maximising the sum is minimising <code>−log P(D|w) + ‖w‖²/(2τ²)</code>, i.e. the data loss plus <code>λ‖w‖²</code> with <code>λ = 1/(2τ²)</code>. A tighter prior (small τ) means stronger regularization. Substituting a Laplace prior <code>P(w) ∝ exp(−|w|/b)</code> gives the L1 penalty identically.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s2">
+  <div class="sec-head"><div class="sec-num">02</div><h2>Learning theory &amp; generalization</h2></div>
+  <p class="sec-lede">The core question of ML: why should performance on data you've seen say anything about data you haven't? Every regularizer, every validation scheme, every architectural prior is an answer to it.</p>
+
+  <h3>The setup, stated properly</h3>
+  <p>There's an unknown joint distribution <code>P(x, y)</code>. You want the hypothesis <code>f</code> minimising <b>risk</b>, <code>R(f) = 𝔼₍ₓ,ᵧ₎~P [L(f(x), y)]</code>. You can't compute it, so you minimise <b>empirical risk</b> over your n samples, <code>R̂(f) = (1/n)Σ L(f(xᵢ), yᵢ)</code>. Everything interesting is in the gap <code>R(f) − R̂(f)</code>.</p>
+  <p>That gap grows with how expressive your hypothesis class is (it can chase noise) and shrinks with n. Formally VC dimension / Rademacher complexity bound it; practically, you control it with regularization, data, and inductive bias.</p>
+
+  <h3>Bias–variance, derived</h3>
+  <p>For squared error, with <code>y = f(x) + ε</code>, <code>Var(ε) = σ²</code>, and <code>f̂</code> trained on a random dataset:</p>
+  <div class="f"><span class="lbl">The decomposition</span>𝔼[(y − f̂(x))²] = (𝔼[f̂(x)] − f(x))²  +  𝔼[(f̂(x) − 𝔼[f̂(x)])²]  +  σ²
+                  ─────── bias² ───────     ────── variance ──────     irreducible
+<span class="why">Bias = error from wrong assumptions, the model can't represent the truth even with infinite data. Variance = sensitivity to which particular training set you drew. σ² = label noise; no model beats it, and if someone claims 100% accuracy on a noisy task, suspect leakage.</span></div>
+
+  <figure>
+    <svg viewBox="0 0 620 250" role="img" aria-label="Bias-variance tradeoff curves">
+      <line x1="60" y1="205" x2="590" y2="205" stroke="#0E1428" stroke-width="1.5"/>
+      <line x1="60" y1="20" x2="60" y2="205" stroke="#0E1428" stroke-width="1.5"/>
+      <path d="M60,40 C160,150 240,190 590,200" fill="none" stroke="#0F7B6C" stroke-width="2.5"/>
+      <path d="M60,200 C260,196 350,150 590,35" fill="none" stroke="#B01B4E" stroke-width="2.5"/>
+      <path d="M60,60 C200,140 240,142 590,55" fill="none" stroke="#4F2AE0" stroke-width="3"/>
+      <line x1="60" y1="185" x2="590" y2="185" stroke="#6C7899" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <circle cx="286" cy="141" r="5" fill="#4F2AE0"/>
+      <line x1="286" y1="141" x2="286" y2="205" stroke="#4F2AE0" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="292" y="128" font-family="IBM Plex Mono" font-size="12" fill="#4F2AE0">sweet spot</text>
+      <text x="100" y="55" font-family="IBM Plex Mono" font-size="12" fill="#0F7B6C">bias²</text>
+      <text x="520" y="60" font-family="IBM Plex Mono" font-size="12" fill="#B01B4E">variance</text>
+      <text x="66" y="180" font-family="IBM Plex Mono" font-size="11" fill="#6C7899">irreducible σ²</text>
+      <text x="250" y="232" font-family="IBM Plex Mono" font-size="12" fill="#0E1428">model capacity →</text>
+      <text x="14" y="115" font-family="IBM Plex Mono" font-size="12" fill="#0E1428" transform="rotate(-90 20,115)">error</text>
+    </svg>
+    <figcaption><b>Fig. 1</b> — Total expected error is the sum of three curves. Note the floor: σ² never moves. The classical U-shape is what you draw if asked; §02 covers why deep nets appear to violate it.</figcaption>
+  </figure>
+
+  <div class="box note"><div class="h">Double descent — the modern caveat</div>
+  <p style="margin:0">The U-curve is the classical picture. Empirically, as you keep growing capacity past the interpolation threshold (where the model fits training data exactly), test error <b>rises, peaks, then falls again</b>. Over-parameterised networks generalise well because SGD has an implicit bias toward low-norm / flat-minimum solutions among the infinitely many that interpolate. Mentioning this signals you've read past the textbook — but state the classical decomposition first.</p></div>
+
+  <h3>Regularization: five distinct mechanisms</h3>
+  <table>
+    <tr><th>Method</th><th>Mechanism</th><th>Effect on solution</th></tr>
+    <tr><td><b>L2 / weight decay</b></td><td>Penalises ‖w‖². Gradient adds <code>2λw</code>, shrinking weights each step</td><td>Shrinks all weights smoothly toward 0, never exactly 0. Handles collinearity by splitting weight between correlated features</td></tr>
+    <tr><td><b>L1 / Lasso</b></td><td>Penalises Σ|w|. Constant-magnitude gradient regardless of size</td><td>Drives weights to <b>exactly</b> zero → feature selection. Among correlated features it arbitrarily picks one</td></tr>
+    <tr><td><b>Elastic net</b></td><td>αL1 + (1−α)L2</td><td>Sparsity from L1 plus grouped selection from L2</td></tr>
+    <tr><td><b>Early stopping</b></td><td>Halt before the model fits noise</td><td>Provably approximates L2 for linear models — the effective norm grows with training steps</td></tr>
+    <tr><td><b>Dropout / augmentation / noise</b></td><td>Injects stochasticity so no feature can be relied on</td><td>Approximate ensembling; forces redundant, distributed representations</td></tr>
+  </table>
+
+  <details class="drill"><summary>Why does L1 give exact zeros but L2 doesn't? Give the geometric and the calculus argument.</summary>
+    <div class="ans">
+    <p><b>Geometric:</b> constrained optimisation. The L2 constraint region is a ball (round, no corners); the L1 region is a diamond with vertices <i>on the axes</i>. The elliptical contours of the squared-error loss expand until they touch the constraint region. A round ball is almost surely touched at a non-axis point; a diamond is most likely touched at a vertex — and a vertex has coordinates that are exactly zero.</p>
+    <p><b>Calculus:</b> look at the gradient of the penalty near zero. For L2 it's <code>2λw → 0</code> as <code>w → 0</code> — the shrinkage force vanishes exactly where you'd need it to finish the job, so weights asymptote to zero without arriving. For L1 the subgradient is <code>λ·sign(w)</code>, a constant push that does not weaken as w shrinks. So as long as the data's gradient is smaller than λ, the weight is pinned at exactly zero. That's the soft-thresholding operator: <code>w ← sign(w)·max(|w| − λ, 0)</code>.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Your model gets 99% train accuracy and 71% test accuracy. Walk me through what you do.</summary>
+    <div class="ans"><p>Diagnose before treating. In order:</p>
+    <ol>
+      <li><b>Confirm it's variance, not a broken split.</b> Check the test set has the same class balance and feature distributions as train. A distribution shift looks identical to overfitting from the metrics alone but has the opposite fix.</li>
+      <li><b>Check for leakage in reverse:</b> 99% train is suspiciously high. Is a feature a proxy for the label? Did I fit the scaler/imputer before splitting?</li>
+      <li><b>Plot a learning curve</b> — test error vs training set size. If the curves are still converging, more data helps and I should get it before touching the model. If they've plateaued with a wide gap, it's capacity/regularization.</li>
+      <li><b>Then, cheapest interventions first:</b> stronger regularization (increase λ, dropout, weight decay), early stopping on a validation split, data augmentation, then reduce capacity, then simpler model class.</li>
+      <li><b>Re-examine features</b> — high-cardinality categoricals with rare levels are a classic overfit source; target-encoding them without out-of-fold encoding will do exactly this.</li>
+    </ol>
+    <p>The point they're testing is whether you jump straight to "add dropout" or actually diagnose.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <h3>Validation done right</h3>
+  <ul>
+    <li><b>k-fold CV:</b> split into k folds, train on k−1, validate on 1, rotate, average. Lower-variance estimate than one holdout. k=5 or 10 by convention; k=n is leave-one-out (nearly unbiased, high variance, expensive).</li>
+    <li><b>Stratified k-fold</b> preserves class ratios per fold — mandatory for imbalanced data.</li>
+    <li><b>Time-series:</b> never shuffle. Use forward-chaining (train on [0,t], validate on [t,t+Δ], roll forward). Random CV on temporal data leaks the future and is the single most common résumé-project mistake.</li>
+    <li><b>Grouped CV:</b> if you have multiple rows per patient/user/session, all rows for a group must be in the same fold, or the model memorises the group.</li>
+    <li><b>Nested CV:</b> when you tune hyperparameters <i>and</i> want an unbiased performance estimate, you need an inner loop for tuning and an outer loop for evaluation. Reporting the best inner-loop score as your final number is optimistically biased — a subtle point that impresses.</li>
+  </ul>
+</section>
+
+<section id="s3">
+  <div class="sec-head"><div class="sec-num">03</div><h2>Evaluation &amp; metrics</h2></div>
+  <p class="sec-lede">Choosing a metric is choosing what kind of mistake you're willing to make. Interviewers use metric questions to check whether you think about the product, not just the model.</p>
+
+  <div class="f"><span class="lbl">Confusion matrix, and everything from it</span>Precision = TP / (TP + FP)      "of what I flagged, how much was right"
+Recall    = TP / (TP + FN)      "of what was there, how much did I catch"
+F1        = 2·P·R / (P + R)     harmonic mean — punishes imbalance between them
+Specificity = TN / (TN + FP)    true negative rate
+FPR       = FP / (FP + TN)      = 1 − specificity
+<span class="why">Accuracy = (TP+TN)/all is a trap on imbalanced data: 99.9% of transactions aren't fraud, so "always predict not-fraud" scores 99.9%. Whenever a question mentions rare events, say this immediately.</span></div>
+
+  <h3>ROC-AUC vs PR-AUC — the distinction they're fishing for</h3>
+  <p><b>ROC</b> plots TPR against FPR as you sweep the threshold. AUC = probability that a randomly chosen positive is ranked above a randomly chosen negative. It's threshold-free and invariant to class balance.</p>
+  <p>That invariance is both its strength and its flaw. FPR has <code>TN</code> in the denominator, and with 99.9% negatives, TN is enormous — so hundreds of false positives barely move FPR. ROC-AUC can look excellent while your fraud alerts are 95% noise.</p>
+  <p><b>PR curve</b> plots precision against recall. Precision has no TN term, so it feels every false positive. On heavily imbalanced problems where you care about the positive class, <b>PR-AUC is the honest metric</b>. Note the PR baseline is the positive rate (0.001), not 0.5.</p>
+
+  <figure>
+    <svg viewBox="0 0 620 230" role="img" aria-label="ROC and PR curves compared">
+      <g transform="translate(30,10)">
+        <line x1="30" y1="180" x2="240" y2="180" stroke="#0E1428" stroke-width="1.5"/>
+        <line x1="30" y1="180" x2="30" y2="15" stroke="#0E1428" stroke-width="1.5"/>
+        <line x1="30" y1="180" x2="240" y2="15" stroke="#6C7899" stroke-dasharray="4 4" stroke-width="1.2"/>
+        <path d="M30,180 C55,60 110,28 240,15" fill="none" stroke="#4F2AE0" stroke-width="2.5"/>
+        <text x="60" y="60" font-family="IBM Plex Mono" font-size="11" fill="#4F2AE0">AUC .97</text>
+        <text x="90" y="205" font-family="IBM Plex Mono" font-size="11" fill="#0E1428">FPR</text>
+        <text x="0" y="100" font-family="IBM Plex Mono" font-size="11" fill="#0E1428" transform="rotate(-90 6,100)">TPR</text>
+        <text x="30" y="-1" font-family="IBM Plex Mono" font-size="11.5" fill="#0E1428" font-weight="600">ROC</text>
+      </g>
+      <g transform="translate(330,10)">
+        <line x1="30" y1="180" x2="240" y2="180" stroke="#0E1428" stroke-width="1.5"/>
+        <line x1="30" y1="180" x2="30" y2="15" stroke="#0E1428" stroke-width="1.5"/>
+        <line x1="30" y1="172" x2="240" y2="172" stroke="#6C7899" stroke-dasharray="4 4" stroke-width="1.2"/>
+        <path d="M30,40 C90,95 140,150 240,168" fill="none" stroke="#B01B4E" stroke-width="2.5"/>
+        <text x="105" y="75" font-family="IBM Plex Mono" font-size="11" fill="#B01B4E">AUC .34</text>
+        <text x="36" y="166" font-family="IBM Plex Mono" font-size="10" fill="#6C7899">baseline = prevalence</text>
+        <text x="90" y="205" font-family="IBM Plex Mono" font-size="11" fill="#0E1428">recall</text>
+        <text x="0" y="115" font-family="IBM Plex Mono" font-size="11" fill="#0E1428" transform="rotate(-90 6,115)">precision</text>
+        <text x="30" y="-1" font-family="IBM Plex Mono" font-size="11.5" fill="#0E1428" font-weight="600">PR</text>
+      </g>
+    </svg>
+    <figcaption><b>Fig. 2</b> — The same model on a 1:1000 imbalanced task. ROC flatters it; PR tells the truth. Being able to say <i>why</i> the two disagree is the answer they want.</figcaption>
+  </figure>
+
+  <h3>Calibration — your home turf</h3>
+  <p>A model is <b>calibrated</b> if, among all predictions with confidence 0.8, exactly 80% are correct. Accuracy and calibration are independent: a model can rank perfectly (AUC 1.0) and be catastrophically overconfident.</p>
+  <div class="f"><span class="lbl">Expected Calibration Error</span>ECE = Σᵦ (|Bᵦ| / n) · | acc(Bᵦ) − conf(Bᵦ) |
+<span class="why">Bin predictions by confidence, measure the gap between accuracy and mean confidence in each bin, weight by bin size. Known issues: sensitive to bin count, and it can be gamed. Alternatives: adaptive-binning ECE, Brier score (= MSE on probabilities, a proper scoring rule that decomposes into calibration + refinement), and negative log-likelihood.</span></div>
+  <ul>
+    <li><b>Fixes:</b> temperature scaling (single parameter T fitted on a held-out set, divides logits — preserves ranking so accuracy is unchanged), Platt scaling (logistic fit), isotonic regression (non-parametric, more flexible, needs more data, can overfit).</li>
+    <li><b>Why it matters:</b> anything that thresholds on confidence — abstention, routing, early-exit, self-consistency stopping, cascades — is only as good as the calibration underneath.</li>
+    <li><b>Critical:</b> the temperature must be fitted on data disjoint from both training and test. This is the leak-free requirement your own work is about; expect to be asked why it matters.</li>
+  </ul>
+
+  <details class="drill"><summary>Fraud detection, 0.2% positive rate. Which metric, which threshold, and why?</summary>
+    <div class="ans"><p>Metric: <b>PR-AUC</b> for model selection (ROC-AUC will be near 0.99 for everything and won't discriminate), plus <b>recall at a fixed precision</b> or <b>precision at a fixed alert budget</b> as the operating metric — because the review team can only handle k alerts a day, and that's the real constraint.</p>
+    <p>Threshold: derived from cost, not from 0.5. If a missed fraud costs C_FN and a false alarm costs C_FP (analyst time plus customer friction), the optimal threshold on a calibrated probability is <code>t* = C_FP / (C_FP + C_FN)</code>. With C_FN = 500 and C_FP = 5, t* ≈ 0.01 — flag anything above 1%.</p>
+    <p>Then: I'd also monitor precision over time, because fraud is adversarial and non-stationary — the distribution changes in response to your model, so I'd retrain on a schedule and alert on drift. And I'd never evaluate with random CV; fraud has temporal structure and the split must be forward in time.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Is a model with 90% accuracy and terrible calibration worse than one with 85% accuracy and good calibration?</summary>
+    <div class="ans"><p>Depends entirely on how the output is consumed, and saying so is the answer.</p>
+    <p>If the model's argmax is the final decision and every error costs the same, take the 90%. Calibration is irrelevant to argmax.</p>
+    <p>If anything downstream <i>reads the probability</i> — expected-value calculations, ranked triage, abstain-and-escalate, cascading to a bigger model, combining with another signal — the 85% calibrated model is strictly more useful, because the 90% model's confidences are lies and every threshold you set on them is arbitrary.</p>
+    <p>Best answer ends here: you usually don't have to choose. Temperature scaling fixes calibration <b>without changing accuracy at all</b>, since dividing all logits by a positive scalar is monotone and preserves the argmax. So take the 90% model and calibrate it on held-out data.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s4">
+  <div class="sec-head"><div class="sec-num">04</div><h2>Classical supervised models</h2></div>
+  <p class="sec-lede">Each of these is a set of assumptions plus an optimisation. Know the assumptions and you can answer any follow-up; memorise the algorithm and you can't.</p>
+
+  <h3>Linear regression</h3>
+  <p>Model: <code>ŷ = Xw</code>. Loss: <code>‖Xw − y‖²</code>. Set the gradient <code>2Xᵀ(Xw − y)</code> to zero:</p>
+  <div class="f"><span class="lbl">Normal equation</span>w* = (XᵀX)⁻¹ Xᵀ y            with ridge:  w* = (XᵀX + λI)⁻¹ Xᵀ y
+<span class="why">XᵀX is singular when features are collinear or when p &gt; n — the inverse doesn't exist and the solution is undefined. Adding λI shifts every eigenvalue up by λ, guaranteeing invertibility. That is <i>why</i> ridge regression is numerically stable, and it's the answer to "what does ridge actually do?"</span></div>
+  <p><b>Assumptions:</b> linearity in parameters, independent errors, homoscedasticity (constant error variance), no perfect collinearity, and for inference, normally distributed errors. Complexity: O(np² + p³) closed-form — so use gradient descent when p is large.</p>
+
+  <h3>Logistic regression — derive this tonight</h3>
+  <p>It's a linear model of the <b>log-odds</b>:</p>
+  <div class="f"><span class="lbl">Model</span>log[ p / (1 − p) ] = wᵀx      ⟹      p = σ(wᵀx) = 1 / (1 + e^(−wᵀx))</div>
+  <p>Likelihood over the dataset, taking y ∈ {0,1}: <code>∏ pᵢ^yᵢ (1−pᵢ)^(1−yᵢ)</code>. Negative log-likelihood:</p>
+  <div class="f"><span class="lbl">Loss and its gradient — the punchline</span>L(w) = −Σᵢ [ yᵢ log pᵢ + (1 − yᵢ) log(1 − pᵢ) ]
+
+∂L/∂w = Σᵢ (pᵢ − yᵢ) xᵢ      =  Xᵀ(p − y)
+<span class="why">The gradient is just (prediction − target) × input. Identical in form to linear regression's gradient. That's not a coincidence — both are generalised linear models, and for any GLM with the canonical link the gradient takes this form. Say that and you've answered three questions at once.</span></div>
+  <p><b>Derivation detail worth knowing:</b> <code>σ′(z) = σ(z)(1 − σ(z))</code>. In the chain rule, <code>∂L/∂p · ∂p/∂z</code>, the <code>1/(p(1−p))</code> from the log-loss cancels the <code>p(1−p)</code> from the sigmoid, leaving <code>(p − y)</code>. That cancellation is why cross-entropy avoids the vanishing-gradient problem that MSE-plus-sigmoid has.</p>
+  <p><b>No closed form</b> — the NLL is convex but transcendental, so you use gradient descent or Newton's method (IRLS). Convexity means one global optimum. On perfectly separable data the weights diverge to infinity to push σ toward exactly 0 or 1; regularization is what keeps it finite, and that's a great detail to volunteer.</p>
+
+  <div class="box tip"><div class="h">Multiclass: softmax</div>
+  <p style="margin:0"><code>p_k = e^(z_k) / Σⱼ e^(z_j)</code>. Gradient of cross-entropy w.r.t. logits is again <code>p − y</code> (one-hot). Softmax is shift-invariant — subtracting max(z) changes nothing mathematically but prevents overflow, which is the standard numerical-stability question. Note softmax has one redundant degree of freedom; with K classes you only need K−1 independent logits.</p></div>
+
+  <h3>Support vector machines</h3>
+  <p>Idea: among all separating hyperplanes, pick the one with the largest margin, because a wide margin is a more robust decision boundary.</p>
+  <div class="f"><span class="lbl">Primal (soft-margin)</span>min  ½‖w‖² + C Σ ξᵢ
+s.t.  yᵢ(wᵀxᵢ + b) ≥ 1 − ξᵢ,   ξᵢ ≥ 0
+
+margin width = 2/‖w‖   →  maximising margin = minimising ‖w‖
+<span class="why">ξᵢ are slack variables allowing violations. C controls the trade-off: large C = few violations tolerated = narrow margin, low bias, high variance. Small C = wide soft margin, more regularized. C is inversely like λ.</span></div>
+  <p>The <b>dual</b> replaces w with <code>Σ αᵢ yᵢ xᵢ</code> and the objective depends on data only through inner products <code>xᵢᵀxⱼ</code>. That's the opening for the kernel trick.</p>
+  <div class="f"><span class="lbl">Kernel trick</span>replace  xᵢᵀxⱼ   with   K(xᵢ, xⱼ) = φ(xᵢ)ᵀφ(xⱼ)
+
+linear   K = xᵀx'
+poly     K = (xᵀx' + c)^d
+RBF      K = exp(−γ‖x − x'‖²)      ← infinite-dimensional feature space
+<span class="why">You get the inner product in a high-dimensional space without ever computing φ(x). Requirement: K must be PSD (Mercer's condition). γ in RBF controls the radius of influence: large γ = each point influences only its neighbourhood = very wiggly boundary = overfit.</span></div>
+  <p><b>Support vectors</b> are the points with <code>αᵢ &gt; 0</code> — only those on or inside the margin. The solution depends on nothing else, which makes SVMs sparse in <i>examples</i> (unlike Lasso, sparse in features) and robust to distant outliers. Scaling is mandatory — RBF's distance metric is meaningless with mismatched feature scales.</p>
+  <p><b>Cost:</b> training is roughly O(n²)–O(n³), so SVMs don't scale past ~100k rows. That's the honest reason they lost to boosted trees and neural nets in practice.</p>
+
+  <h3>Decision trees</h3>
+  <p>Greedily choose the (feature, threshold) split that most reduces impurity, recurse, stop on a depth/leaf-size/gain criterion.</p>
+  <div class="f"><span class="lbl">Impurity measures</span>Gini    = 1 − Σ pₖ²                    (fast, no logs — sklearn default)
+Entropy = −Σ pₖ log pₖ                (information gain = H(parent) − Σ (nⱼ/n) H(childⱼ))
+MSE     = variance within node        (regression trees)
+<span class="why">Gini and entropy agree ~98% of the time; entropy is slightly more sensitive to changes in class probabilities. Never claim one is clearly better — the honest answer is "they rarely differ; Gini is cheaper."</span></div>
+  <ul>
+    <li><b>Strengths:</b> no scaling needed, handles mixed types, captures interactions automatically, interpretable, invariant to monotone feature transforms.</li>
+    <li><b>Weaknesses:</b> extremely high variance — change a few rows and the top split flips, restructuring the whole tree. Greedy and myopic (can't see a split that only pays off two levels down). Axis-aligned, so diagonal boundaries need staircases. Cannot extrapolate beyond the training range — a regression tree predicts a constant outside it.</li>
+    <li><b>Bias in split selection:</b> impurity-based importance favours high-cardinality and continuous features, because they offer more thresholds to try. Use permutation importance or SHAP instead when it matters.</li>
+  </ul>
+
+  <h3>k-NN and Naive Bayes</h3>
+  <div class="grid2">
+    <div class="box"><div class="h">k-nearest neighbours</div>
+    <p style="margin:0 0 8px">Zero training, all cost at inference — the definition of a non-parametric lazy learner. Small k = low bias, high variance, jagged boundary. Large k = smoother, higher bias. Must scale features. Suffers badly from the <b>curse of dimensionality</b>: in high dimensions, the ratio of nearest to farthest distance approaches 1, so "nearest" stops meaning anything. Inference is O(nd) per query unless you use KD-trees (which themselves degrade past ~20 dimensions) or approximate methods like HNSW/IVF-PQ — which is exactly what your vector database does.</p></div>
+    <div class="box"><div class="h">Naive Bayes</div>
+    <p style="margin:0 0 8px">Applies Bayes with the "naive" assumption that features are conditionally independent given the class: <code>P(x|y) = ∏ P(xⱼ|y)</code>. The assumption is nearly always false, yet it works well for text, because you only need the <i>argmax</i> to be right, not the probabilities. Needs Laplace/add-α smoothing so an unseen word doesn't zero out the entire product. Famously badly calibrated — the independence assumption multiplies correlated evidence repeatedly, pushing probabilities to 0 or 1.</p></div>
+  </div>
+
+  <details class="drill"><summary>Why can't you use linear regression for classification?</summary>
+    <div class="ans"><p>Four reasons, in increasing sophistication:</p>
+    <ol>
+      <li>Outputs aren't bounded to [0,1], so they aren't probabilities.</li>
+      <li>Squared error penalises confidently-correct predictions. A point with label 1 predicted at 3.0 incurs loss 4, and the model drags the boundary to fix a "mistake" that isn't one. So a single far-away point can shift the decision boundary and cause misclassifications — the classic figure.</li>
+      <li>The Gaussian noise assumption behind MSE is wrong for a binary target; the residuals are heteroscedastic by construction (variance p(1−p) depends on the mean).</li>
+      <li>With sigmoid + MSE, the gradient includes σ′(z), which is ≈0 when the model is confidently wrong — so the worst-off examples produce the smallest updates and learning stalls. Cross-entropy's log cancels that term exactly.</li>
+    </ol></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Generative vs discriminative — define it and say when each wins.</summary>
+    <div class="ans"><p><b>Discriminative</b> models learn <code>P(y|x)</code> directly (logistic regression, SVM, neural nets). <b>Generative</b> models learn <code>P(x|y)</code> and <code>P(y)</code>, then use Bayes to get <code>P(y|x)</code> (Naive Bayes, GDA/LDA, GMMs, and in the modern sense, LLMs modelling P(text)).</p>
+    <p><b>The Ng & Jordan result:</b> the generative model (Naive Bayes) has higher asymptotic error but converges to its ceiling in O(log p) samples, versus O(p) for logistic regression. So generative wins in the small-data regime and discriminative wins once you have enough data. That's the crisp answer.</p>
+    <p>Generative models also let you sample new data, handle missing features naturally by marginalising, and detect out-of-distribution inputs via low P(x) — none of which a discriminative model gives you.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s5">
+  <div class="sec-head"><div class="sec-num">05</div><h2>Ensembles &amp; boosting</h2></div>
+  <p class="sec-lede">The most reliable performance gain in classical ML, and the most common source of "explain the difference" questions. Anchor everything to the bias–variance decomposition and you can't get lost.</p>
+
+  <h3>Bagging attacks variance</h3>
+  <p>Train M models on bootstrap resamples (sample n rows <i>with replacement</i>), average their predictions. If the models were independent with variance σ², the average has variance σ²/M. They aren't independent — they share data — so the real result is:</p>
+  <div class="f"><span class="lbl">Variance of an average of correlated predictors</span>Var = ρσ² + (1 − ρ)σ²/M
+<span class="why">As M → ∞ the second term vanishes but ρσ² remains. The only way to improve further is to reduce ρ — the correlation between trees. That is the entire justification for random forests.</span></div>
+  <p><b>Random forest</b> = bagging + a second decorrelation trick: at each split, consider only a random subset of <code>m</code> features (typically √p for classification, p/3 for regression). This stops every tree from choosing the same dominant feature at the root. Bias goes up slightly; ρ drops a lot; variance drops more.</p>
+  <p><b>Out-of-bag estimate:</b> each bootstrap sample omits about <code>(1 − 1/n)ⁿ → 1/e ≈ 36.8%</code> of rows. Predict each row using only the trees that didn't see it — a free, nearly unbiased validation estimate with no separate holdout. Deriving the 36.8% is a favourite question.</p>
+
+  <h3>Boosting attacks bias</h3>
+  <p>Train models <b>sequentially</b>, each one correcting the previous ensemble's errors. Base learners are deliberately weak and high-bias (shallow trees, "stumps" or depth 3–6).</p>
+  <div class="f"><span class="lbl">Gradient boosting, the actual idea</span>F₀(x) = argmin_c Σ L(yᵢ, c)                    start with a constant
+for m = 1..M:
+    rᵢ = −[ ∂L(yᵢ, F(xᵢ)) / ∂F(xᵢ) ]_{F=F_{m−1}}     pseudo-residuals
+    hₘ = fit a tree to (xᵢ, rᵢ)                     tree predicts the gradient
+    Fₘ(x) = F_{m−1}(x) + ν · γₘ hₘ(x)               ν = learning rate (shrinkage)
+<span class="why">This is gradient descent in <i>function space</i>. Each tree is a step in the direction that most reduces the loss, and the ensemble is the running sum of steps. With squared error, the negative gradient is exactly the residual (y − F), which is why the classic explanation is "fit the next tree to the residuals" — but that's the special case, not the definition. Saying the general version is a differentiator.</span></div>
+
+  <table>
+    <tr><th></th><th>Bagging / RF</th><th>Boosting / GBM</th></tr>
+    <tr><td><b>Trained</b></td><td>In parallel, independently</td><td>Sequentially, each depends on the last</td></tr>
+    <tr><td><b>Base learner</b></td><td>Deep, low-bias, high-variance trees</td><td>Shallow, high-bias, low-variance stumps</td></tr>
+    <tr><td><b>Reduces</b></td><td>Variance</td><td>Bias (and variance, via shrinkage)</td></tr>
+    <tr><td><b>Overfits with more trees?</b></td><td>No — plateaus, adding trees is safe</td><td><b>Yes</b> — needs early stopping on a validation set</td></tr>
+    <tr><td><b>Outliers / noisy labels</b></td><td>Robust — averaging dilutes them</td><td>Sensitive — repeatedly focuses on the hardest (possibly mislabelled) points</td></tr>
+    <tr><td><b>Tuning</b></td><td>Forgiving; defaults usually fine</td><td>Fussy; learning rate × n_estimators must be traded off</td></tr>
+  </table>
+
+  <h3>XGBoost / LightGBM / CatBoost — what each actually adds</h3>
+  <ul>
+    <li><b>XGBoost:</b> second-order approximation of the loss (uses gradient <i>and</i> Hessian, so the leaf weight is <code>−G/(H+λ)</code>), explicit regularization on leaf count and leaf weights in the objective, sparsity-aware split finding with a learned default direction for missing values, approximate quantile sketch for candidate thresholds, and column subsampling.</li>
+    <li><b>LightGBM:</b> histogram binning of features (O(#bins) instead of O(#rows) per split), <b>leaf-wise</b> growth instead of level-wise (grows the leaf with max loss reduction — faster convergence, more overfitting risk, control with num_leaves), GOSS sampling, and EFB feature bundling. Usually the fastest on large data.</li>
+    <li><b>CatBoost:</b> ordered target statistics for categorical features that avoid target leakage, and ordered boosting to correct the prediction-shift bias. Best out-of-the-box on categorical-heavy tabular data.</li>
+  </ul>
+
+  <div class="box note"><div class="h">Have this line ready</div>
+  <p style="margin:0">"On tabular data, gradient-boosted trees still generally beat neural networks — the 2022 Grinsztajn et al. result. Trees are invariant to monotone feature transforms, robust to uninformative features, and handle irregular non-smooth target functions that MLPs' smoothness bias fights against. I'd reach for a neural net on tabular data mainly for multi-modal inputs or when I need embeddings for transfer."</p></div>
+
+  <details class="drill"><summary>Explain AdaBoost's weighting scheme.</summary>
+    <div class="ans"><p>AdaBoost is gradient boosting with exponential loss <code>L = e^(−y·F(x))</code>, but the original formulation is in terms of reweighting:</p>
+    <div class="f">εₘ = Σ wᵢ 𝟙[yᵢ ≠ hₘ(xᵢ)] / Σ wᵢ        weighted error rate
+αₘ = ½ ln[ (1 − εₘ) / εₘ ]              classifier's vote weight
+wᵢ ← wᵢ · exp( −αₘ yᵢ hₘ(xᵢ) )          up-weight the misclassified</div>
+    <p>Read off the behaviour: if εₘ = 0.5 the classifier is useless and αₘ = 0, it gets no vote. If εₘ &lt; 0.5, αₘ &gt; 0. If εₘ &gt; 0.5, αₘ is <i>negative</i> — the ensemble uses its inverted predictions. Misclassified points get their weight multiplied by e^(αₘ) so the next learner concentrates on them.</p>
+    <p>Weakness worth volunteering: exponential loss grows without bound for confidently-wrong points, so a mislabelled example gets exponentially increasing weight and can dominate the ensemble. That's why AdaBoost is notably noise-sensitive and why log-loss GBMs are preferred in practice.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Bagging reduces variance. Prove the 36.8% out-of-bag figure.</summary>
+    <div class="ans"><p>Drawing n items with replacement from n items: on any single draw, the probability a specific row is <i>not</i> chosen is <code>(1 − 1/n)</code>. Across n independent draws, the probability it's never chosen is <code>(1 − 1/n)ⁿ</code>. Take the limit:</p>
+    <div class="f">lim_{n→∞} (1 − 1/n)ⁿ = e⁻¹ ≈ 0.368</div>
+    <p>So each bootstrap sample contains about 63.2% unique rows, and 36.8% are out-of-bag. Averaging OOB predictions across all trees where a row was excluded gives a validation estimate for free — practically equivalent to leave-one-out CV, at no extra training cost.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>What's stacking, and why is it easy to get wrong?</summary>
+    <div class="ans"><p>Stacking trains a meta-learner on the <i>predictions</i> of several base models, so it can learn which model to trust in which region of the input space — unlike simple averaging, which weights them uniformly.</p>
+    <p>The failure mode: if you train the meta-learner on predictions the base models made <b>on their own training data</b>, those predictions are optimistically good (the base models have partly memorised), so the meta-learner learns to trust an overfit signal and the ensemble generalises worse than its parts. The fix is <b>out-of-fold predictions</b>: for each fold, train base models on the other folds and predict on the held-out one; assemble those into the meta-features. Keep the meta-learner simple (regularized logistic/linear) — it has very few effective samples.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s6">
+  <div class="sec-head"><div class="sec-num">06</div><h2>Unsupervised &amp; dimensionality reduction</h2></div>
+  <p class="sec-lede">Less commonly asked than supervised learning, which is exactly why a confident PCA derivation or a clean EM explanation stands out.</p>
+
+  <h3>k-means</h3>
+  <p>Minimise within-cluster sum of squares: <code>J = Σₖ Σ_{x∈Cₖ} ‖x − μₖ‖²</code>. Alternate two steps:</p>
+  <ol><li><b>Assign</b> each point to its nearest centroid (holding μ fixed, this is the optimal assignment).</li>
+  <li><b>Update</b> each centroid to the mean of its points (holding assignments fixed, the mean provably minimises squared distance).</li></ol>
+  <p>Each step is non-increasing in J and there are finitely many assignments, so it <b>converges — but to a local minimum</b>, depending on initialisation. Hence <b>k-means++</b>: pick the first centroid at random, then pick each subsequent one with probability proportional to D(x)² (squared distance to the nearest existing centroid), which spreads the seeds out and gives an O(log k) approximation guarantee in expectation.</p>
+  <ul>
+    <li><b>Assumes</b> spherical, similar-sized, similar-density clusters — because Euclidean distance to a centroid defines a sphere. It will slice a crescent moon or two elongated clusters straight down the middle.</li>
+    <li><b>Choosing k:</b> elbow on the inertia curve (subjective), silhouette score (mean of <code>(b−a)/max(a,b)</code>, ranges −1 to 1, higher is better), gap statistic, or a downstream task metric. Say the elbow is a heuristic, not a criterion.</li>
+    <li><b>Complexity</b> O(nkdi). Scale features first — otherwise the largest-range feature dominates the distance.</li>
+  </ul>
+
+  <h3>GMM and the EM algorithm</h3>
+  <p>Model the data as a mixture: <code>p(x) = Σₖ πₖ N(x | μₖ, Σₖ)</code>. Unlike k-means, assignments are <b>soft</b> (responsibilities), and clusters can be elliptical and differently sized because each has its own covariance.</p>
+  <div class="f"><span class="lbl">EM</span>E-step:  γᵢₖ = πₖ N(xᵢ|μₖ,Σₖ) / Σⱼ πⱼ N(xᵢ|μⱼ,Σⱼ)      responsibility of k for point i
+M-step:  Nₖ = Σᵢ γᵢₖ
+         μₖ = (1/Nₖ) Σᵢ γᵢₖ xᵢ
+         Σₖ = (1/Nₖ) Σᵢ γᵢₖ (xᵢ−μₖ)(xᵢ−μₖ)ᵀ
+         πₖ = Nₖ / n
+<span class="why">Why EM works: the log-likelihood of a mixture is intractable because of the log-of-a-sum. EM maximises a lower bound (the ELBO) instead — the E-step tightens the bound at the current parameters, the M-step maximises it. Log-likelihood is guaranteed non-decreasing each iteration. k-means is the limiting case of GMM with Σₖ = εI as ε→0, where responsibilities become hard 0/1.</span></div>
+
+  <h3>PCA — derive it two ways</h3>
+  <p><b>Setup:</b> centre the data (subtract the mean — non-negotiable, or the first component just points at the mean). Compute <code>Σ = (1/n)XᵀX</code>.</p>
+  <p><b>Derivation 1 — maximum variance.</b> Find the unit vector w maximising the variance of the projection, <code>wᵀΣw</code> subject to <code>wᵀw = 1</code>. Lagrangian: <code>wᵀΣw − λ(wᵀw − 1)</code>. Differentiate, set to zero:</p>
+  <div class="f">2Σw − 2λw = 0    ⟹    Σw = λw
+<span class="why">The optimum is an eigenvector of the covariance matrix, and the variance captured is the eigenvalue λ. So take the top-k eigenvectors by eigenvalue. Explained variance ratio = λₖ / Σλⱼ.</span></div>
+  <p><b>Derivation 2 — minimum reconstruction error.</b> Find the k-dimensional subspace minimising <code>Σ‖xᵢ − x̂ᵢ‖²</code>. Because total variance is fixed, minimising the residual is the same as maximising the retained variance. The two objectives are equivalent — say this, it shows real understanding.</p>
+  <p><b>In practice</b> use the SVD of the centred X directly (<code>X = UΣVᵀ</code>, principal directions are columns of V, and forming XᵀX squares the condition number and loses precision).</p>
+  <ul>
+    <li>Components are orthogonal and ordered by variance. Standardise features first if units differ, otherwise PCA just finds the largest-variance unit.</li>
+    <li><b>Limits:</b> linear only; variance ≠ discriminative information (the class-separating direction can be a low-variance one — that's what LDA optimises instead); components are dense combinations, so interpretability suffers.</li>
+  </ul>
+
+  <div class="grid2">
+    <div class="box"><div class="h">t-SNE</div><p style="margin:0">Preserves <i>local</i> neighbourhoods by matching pairwise similarity distributions and minimising KL. Uses a heavy-tailed t-distribution in the low-dim space to solve the crowding problem. <b>Read distances and cluster sizes as meaningless</b> — only local grouping is trustworthy. Non-parametric, so it can't embed new points. Perplexity ≈ effective neighbour count.</p></div>
+    <div class="box"><div class="h">UMAP</div><p style="margin:0">Similar goal via a fuzzy topological construction; faster, preserves more global structure, and supports transforming new points. Still: don't over-read the geometry. Both are <b>visualisation</b> tools, not preprocessing — don't feed t-SNE output into a classifier.</p></div>
+  </div>
+
+  <details class="drill"><summary>Your clusters look terrible with k-means. Give me three reasons and three alternatives.</summary>
+    <div class="ans"><p><b>Reasons:</b> (1) the true clusters aren't spherical or equally sized, violating the model; (2) features weren't standardised, so one high-variance feature dominates the Euclidean distance; (3) high dimensionality — distances concentrate and every point is roughly equidistant from every other, so the objective becomes flat and uninformative.</p>
+    <p><b>Alternatives:</b> <b>GMM</b> if clusters are elliptical or overlapping; <b>DBSCAN</b> if they're arbitrarily shaped and there's noise — it defines clusters by density (eps, min_samples), finds k itself, and labels outliers, but struggles when densities vary; <b>HDBSCAN</b> for varying density; <b>hierarchical/agglomerative</b> if you want a dendrogram and no fixed k, with Ward linkage minimising within-cluster variance. Also consider clustering in a learned embedding space rather than raw features.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>What is the curse of dimensionality, concretely?</summary>
+    <div class="ans"><p>Several distinct effects, and naming more than one is the point:</p>
+    <ul><li><b>Sample sparsity:</b> to keep a fixed density you need samples exponential in d. Covering [0,1]^10 at 10 points per axis takes 10¹⁰ samples.</li>
+    <li><b>Distance concentration:</b> as d grows, <code>(max_dist − min_dist)/min_dist → 0</code>. Nearest-neighbour queries lose meaning, which breaks kNN, k-means and RBF kernels.</li>
+    <li><b>Volume moves to the shell:</b> almost all the volume of a high-dimensional ball is in a thin shell near its surface, so "typical" points are all far from the centre and from each other.</li>
+    <li><b>Everything is nearly orthogonal:</b> random vectors in high d have inner product ≈0 — which is, incidentally, why superposition works in LLM residual streams and why you can pack far more features than dimensions.</li></ul>
+    <p><b>Escape hatch:</b> real data lies on a much lower-dimensional manifold. That manifold hypothesis is why deep learning works at all despite nominally enormous input dimensions.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s7">
+  <div class="sec-head"><div class="sec-num">07</div><h2>Neural nets from scratch</h2></div>
+  <p class="sec-lede">If they hand you a marker, this is what they hand it to you for. Be able to do the two-layer backprop with shapes, out loud, without hesitating.</p>
+
+  <h3>Forward pass</h3>
+  <div class="f"><span class="lbl">Two-layer MLP, batch of size N</span>X  : (N, d)
+z¹ = X W¹ + b¹        W¹ : (d, h)    z¹ : (N, h)
+a¹ = g(z¹)                            a¹ : (N, h)
+z² = a¹ W² + b²       W² : (h, C)    z² : (N, C)
+ŷ  = softmax(z²)                      ŷ  : (N, C)
+L  = −(1/N) Σ Σ y log ŷ</div>
+
+  <h3>Backprop, term by term</h3>
+  <div class="f"><span class="lbl">Backward pass — memorise the shapes, the rest follows</span>δ² = (ŷ − y) / N                       (N, C)   ← softmax+CE collapse to this
+∂L/∂W² = a¹ᵀ δ²                        (h, C)
+∂L/∂b² = Σ_rows δ²                     (C,)
+δ¹ = (δ² W²ᵀ) ⊙ g′(z¹)                 (N, h)
+∂L/∂W¹ = Xᵀ δ¹                         (d, h)
+∂L/∂b¹ = Σ_rows δ¹                     (h,)
+<span class="why">The pattern for every layer: gradient w.r.t. weights = (input to that layer)ᵀ × (error signal at that layer). To push error backwards: multiply by Wᵀ and elementwise-multiply by the local activation derivative. Every architecture is this pattern repeated. If you can state that sentence, you can derive backprop for anything they invent on the spot.</span></div>
+
+  <p><b>Why the softmax + cross-entropy gradient is just (ŷ − y):</b> the Jacobian of softmax is <code>∂pᵢ/∂zⱼ = pᵢ(δᵢⱼ − pⱼ)</code>. Multiply by <code>∂L/∂pᵢ = −yᵢ/pᵢ</code> and sum over i; the pᵢ cancel and, using Σy = 1, you're left with <code>p − y</code>. Libraries fuse these two ops for exactly this reason (numerical stability plus the clean gradient).</p>
+
+  <div class="box tip"><div class="h">Backprop is reverse-mode autodiff</div>
+  <p style="margin:0">A network is a computation graph. Forward-mode differentiation costs one pass per <i>input</i> dimension; reverse-mode costs one pass per <i>output</i> dimension. Loss functions have one scalar output and millions of inputs, so reverse mode gives you all parameter gradients in a single backward pass at roughly the cost of the forward pass. That asymmetry is the whole reason deep learning is computationally feasible.</p></div>
+
+  <h3>Activations — and why each was invented</h3>
+  <table>
+    <tr><th>Function</th><th>Form / derivative</th><th>The problem it has or solves</th></tr>
+    <tr><td><b>Sigmoid</b></td><td>1/(1+e⁻ᶻ); σ(1−σ), max 0.25</td><td>Saturates both ends → vanishing gradients. Not zero-centred, so all gradients into a weight share a sign, causing zig-zag updates. Keep it for output layers only</td></tr>
+    <tr><td><b>tanh</b></td><td>zero-centred, derivative 1−tanh², max 1</td><td>Fixes the centring; still saturates. Standard inside LSTMs</td></tr>
+    <tr><td><b>ReLU</b></td><td>max(0,z); derivative 1 or 0</td><td>No saturation for z&gt;0, trivially cheap, induces sparsity. <b>Dying ReLU:</b> a unit pushed permanently negative has zero gradient forever and never recovers</td></tr>
+    <tr><td><b>LeakyReLU / PReLU</b></td><td>αz for z&lt;0 (α≈0.01 or learned)</td><td>Keeps a gradient path alive on the negative side</td></tr>
+    <tr><td><b>GELU</b></td><td>z·Φ(z), a smooth gate by the input's percentile</td><td>Smooth and non-monotone near zero; the default in transformers (BERT, GPT)</td></tr>
+    <tr><td><b>SwiGLU</b></td><td>(xW₁ ⊙ σ(xW₂))W₃ — a gated variant</td><td>Consistently better perplexity per FLOP; used in LLaMA, PaLM. Note it needs 3 matrices, so hidden dim is scaled to ⅔ to match parameter count</td></tr>
+  </table>
+
+  <h3>Initialisation — the failure they'll ask about</h3>
+  <p>Initialise all weights to zero and every neuron in a layer computes the same thing, receives the same gradient, and stays identical forever — <b>symmetry is never broken</b> and the layer has an effective width of 1. Initialise too large and activations explode; too small and the signal dies out over depth.</p>
+  <div class="f"><span class="lbl">Keep the variance constant across layers</span>Xavier/Glorot:  Var(W) = 2 / (fan_in + fan_out)     for tanh / sigmoid
+He/Kaiming:     Var(W) = 2 / fan_in                  for ReLU
+<span class="why">The factor of 2 in He init compensates for ReLU zeroing out half the activations, which would otherwise halve the variance at each layer and shrink the signal geometrically with depth.</span></div>
+
+  <details class="drill"><summary>Derive the vanishing gradient problem.</summary>
+    <div class="ans"><p>The gradient at layer l is a product of Jacobians along the path back from the loss:</p>
+    <div class="f">∂L/∂W⁽ˡ⁾ ∝ ∏_{k=l}^{L} W⁽ᵏ⁾ᵀ · diag(g′(z⁽ᵏ⁾))</div>
+    <p>This is a product of L−l terms. If each term has magnitude consistently below 1, the product decays <b>exponentially</b> in depth. With sigmoid, g′ ≤ 0.25, so even with perfectly scaled weights you lose at least a factor of 4 per layer — after 10 layers that's ~10⁻⁶. Early layers stop learning while late layers train fine. The mirror case, terms &gt;1, gives exploding gradients, which shows up as NaN losses and is handled by gradient clipping.</p>
+    <p><b>The fixes, and which mechanism each uses:</b> non-saturating activations (ReLU family, g′ = 1 on the positive side); careful initialisation (keeps the W terms near unit scale); normalization layers (rescale activations so the Jacobian doesn't drift); and most importantly <b>residual connections</b> — with <code>x + F(x)</code>, the Jacobian is <code>I + ∂F/∂x</code>, so the identity term guarantees a gradient path of magnitude 1 straight back to any earlier layer regardless of depth. That's why 100+ layer networks became trainable.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>What does the universal approximation theorem actually say — and not say?</summary>
+    <div class="ans"><p><b>Says:</b> a feed-forward network with a single hidden layer and a non-polynomial activation can approximate any continuous function on a compact set to arbitrary accuracy, given enough hidden units.</p>
+    <p><b>Does not say:</b> how many units (the width may be exponential in the input dimension); that you can <i>find</i> those weights (it's an existence result, silent on optimisation); or anything about generalisation to unseen data. It's also why the theorem doesn't justify shallow networks — depth buys you exponentially more efficient representations of compositional functions, which is the actual reason deep beats wide in practice.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s8">
+  <div class="sec-head"><div class="sec-num">08</div><h2>Training deep nets</h2></div>
+  <p class="sec-lede">Optimisers, normalization, and the debugging story. The debugging question — "your loss isn't going down, what do you do" — is asked in nearly every ML interview and rewards a systematic answer.</p>
+
+  <h3>Optimisers, built up in order</h3>
+  <div class="f"><span class="lbl">Each line adds one idea to the previous</span>SGD          w ← w − η g
+Momentum     v ← βv + g            w ← w − ηv        accumulate direction, damp oscillation
+Nesterov     evaluate g at the look-ahead point w − ηβv
+AdaGrad      s ← s + g²            w ← w − η g/(√s+ε)   per-parameter scaling; s only grows → LR dies
+RMSProp      s ← ρs + (1−ρ)g²      exponential average instead → s stops growing forever
+Adam         m ← β₁m + (1−β₁)g     first moment  (momentum)
+             v ← β₂v + (1−β₂)g²    second moment (RMSProp)
+             m̂ = m/(1−β₁ᵗ), v̂ = v/(1−β₂ᵗ)              bias correction
+             w ← w − η m̂/(√v̂ + ε)
+<span class="why">Bias correction exists because m and v are initialised at zero, so early estimates are biased toward zero; dividing by (1−βᵗ) undoes it. Defaults β₁=0.9, β₂=0.999, ε=1e−8. β₂ closer to 1 means a longer memory for the variance estimate.</span></div>
+
+  <p><b>AdamW</b> — the one to name for transformers. In Adam, an L2 penalty added to the loss gets divided by <code>√v̂</code> along with everything else, so parameters with large historical gradients get <i>less</i> decay — the opposite of what regularization should do. AdamW <b>decouples</b> it, applying <code>w ← w − ηλw</code> directly, separate from the adaptive step. This measurably improves generalisation and is the default for every modern LLM.</p>
+  <p><b>Why SGD+momentum still wins sometimes:</b> on vision tasks it often generalises slightly better than Adam. The common explanation is that Adam's per-parameter scaling steers toward sharper minima; SGD's isotropic noise biases toward flatter ones, which generalise better.</p>
+
+  <h3>Learning rate — the single most important hyperparameter</h3>
+  <ul>
+    <li><b>Warmup:</b> start near zero and ramp up over the first few thousand steps. Essential for transformers — at initialisation, Adam's variance estimates are unreliable and large early steps destabilise LayerNorm statistics and attention patterns permanently.</li>
+    <li><b>Cosine decay</b> from the peak to ~10% of it is the standard LLM schedule. Also: step decay, linear decay, one-cycle.</li>
+    <li><b>LR range test:</b> exponentially increase the LR over a few hundred steps and plot loss; pick roughly an order of magnitude below where it diverges.</li>
+    <li><b>Batch size interaction:</b> larger batches give lower-variance gradients, permitting a larger LR. Linear scaling rule: multiply batch by k, multiply LR by k (with warmup). The √k rule is the alternative and often more stable for Adam.</li>
+  </ul>
+
+  <h3>Normalization</h3>
+  <div class="f"><span class="lbl">All the same formula, different axes</span>x̂ = (x − μ) / √(σ² + ε)      then    y = γx̂ + β      (learnable scale & shift)
+
+BatchNorm  — stats over the BATCH, per feature/channel
+LayerNorm  — stats over the FEATURES, per example
+RMSNorm    — x / RMS(x) · γ  , drops mean-centring and β entirely</div>
+  <p><b>Why transformers use LayerNorm, not BatchNorm:</b> sequences have variable length and the batch statistics of a padded token position are meaningless; BatchNorm makes each example's output depend on the others in its batch, which breaks autoregressive inference (batch size 1 at serving time); and NLP batch statistics are far noisier than vision's. LayerNorm needs no running statistics and behaves identically at train and test time.</p>
+  <p><b>Pre-LN vs Post-LN:</b> the original transformer put LayerNorm after the residual add (Post-LN) and needed careful warmup to train at all. Pre-LN — <code>x + Attn(LN(x))</code> — keeps a clean identity path through the whole network and trains stably without warmup. Every modern LLM uses Pre-LN. <b>RMSNorm</b> drops the mean subtraction (empirically the re-centring wasn't doing the work; the re-scaling was) for a ~10-15% speedup; used in LLaMA and most current models.</p>
+  <p><b>BatchNorm's train/test asymmetry</b> is a classic bug source: at train time it uses batch statistics, at test time the running averages. Forget <code>model.eval()</code> and your inference silently changes. Also: BN's regularizing effect comes from the noise in batch statistics, which is why very small batches hurt it badly (use GroupNorm below batch size ~8).</p>
+
+  <details class="drill"><summary>Your training loss isn't decreasing. Debug it out loud.</summary>
+    <div class="ans"><p>Bisect the problem — is it the data, the model, or the optimisation?</p>
+    <ol>
+      <li><b>Overfit a single batch first.</b> Take 8 examples and train until loss ≈ 0. If you can't, the bug is in the model or the training loop, not the data or hyperparameters. This is the highest-information single test and I always do it first.</li>
+      <li><b>Check the initial loss.</b> For C-class classification it should be ≈ ln(C) — 2.30 for 10 classes. If it isn't, the labels, the loss, or the output layer is wrong. A wildly high initial loss usually means the output layer bias is badly initialised.</li>
+      <li><b>Learning rate.</b> Too high → loss oscillates or NaNs; too low → flat line. Sweep by orders of magnitude, not by 10%.</li>
+      <li><b>Check gradients actually flow.</b> Print gradient norms per layer. All zeros → detached tensor, wrong <code>requires_grad</code>, dead ReLUs, or a missing <code>backward()</code>. Exploding → clip to a max norm of ~1.0.</li>
+      <li><b>Data pipeline.</b> Are labels aligned with inputs after shuffling? Is normalization applied? Visualise a batch as the model sees it — mismatched channel order or a double-normalized image is common.</li>
+      <li><b>Common code bugs:</b> forgetting <code>optimizer.zero_grad()</code> (gradients accumulate), applying softmax before a loss that already includes it, wrong reduction axis, a mask broadcasting incorrectly.</li>
+      <li><b>Only then:</b> capacity, architecture, normalization placement, initialisation.</li>
+    </ol>
+    <p>The last line to say: "and I'd log everything — loss curves, grad norms, LR, activation statistics — because debugging without instrumentation is guessing."</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Dropout: mechanism, and what happens at inference?</summary>
+    <div class="ans"><p>During training, zero each unit independently with probability p. This prevents co-adaptation — no unit can rely on a specific other unit being present — and forces redundant, distributed representations. It approximates training an exponential ensemble of subnetworks that share weights.</p>
+    <p>At inference, dropout is <b>off</b> and all units are active, so the expected input to the next layer is larger by a factor of 1/(1−p). Two ways to correct it: scale activations by (1−p) at test time (original), or — universally now — <b>inverted dropout</b>: divide by (1−p) during training, so inference code needs no change at all.</p>
+    <p><b>When not to use it:</b> with BatchNorm (the variance shift between train and test interacts badly — this is a documented conflict), on convolutional layers (spatially correlated activations make it weak; use DropBlock or rely on BN), and in modern LLM pretraining, where dropout is typically 0 because with a corpus larger than the model can memorise there's nothing to regularize against and it just wastes compute.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s9">
+  <div class="sec-head"><div class="sec-num">09</div><h2>CNNs &amp; sequence models</h2></div>
+  <p class="sec-lede">Less central than they were, but the reasoning — inductive bias, parameter sharing, receptive field — is what transformer questions build on.</p>
+
+  <h3>Convolutions</h3>
+  <div class="f"><span class="lbl">Shapes and counts</span>out = ⌊ (in + 2·pad − dilation·(kernel−1) − 1) / stride ⌋ + 1
+
+params in a conv layer  = (k · k · C_in + 1) · C_out
+FLOPs                   ≈ H_out · W_out · k · k · C_in · C_out
+<span class="why">Compare with a fully-connected layer on a 224×224×3 image with 1000 hidden units: 150 million parameters. A 3×3×3 conv with 64 filters: 1,792. That reduction is <b>parameter sharing</b> — the same edge detector is useful everywhere in the image.</span></div>
+  <p><b>Two inductive biases:</b> <i>locality</i> (nearby pixels are related, so a small kernel suffices) and <i>translation equivariance</i> (shift the input, the feature map shifts identically). Pooling adds approximate translation <i>invariance</i>. These priors are why CNNs beat MLPs on images with far less data — and why ViTs need much more data or heavy augmentation to match them, since they must learn the priors instead of assuming them.</p>
+  <ul>
+    <li><b>Receptive field</b> grows linearly with depth for stacked 3×3 convs (layer L sees 2L+1 pixels), and exponentially with dilation. Two stacked 3×3 convs have the same receptive field as one 5×5 but use 18C² instead of 25C² parameters and insert an extra nonlinearity — the VGG argument.</li>
+    <li><b>1×1 convolutions</b> don't mix spatially; they mix <i>channels</i> and change channel depth cheaply. That's the bottleneck block in ResNet and the core of Inception.</li>
+    <li><b>Depthwise separable</b> (MobileNet): one spatial conv per channel, then a 1×1 to mix — cuts cost by roughly 1/k² + 1/C_out.</li>
+    <li><b>ResNet:</b> <code>y = x + F(x)</code>. Solves degradation (deeper plain nets did worse even on <i>training</i> error, so it wasn't overfitting) by making the identity easy to represent — a block only has to learn the residual. The gradient consequence is in §07.</li>
+  </ul>
+
+  <h3>RNNs, LSTMs, GRUs</h3>
+  <p>RNN: <code>h_t = tanh(W_hh h_{t−1} + W_xh x_t)</code>. Backprop through time unrolls it, and the gradient across k steps carries <code>W_hhᵏ</code> — so if the largest eigenvalue is &lt;1 gradients vanish, &gt;1 they explode. In practice an RNN can't learn dependencies beyond ~10 steps.</p>
+  <div class="f"><span class="lbl">LSTM — the fix is the cell state</span>f_t = σ(W_f·[h_{t−1}, x_t])          forget: what to erase from memory
+i_t = σ(W_i·[h_{t−1}, x_t])          input:  what to write
+c̃_t = tanh(W_c·[h_{t−1}, x_t])       candidate content
+c_t = f_t ⊙ c_{t−1} + i_t ⊙ c̃_t      ← ADDITIVE update, this is the whole trick
+o_t = σ(W_o·[h_{t−1}, x_t])          output: what to expose
+h_t = o_t ⊙ tanh(c_t)
+<span class="why">The cell state is updated additively, not by repeated matrix multiplication, so ∂c_t/∂c_{t−1} = f_t — a gate near 1 gives a gradient highway across hundreds of steps. Same principle as a residual connection. <b>GRU</b> merges forget and input into one update gate and drops the separate cell state: ~25% fewer parameters, usually comparable accuracy, faster.</span></div>
+  <p><b>Why transformers replaced them:</b> the recurrence is inherently sequential — you cannot compute h_t before h_{t−1}, so training can't be parallelised over the time axis. Attention computes all positions simultaneously, giving O(1) sequential operations instead of O(n), and a constant path length between any two tokens instead of O(n). You trade O(n²) compute for parallelism and short gradient paths, and on modern hardware that trade is overwhelmingly worth it.</p>
+</section>
+
+<section id="s10">
+  <div class="sec-head"><div class="sec-num">10</div><h2>Transformers, in full</h2></div>
+  <p class="sec-lede">Given your résumé, assume this is where the interview spends its time. Know the shapes, the complexity, and the reasons behind every design choice.</p>
+
+  <h3>Scaled dot-product attention</h3>
+  <div class="f"><span class="lbl">The equation, with shapes</span>Q = XW_Q   (n, d_k)      K = XW_K   (n, d_k)      V = XW_V   (n, d_v)
+
+Attention(Q,K,V) = softmax( QKᵀ / √d_k + M ) V
+
+QKᵀ        : (n, n)     pairwise scores
+softmax    : (n, n)     row-normalised weights, each row sums to 1
+· V        : (n, d_v)   weighted average of value vectors
+<span class="why">Q = "what am I looking for", K = "what do I contain", V = "what I'll pass on if selected". The output for each token is a convex combination of all value vectors, weighted by query-key compatibility.</span></div>
+
+  <p><b>Why divide by √d_k</b> — the question that separates memorisers from understanders. If q and k have i.i.d. components with mean 0 and variance 1, their dot product <code>Σᵢ qᵢkᵢ</code> is a sum of d_k such terms, so it has variance d_k and typical magnitude √d_k. Feed logits of that scale into softmax and it saturates — the output approaches a one-hot vector, and softmax's gradient <code>p(1−p)</code> goes to zero. Dividing by √d_k returns the logits to unit variance, keeping the softmax in its responsive region and gradients alive.</p>
+
+  <div class="f"><span class="lbl">Multi-head</span>headᵢ = Attention(XW_Qⁱ, XW_Kⁱ, XW_Vⁱ)      each with d_k = d_model / h
+MHA    = Concat(head₁ … head_h) W_O
+<span class="why">Total compute is roughly the same as one full-width head, but each head can attend to a different relationship — one tracks syntactic dependency, another coreference, another position offsets. It's an ensemble of representation subspaces, and the concatenation plus W_O lets the model mix them.</span></div>
+
+  <h3>The rest of the block</h3>
+  <ul>
+    <li><b>FFN:</b> <code>FFN(x) = W₂ · act(W₁x + b₁) + b₂</code>, with hidden dimension 4× d_model by convention. Applied position-wise and identically at every position. It holds roughly ⅔ of the parameters — and mechanistic interpretability work suggests it acts as a key-value memory storing factual associations.</li>
+    <li><b>Residual + norm:</b> Pre-LN, as in §08: <code>x = x + Attn(LN(x))</code>, then <code>x = x + FFN(LN(x))</code>. The residual stream is the model's working memory that every block reads from and writes to.</li>
+    <li><b>Causal mask:</b> set the upper triangle of the score matrix to <code>−∞</code> before softmax, so position i can't see j &gt; i. This is what makes training parallel <i>and</i> autoregressive — every position's next-token prediction is computed in one forward pass without leaking the future.</li>
+  </ul>
+
+  <h3>Positional information</h3>
+  <p>Attention is a permutation-equivariant set operation — shuffle the tokens and you get the same outputs, shuffled. Position must be injected explicitly.</p>
+  <table>
+    <tr><th>Scheme</th><th>How</th><th>Trade-off</th></tr>
+    <tr><td><b>Sinusoidal</b></td><td>Fixed sin/cos at geometrically spaced frequencies, added to embeddings</td><td>No parameters; relative offsets are a linear function of position, so in principle extrapolates. In practice, poorly</td></tr>
+    <tr><td><b>Learned absolute</b></td><td>A trainable embedding per position (BERT, GPT-2)</td><td>Simple and effective, but hard-capped at the trained context length</td></tr>
+    <tr><td><b>RoPE</b></td><td><b>Rotates</b> Q and K by an angle proportional to position, in 2D subspaces</td><td>The dot product qᵀk then depends only on <b>relative</b> offset m−n. No added parameters, works with KV caching, extends via interpolation (NTK/YaRN). Default in LLaMA, Qwen, Mistral</td></tr>
+    <tr><td><b>ALiBi</b></td><td>Adds a linear distance penalty <code>−m·|i−j|</code> to the attention scores</td><td>Extremely simple, extrapolates to longer contexts than trained on, but biases toward recency</td></tr>
+  </table>
+
+  <h3>Complexity, and how it's attacked</h3>
+  <div class="f"><span class="lbl">Where the cost is</span>attention   O(n² · d)      time,   O(n²) memory for the score matrix
+FFN         O(n · d²)      time
+<span class="why">For short sequences the d² term dominates; the n² term takes over past roughly n ≈ d. This is why context length is expensive and why 128k-context models needed algorithmic work, not just more GPUs.</span></div>
+  <ul>
+    <li><b>FlashAttention</b> — the important one. It doesn't change the math at all; it changes the memory access pattern. Attention is <b>memory-bandwidth bound</b>, not compute-bound: writing the n×n score matrix to HBM and reading it back dominates. FlashAttention tiles the computation, keeps blocks in SRAM, and uses the online-softmax trick to compute the exact result without ever materialising the full matrix. Result: exact attention, linear memory in n, 2–4× faster.</li>
+    <li><b>Sparse / sliding-window</b> (Longformer, Mistral): each token attends to a local window plus a few global tokens. Stacking layers still propagates information globally, like a receptive field.</li>
+    <li><b>Linear attention</b>: replace softmax with a kernel feature map so you can reassociate <code>(QKᵀ)V → Q(KᵀV)</code> and get O(n·d²). Cheaper, generally worse quality. Related family: state-space models (Mamba), which recover recurrence with a parallel scan.</li>
+    <li><b>GQA / MQA:</b> share K and V heads across multiple Q heads. Barely affects quality and cuts the KV cache by the sharing factor — the dominant memory cost at inference. Nearly universal now.</li>
+  </ul>
+
+  <details class="drill"><summary>Walk me through what happens computationally when an LLM generates the 500th token.</summary>
+    <div class="ans"><p><b>Two distinct phases, and naming them is half the answer.</b></p>
+    <p><b>Prefill</b> processed the prompt: all prompt tokens go through the model in one parallel forward pass, and every layer's K and V projections are stored in the KV cache. This phase is <b>compute-bound</b> — big matmuls, high GPU utilisation.</p>
+    <p><b>Decode</b> generates one token at a time. For token 500: embed the single previous token, and at each layer compute Q, K, V for that <i>one</i> position only. Append the new K and V to the cache. Attention is then a (1 × 499) score vector against the cached keys, softmax, and a weighted sum of cached values. Through the FFN, then the LM head produces logits over the vocabulary, and a sampling step picks the next token.</p>
+    <p><b>Without the cache</b> you would recompute K and V for all 499 previous tokens at every step — O(n²) redundant work per token, O(n³) overall.</p>
+    <p><b>The key insight to volunteer:</b> decode is <b>memory-bandwidth bound</b>, not compute-bound. Each step reads the entire weight matrix from HBM to do a single matrix-<i>vector</i> product, so arithmetic intensity is terrible and the GPU sits mostly idle. That's why batching improves throughput enormously at no latency cost (the weights get reused across the batch), why quantization speeds up inference (fewer bytes to move), and why speculative decoding works — a small draft model proposes k tokens and the big model verifies all k in one parallel forward pass, converting k memory-bound steps into one.</p>
+    <p><b>KV cache size</b> = <code>2 · layers · n · d_model · bytes · batch</code>, which for a 70B model at 8k context runs to tens of gigabytes — hence GQA, paged attention (vLLM), and KV-cache quantization.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Why is BERT bidirectional and GPT not? What follows from that?</summary>
+    <div class="ans"><p>It's the training objective, and the mask that objective requires.</p>
+    <p><b>BERT</b> is trained with masked language modelling: 15% of tokens are replaced and the model predicts them from <i>both</i> directions. No causal mask, so every token attends to every other. This gives richer contextual representations, which is why encoder models remain strong for classification, NER, and retrieval embeddings. But it can't generate autoregressively, and the objective is sample-inefficient — you only get a learning signal on 15% of positions per pass.</p>
+    <p><b>GPT</b> is trained on next-token prediction with a causal mask. Every position gives a training signal, and the objective matches the generation task exactly. Predicting the next token forces the model to learn syntax, semantics, facts and reasoning as a side effect of compression — which turns out to scale extraordinarily well.</p>
+    <p><b>Consequence:</b> encoders for understanding-and-scoring, decoders for generation. Note that decoder-only models have largely won even on tasks encoders used to own, because instruction-tuned generative models can be prompted to do them — though for pure embedding quality, bidirectional encoders still hold their ground.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Explain tokenization and one problem it causes.</summary>
+    <div class="ans"><p><b>BPE</b> starts from characters (or bytes) and iteratively merges the most frequent adjacent pair, building a vocabulary of subwords. WordPiece is similar but merges by likelihood gain; SentencePiece/Unigram starts from a large vocabulary and prunes. Subwords are the compromise between character-level (long sequences, no OOV) and word-level (short sequences, huge vocab, OOV problems).</p>
+    <p><b>Problems it causes:</b> arithmetic and character-level tasks are hard because numbers tokenize inconsistently ("1234" may be one token, "1235" three) and the model can't see letters inside a token — that's the actual cause of the "how many r's in strawberry" failure. Non-English and code are tokenized less efficiently, so the same content costs more tokens and more money. And <b>glitch tokens</b> — strings present in the tokenizer's training corpus but nearly absent from the model's — have essentially untrained embeddings and produce bizarre behaviour.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s11">
+  <div class="sec-head"><div class="sec-num">11</div><h2>LLMs: train, align, serve</h2></div>
+  <p class="sec-lede">The pipeline end to end, plus the parts your own research touches. Expect the follow-ups here to go deeper than anywhere else in the interview.</p>
+
+  <h3>The training stages</h3>
+  <table>
+    <tr><th>Stage</th><th>Objective</th><th>Data</th><th>What it buys</th></tr>
+    <tr><td><b>Pretraining</b></td><td>Next-token cross-entropy</td><td>Trillions of tokens of web text, code, books</td><td>World knowledge, grammar, reasoning latent in compression. ~99% of the compute</td></tr>
+    <tr><td><b>SFT</b></td><td>Same objective, loss masked to response tokens only</td><td>10k–1M curated instruction/response pairs</td><td>Format and instruction-following. Teaches <i>how to answer</i>, not new facts</td></tr>
+    <tr><td><b>Preference tuning</b></td><td>RLHF (PPO) or DPO on chosen/rejected pairs</td><td>Human or AI preference comparisons</td><td>Helpfulness, harmlessness, tone. Optimises what's hard to write as a loss</td></tr>
+    <tr><td><b>RLVR / reasoning RL</b></td><td>RL against a programmatic reward (test passes, answer matches)</td><td>Math, code, verifiable tasks</td><td>Long chain-of-thought, self-correction. The o1/R1 line</td></tr>
+  </table>
+
+  <div class="f"><span class="lbl">RLHF, three steps</span>1. SFT model π_sft
+2. Reward model r_φ trained on preferences with the Bradley-Terry loss:
+      L = −log σ( r(x, y_chosen) − r(x, y_rejected) )
+3. PPO maximises:   𝔼[ r_φ(x,y) ] − β · KL( π_θ ‖ π_sft )
+<span class="why">The KL term is load-bearing. Without it the policy drifts into adversarial gibberish that the reward model happens to score highly — reward hacking. β sets how far the policy may wander from the SFT model.</span></div>
+
+  <p><b>DPO</b> removes the reward model and the RL loop entirely. The insight: for the KL-constrained RLHF objective the optimal policy has a closed form, which can be inverted to express the implicit reward in terms of the policy itself. Substituting into the Bradley-Terry loss gives a plain supervised objective:</p>
+  <div class="f">L_DPO = −log σ( β log[π_θ(y_w|x)/π_ref(y_w|x)] − β log[π_θ(y_l|x)/π_ref(y_l|x)] )
+<span class="why">Simpler, stable, far cheaper — no reward model, no sampling loop, no value network. Trade-off: it learns only from the fixed preference dataset (off-policy), whereas PPO keeps sampling fresh completions and can explore beyond it. Known failure: DPO can reduce the likelihood of <i>both</i> chosen and rejected responses, just pushing them apart — hence variants like IPO, KTO, and ORPO.</span></div>
+
+  <h3>Parameter-efficient fine-tuning</h3>
+  <div class="f"><span class="lbl">LoRA</span>W' = W₀ + BA        A: (r, d) init ~N(0,σ²)     B: (d, r) init 0
+                    r ≪ d,  typically 8–64
+trainable params: 2·r·d  instead of d²      →  often &lt;1% of the model
+<span class="why">B is initialised to zero so BA = 0 at the start and the model is exactly unchanged — training begins from the pretrained function. The hypothesis is that the weight <i>update</i> during fine-tuning has low intrinsic rank, even though W₀ doesn't. Adapters merge back into W at inference, so there's zero added latency, and you can hot-swap task-specific adapters over one shared base.</span></div>
+  <ul>
+    <li><b>Scaling factor</b> <code>α/r</code> multiplies the update; keeping α/r constant lets you change r without re-tuning the learning rate.</li>
+    <li><b>QLoRA:</b> base weights frozen in 4-bit NF4, LoRA adapters in bf16, plus double quantization and paged optimizers. Puts a 70B fine-tune on a single 48GB GPU.</li>
+    <li><b>Which modules:</b> originally just Q and V projections; current practice targets all linear layers (Q,K,V,O and the FFN), which is usually worth the extra parameters.</li>
+    <li><b>Limits:</b> LoRA adapts style, format and task behaviour well; it's a poor tool for injecting large amounts of new knowledge — full fine-tuning or retrieval is better for that.</li>
+  </ul>
+
+  <h3>Decoding and test-time compute</h3>
+  <ul>
+    <li><b>Greedy</b> — argmax each step. Deterministic, repetitive, and myopic: locally optimal tokens can lead to globally poor sequences.</li>
+    <li><b>Beam search</b> — keep k partial hypotheses ranked by cumulative log-prob, with length normalization. Good for translation and summarisation where there's a single right answer; produces bland, degenerate text in open-ended generation.</li>
+    <li><b>Temperature</b> — divide logits by T before softmax. T&lt;1 sharpens, T&gt;1 flattens, T→0 is greedy. Note this is the same operation as calibration temperature scaling, used for a different purpose.</li>
+    <li><b>Top-k</b> — sample from the k most likely tokens. <b>Top-p / nucleus</b> — sample from the smallest set whose cumulative probability exceeds p; adaptive, so it uses a wide set when the model is uncertain and a narrow one when it's confident. Usually better than top-k for that reason. <b>Min-p</b> scales the cutoff by the top token's probability.</li>
+    <li><b>Self-consistency</b> — sample n chains of thought, take the majority answer. Reliably improves accuracy on reasoning benchmarks at n× the cost.</li>
+    <li><b>Best-of-n / verifier reranking</b> — sample n, score with a reward or process model, keep the best. <b>Process reward models</b> score intermediate steps rather than only the final answer, giving denser signal.</li>
+  </ul>
+
+  <div class="box tip"><div class="h">Test-time compute scaling — say this precisely</div>
+  <p style="margin:0 0 8px">The framing: you can buy accuracy with training FLOPs or with inference FLOPs, and beyond a point the second is cheaper. Two axes — <b>sequential</b> (longer chains, self-revision) and <b>parallel</b> (sampling many candidates and aggregating). Snell et al. showed the optimal allocation is question-dependent: easy questions benefit from sequential refinement, hard ones from parallel search.</p>
+  <p style="margin:0">The open problem — and the one your paper sits on — is the <b>stopping rule</b>. Adaptive schemes need a signal for "am I done", and that signal is almost always model confidence. If confidence is uncalibrated, and specifically if it degrades as you scale compute, then the stopping rule fails exactly where it matters: the model becomes more confident while becoming no more correct. Be ready to state that in two sentences.</p></div>
+
+  <h3>Serving and efficiency</h3>
+  <ul>
+    <li><b>Quantization:</b> INT8/INT4 weights. Post-training (GPTQ uses second-order info to minimise layer-wise error; AWQ protects salient channels identified by activation magnitude) vs quantization-aware training (better, costlier). Weight-only quantization helps most because decode is memory-bound. Outlier activation channels are the main difficulty — hence per-channel scaling and mixed precision.</li>
+    <li><b>Distillation:</b> train a student on the teacher's <i>soft</i> output distribution. The "dark knowledge" is in the relative probabilities of the wrong classes — that a 7 looks somewhat like a 1 — which carries far more information per example than a one-hot label. Use temperature T on both sides and scale the gradient by T². When the teacher is API-only and gives no logits, you fall back to sequence-level distillation on sampled outputs, optionally with rationales.</li>
+    <li><b>Speculative decoding:</b> a small draft model proposes k tokens; the large model verifies them in one forward pass; a rejection-sampling rule guarantees the output distribution is <b>identical</b> to sampling from the large model alone. Pure latency win with no quality cost.</li>
+    <li><b>Batching:</b> continuous/in-flight batching (vLLM, TGI) plus PagedAttention, which stores the KV cache in non-contiguous blocks like OS virtual memory to eliminate fragmentation.</li>
+    <li><b>MoE:</b> replace the FFN with N experts and route each token to the top-k (usually 2). Parameter count scales without proportional FLOPs. Requires a load-balancing auxiliary loss or a few experts get all the traffic; and all experts must be in memory even though only k are active, so it trades memory for compute.</li>
+  </ul>
+
+  <h3>RAG and agents</h3>
+  <p><b>RAG</b>: embed the corpus, retrieve top-k chunks by vector similarity for a query, put them in the prompt. Use it when knowledge is dynamic, private, verifiable, or too large to fit; fine-tune instead when you need a behaviour, format, or style. The honest failure modes: retrieval quality caps everything (garbage retrieved, garbage generated); chunking destroys context across boundaries; pure dense retrieval misses exact terms, so <b>hybrid BM25 + dense with a cross-encoder reranker</b> is the strong default; and "lost in the middle" — models attend poorly to content in the centre of a long context, so put the highest-ranked chunk first or last.</p>
+  <p><b>Agents</b>: an LLM in a loop with tools, memory, and a termination condition. ReAct interleaves reasoning traces with tool calls. Practical concerns you should raise unprompted: error compounding over steps (95% per-step reliability is 60% over 10 steps), the need for schema-constrained output to make tool calls parseable, deterministic guardrails around irreversible actions rather than trusting the model, and evaluation being genuinely hard — trajectory-level judging, not just final-answer accuracy.</p>
+
+  <details class="drill"><summary>Why do LLMs hallucinate, and what actually reduces it?</summary>
+    <div class="ans"><p><b>Root causes, in order of importance:</b></p>
+    <ol>
+      <li><b>The objective.</b> Next-token prediction rewards plausible continuations, not true ones. Nothing in pretraining distinguishes a fact from a fluent-sounding invention with similar statistics.</li>
+      <li><b>No mechanism for "I don't know."</b> The model must place probability mass somewhere; a confident-sounding answer has higher likelihood under the training distribution than hedging, because human text is mostly written by people who knew the answer.</li>
+      <li><b>Alignment can make it worse.</b> If human raters prefer confident, complete answers, RLHF trains the model to be confident and complete even when it shouldn't be — a direct reward for overconfidence.</li>
+      <li><b>Long-tail facts</b> are seen a handful of times and stored as weak, interfering associations.</li>
+    </ol>
+    <p><b>What helps:</b> retrieval grounding with citations the user can check; abstention thresholds on a <i>calibrated</i> confidence signal; consistency checks (sample multiple times — disagreement across samples correlates with error, which is the basis of semantic entropy methods); training on data that includes appropriate uncertainty; and verifier models or constrained decoding for structured outputs.</p>
+    <p><b>The line to end on:</b> "None of these eliminate it, because the failure is in the objective, not the implementation. The practical target is making the model's uncertainty <i>usable</i> — which is a calibration problem, and calibration is what my own research measures."</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>Chain-of-thought: what's the actual mechanism?</summary>
+    <div class="ans"><p>The computation available for a single token is fixed — a constant number of layers. CoT lets the model spend <b>more forward passes</b> on a problem by writing intermediate results into the context, where they're re-readable. It converts a depth-limited computation into a longer sequential one, and it decomposes a hard mapping into steps each of which is well-represented in the training distribution.</p>
+    <p>Complexity-theoretic framing worth knowing: a fixed-depth transformer is in a limited circuit class, but with a CoT of polynomial length it can simulate a polynomial-time Turing machine. The scratchpad is genuine extra computation, not just prompting flavour.</p>
+    <p><b>Important caveats to volunteer:</b> the stated reasoning is not guaranteed to be the model's actual computation — faithfulness studies show models reaching an answer for reasons the trace doesn't mention. CoT mainly helps on multi-step problems and can hurt on tasks where deliberation interferes. And it emerges with scale — small models often produce fluent reasoning that doesn't improve accuracy at all, which is a nice bridge to your own work.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>How would you evaluate an LLM feature you built?</summary>
+    <div class="ans"><p>Layered, cheapest first:</p>
+    <ol><li><b>A golden set</b> of 100–300 hand-curated cases covering the real distribution, including known failure categories. Small enough to inspect, large enough to move.</li>
+    <li><b>Deterministic checks</b> where possible — schema validity, exact match on extractable fields, tool-call correctness, latency, cost per request. Never use an LLM judge for something a regex can decide.</li>
+    <li><b>LLM-as-judge</b> for the subjective remainder, with a written rubric, pairwise comparison rather than absolute scoring (more reliable), position-swapping to cancel order bias, and validation against human labels on a subsample so you know the judge's agreement rate.</li>
+    <li><b>Ablations</b> — remove one component at a time to show what's actually carrying the performance. Without this, you have a number, not a finding.</li>
+    <li><b>Online:</b> A/B test with a guardrail metric, plus logging for regression detection. Offline metrics are a proxy; user behaviour is the truth.</li></ol>
+    <p>This maps directly onto your Samsung benchmark work — say so, with the numbers.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s12">
+  <div class="sec-head"><div class="sec-num">12</div><h2>Applied ML &amp; system design</h2></div>
+  <p class="sec-lede">The round where they find out whether you've shipped anything. The scoring rubric is almost always: did the candidate clarify requirements before designing, and did they mention data before models?</p>
+
+  <h3>The framework — use it verbatim</h3>
+  <ol>
+    <li><b>Clarify (2–3 min, always).</b> What's the business objective, and what proxy metric represents it? What's the scale — QPS, users, items? Latency budget? Is it online or batch? What data exists already? Any fairness or regulatory constraints?</li>
+    <li><b>Frame as an ML problem.</b> What's the input, what's the output, what's a training example, and where does the label come from? Is ML even necessary — would a heuristic get 80% of the value?</li>
+    <li><b>Data.</b> Sources, volume, labelling strategy, the train/val/test split (and why it's split that way), class balance, leakage risks.</li>
+    <li><b>Features.</b> Include a baseline. Say which are computed offline vs at request time, and how you'd avoid train/serve skew.</li>
+    <li><b>Model.</b> Start with the simplest thing that works — logistic regression or gradient boosting — and justify complexity only against a measured gap.</li>
+    <li><b>Evaluation.</b> Offline metric, online metric, and the guardrail metric you'd refuse to regress.</li>
+    <li><b>Serving.</b> Latency, batching, caching, precomputation, model size.</li>
+    <li><b>Monitoring.</b> Drift, staleness, retraining trigger, rollback plan.</li>
+  </ol>
+
+  <div class="box trap"><div class="h">Data leakage — the highest-frequency trap in this round</div>
+  <ul style="margin:0">
+    <li><b>Preprocessing before splitting</b> — fitting a scaler, imputer, or target encoder on the full dataset leaks test statistics into training. Fit on train, transform test. Use a Pipeline so it's structurally impossible.</li>
+    <li><b>Temporal leakage</b> — any feature computed with information unavailable at prediction time. "Total lifetime purchases" computed over the whole history leaks the future.</li>
+    <li><b>Duplicate or near-duplicate rows</b> straddling the split — extremely common in scraped and augmented datasets.</li>
+    <li><b>Group leakage</b> — the same user/patient/document in both splits.</li>
+    <li><b>Target leakage</b> — a feature that's a downstream consequence of the label. "Was assigned to the fraud review queue" predicts fraud perfectly and doesn't exist at inference.</li>
+  </ul></div>
+
+  <h3>Imbalanced data</h3>
+  <p>Order of preference: <b>(1) change the metric and threshold</b> — often nothing else is needed; <b>(2) class weights in the loss</b> — cheap, principled, no data distortion; <b>(3) resampling</b> — undersample the majority if you have plenty of data, oversample or SMOTE the minority if you don't (SMOTE interpolates between minority neighbours; it's unreliable in high dimensions and can create points inside the majority region); <b>(4) reframe as anomaly detection</b> if the positive rate is extreme (&lt;0.1%). Critical detail: <b>resample only the training fold, never the validation or test set</b>, or your metrics describe a distribution that doesn't exist.</p>
+
+  <h3>Drift and monitoring</h3>
+  <ul>
+    <li><b>Data/covariate drift:</b> P(x) changes, P(y|x) doesn't. Detect with PSI, KS test, or KL between reference and live feature distributions. Often survivable.</li>
+    <li><b>Concept drift:</b> P(y|x) changes — the relationship itself moved. Requires retraining. Detectable only once labels arrive, which is why proxy metrics matter.</li>
+    <li><b>Label lag:</b> if ground truth takes 30 days, monitor prediction distribution and feature drift as leading indicators.</li>
+    <li><b>Training–serving skew:</b> the top cause of "great offline, bad online". Same feature code path for both, or a feature store, ideally with logging of the exact features used at inference.</li>
+  </ul>
+
+  <details class="drill"><summary>Design a recommendation system for a video platform.</summary>
+    <div class="ans"><p><b>Clarify first:</b> objective — watch time, or long-term retention? Those diverge, and optimising raw watch time gives you clickbait. Catalogue size, DAU, latency budget (~100ms), cold start requirements.</p>
+    <p><b>Two-stage architecture</b>, which is the expected answer:</p>
+    <ul><li><b>Candidate generation</b> — millions of items to a few hundred, in milliseconds. Multiple sources: a two-tower neural retriever (user tower and item tower trained with in-batch negatives and sampled softmax, item embeddings indexed in ANN), collaborative filtering, trending, and recent-subscription items. Cheap, high recall, no expensive features.</li>
+    <li><b>Ranking</b> — a few hundred to a page, with an expensive model. Gradient-boosted trees or a deep model over user × item × context features, trained on logged impressions with multi-task heads (P(click), P(complete), P(like)) combined into one utility score.</li>
+    <li><b>Re-ranking</b> — diversity (MMR or determinantal point process), freshness, business rules, filtering already-watched.</li></ul>
+    <p><b>The parts that show experience:</b> position bias in the logged data — items shown at the top get clicked more regardless of quality, so train with position as a feature and set it to a constant at inference, or use inverse-propensity weighting. Feedback loops — the model only sees data from what it recommended, so add exploration. Cold start — content features and embeddings for new items, popularity fallback for new users. Evaluation — offline NDCG/recall@k for iteration, but the decision comes from an online A/B test with a retention guardrail.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>How do you know an A/B test result is real?</summary>
+    <div class="ans"><p>Compute the required sample size <b>before</b> starting, from the minimum detectable effect, baseline variance, α = 0.05, and power = 0.8. Fix the duration in advance and run at least a full weekly cycle to absorb day-of-week effects.</p>
+    <p><b>Peeking</b> is the classic error: checking daily and stopping when p &lt; 0.05 inflates the false positive rate far above 5%, because you get many chances to cross the line by chance. Fixes: fixed horizon, sequential testing with alpha spending, or always-valid inference.</p>
+    <p>Other things to raise: randomisation unit must match the interference structure (user-level, not session-level, if the treatment persists); check for sample ratio mismatch as an assignment-bug detector; multiple-comparison correction if you're testing many metrics; novelty effects that decay after a week; and network effects in social or marketplace settings, which break the independence assumption and need cluster randomisation.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+</section>
+
+<section id="s13">
+  <div class="sec-head"><div class="sec-num">13</div><h2>Code it from scratch</h2></div>
+  <p class="sec-lede">The implementations most often asked for on a shared screen. Read them until the shapes feel obvious — then close the page and write one from memory.</p>
+
+  <h4>Numerically stable softmax + cross-entropy</h4>
+<pre><span class="c"># The max subtraction is the whole point of the question.</span>
+<span class="k">def</span> <b>softmax</b>(z):                          <span class="c"># z: (N, C)</span>
+    z = z - z.max(axis=1, keepdims=<span class="k">True</span>)   <span class="c"># shift-invariant: same result, no overflow</span>
+    e = np.exp(z)
+    <span class="k">return</span> e / e.sum(axis=1, keepdims=<span class="k">True</span>)
+
+<span class="k">def</span> <b>cross_entropy</b>(logits, y):              <span class="c"># y: (N,) integer labels</span>
+    p = softmax(logits)
+    N = logits.shape[0]
+    <span class="k">return</span> -np.log(p[np.arange(N), y] + 1e-12).mean()
+
+<span class="k">def</span> <b>ce_grad</b>(logits, y):                    <span class="c"># dL/dlogits — the (p - y)/N result</span>
+    p = softmax(logits); N = logits.shape[0]
+    p[np.arange(N), y] -= 1.0
+    <span class="k">return</span> p / N</pre>
+
+  <h4>Linear regression by gradient descent</h4>
+<pre><span class="k">def</span> <b>linreg</b>(X, y, lr=0.01, epochs=1000, l2=0.0):
+    n, d = X.shape
+    w, b = np.zeros(d), 0.0
+    <span class="k">for</span> _ <span class="k">in</span> range(epochs):
+        pred = X @ w + b
+        err  = pred - y                       <span class="c"># (n,)</span>
+        dw   = (X.T @ err) / n + l2 * w       <span class="c"># (d,)  ridge term</span>
+        db   = err.mean()
+        w -= lr * dw; b -= lr * db
+    <span class="k">return</span> w, b
+
+<span class="c"># Closed form, for comparison: w = np.linalg.solve(X.T@X + l2*np.eye(d), X.T@y)</span>
+<span class="c"># Use solve(), never inv() — better conditioned and ~2x faster.</span></pre>
+
+  <h4>Logistic regression</h4>
+<pre><span class="k">def</span> <b>sigmoid</b>(z):
+    <span class="k">return</span> np.where(z &gt;= 0, 1/(1+np.exp(-z)),
+                          np.exp(z)/(1+np.exp(z)))   <span class="c"># stable both tails</span>
+
+<span class="k">def</span> <b>logreg</b>(X, y, lr=0.1, epochs=2000, l2=0.0):
+    n, d = X.shape
+    w, b = np.zeros(d), 0.0
+    <span class="k">for</span> _ <span class="k">in</span> range(epochs):
+        p  = sigmoid(X @ w + b)
+        g  = p - y                            <span class="c"># identical form to linreg — GLM</span>
+        w -= lr * ((X.T @ g)/n + l2*w)
+        b -= lr * g.mean()
+    <span class="k">return</span> w, b</pre>
+
+  <h4>k-means with k-means++ init</h4>
+<pre><span class="k">def</span> <b>kmeans</b>(X, k, iters=100, seed=0):
+    rng = np.random.default_rng(seed)
+    C = [X[rng.integers(len(X))]]
+    <span class="k">for</span> _ <span class="k">in</span> range(k-1):                            <span class="c"># k-means++ seeding</span>
+        d2 = ((X[:,<span class="k">None</span>,:] - np.array(C)[<span class="k">None</span>,:,:])**2).sum(-1).min(1)
+        C.append(X[rng.choice(len(X), p=d2/d2.sum())])
+    C = np.array(C)
+    <span class="k">for</span> _ <span class="k">in</span> range(iters):
+        d2  = ((X[:,<span class="k">None</span>,:] - C[<span class="k">None</span>,:,:])**2).sum(-1)   <span class="c"># (n, k)</span>
+        lab = d2.argmin(1)
+        newC = np.array([X[lab==j].mean(0) <span class="k">if</span> (lab==j).any() <span class="k">else</span> C[j]
+                         <span class="k">for</span> j <span class="k">in</span> range(k)])
+        <span class="k">if</span> np.allclose(newC, C): <span class="k">break</span>             <span class="c"># converged</span>
+        C = newC
+    <span class="k">return</span> C, lab</pre>
+
+  <h4>Two-layer network, full forward + backward</h4>
+<pre><span class="k">def</span> <b>train_step</b>(X, y, W1, b1, W2, b2, lr):
+    N = X.shape[0]
+    <span class="c"># ---- forward</span>
+    z1 = X @ W1 + b1;  a1 = np.maximum(0, z1)      <span class="c"># ReLU</span>
+    z2 = a1 @ W2 + b2
+    loss = cross_entropy(z2, y)
+    <span class="c"># ---- backward</span>
+    d2 = ce_grad(z2, y)                             <span class="c"># (N, C)</span>
+    dW2 = a1.T @ d2;      db2 = d2.sum(0)           <span class="c"># (h,C), (C,)</span>
+    d1 = (d2 @ W2.T) * (z1 &gt; 0)                     <span class="c"># ReLU' is the mask</span>
+    dW1 = X.T @ d1;       db1 = d1.sum(0)           <span class="c"># (d,h), (h,)</span>
+    <span class="c"># ---- update</span>
+    <span class="k">for</span> p, g <span class="k">in</span> ((W1,dW1),(b1,db1),(W2,dW2),(b2,db2)):
+        p -= lr * g
+    <span class="k">return</span> loss</pre>
+
+  <h4>Self-attention with causal mask</h4>
+<pre><span class="k">def</span> <b>attention</b>(X, Wq, Wk, Wv, causal=<span class="k">True</span>):
+    Q, K, V = X @ Wq, X @ Wk, X @ Wv          <span class="c"># each (n, d_k)</span>
+    d_k = Q.shape[-1]
+    S = Q @ K.T / np.sqrt(d_k)                <span class="c"># (n, n) — the sqrt matters</span>
+    <span class="k">if</span> causal:
+        n = S.shape[0]
+        S = np.where(np.tril(np.ones((n,n))) == 0, -1e9, S)
+    A = softmax(S)                            <span class="c"># rows sum to 1</span>
+    <span class="k">return</span> A @ V, A                           <span class="c"># (n, d_v)</span>
+
+<span class="k">def</span> <b>multi_head</b>(X, Wq, Wk, Wv, Wo, h):      <span class="c"># Wq: (d, d)</span>
+    n, d = X.shape; dk = d // h
+    Q = (X@Wq).reshape(n,h,dk).transpose(1,0,2)   <span class="c"># (h, n, dk)</span>
+    K = (X@Wk).reshape(n,h,dk).transpose(1,0,2)
+    V = (X@Wv).reshape(n,h,dk).transpose(1,0,2)
+    S = Q @ K.transpose(0,2,1) / np.sqrt(dk)      <span class="c"># (h, n, n)</span>
+    S = np.where(np.tril(np.ones((n,n))) == 0, -1e9, S)
+    A = np.exp(S - S.max(-1, keepdims=<span class="k">True</span>))
+    A = A / A.sum(-1, keepdims=<span class="k">True</span>)
+    O = (A @ V).transpose(1,0,2).reshape(n, d)    <span class="c"># concat heads</span>
+    <span class="k">return</span> O @ Wo</pre>
+
+  <h4>LayerNorm and RMSNorm</h4>
+<pre><span class="k">def</span> <b>layer_norm</b>(x, g, b, eps=1e-5):         <span class="c"># normalise the FEATURE axis</span>
+    mu  = x.mean(-1, keepdims=<span class="k">True</span>)
+    var = x.var(-1, keepdims=<span class="k">True</span>)
+    <span class="k">return</span> g * (x - mu) / np.sqrt(var + eps) + b
+
+<span class="k">def</span> <b>rms_norm</b>(x, g, eps=1e-6):             <span class="c"># no mean subtraction, no bias</span>
+    <span class="k">return</span> g * x / np.sqrt((x**2).mean(-1, keepdims=<span class="k">True</span>) + eps)</pre>
+
+  <h4>ROC-AUC without sklearn (the rank trick)</h4>
+<pre><span class="k">def</span> <b>auc</b>(y, s):
+    <span class="c"># AUC = P(score of a random positive &gt; score of a random negative)</span>
+    order = np.argsort(s)
+    ranks = np.empty(len(s)); ranks[order] = np.arange(1, len(s)+1)
+    n_pos, n_neg = y.sum(), len(y) - y.sum()
+    <span class="k">return</span> (ranks[y==1].sum() - n_pos*(n_pos+1)/2) / (n_pos*n_neg)
+<span class="c"># This is the Mann-Whitney U statistic. Handles ties poorly — use</span>
+<span class="c"># average ranks (scipy.stats.rankdata) if ties are common.</span></pre>
+
+  <h4>Best-of-n with a confidence threshold</h4>
+<pre><span class="c"># Adaptive test-time compute: stop early when calibrated confidence clears tau.</span>
+<span class="k">def</span> <b>adaptive_sample</b>(model, prompt, n_max=16, tau=0.9, T=1.0):
+    answers, budget = [], 0
+    <span class="k">for</span> i <span class="k">in</span> range(n_max):
+        out, logits = model.generate(prompt)
+        conf = softmax(logits / T).max()        <span class="c"># T fitted on a HELD-OUT split</span>
+        answers.append(out); budget += 1
+        agree = sum(a == out <span class="k">for</span> a <span class="k">in</span> answers) / len(answers)
+        <span class="k">if</span> i &gt;= 2 <span class="k">and</span> conf &gt; tau <span class="k">and</span> agree &gt; tau:
+            <span class="k">break</span>                               <span class="c"># the stopping rule — only as good</span>
+    <span class="k">return</span> majority(answers), budget            <span class="c"># as the calibration underneath</span></pre>
+
+  <div class="box tip"><div class="h">If they ask you to code live</div>
+  <p style="margin:0">Say the shapes out loud as you go — <i>"X is N by d, W1 is d by h, so z1 is N by h"</i>. It catches your own bugs, it's the single clearest signal that you've done this before, and it gives the interviewer something to agree with while you think.</p></div>
+</section>
+
+<section id="s14">
+  <div class="sec-head"><div class="sec-num">14</div><h2>Rapid-fire bank</h2></div>
+  <p class="sec-lede">Short questions, short answers. Read the question, answer in your head, then open. Anything you fumble goes on the revisit list.</p>
+
+  <h4>Fundamentals</h4>
+  <details class="drill"><summary>Parametric vs non-parametric?</summary><div class="ans"><p>Parametric models have a fixed number of parameters regardless of dataset size (linear regression, neural nets), so training data can be discarded afterwards. Non-parametric models grow with the data (kNN, kernel SVM, decision trees, Gaussian processes) — more flexible, more data-hungry, more expensive at inference.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Why standardise features? Which models don't need it?</summary><div class="ans"><p>Anything based on distances (kNN, k-means, SVM-RBF, PCA) or on gradient descent over a shared learning rate needs it — otherwise features with larger ranges dominate the distance metric or produce badly-conditioned loss surfaces with elongated contours that gradient descent zig-zags across. Also required for meaningful L1/L2 penalties, since the penalty is scale-dependent. <b>Tree-based models don't need it</b> — splits are threshold comparisons, invariant to any monotone transform.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>How do you handle missing values?</summary><div class="ans"><p>First ask <i>why</i> they're missing — MCAR, MAR, or MNAR (missing not at random, where missingness depends on the unobserved value itself and any imputation biases the model). Options: drop rows if rare and MCAR; drop the column if mostly missing; impute with median (robust) or mode; model-based imputation (kNN, MICE, iterative); add a binary "was_missing" indicator, which is often the most informative feature since missingness itself carries signal; or use a model with native support — LightGBM and XGBoost learn a default split direction for missing values. <b>Always fit the imputer on the training fold only.</b></p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Encode a categorical feature with 10,000 levels.</summary><div class="ans"><p>One-hot is out — 10,000 sparse columns. Options: <b>target/mean encoding</b> with out-of-fold computation and smoothing toward the global mean for rare levels (leaks badly if done naively — this is the point of the question); <b>frequency encoding</b>; <b>hashing</b> to a fixed number of buckets (collisions, but bounded memory and handles unseen levels); <b>learned embeddings</b> if you're using a neural net; or <b>CatBoost</b>, whose ordered target statistics solve the leakage properly. Also consider grouping the long tail into "other".</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Type I vs Type II error, in ML terms?</summary><div class="ans"><p>Type I = false positive = you flagged something that wasn't there (controlled by α). Type II = false negative = you missed something real (controlled by 1 − power). Precision is degraded by Type I, recall by Type II. Which one matters is a product decision: a cancer screen tolerates false positives to avoid misses; a spam filter does the reverse.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>What is the kernel trick, in one sentence?</summary><div class="ans"><p>Computing inner products in a high- or infinite-dimensional feature space without ever constructing the feature vectors, by replacing <code>φ(x)ᵀφ(x')</code> with a kernel function <code>K(x,x')</code> — valid whenever K is symmetric positive semi-definite (Mercer's condition).</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <h4>Deep learning</h4>
+  <details class="drill"><summary>Batch size: what does increasing it do?</summary><div class="ans"><p>Lower-variance gradient estimates, better hardware utilisation, faster wall-clock epochs. But: less gradient noise means less implicit regularization, and large-batch training is known to converge to sharper minima that generalise worse unless you scale the learning rate (linear or √ rule) and use warmup. Memory scales with batch size, so gradient accumulation simulates a large batch on small hardware. Very small batches make BatchNorm statistics unreliable.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Epoch, batch, iteration — define all three.</summary><div class="ans"><p>Iteration = one parameter update from one batch. Batch = the group of examples in that update. Epoch = one full pass over the training set = <code>ceil(n / batch_size)</code> iterations. Note LLM pretraining often runs less than one epoch on the full corpus.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>What are skip connections for, besides gradients?</summary><div class="ans"><p>Three things: (1) a gradient highway — the Jacobian is <code>I + ∂F/∂x</code>, so a magnitude-1 path exists to every earlier layer; (2) they make the identity function trivially representable, which fixes the degradation problem where deeper plain networks had higher <i>training</i> error; (3) they create an implicit ensemble of paths of different depths, so the network behaves like an ensemble of shallower networks. In transformers they also define the residual stream — a shared communication channel that every block reads from and writes to.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Transfer learning: freeze or fine-tune?</summary><div class="ans"><p>Depends on target dataset size and domain similarity. Small + similar: freeze the backbone, train the head only. Large + similar: fine-tune everything at a low learning rate. Small + different: freeze early layers (generic edges/textures transfer), fine-tune later ones. Large + different: fine-tune everything, or reconsider whether pretraining helps. Use discriminative learning rates — lower for earlier layers — and watch for catastrophic forgetting, which is what LoRA and adapters mitigate by leaving the base weights untouched.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Why does label smoothing help?</summary><div class="ans"><p>Replace the one-hot target with <code>(1−ε)</code> on the true class and <code>ε/(K−1)</code> elsewhere. A hard one-hot target is only reachable with infinite logits, so the model is pushed to ever-larger logit gaps — overconfidence with no accuracy gain. Smoothing gives a finite optimum, improves calibration and usually generalisation. Trade-off worth naming: it compresses the representation of each class into a tighter cluster, which can hurt when you want the penultimate embeddings for retrieval or distillation.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Contrastive learning — what's the objective?</summary><div class="ans"><p>Pull representations of positive pairs (two augmentations of the same image, a query and its relevant document) together and push negatives apart. InfoNCE: <code>−log[ exp(sim(z,z⁺)/τ) / Σ exp(sim(z,zⱼ)/τ) ]</code> — a softmax over one positive and many negatives, so it's really cross-entropy over a similarity-based classification. τ controls how much the loss focuses on hard negatives. The number and difficulty of negatives is the main quality lever, which is why in-batch negatives with large batches (SimCLR) or a momentum queue (MoCo) matter, and why hard-negative mining dominates retrieval training.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <h4>LLMs</h4>
+  <details class="drill"><summary>What do scaling laws say, and what changed with Chinchilla?</summary><div class="ans"><p>Loss falls as a power law in parameters, data, and compute, over many orders of magnitude. The original Kaplan et al. work implied that given more compute you should mostly grow the model. <b>Chinchilla</b> (Hoffmann et al.) corrected this: for a fixed compute budget, parameters and tokens should scale roughly <i>equally</i> — about 20 tokens per parameter. Existing large models were badly under-trained; a 70B model trained on 1.4T tokens beat a 280B model trained on 300B. The later shift: since inference cost is paid forever, it's often optimal to train a <i>smaller</i> model far past Chinchilla-optimal, which is what the small-but-heavily-trained open models do.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>What is emergence, and is it real?</summary><div class="ans"><p>The claim: some capabilities appear abruptly at a scale threshold rather than improving smoothly. The important counterargument (Schaeffer et al.) is that apparent emergence is often an artifact of <b>discontinuous metrics</b> — exact-match accuracy on a multi-step task is a step function over a smoothly improving per-token probability. Switch to a continuous metric like token edit distance or log-likelihood and the curve is smooth. Give both sides; the willingness to state the deflationary account is what scores.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Perplexity — define it and say what it hides.</summary><div class="ans"><p><code>PPL = exp(mean negative log-likelihood per token)</code> — the effective branching factor, i.e. how many equally-likely options the model is choosing among. Lower is better. What it hides: it's tokenizer-dependent, so it's not comparable across models with different vocabularies; it measures fit to a distribution, not usefulness — an aligned model often has <i>worse</i> perplexity than its base model while being far more useful; and it's dominated by common tokens, so it barely moves for large changes in rare-but-important behaviour.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Catastrophic forgetting — cause and mitigations?</summary><div class="ans"><p>Fine-tuning on a narrow distribution moves weights to minimise the new loss with no constraint to preserve old behaviour, so unrelated capabilities degrade. Mitigations: replay a mixture of the original data; regularise toward the base weights (L2-SP, EWC weights the penalty by the Fisher information so important parameters move less); PEFT methods like LoRA that leave the base intact and can be switched off; lower learning rates and fewer epochs; and multi-task rather than sequential training where possible.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Prompt engineering techniques that actually have evidence behind them?</summary><div class="ans"><p>Few-shot examples (format matters more than correctness of the labels, per Min et al.); chain-of-thought for multi-step problems; self-consistency; decomposition into sub-tasks; explicit output schemas; putting the most important content at the start or end of a long context; and giving the model an explicit option to say it doesn't know. Weak or overstated: elaborate persona prompts, emotional appeals, and threats — effects are small and inconsistent across models. Being willing to say which techniques <i>don't</i> replicate is a good signal.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+
+  <details class="drill"><summary>Why can't you just increase context length instead of using RAG?</summary><div class="ans"><p>Four reasons. Cost: attention is quadratic in n, and even with linear-memory kernels you pay for every token in every request, forever. Latency: prefill time grows with context. Quality: retrieval degrades in the middle of long contexts, and irrelevant content actively distracts the model — more context is not monotonically better. And staleness: a long context still has to be assembled from somewhere, which is retrieval by another name. The right framing is that long context and RAG are complementary — retrieval selects, context holds.</p></div><div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div></details>
+</section>
+
+<section id="s15">
+  <div class="sec-head"><div class="sec-num">15</div><h2>Defending your own work</h2></div>
+  <p class="sec-lede">Highest-leverage section on the page. Everything above is shared with every other candidate. This part isn't — and interviewers spend more time here than on any single technical topic.</p>
+
+  <h3>The 90-second version of the calibration paper</h3>
+  <p>Structure it as <b>problem → why it's hard → what you did → what you found → what's still open</b>. Something like:</p>
+  <div class="box"><div class="h">Say it roughly like this</div>
+  <p style="margin:0 0 8px">"Test-time compute scaling assumes that if you let a model generate more, you can tell when it's converged and stop. That stopping signal is almost always the model's own confidence. So I asked whether small models — under 3B — actually have usable confidence under test-time scaling.</p>
+  <p style="margin:0 0 8px">I evaluated seven models from 0.5B to 7B, including instruct and R1-distilled variants, across GSM8K, MATH-500 and MMLU-Pro under a generate-once protocol. The finding is what I call the confidently-wrong trap: as you scale compute, confidence and correctness decouple in the small models — they get more certain without getting more right, which means a confidence-based stopping rule fails precisely where you need it.</p>
+  <p style="margin:0">The second contribution is a calibration guard that's leak-free — the threshold is fitted on a split disjoint from both the training and evaluation data, because fitting it on the eval set is the obvious way to make these numbers look much better than they are."</p></div>
+  <p>Then stop. Let them ask. Talking for four minutes unprompted is the most common self-inflicted wound in a research interview.</p>
+
+  <h3>The questions they will actually ask</h3>
+  <details class="drill"><summary>"What's the weakness of this work?"</summary>
+    <div class="ans"><p>This is a test of intellectual honesty, and the failure mode is deflecting. Answer it directly, pick a real limitation, and show you've thought about how to address it.</p>
+    <p>Candidate answers: the generate-once protocol is a deliberate simplification and doesn't capture sequential-revision regimes; three benchmarks is narrow and two of them are math, so it's unclear how far the finding generalises to open-ended tasks; confidence is measured one specific way and alternative signals (semantic entropy, verifier scores, self-consistency agreement) might behave differently; and the model set is open-weights only, so nothing is said about frontier models.</p>
+    <p>Then convert it forward: "The version I'd want next is a multi-round protocol with several confidence estimators compared head to head, because right now I can show the failure but I can't fully attribute it."</p>
+    <p><b>Do not</b> say "no real weaknesses" or list only trivial ones. Interviewers read that as either dishonesty or not having engaged with the work deeply.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>"Why does calibration collapse in small models specifically?"</summary>
+    <div class="ans"><p>Be honest about what you measured versus what you're hypothesising — that distinction is itself the answer they're grading.</p>
+    <p>Plausible mechanisms to offer as hypotheses: smaller models have less capacity to represent uncertainty as a separate quantity from the answer; instruction-tuning and preference optimisation reward confident-sounding outputs, and that pressure is relatively larger for a small model with less to fall back on; distilled reasoning models are trained to imitate confident traces from a stronger teacher, inheriting the confidence without the competence behind it; and longer generations give more opportunity for the model to condition on its own earlier tokens, which reinforces an initial commitment regardless of correctness.</p>
+    <p>End with: "I have the correlational result; I haven't isolated the cause. Distinguishing them would need a controlled ablation over the tuning stages."</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <details class="drill"><summary>"Why should I care? What does this change for someone building a product?"</summary>
+    <div class="ans"><p>Concrete consequences: any system that routes between a cheap and an expensive model on confidence will mis-route; any early-exit or adaptive-compute scheme will exit early on exactly the wrong questions; any abstention or escalate-to-human threshold will let confident errors through, which is the most expensive failure class because nobody reviews them. And any of those thresholds tuned on the evaluation set will look fine in the report and fail in production.</p>
+    <p>Practical recommendation: don't use raw confidence from a sub-3B model as a control signal; use agreement across samples, or a separate verifier, or calibrate on a genuinely held-out split and re-check it after any fine-tuning.</p></div>
+    <div class="cal"><span>How solid?</span><button data-c="s">Solid</button><button data-c="k">Shaky</button></div>
+  </details>
+
+  <h3>The Samsung project — have these numbers ready</h3>
+  <p>The interviewer wants <b>your</b> decisions, not the org chart. Lead with the design choice and the reason for it.</p>
+  <ul>
+    <li><b>Why a knowledge graph rather than dumping state into the prompt?</b> Implicit commands ("it's too dark in here") need resolution against device capabilities and current state. The two-layer split — a static ontology of what devices can do, plus a dynamic layer of what's currently true — keeps the slow-changing schema separate from fast-changing state, and lets you query rather than re-serialise everything into context each turn. Have the KG-vs-JSON ablation ready as evidence.</li>
+    <li><b>Why four modules instead of one call?</b> Device → function → condition → NLG separates concerns that fail differently, so you can evaluate and fix them independently, and each sub-task gets a constrained output schema, which is what makes the output parseable at all.</li>
+    <li><b>The safety gates</b> — grounding, range/type, precondition, impact tier, self-consistency confidence — are deterministic, not model-judged. That's the defensible design position: never let a probabilistic system be the last check before an irreversible action. The 0% false-HIGH-impact rate across the 38-case suite is the number to quote.</li>
+    <li><b>Distillation under a black-box teacher.</b> No logits from an API model, so no classical soft-target KD — you're doing sequence-level distillation on sampled outputs plus rationales. Knowing exactly why the standard method doesn't apply is a strong signal.</li>
+    <li><b>The benchmark:</b> 5 models × 6 categories × 3 context modes, ~4,050 LLM calls, 1,800 scored comparisons, with Gemini as both benchmark and judge. <b>Volunteer the flaw before they find it</b> — using the same model as both a compared system and the judge is a bias you should name, along with how you'd control for it (swap judges, human-validate a subsample, position-swap).</li>
+    <li><b>Be straight about scope:</b> the SFT and GRPO scripts were delivered but not run by the final review, so there are no student checkpoints. Say that plainly if asked. Overstating it is the one thing that can actually cost you the offer.</li>
+  </ul>
+
+  <h3>Your other projects, in one line each</h3>
+  <table>
+    <tr><th>Project</th><th>The one thing to say about it</th></tr>
+    <tr><td><b>G1-Scale</b></td><td>Tool-augmented LLM for large graph reasoning — a ReAct agent with a NetworkX traversal tool, SFT on oracle traces then RLVR with PPO, benchmarked across 0.5B–7B. The interesting claim: giving a small model a reliable tool beats scaling the model for structured tasks</td></tr>
+    <tr><td><b>RAG CS QA system</b></td><td>Five-subject retrieval agent with topic routing and claim-level fact verification, LangChain + ChromaDB. Built end to end in a 1.5-hour timed exam — mention the constraint, it reframes the scope as a strength</td></tr>
+    <tr><td><b>ViT image retrieval</b></td><td>97.8% accuracy — be ready to say what the baseline was and what split it's measured on, or the number invites scepticism</td></tr>
+    <tr><td><b>Deep Researcher</b></td><td>Multi-step research agent — good material for a discussion about error compounding and trajectory evaluation</td></tr>
+  </table>
+
+  <div class="box trap"><div class="h">Two traps in project questions</div>
+  <p style="margin:0 0 8px"><b>"We" instead of "I".</b> On team projects, state your specific contribution explicitly and generously credit the rest. Vagueness here reads as inflation.</p>
+  <p style="margin:0"><b>Unearned numbers.</b> Any metric you quote will be followed by "compared to what?" and "how did you measure it?". If you can't answer both, don't lead with the number.</p></div>
+</section>
+
+<section id="s16">
+  <div class="sec-head"><div class="sec-num">16</div><h2>Walk-in checklist</h2></div>
+  <p class="sec-lede">Read this one in the morning. Nothing new here — just the things that are easy to forget while nervous.</p>
+
+  <div class="grid2">
+    <div class="box tip"><div class="h">In the room</div>
+    <ul style="margin:0">
+      <li>Restate the question before answering. Buys thinking time, catches misunderstandings early.</li>
+      <li>Three beats: definition → mechanism → when it breaks.</li>
+      <li>Think out loud. Silence is unscoreable.</li>
+      <li>Say shapes and units when doing math.</li>
+      <li>If corrected, update immediately and say so. Defending a wrong answer costs more than the wrong answer did.</li>
+      <li>Ask about constraints before designing anything.</li>
+    </ul></div>
+    <div class="box trap"><div class="h">Don't</div>
+    <ul style="margin:0">
+      <li>Bluff. Say what you'd expect from first principles and mark it as a guess.</li>
+      <li>Lead with the most complex solution. Baseline first, always.</li>
+      <li>Recite definitions without the mechanism.</li>
+      <li>Quote a metric you can't contextualise.</li>
+      <li>Talk for four minutes uninterrupted.</li>
+      <li>Say a project was "basically done" when scripts weren't run.</li>
+    </ul></div>
+  </div>
+
+  <h3>Ask them something real</h3>
+  <ul>
+    <li>How do you decide when a model is good enough to ship — what's the bar, and who sets it?</li>
+    <li>What does the evaluation setup look like day to day? Offline suites, human review, online?</li>
+    <li>Where does the team spend most of its time — data, modelling, or infrastructure?</li>
+    <li>What's a recent result that surprised the team, or changed your approach?</li>
+    <li>If I joined, what would the first project be?</li>
+  </ul>
+  <p>Questions about evaluation and data always land well, because they signal you've worked on real systems rather than notebooks.</p>
+
+  <div id="revisit">
+    <h3>Revisit before you walk in</h3>
+    <p style="color:#C9D2E8;max-width:62ch;margin-top:0">Everything you marked shaky, in order. If this list is long, work top-down — the earlier sections are more likely to come up.</p>
+    <ul id="revisit-list"><li class="empty">Nothing marked yet. Work through the drills above and mark each one honestly — the list builds itself.</li></ul>
+    <button id="copy-btn">Copy this list</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var drills = Array.prototype.slice.call(document.querySelectorAll('.drill'));
+  var state = new Map();
+
+  drills.forEach(function(d, i){
+    var q = d.querySelector('summary').textContent.trim();
+    var sec = d.closest('section');
+    var secName = sec ? sec.querySelector('h2').textContent.trim() : '';
+    d.dataset.q = q; d.dataset.sec = secName; d.dataset.idx = i;
+    d.querySelectorAll('.cal button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var mark = btn.dataset.c;
+        if(state.get(i) === mark){ state.delete(i); } else { state.set(i, mark); }
+        d.querySelectorAll('.cal button').forEach(function(b){
+          b.classList.remove('pick-s','pick-k');
+        });
+        var cur = state.get(i);
+        if(cur === 's') btn.classList.add('pick-s');
+        if(cur === 'k') btn.classList.add('pick-k');
+        render();
+      });
+    });
+  });
+
+  var total = drills.length;
+  var elPct = document.getElementById('m-pct'),
+      elS = document.getElementById('m-s'), elK = document.getElementById('m-k'),
+      elT = document.getElementById('m-t'), barS = document.getElementById('m-solid'),
+      barK = document.getElementById('m-shaky'), list = document.getElementById('revisit-list');
+
+  function render(){
+    var s = 0, k = 0;
+    state.forEach(function(v){ if(v === 's') s++; else k++; });
+    elS.textContent = s; elK.textContent = k; elT.textContent = total - s - k;
+    elPct.textContent = Math.round(((s + k) / total) * 100) + '%';
+    barS.style.width = (s / total * 100) + '%';
+    barK.style.width = (k / total * 100) + '%';
+
+    list.innerHTML = '';
+    var shaky = drills.filter(function(d){ return state.get(+d.dataset.idx) === 'k'; });
+    if(!shaky.length){
+      var li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = s ? 'Nothing shaky so far. Keep going — mark honestly, not optimistically.' : 'Nothing marked yet. Work through the drills above and mark each one honestly — the list builds itself.';
+      list.appendChild(li);
+      return;
+    }
+    shaky.forEach(function(d){
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#' + d.closest('section').id;
+      a.textContent = d.dataset.q;
+      a.style.color = '#B9A6FF';
+      li.appendChild(a);
+      var sm = document.createElement('span');
+      sm.textContent = '  · ' + d.dataset.sec;
+      sm.style.color = '#8C99BC';
+      sm.style.fontSize = '13px';
+      li.appendChild(sm);
+      list.appendChild(li);
+    });
+  }
+
+  document.getElementById('copy-btn').addEventListener('click', function(){
+    var lines = drills.filter(function(d){ return state.get(+d.dataset.idx) === 'k'; })
+      .map(function(d){ return '- [' + d.dataset.sec + '] ' + d.dataset.q; });
+    var txt = lines.length ? 'Revisit before the interview:\n' + lines.join('\n') : 'Nothing marked shaky.';
+    var btn = this;
+    navigator.clipboard.writeText(txt).then(function(){
+      btn.textContent = 'Copied';
+      setTimeout(function(){ btn.textContent = 'Copy this list'; }, 1600);
+    }).catch(function(){
+      btn.textContent = 'Copy failed — select the list manually';
+    });
+  });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('on'); });
+        var i = sections.indexOf(e.target);
+        if(i > -1) links[i].classList.add('on');
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+  sections.forEach(function(s){ if(s) obs.observe(s); });
+
+  render();
+})();
+</script>
+</body>
+</html>
