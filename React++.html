@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Route map: JavaScript to Kubernetes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6F9; --surface:#FFFFFF; --ink:#16202E; --muted:#586476; --rule:#D9DFE7;
+  --blue:#1F5FC4; --blue-ink:#1F5FC4;
+  --yellow:#E8AE00; --yellow-ink:#7A5A00;
+  --violet:#7B3FA0; --violet-ink:#7B3FA0;
+  --board:#16202E; --board-ink:#F4F6F9;
+  --font:"Overpass", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1621; --surface:#172131; --ink:#E6EBF2; --muted:#9BA7B9; --rule:#2A3648;
+    --blue:#5B93F0; --blue-ink:#8DB4F5; --yellow:#F2C12E; --yellow-ink:#F2C12E;
+    --violet:#B782D6; --violet-ink:#CFA6E6; --board:#05090F; --board-ink:#E6EBF2;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1621; --surface:#172131; --ink:#E6EBF2; --muted:#9BA7B9; --rule:#2A3648;
+  --blue:#5B93F0; --blue-ink:#8DB4F5; --yellow:#F2C12E; --yellow-ink:#F2C12E;
+  --violet:#B782D6; --violet-ink:#CFA6E6; --board:#05090F; --board-ink:#E6EBF2;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--rule)}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:60px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.brand{font-weight:800;font-size:18px;letter-spacing:-.01em;margin-right:auto}
+.overall{font-size:15px;color:var(--muted)}
+.overall b{color:var(--ink)}
+.actions{display:flex;gap:8px}
+button,.btn{font:inherit;font-size:15px;font-weight:600;border:1.5px solid var(--rule);background:var(--surface);color:var(--ink);padding:6px 14px;border-radius:999px;cursor:pointer}
+button:hover{border-color:var(--ink)}
+.status{width:100%;font-size:13px;color:var(--muted);margin-top:-4px}
+.status.warn{color:#B3261E}
+
+/* hero */
+.hero{padding:44px 0 12px}
+h1{font-size:clamp(30px,5.2vw,50px);line-height:1.05;letter-spacing:-.025em;font-weight:800;margin:0 0 14px;max-width:16ch}
+.lede{color:var(--muted);max-width:60ch;margin:0 0 28px}
+.mapbox{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:8px 4px}
+.mapbox svg{display:block;min-width:660px;width:100%;height:auto}
+.map-label{font-family:var(--font);font-weight:700;font-size:15px;fill:var(--ink)}
+.map-pct{font-family:var(--font);font-size:12.5px;fill:var(--muted)}
+.map a:hover .ring{stroke-width:6}
+.map a:focus-visible{outline:none}
+.map a:focus-visible .ring{stroke:var(--ink)}
+
+/* next stop boards */
+.boards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:18px 0 8px}
+.board{background:var(--board);color:var(--board-ink);border-radius:14px;padding:16px 18px 16px 22px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+.board::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--c)}
+.board .where{font-size:13.5px;opacity:.75}
+.board .what{font-size:21px;font-weight:700;line-height:1.25}
+.board .mod-of{font-size:14px;opacity:.75}
+.board button{align-self:flex-start;margin-top:6px;background:transparent;color:var(--board-ink);border-color:rgba(255,255,255,.3)}
+.board button:hover{border-color:var(--board-ink)}
+
+/* tracks */
+.track{margin:52px 0 0}
+.track h2{font-size:26px;font-weight:800;letter-spacing:-.015em;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+.track h2 .swatch{width:34px;height:8px;border-radius:4px;background:var(--c)}
+.track .tdesc{color:var(--muted);margin:0 0 18px;max-width:62ch}
+.line{position:relative;padding-left:44px}
+.line::before{content:"";position:absolute;left:15px;top:22px;bottom:22px;width:8px;border-radius:4px;background:var(--c)}
+.mod{position:relative;margin-bottom:14px}
+.mod details{background:var(--surface);border:1px solid var(--rule);border-radius:14px}
+.mod summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;padding:14px 18px;flex-wrap:wrap}
+.mod summary::-webkit-details-marker{display:none}
+.stn{position:absolute;left:-40px;top:14px;width:30px;height:30px;border-radius:50%;background:var(--surface);border:5px solid var(--c)}
+.mod.done .stn{background:var(--c)}
+.mt{margin-right:auto;display:flex;flex-direction:column}
+.mname{font-size:20px;font-weight:700;line-height:1.2}
+.mweeks{font-size:14px;color:var(--muted)}
+.mprog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.bar{width:110px;height:6px;border-radius:3px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c);transition:width .25s}
+.chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-left:4px;transition:transform .2s}
+details[open] .chev{transform:rotate(-135deg)}
+.mbody{padding:0 18px 20px;border-top:1px solid var(--rule)}
+.why{margin:14px 0 6px;max-width:68ch}
+.cols{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+@media (max-width:720px){.cols{grid-template-columns:1fr;gap:6px}.bar{width:70px}}
+h3{font-size:15px;font-weight:700;margin:18px 0 8px;color:var(--ci)}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{border-bottom:1px solid var(--rule)}
+.checks li:last-child{border-bottom:0}
+.checks label{display:flex;gap:12px;align-items:flex-start;padding:7px 0;cursor:pointer;font-size:16px;line-height:1.4}
+.checks input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;margin:1px 0 0;border:2px solid var(--muted);border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--surface)}
+.checks input:checked{border-color:var(--c);background:var(--c)}
+.checks input:checked::after{content:"";width:6px;height:10px;border:solid var(--surface);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.checks input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.res{list-style:none;margin:0;padding:0}
+.res li{padding:6px 0;font-size:15.5px;line-height:1.4}
+.res a{font-weight:700;text-decoration-color:var(--c);text-decoration-thickness:2px;text-underline-offset:3px}
+.res .start{font-size:13px;color:var(--ci);font-weight:700;margin-left:6px}
+.res .rnote{display:block;color:var(--muted);font-size:14.5px}
+.notes-l{display:block;font-size:15px;font-weight:700;margin:18px 0 6px;color:var(--ci)}
+textarea{width:100%;min-height:84px;resize:vertical;font:inherit;font-size:15.5px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:10px 12px}
+.touched{font-size:13px;color:var(--muted);margin:8px 0 0}
+
+.cap .line::before{display:none}
+footer{margin:64px 0 40px;padding-top:20px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Route map</div>
+    <div class="overall" id="overall"></div>
+    <div class="actions">
+      <button id="exportBtn" type="button">Export backup</button>
+      <button id="importBtn" type="button">Import backup</button>
+      <input type="file" id="importFile" accept="application/json,.json" class="sr" tabindex="-1" aria-hidden="true">
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>JavaScript to Kubernetes, one stop at a time</h1>
+    <p class="lede">Two lines run in parallel, frontend and backend infrastructure, and meet at the capstone project. Tick off each stop as you go. Progress saves automatically in this browser.</p>
+    <div class="mapbox"><svg class="map" id="map" viewBox="0 0 900 270" role="img" aria-label="Route map showing progress on both lines"></svg></div>
+    <div class="boards" id="boards"></div>
+  </section>
+
+  <div id="tracks"></div>
+
+  <footer>
+    <p>Progress lives in this browser only. To continue on another device, export a backup here and import it there. Clearing browser data erases progress, so export now and then.</p>
+    <p><button id="resetBtn" type="button">Reset all progress</button></p>
+  </footer>
+</main>
+
+<script>
+const DATA = {
+  tracks: [
+    {
+      id: "fe", name: "Frontend line", color: "blue",
+      desc: "JavaScript fundamentals first, then types, then React. Aim for competent, not expert.",
+      modules: [
+        {
+          id: "js", title: "JavaScript", weeks: "1–3",
+          why: "You already know Java, so skip the programming basics and focus on what JavaScript does differently.",
+          topics: [
+            "let, const, var and hoisting",
+            "Types, == vs ===, truthy and falsy values",
+            "Functions and arrow functions",
+            "Scope and closures",
+            "How this works; call, apply, bind",
+            "Objects, prototypes and classes",
+            "Array methods: map, filter, reduce, find",
+            "Destructuring, spread and rest",
+            "The event loop: call stack, microtasks, macrotasks",
+            "Promises and chaining",
+            "async/await and error handling",
+            "Modules: import and export",
+            "DOM basics and event listeners",
+            "fetch and working with JSON"
+          ],
+          build: [
+            "To-do app in plain JavaScript (no framework)",
+            "Page that fetches a public API and renders results",
+            "Write debounce and Promise.all from scratch"
+          ],
+          resources: [
+            { name: "javascript.info", url: "https://javascript.info/", note: "Do Part 1 fully. Leave browser chapters until React needs them.", start: true },
+            { name: "MDN JavaScript docs", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", note: "Reference only; look things up, don't read front to back." },
+            { name: "You Don't Know JS", url: "https://github.com/getify/You-Dont-Know-JS", note: "Optional depth later, especially scope, closures and this." }
+          ]
+        },
+        {
+          id: "ts", title: "TypeScript", weeks: "4",
+          why: "Most real React codebases use TypeScript. After Java it will feel familiar within days.",
+          topics: [
+            "Basic types and type inference",
+            "Interfaces vs type aliases",
+            "Union types and narrowing",
+            "Generics",
+            "Utility types: Partial, Pick, Omit, Record",
+            "tsconfig and strict mode"
+          ],
+          build: [ "Convert your JavaScript to-do app to TypeScript" ],
+          resources: [
+            { name: "TypeScript Handbook", url: "https://www.typescriptlang.org/docs/handbook/intro.html", note: "Official and concise. Enough on its own.", start: true }
+          ]
+        },
+        {
+          id: "react", title: "React", weeks: "5–7",
+          why: "Learn modern hooks-based React only. Skip any tutorial that uses class components.",
+          topics: [
+            "JSX and components",
+            "Props",
+            "State with useState",
+            "Rendering lists and keys",
+            "Conditional rendering",
+            "Events and controlled form inputs",
+            "useEffect and when not to use it",
+            "Lifting state up",
+            "useContext",
+            "useReducer",
+            "Custom hooks",
+            "Why components re-render; useMemo and useCallback",
+            "Routing with React Router",
+            "Data fetching with TanStack Query"
+          ],
+          build: [
+            "Tic-tac-toe tutorial on react.dev",
+            "Search app (movies or weather) using a public API",
+            "Set up a React + TypeScript project with Vite"
+          ],
+          resources: [
+            { name: "react.dev Learn", url: "https://react.dev/learn", note: "The official docs. Interactive and the best starting point.", start: true },
+            { name: "Vite guide", url: "https://vite.dev/guide/", note: "How to create and run a React project locally." }
+          ]
+        },
+        {
+          id: "next", title: "Next.js basics", weeks: "8–9",
+          why: "Shows how React is used in production: routing, server rendering and deployment.",
+          topics: [
+            "App Router and file-based routing",
+            "Server components vs client components",
+            "Data fetching and caching",
+            "Route handlers (API routes)",
+            "Deploying a Next.js app"
+          ],
+          build: [ "Finish the official Next.js dashboard course" ],
+          resources: [
+            { name: "Next.js Learn", url: "https://nextjs.org/learn", note: "Free, project-based, well structured.", start: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: "be", name: "Backend line", color: "yellow",
+      desc: "Docker first, because everything after it runs in containers. Redis and Kafka connect directly to system design; Kubernetes comes last.",
+      modules: [
+        {
+          id: "docker", title: "Docker", weeks: "1–2",
+          why: "Redis and Kafka will run in containers, and Kubernetes is container orchestration. Skipping this makes everything later confusing.",
+          topics: [
+            "Images vs containers",
+            "Writing a Dockerfile",
+            "Layers and build caching",
+            "Port mapping",
+            "Volumes and bind mounts",
+            "Container networking",
+            "docker compose with multiple services",
+            "Multi-stage builds",
+            "Pushing to a registry"
+          ],
+          build: [
+            "Containerize a Spring Boot app",
+            "Compose file running the app with Postgres and Redis"
+          ],
+          resources: [
+            { name: "Docker Get Started", url: "https://docs.docker.com/get-started/", note: "Official walkthrough. Short and practical.", start: true },
+            { name: "TechWorld with Nana", url: "https://www.youtube.com/@TechWorldwithNana", note: "Visual explanations of Docker and Kubernetes." }
+          ]
+        },
+        {
+          id: "redis", title: "Redis", weeks: "3–5",
+          why: "The cache and rate limiter from your system design prep, now real and runnable.",
+          topics: [
+            "Running Redis and using redis-cli",
+            "Strings, INCR, EXPIRE and TTL",
+            "Hashes",
+            "Lists",
+            "Sets and sorted sets",
+            "Eviction policies: LRU and LFU",
+            "Persistence: RDB vs AOF",
+            "Pub/sub",
+            "Cache-aside and write-through patterns",
+            "Cache invalidation and stampedes",
+            "Replication and Sentinel",
+            "Redis Cluster and hash slots",
+            "Using Redis from Spring (Spring Data Redis)"
+          ],
+          build: [
+            "Cache-aside layer in front of an API",
+            "Rate limiter: fixed window, then sliding window",
+            "Leaderboard with sorted sets"
+          ],
+          resources: [
+            { name: "Redis University", url: "https://university.redis.io/", note: "Free courses. Start with the data structures course.", start: true },
+            { name: "Redis data types docs", url: "https://redis.io/docs/latest/develop/data-types/", note: "Keep open while practising in redis-cli." }
+          ]
+        },
+        {
+          id: "kafka", title: "Kafka", weeks: "6–9",
+          why: "Event streaming shows up in banking and large-scale backends. Focus on partitions, consumer groups and delivery guarantees.",
+          topics: [
+            "Events, topics and partitions",
+            "Brokers and KRaft",
+            "Producers, keys and partitioning",
+            "acks and the idempotent producer",
+            "Consumers and consumer groups",
+            "Offsets and commits",
+            "Rebalancing",
+            "Replication, ISR and leader election",
+            "Retention and log compaction",
+            "At-most-once, at-least-once, exactly-once",
+            "Schema Registry and Avro basics",
+            "Kafka Streams and Kafka Connect overview",
+            "Spring for Apache Kafka"
+          ],
+          build: [
+            "Run Kafka locally with docker compose",
+            "Spring Boot producer and consumer",
+            "Kill a consumer and watch the group rebalance",
+            "Order events pipeline with two consumer services"
+          ],
+          resources: [
+            { name: "Confluent Developer courses", url: "https://developer.confluent.io/courses/", note: "Start with Kafka 101. Free and the clearest introduction.", start: true },
+            { name: "Apache Kafka documentation", url: "https://kafka.apache.org/documentation/", note: "Design section explains replication and delivery semantics." },
+            { name: "Kafka: The Definitive Guide (book)", url: "", note: "Read the producer, consumer and replication chapters." }
+          ]
+        },
+        {
+          id: "k8s", title: "Kubernetes", weeks: "10–12",
+          why: "Learn to deploy and run your own services on a local cluster. Operator-level depth can wait.",
+          topics: [
+            "Cluster architecture: control plane, nodes, kubelet",
+            "kubectl essentials",
+            "Pods",
+            "Deployments and ReplicaSets",
+            "Services: ClusterIP, NodePort, LoadBalancer",
+            "ConfigMaps and Secrets",
+            "Namespaces",
+            "Liveness and readiness probes",
+            "Resource requests and limits",
+            "Ingress",
+            "Volumes and PersistentVolumeClaims",
+            "StatefulSets",
+            "Horizontal Pod Autoscaler",
+            "Rolling updates and rollback",
+            "Helm basics"
+          ],
+          build: [
+            "Local cluster with kind",
+            "Deploy your Spring Boot app with a Service",
+            "Add Redis and an Ingress",
+            "Autoscale the app with HPA under load"
+          ],
+          resources: [
+            { name: "Kubernetes tutorials", url: "https://kubernetes.io/docs/tutorials/", note: "Official basics tutorial. Start here.", start: true },
+            { name: "Killercoda", url: "https://killercoda.com/", note: "Free browser-based labs for hands-on practice." },
+            { name: "kind", url: "https://kind.sigs.k8s.io/", note: "Runs a cluster inside Docker on your laptop." },
+            { name: "Kubernetes: Up & Running (book)", url: "", note: "For depth once the basics feel comfortable." }
+          ]
+        }
+      ]
+    }
+  ],
+  capstone: {
+    id: "cap", title: "Capstone project", weeks: "10–12",
+    why: "One project that uses everything, for example a URL shortener or job-application tracker. This is what goes on your resume.",
+    topics: [],
+    build: [
+      "React + TypeScript frontend",
+      "Spring Boot API",
+      "Redis for caching and rate limiting",
+      "Kafka click events with a separate analytics consumer",
+      "Everything containerized with docker compose",
+      "Deployed to local Kubernetes",
+      "README with an architecture diagram",
+      "Pushed to GitHub"
+    ],
+    resources: []
+  }
+};
+
+/* ---------- state ---------- */
+const KEY = "routemap-progress-v1";
+let state = { checks: {}, notes: {}, touched: {} };
+let storageOK = true;
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      state = { checks: s.checks || {}, notes: s.notes || {}, touched: s.touched || {} };
+    }
+  } catch (e) { storageOK = false; }
+}
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    const t = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    setStatus("Saved on this device at " + t);
+  } catch (e) {
+    storageOK = false;
+    setStatus("This browser is blocking storage, so progress won't be kept after you close the page. Use Export backup to keep a copy.", true);
+  }
+}
+function setStatus(msg, warn) {
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.classList.toggle("warn", !!warn);
+}
+
+/* ---------- helpers ---------- */
+const allModules = () => [...DATA.tracks.flatMap(t => t.modules.map(m => ({ m, color: t.color, track: t }))),
+                          { m: DATA.capstone, color: "violet", track: null }];
+const items = m => [...m.topics.map((x, i) => ({ id: m.id + ":t" + i, text: x })),
+                    ...m.build.map((x, i) => ({ id: m.id + ":b" + i, text: x }))];
+function progress(m) {
+  const its = items(m);
+  const done = its.filter(i => state.checks[i.id]).length;
+  return { done, total: its.length, pct: its.length ? done / its.length : 0 };
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ---------- render modules ---------- */
+function checkList(list) {
+  return `<ul class="checks">${list.map(i =>
+    `<li><label><input type="checkbox" data-id="${i.id}" ${state.checks[i.id] ? "checked" : ""}><span>${esc(i.text)}</span></label></li>`
+  ).join("")}</ul>`;
+}
+function moduleHTML(m, color, open) {
+  const p = progress(m);
+  const its = items(m);
+  const learn = its.filter(i => i.id.includes(":t"));
+  const build = its.filter(i => i.id.includes(":b"));
+  const res = m.resources.length ? `<h3>Resources</h3><ul class="res">${m.resources.map(r =>
+      `<li>${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${esc(r.name)}</a>` : `<b>${esc(r.name)}</b>`}${r.start ? `<span class="start">Start here</span>` : ""}<span class="rnote">${esc(r.note)}</span></li>`
+    ).join("")}</ul>` : "";
+  const left = learn.length ? `<h3>Learn</h3>${checkList(learn)}` : `<h3>Build</h3>${checkList(build)}`;
+  const right = learn.length ? `<h3>Build</h3>${checkList(build)}${res}` : res;
+  return `
+  <section class="mod ${p.pct === 1 ? "done" : ""}" id="mod-${m.id}" data-mod="${m.id}" style="--c:var(--${color});--ci:var(--${color}-ink)">
+    <span class="stn" aria-hidden="true"></span>
+    <details ${open ? "open" : ""}>
+      <summary>
+        <span class="mt"><span class="mname">${esc(m.title)}</span><span class="mweeks">Weeks ${m.weeks}</span></span>
+        <span class="mprog"><span class="bar"><i style="width:${p.pct * 100}%"></i></span><span class="count">${p.done} of ${p.total}</span><span class="chev" aria-hidden="true"></span></span>
+      </summary>
+      <div class="mbody">
+        <p class="why">${esc(m.why)}</p>
+        <div class="cols"><div>${left}</div><div>${right}</div></div>
+        <label class="notes-l" for="notes-${m.id}">Notes</label>
+        <textarea id="notes-${m.id}" data-notes="${m.id}" placeholder="What clicked, what didn't, links to your code"></textarea>
+        <p class="touched" data-touched="${m.id}"></p>
+      </div>
+    </details>
+  </section>`;
+}
+function renderTracks() {
+  let html = "";
+  for (const t of DATA.tracks) {
+    const firstOpen = t.modules.find(m => progress(m).pct < 1);
+    html += `<section class="track" style="--c:var(--${t.color})">
+      <h2><span class="swatch" aria-hidden="true"></span>${esc(t.name)}</h2>
+      <p class="tdesc">${esc(t.desc)}</p>
+      <div class="line">${t.modules.map(m => moduleHTML(m, t.color, m === firstOpen)).join("")}</div>
+    </section>`;
+  }
+  const cap = DATA.capstone;
+  html += `<section class="track cap" style="--c:var(--violet)">
+    <h2><span class="swatch" aria-hidden="true"></span>Where the lines meet</h2>
+    <p class="tdesc">Start once Kafka is underway and React feels comfortable.</p>
+    <div class="line">${moduleHTML(cap, "violet", progress(cap).done > 0 && progress(cap).pct < 1)}</div>
+  </section>`;
+  document.getElementById("tracks").innerHTML = html;
+  document.querySelectorAll("textarea[data-notes]").forEach(t => { t.value = state.notes[t.dataset.notes] || ""; });
+}
+
+/* ---------- map ---------- */
+function renderMap() {
+  const xs = [90, 240, 390, 540];
+  const cap = { x: 790, y: 135 };
+  const lines = [
+    { t: DATA.tracks[0], y: 70, labelY: -1 },
+    { t: DATA.tracks[1], y: 200, labelY: 1 }
+  ];
+  let s = "";
+  for (const L of lines) {
+    s += `<path d="M40 ${L.y} H600 C680 ${L.y} 700 ${cap.y} ${cap.x} ${cap.y}" fill="none" stroke="var(--${L.t.color})" stroke-width="10" stroke-linecap="round"/>`;
+  }
+  const station = (x, y, m, color, labelPos, r = 12) => {
+    const p = progress(m);
+    const R = r + 7, C = 2 * Math.PI * R;
+    const ny = labelPos < 0 ? y - 36 : y + 44;
+    const py = ny + 16;
+    return `<a href="#mod-${m.id}" aria-label="${esc(m.title)}, ${Math.round(p.pct * 100)} percent done">
+      <circle cx="${x}" cy="${y}" r="${R}" fill="none" stroke="var(--rule)" stroke-width="4"/>
+      <circle cx="${x}" cy="${y}" r="${R}" fill="none" stroke="var(--${color})" stroke-width="4" stroke-linecap="round"
+        stroke-dasharray="${C * p.pct} ${C}" transform="rotate(-90 ${x} ${y})"/>
+      <circle class="ring" cx="${x}" cy="${y}" r="${r}" fill="${p.pct === 1 ? `var(--${color})` : "var(--surface)"}" stroke="var(--ink)" stroke-width="4"/>
+      <text class="map-label" x="${x}" y="${ny}" text-anchor="middle">${esc(m.title)}</text>
+      <text class="map-pct" x="${x}" y="${py}" text-anchor="middle">${Math.round(p.pct * 100)}%</text>
+    </a>`;
+  };
+  for (const L of lines) L.t.modules.forEach((m, i) => { s += station(xs[i], L.y, m, L.t.color, L.labelY); });
+  s += station(cap.x, cap.y, DATA.capstone, "violet", 1, 16);
+  document.getElementById("map").innerHTML = s;
+}
+
+/* ---------- next-stop boards ---------- */
+function nextStop(modules) {
+  for (const m of modules) for (const i of items(m)) if (!state.checks[i.id]) return { m, i };
+  return null;
+}
+function renderBoards() {
+  const html = [...DATA.tracks.map(t => ({ label: t.name, color: t.color, n: nextStop(t.modules) })),
+                { label: "Capstone", color: "violet", n: nextStop([DATA.capstone]) }]
+    .filter((b, idx) => idx < 2 || progress(DATA.capstone).done > 0 || DATA.tracks.every(t => !nextStop(t.modules)))
+    .map(b => b.n
+      ? `<div class="board" style="--c:var(--${b.color})"><span class="where">${esc(b.label)}, next stop</span>
+          <span class="what">${esc(b.n.i.text)}</span><span class="mod-of">${esc(b.n.m.title)}</span>
+          <button type="button" data-done="${b.n.i.id}">Mark as done</button></div>`
+      : `<div class="board" style="--c:var(--${b.color})"><span class="where">${esc(b.label)}</span>
+          <span class="what">Line complete.</span></div>`).join("");
+  document.getElementById("boards").innerHTML = html;
+}
+
+/* ---------- overall + module headers ---------- */
+function refresh() {
+  let done = 0, total = 0;
+  for (const { m } of allModules()) {
+    const p = progress(m); done += p.done; total += p.total;
+    const sec = document.querySelector(`[data-mod="${m.id}"]`);
+    if (sec) {
+      sec.classList.toggle("done", p.pct === 1);
+      sec.querySelector(".bar i").style.width = (p.pct * 100) + "%";
+      sec.querySelector(".count").textContent = `${p.done} of ${p.total}`;
+      const tEl = sec.querySelector("[data-touched]");
+      const ts = state.touched[m.id];
+      tEl.textContent = ts ? "Last updated " + new Date(ts).toLocaleDateString([], { day: "numeric", month: "short", year: "numeric" }) : "";
+    }
+  }
+  document.getElementById("overall").innerHTML = `<b>${done}</b> of ${total} stops done`;
+  renderMap();
+  renderBoards();
+}
+
+/* ---------- events ---------- */
+function touch(modId) { state.touched[modId] = new Date().toISOString(); }
+
+document.addEventListener("change", e => {
+  const cb = e.target.closest("input[type=checkbox][data-id]");
+  if (!cb) return;
+  if (cb.checked) state.checks[cb.dataset.id] = true; else delete state.checks[cb.dataset.id];
+  touch(cb.dataset.id.split(":")[0]);
+  save(); refresh();
+});
+
+let noteTimer;
+document.addEventListener("input", e => {
+  const t = e.target.closest("textarea[data-notes]");
+  if (!t) return;
+  state.notes[t.dataset.notes] = t.value;
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => { touch(t.dataset.notes); save(); refresh(); }, 400);
+});
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-done]");
+  if (!b) return;
+  const id = b.dataset.done;
+  state.checks[id] = true;
+  touch(id.split(":")[0]);
+  const cb = document.querySelector(`input[data-id="${CSS.escape(id)}"]`);
+  if (cb) cb.checked = true;
+  save(); refresh();
+});
+
+document.getElementById("exportBtn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify({ app: "routemap", version: 1, exportedAt: new Date().toISOString(), ...state }, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "routemap-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  setStatus("Backup exported.");
+});
+
+document.getElementById("importBtn").addEventListener("click", () => document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  try {
+    const s = JSON.parse(await f.text());
+    if (!s || typeof s.checks !== "object") throw new Error("bad");
+    if (!confirm("Replace your current progress with this backup?")) return;
+    state = { checks: s.checks || {}, notes: s.notes || {}, touched: s.touched || {} };
+    save(); renderTracks(); refresh();
+    setStatus("Backup imported.");
+  } catch (err) {
+    setStatus("That file isn't a route map backup. Choose a .json file exported from this page.", true);
+  }
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Erase all progress and notes? Export a backup first if you might want them back.")) return;
+  state = { checks: {}, notes: {}, touched: {} };
+  save(); renderTracks(); refresh();
+  setStatus("Progress reset.");
+});
+
+/* ---------- boot ---------- */
+load();
+renderTracks();
+refresh();
+setStatus(storageOK
+  ? "Progress saves automatically on this device."
+  : "This browser is blocking storage, so progress won't be kept after you close the page. Use Export backup to keep a copy.", !storageOK);
+</script>
+</body>
+</html>
