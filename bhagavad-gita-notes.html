@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bhagavad Gita — Class Notes, Lectures 1–11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f4fa; --sheet:#ffffff; --ink:#1d2340; --muted:#5f6480;
+  --peacock:#0e6a6c; --saffron:#c9780f; --rule:#dcdbe8; --wash:#eef3f2; --note:#fff6e6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12152a; --sheet:#1a1e38; --ink:#e7e8f3; --muted:#a3a7c2;
+    --peacock:#5cc3c0; --saffron:#f0a93e; --rule:#2d3256; --wash:#18313a; --note:#2e2716;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12152a; --sheet:#1a1e38; --ink:#e7e8f3; --muted:#a3a7c2;
+  --peacock:#5cc3c0; --saffron:#f0a93e; --rule:#2d3256; --wash:#18313a; --note:#2e2716;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4","Tiro Devanagari Hindi",Georgia,serif;font-size:1.06rem;line-height:1.7}
+.deva{font-family:"Tiro Devanagari Hindi","Source Serif 4",serif}
+a{color:var(--peacock)}
+a:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid var(--saffron);outline-offset:3px}
+
+header.hero{padding:clamp(2.5rem,7vw,5rem) 1.25rem 2.5rem;max-width:68rem;margin:0 auto;
+  display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end}
+.hero h1{font-family:"Rozha One",Georgia,serif;font-weight:400;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;margin:0;color:var(--ink)}
+.hero .sub{color:var(--muted);margin:.8rem 0 0;max-width:36rem}
+.ratio{text-align:right;font-family:"Rozha One",serif;color:var(--peacock);line-height:1}
+.ratio .big{font-size:clamp(3rem,9vw,5.5rem);display:block}
+.ratio .from{font-size:1.4rem;color:var(--saffron)}
+.ratio small{display:block;font-family:"Source Serif 4",serif;font-size:.85rem;color:var(--muted);margin-top:.5rem;max-width:14rem;margin-left:auto}
+@media (max-width:640px){header.hero{grid-template-columns:1fr}.ratio{text-align:left}.ratio small{margin-left:0}}
+
+.layout{max-width:68rem;margin:0 auto;padding:0 1.25rem 4rem;display:grid;grid-template-columns:13rem 1fr;gap:2.5rem}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1rem);align-self:start;font-size:.92rem}
+nav.toc ol{list-style:none;padding:0;margin:0;border-left:2px solid var(--rule)}
+nav.toc li a{display:block;padding:.3rem .8rem;text-decoration:none;color:var(--muted)}
+nav.toc li a:hover{color:var(--ink);border-left:2px solid var(--saffron);margin-left:-2px}
+nav.toc .num{color:var(--peacock);font-weight:600;margin-right:.35rem}
+@media (max-width:820px){.layout{grid-template-columns:1fr}nav.toc{position:static}
+  nav.toc ol{display:flex;flex-wrap:wrap;border:0;gap:.3rem}nav.toc li a{border:1px solid var(--rule);border-radius:999px;padding:.15rem .7rem}}
+
+main{min-width:0}
+.intro{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1.6rem;margin-bottom:2rem}
+.intro h2,.section-head{font-family:"Rozha One",serif;font-weight:400;font-size:1.6rem;margin:0 0 .6rem;line-height:1.2}
+.arc{counter-reset:arc;list-style:none;padding:0;margin:.6rem 0 0}
+.arc li{counter-increment:arc;padding:.35rem 0 .35rem 2.2rem;position:relative}
+.arc li::before{content:counter(arc);position:absolute;left:0;top:.35rem;width:1.6rem;height:1.6rem;border-radius:50%;
+  background:var(--peacock);color:var(--sheet);font-size:.85rem;display:grid;place-items:center;font-weight:600}
+
+details.lec{background:var(--sheet);border:1px solid var(--rule);border-left:5px solid var(--peacock);border-radius:6px;margin:0 0 1rem}
+details.lec[open]{border-left-color:var(--saffron)}
+details.lec>summary{cursor:pointer;list-style:none;padding:1rem 1.4rem;display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+details.lec>summary::-webkit-details-marker{display:none}
+summary .tag{font-family:"Rozha One",serif;color:var(--peacock);font-size:1.5rem;min-width:2.6rem}
+summary .t{font-weight:600;font-size:1.12rem;flex:1 1 16rem}
+summary .meta{color:var(--muted);font-size:.88rem}
+summary .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
+details[open]>summary .chev{transform:rotate(90deg)}
+@media (prefers-reduced-motion: reduce){summary .chev{transition:none}}
+.body{padding:0 1.4rem 1.4rem;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:1.6rem}
+@media (max-width:900px){.body{grid-template-columns:1fr}}
+.written h3,.sum h3{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--muted)}
+.written{max-width:44rem}
+.written ul,.written ol{padding-left:1.25rem;margin:.3rem 0 .8rem}
+.written li{margin:.15rem 0}
+.written p{margin:.4rem 0}
+.pg{display:inline-block;font-size:.78rem;color:var(--saffron);border:1px solid var(--saffron);border-radius:3px;padding:0 .35rem;margin:1rem 0 .3rem;line-height:1.5}
+.pg:first-child{margin-top:0}
+.sum{background:var(--wash);border-radius:6px;padding:1rem 1.2rem;align-self:start;position:sticky;top:1rem}
+@media (max-width:900px){.sum{position:static}}
+.sum p{margin:.3rem 0}
+.flag{background:var(--note);border-left:3px solid var(--saffron);padding:.4rem .7rem;font-size:.92rem;margin:.6rem 0;border-radius:0 4px 4px 0}
+.unclear{color:var(--muted);font-style:italic}
+blockquote{margin:.5rem 0;padding:.3rem 0 .3rem 1rem;border-left:3px solid var(--peacock);font-style:italic}
+.scroll{overflow-x:auto;margin:.5rem 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:28rem}
+th,td{border-bottom:1px solid var(--rule);text-align:left;padding:.4rem .6rem;vertical-align:top}
+th{color:var(--muted);font-weight:600}
+pre.mermaid{background:transparent;margin:.8rem 0;overflow-x:auto;text-align:center}
+.closing{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1.6rem;margin-top:2rem}
+.controls{display:flex;gap:.5rem;margin:0 0 1rem;flex-wrap:wrap}
+.controls button{font:inherit;font-size:.9rem;background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:.25rem .9rem;cursor:pointer}
+.controls button:hover{border-color:var(--peacock)}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:2rem 1rem}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div>
+    <h1>Bhagavad Gita<br>class notes</h1>
+    <p class="sub">“The Song of God.” Eleven lectures, 16 January to 7 February 2025, transcribed page by page from 40 handwritten pages, with a summary beside each lecture.</p>
+  </div>
+  <div class="ratio" aria-label="Ten to the power ten shlokas condensed into seven hundred">
+    <span class="from">10¹⁰ shlokas →</span>
+    <span class="big">700</span>
+    <small>The whole Vedic literature, distilled into the Gita, like a banyan tree held in its seed.</small>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" aria-label="Lectures">
+  <ol>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#l1"><span class="num">L1</span>Song of God</a></li>
+    <li><a href="#l2"><span class="num">L2</span>Pramanas</a></li>
+    <li><a href="#l3"><span class="num">L3</span>Shabda &amp; Vedas</a></li>
+    <li><a href="#l4"><span class="num">L4</span>Modern vs Vedic</a></li>
+    <li><a href="#l5"><span class="num">L5</span>The guru &amp; the disciple</a></li>
+    <li><a href="#l6"><span class="num">L6</span>Why a teacher</a></li>
+    <li><a href="#l7"><span class="num">L7</span>Mahabharata history</a></li>
+    <li><a href="#l8"><span class="num">L8</span>Chapter 1 opens</a></li>
+    <li><a href="#l9"><span class="num">L9</span>Conches &amp; chariot</a></li>
+    <li><a href="#l10"><span class="num">L10</span>Arjuna’s five doubts</a></li>
+    <li><a href="#l11"><span class="num">L11</span>Doubts answered</a></li>
+    <li><a href="#verses">Verse index</a></li>
+  </ol>
+</nav>
+
+<main>
+<section class="intro" id="overview">
+  <h2>How the course builds</h2>
+  <ol class="arc">
+    <li><strong>Why the Gita:</strong> it is the essence of the Vedas, heard from a flawless source.</li>
+    <li><strong>How to learn it:</strong> from a bona fide teacher in disciplic succession, with humility, inquiry, service and faith.</li>
+    <li><strong>Background:</strong> the Mahabharata story up to the war at Kurukshetra.</li>
+    <li><strong>Chapter 1:</strong> Duryodhana’s fear and Dhritarashtra’s attachment set against Arjuna’s sensitivity.</li>
+    <li><strong>Arjuna’s dilemma:</strong> five good qualities, misdirected, freeze him — which is where Krishna’s teaching begins.</li>
+  </ol>
+  <p style="margin:.9rem 0 0">The thread through everything: move from Duryodhana-consciousness to Arjuna-consciousness, and act from duty (dharma) rather than impulse.</p>
+</section>
+
+<div class="controls">
+  <button type="button" id="openAll">Expand all lectures</button>
+  <button type="button" id="closeAll">Collapse all</button>
+</div>
+
+<!-- L1 -->
+<details class="lec" id="l1" open>
+<summary><span class="tag">L1</span><span class="t">The Song of God</span><span class="meta">16/1/25 · pages 1–2</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 1</span>
+<p><strong>Bhagwad Geeta</strong> — “The Song of God”</p>
+<ul>
+<li>Srila Vyasa Deva → compiler of the Vedas (including Vedas).</li>
+<li>Before, knowledge was passed: speak → listen → written (if not then, it would have caused confusion).</li>
+<li>Timeline: 5000 years → now. Degradation in consciousness, physical ability, memory. “We could see great scale degradation in society.”</li>
+<li>10¹⁰ shlokas total by Vyasdev (Vedas) → 700 shlokas in Bhagwad Geeta.</li>
+<li>Shankaracharya said: all the Upanishads → cow; Krishna → milkman; Arjun → calf; milk → Bhagwad Geeta.</li>
+</ul>
+<span class="pg">Page 2</span>
+<p><strong>Subject matter of BG</strong></p>
+<ol><li>Ishvara</li><li>Jiva</li><li>Prakriti</li><li>Kala</li><li>Karma</li></ol>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>The Gita is the condensed essence of the Vedas. The Vedas were written down about 5000 years ago only because human memory and consciousness had declined. The Gita covers five topics: God (Ishvara), the soul (Jiva), material nature (Prakriti), time (Kala) and action (Karma).</p>
+</aside>
+</div>
+</details>
+
+<!-- L2 -->
+<details class="lec" id="l2">
+<summary><span class="tag">L2</span><span class="t">Ways of gaining knowledge</span><span class="meta">17/1/25 · pages 2–3</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Pages 2–3</span>
+<p><strong>① Pratyaksha Pramana</strong> — direct sense perception. Defects:</p>
+<ol>
+<li>Imperfect senses: out of the huge electromagnetic spectrum, you can only see a few nanometers.</li>
+<li>Tendency to get illusions.</li>
+<li>Committing mistakes.</li>
+<li>Cheating tendency.</li>
+</ol>
+<p><strong>② Anumana Pramana</strong> — theorizing; based on inputs coming from the 5 senses.</p>
+<p><strong>③ Shabda Pramana</strong> — (continued in L3)</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Three sources of knowledge: perception, inference and testimony. Perception carries the “four defects” (imperfect senses, illusion, mistakes, cheating). Inference is built on perception, so it inherits those defects.</p>
+</aside>
+</div>
+</details>
+
+<!-- L3 -->
+<details class="lec" id="l3">
+<summary><span class="tag">L3</span><span class="t">Shabda Pramana and the Vedas</span><span class="meta">21/1/25 · pages 3–5</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 3</span>
+<ul>
+<li><strong>Shabda Pramana</strong>: gain knowledge by hearing from the right authority. e.g. “man is mortal”, “who is your father”.</li>
+<li>Perfect source ↔ God (Vedas — words of God). God is beyond the 4 defects.</li>
+</ul>
+<span class="pg">Page 4</span>
+<ul>
+<li>The person presenting the knowledge must be bona fide.</li>
+<li>Vyasdev did not create the Vedas; he is the compiler (put them to writing). The Vedas have been existing since time immemorial; people remembered them by heart.</li>
+<li>The Vedas — <strong>Apaurusheya</strong> &amp; never wrong: not given by a human (who has 4 defects), not given by a mortal being.</li>
+<li>e.g. cowdung is pure; conch shell is pure; plants have life; animals have consciousness.</li>
+<li>British rule → systematically crushed the Vedic culture by introducing the modern education system.</li>
+</ul>
+<p><strong>The systematic brainwash:</strong></p>
+<ul>
+<li>Aryan invasion theory</li>
+</ul>
+<span class="pg">Page 5</span>
+<ul>
+<li>Modern education system referring to the Vedas as mythology.</li>
+<li>Distortion of Vedic practices and their being projected as essential Vedic practices (e.g. caste system, sati pratha).</li>
+<li>Encouraging practices not in the Vedas as elite / high class.</li>
+<li>Misinformation on social media / TV.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Because everyone’s perception is flawed, reliable knowledge must come from a flawless source — the Vedas, heard through a genuine speaker. The lecture then argues that colonial education and later distortions eroded trust in Vedic knowledge.</p>
+<p class="flag">The “systematic brainwash” points are the lecturer’s historical view; several (e.g. on the Aryan migration debate) are contested among historians.</p>
+</aside>
+</div>
+</details>
+
+<!-- L4 -->
+<details class="lec" id="l4">
+<summary><span class="tag">L4</span><span class="t">Modern vs Vedic, and the need for a teacher</span><span class="meta">23/1/25 · pages 5–10</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Pages 5–7</span>
+<p>Everything which is <strong>modern</strong> is not necessarily <strong>scientifically correct</strong>.</p>
+<div class="scroll"><table>
+<thead><tr><th>Area</th><th>Modern way</th><th>Vedic way</th></tr></thead>
+<tbody>
+<tr><td>Cooking</td><td>microwave; spoons, fork</td><td>wood fire; hand</td></tr>
+<tr><td>Agriculture</td><td>pesticides, fertilizers, herbicides</td><td>cowdung</td></tr>
+<tr><td>Washing</td><td>detergent, washing machine</td><td>reetha, hand wash</td></tr>
+<tr><td>Transportation</td><td>vehicles</td><td>horse cart</td></tr>
+<tr><td>Medicine</td><td>“no side effects of medicine”</td><td>“expensive, side effects of medicine”</td></tr>
+<tr><td>Carry bags</td><td colspan="2"><span class="unclear">heading only</span></td></tr>
+<tr><td>Textile industry</td><td colspan="2"><span class="unclear">heading only</span></td></tr>
+<tr><td>Water</td><td>plastic bottles</td><td>well</td></tr>
+<tr><td>Brushing</td><td>toothpaste</td><td>neem</td></tr>
+</tbody></table></div>
+<p class="flag">The two medicine entries look swapped in the notes; the intended point was probably that modern medicine is expensive with side effects and Vedic medicine has none.</p>
+<span class="pg">Page 7</span>
+<ul>
+<li><strong>Vedas</strong> — caution: hear from the right authority.</li>
+<li><strong>Need of a teacher:</strong> every field of knowledge needs a personal teacher.</li>
+<li>Analogy of <strong>fertile land</strong> (disciple with open mind) and the <strong>potent seed</strong> (teacher should be genuine) → good crops.</li>
+<li><strong>Qualification of the teacher:</strong> must have learnt in disciplic succession.</li>
+</ul>
+<span class="pg">Page 8</span>
+<pre class="mermaid">
+flowchart LR
+  K[Krishna] --> V["Vivasvan (sun god)"] --> M[Manu] --> I[Ikshvaku]
+  I -.Suryavansh.-> R[Raghu] -.-> D[Dasharath] --> RA["Ram (76th generation)"]
+  RA -.-> KL[Kingly line]
+  RA -.-> SL[Saints line]
+</pre>
+<p>Ikshvaku → first ruler on the earth planet.</p>
+<span class="pg">Page 9</span>
+<p>The teacher must belong to one of the four bona fide disciplic successions:</p>
+<pre class="mermaid">
+flowchart TD
+  N[Narayan / Krishna] --> B[Lord Brahma] -.-> MA[Madhvacharya]
+  N --> L[Lakshmi] -.-> RJ[Ramanujacharya]
+  N --> S[Lord Shiva] -.-> VS[Vishnuswami]
+  N --> KU[4 Kumaras] -.-> NI[Nimbarkacharya]
+</pre>
+<p>Example: Krishna → Brahma → Narada → Vyasdev → Madhvacharya.</p>
+<span class="pg">Page 10</span>
+<ul>
+<li>Teacher must have a teacher.</li>
+<li>The succession must start from God (as God is beyond the 4 defects), so He can give perfect knowledge.</li>
+<li>Must have <strong>realized the truth</strong>.</li>
+<li>Teaches <strong>strictly based on scriptures</strong>: has to teach based on sastra and refer to scriptural text. e.g. a lawyer in court.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>The lecture opens by arguing that Vedic ways of living are often better than modern ones, then turns to the teacher. A genuine guru belongs to an unbroken lineage from God (one of the four sampradayas), has realized the truth, and teaches strictly from scripture, the way a lawyer cites the law.</p>
+<p class="flag">The modern-vs-Vedic table reflects the lecturer’s view; comparisons like microwave vs wood fire or medicine are simplified.</p>
+</aside>
+</div>
+</details>
+
+<!-- L5 -->
+<details class="lec" id="l5">
+<summary><span class="tag">L5</span><span class="t">The guru and the disciple</span><span class="meta">24/1/25 · pages 10–13</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 10</span>
+<p>10¹⁰ → 700, just like a banyan tree → banyan tree seed.</p>
+<span class="pg">Page 11</span>
+<ul>
+<li>Milk → good. Milk touched by a snake → poisonous. The snake = unqualified teacher.</li>
+<li>Applied science → teacher is required.
+  <ul>
+  <li>Many things you won’t be able to understand on your own.</li>
+  <li>Whom will you ask doubts? (Ask ChatGPT? Maybe wrong answers.)</li>
+  <li>Who will correct you if you apply the teaching wrongly?</li>
+  </ul></li>
+<li>Vedas are called <strong>Shruti</strong> because they are heard from a teacher.</li>
+<li>Krishna ji’s guru → Sandipani Muni ji. Lord Ram’s guru → Vashisht Muni &amp; Vishwamitra ji.</li>
+</ul>
+<span class="pg">Page 12</span>
+<ul>
+<li>Teacher should practise what he preaches.</li>
+<li>Should encourage following the scriptures.</li>
+<li>Free from lust, anger, greed, pride, illusion, envy.</li>
+<li>No discrimination based on caste &amp; creed. No envy.</li>
+<li>No commercialization / charging of money / charging for secret mantras.</li>
+<li>Equanimity of mind.</li>
+</ul>
+<p><strong>Test → Guru · Sadhu · Sastra.</strong> Guru’s teachings = previous acharyas’ teaching = sastra’s teaching. The guru’s teaching should be in line with previous acharyas and sastras.</p>
+<span class="pg">Page 13</span>
+<p><strong>Qualification of disciple / student — BG 4.34</strong></p>
+<blockquote>tad viddhi praṇipātena paripraśnena sevayā / upadekṣyanti te…</blockquote>
+<ol>
+<li><strong>Humble surrender</strong> → open mind / eager to hear (“I do not know, let me try to understand what my teacher is speaking”).</li>
+<li><strong>Inquisitiveness</strong> → have the spirit of inquiry; interested to understand the subject matter; ask doubts wherever they come.</li>
+<li><strong>Submissive service</strong> → the most important service a student can render is to hear the teachings from the teacher.</li>
+<li><strong>Truthfulness.</strong></li>
+</ol>
+<p><strong>BG 4.39</strong> → have faith in the Vedas / BG; a faithless person can’t understand.</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Truth passed through an unqualified teacher becomes poison, like milk touched by a snake. A genuine teacher lives what he teaches, is free of the six vices, doesn’t discriminate or sell mantras, and stays even-minded. The check is that guru, saints and scripture must agree.</p>
+<p>The student, per BG 4.34, needs humility, questioning, service and truthfulness — and, per 4.39, faith.</p>
+</aside>
+</div>
+</details>
+
+<!-- L6 -->
+<details class="lec" id="l6">
+<summary><span class="tag">L6</span><span class="t">Why a personal teacher is required</span><span class="meta">28/1/25 · page 14</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 14</span>
+<ol>
+<li>Disciplic succession</li>
+<li>Example of the Lord himself</li>
+<li>Who will correct?</li>
+<li>Vedas are Shruti</li>
+<li>If you have a doubt?</li>
+<li>Many things require explanation</li>
+</ol>
+<p><strong>Equanimity</strong> → not like very joyous or very sad; he is stable.</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>A recap of the teacher argument as six reasons, plus a definition of equanimity: staying steady instead of swinging between elation and sorrow.</p>
+</aside>
+</div>
+</details>
+
+<!-- L7 -->
+<details class="lec" id="l7">
+<summary><span class="tag">L7</span><span class="t">Brief history: the personalities</span><span class="meta">30/1/25 · pages 14–20</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<p class="flag">The notes date this “30/1/23”; from the sequence it is almost certainly 30/1/25.</p>
+<pre class="mermaid">
+flowchart TD
+  KU[King Kuru] -.-> DH[Dhritarashtra]
+  KU -.-> PA[Pandu]
+  KU -.-> VI[Vidura]
+  DH ---|wife| GA[Gandhari]
+  GA --> KA["Kauravas (100): Duryodhana + 99"]
+  PA ---|wives| KT["Kunti & Madri"]
+  KT --> PD["Pandavas: Yudhishthir, Bhim, Arjuna, Nakul, Sahadev"]
+  VA["Vasudev (Krishna's father)"] ---|sister| KTN[Kunti]
+</pre>
+<span class="pg">Page 14</span>
+<ul>
+<li>Dhritarashtra, Pandu (+Kunti), Vidura → brothers.</li>
+<li>Dhritarashtra’s sons = Kauravas (100). Pandu had 2 wives, “Madhuri” &amp; Kunti (mother) → Pandavas.</li>
+</ul>
+<span class="pg">Page 15</span>
+<ul>
+<li>Kunti is sister of Vasudev (father of Krishna). Devki — mother of Krishna.</li>
+<li>Queen Kunti (wife of Pandu) — sister of Vasudev.</li>
+<li>Pandavas → Yudhishthir, Bhim, Arjuna, Nakul, Sahadev.</li>
+<li>Gandhari → wife of Dhritarashtra; had 100 sons → Duryodhana and his 99 brothers.</li>
+<li>Dronacharya (archery) → martial teacher of Kauravas &amp; Pandavas.</li>
+</ul>
+<span class="pg">Page 16</span>
+<ul>
+<li>Bhishma → grandfather of Kauravas and Pandavas; <em>not</em> the father of Vidura or Dhritarashtra.</li>
+<li>Dhritarashtra was born blind, so he can’t be made king even though he was elder. So Pandu was made king; so he had a little grudge.</li>
+<li>When Pandu died, Dhritarashtra was made caretaker king because the children were very small. Dhritarashtra was selfish.</li>
+<li>(Gandhari had also “killed her womb” etc.)</li>
+</ul>
+<span class="pg">Page 17</span>
+<ul>
+<li>It was visible that the Kauravas were not good &amp; the Pandavas were actually good (meritorious), but they wanted their sons to become king.</li>
+<li>So they tried to murder the Pandavas in many ways (fire on summer vacation palace — Lakshagriha). After this they lived as agyatvas (incognito mode); they didn’t go back to the palace.</li>
+<li>Sages requested Kunti ji to return to the palace when the Pandavas grew up, so they could go and rule.</li>
+</ul>
+<span class="pg">Page 18</span>
+<ul>
+<li>When they went → Dhritarashtra denied. After discussion he gave only a very bad piece of land. Pandavas said OK, fine.</li>
+<li>When they went to that piece of land, many other great personalities &amp; the public followed them. They converted that place into Indraprastha (made it a very beautiful paradise).</li>
+<li>Yudhishthir had vowed he will never disregard the words of his seniors.</li>
+</ul>
+<span class="pg">Page 19</span>
+<ul>
+<li>Gandhari’s brother Shakuni — expert in gambling (magically manipulated). Duryodhana discussed with Shakuni.</li>
+<li>Dhritarashtra sent an invitation to Yudhishthir for a gambling match; being obedient he came. He lost everything.</li>
+<li>Dushasan (power of 10,000 elephants) pulled the clothes of Draupadi.</li>
+<li>2nd gambling match — lost again. Last dice → 12 years of exile &amp; 1 year of incognito. They accepted.</li>
+</ul>
+<span class="pg">Page 20</span>
+<ul>
+<li><strong>Pandavas return:</strong> asked back Indraprastha → Duryodhana refused to give anything.</li>
+<li>Krishna went as peace messenger → refused to give a pinprick of land → refused to give 5 villages → tried to capture Krishna.</li>
+<li>War is inevitable.</li>
+<li>Arjun &amp; Duryodhana went to Krishna: “I (with no weapon)” or Narayani Sena. 1st choice Arjun → chose Krishna. 2nd choice Duryodhana → Narayani Sena.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>The Mahabharata background: Dhritarashtra’s blindness and grudge, attempts to kill the Pandavas, Indraprastha, the rigged dice game and Draupadi’s humiliation, exile, and Duryodhana refusing even five villages. When both sides approach Krishna, Arjuna picks Krishna himself, unarmed, over his entire army.</p>
+<p class="flag">“Madhuri” is Madri. “Killed her womb” most likely means struck her womb — in the story, Gandhari strikes her womb in frustration during her long pregnancy.</p>
+</aside>
+</div>
+</details>
+
+<!-- L8 -->
+<details class="lec" id="l8">
+<summary><span class="tag">L8</span><span class="t">The first chapter opens</span><span class="meta">31/1/25 · pages 21–25</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 21</span>
+<ul>
+<li>Sanjay → could see everything.</li>
+<li>Dhritarashtra wanted to know what is happening (know in real time). Srila Vyasdev offered divya drishti to enable him to see everything. He did not want to see his sons die, so he asked Vyasdev to give it to Sanjay (his personal secretary) so that he could tell him everything.</li>
+<li><strong>BG 1.1</strong> → Dhritarashtra asked Sanjay: after his sons &amp; Pandu’s sons assembled in Kurukshetra’s pilgrimage place, what did they do? Kurukshetra was a holy &amp; spiritual place.</li>
+</ul>
+<span class="pg">Page 22</span>
+<ul>
+<li>He feared that his sons should not be influenced by the spiritual place but they should fight; he wanted them to win the kingdom.</li>
+<li>King Kuru → Dhritarashtra → Kauravas; King Kuru → Pandu → Pandavas.</li>
+<li>Dhritarashtra coined the term <strong>māmakāḥ pāṇḍavāś ca</strong> → the mentality of “I &amp; mine” → divisions &amp; more divisions.</li>
+<li>Can’t even benefit those one considers one’s own.</li>
+<li>I &amp; mine / indiscriminate material attachment towards his sons; he knew they are not qualified.</li>
+</ul>
+<span class="pg">Page 23</span>
+<ul>
+<li>Krishna had spoken just a few words in Ch 1 → ¼ verse.</li>
+<li>Ch 1 sets the basis: gives what qualities are required to understand BG. Duryodhana / Dhritarashtra — if like him, then you are not qualified. Arjuna — if you have qualities like him, you are qualified.</li>
+<li><strong>BG 1.2</strong>: now Sanjay answers: after looking at the army arranged in military formation by the sons of Pandu, King Duryodhana went to his teacher and spoke the following words.</li>
+<li>Drupada → father of Draupadi.</li>
+</ul>
+<span class="pg">Page 24</span>
+<blockquote>Text 3: O my teacher, behold the great army of the sons of Pandu, so expertly arranged by your intelligent disciple, the son of Drupada.</blockquote>
+<ul>
+<li>What to do now — Duryodhana was shocked to see so much army (he didn’t expect so many people).</li>
+<li>Dhrishtadyumna, son of Drupada → who arranged the army.</li>
+<li>Drupada &amp; Dronacharya had conflict. Drupada → tapasya → to get a son who will kill (Drona) → got Dhrishtadyumna.</li>
+<li>Dhrishtadyumna got teaching from Dronacharya. He imparted all teaching, but Dhrishtadyumna had good <span class="unclear">intentions [?]</span>, that’s why he accepted him as disciple.</li>
+<li>Dhrishtadyumna was commander-in-chief of the Pandavas’ army.</li>
+</ul>
+<span class="pg">Page 25</span>
+<ul>
+<li>Now Duryodhana is taunting Dronacharya. Rather than frankly expressing his fear, he hid his fear and over that he is trying to criticize Dronacharya.</li>
+<li>Rather than seeking solution from teacher, he is criticizing him.</li>
+<li>Duryodhana knew very well that he was on the wrong side.</li>
+<li>He thought Dronacharya &amp; Bhishma had a soft corner for the Pandavas, so he addressed / motivated them specially.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Chapter 1 works as a mirror. Dhritarashtra’s “my sons vs Pandu’s sons” (māmakāḥ) shows possessive attachment and a divisive mind, even though he knew his sons were unfit. Duryodhana’s first words hide fear behind a taunt at his own teacher.</p>
+<p>Both are set against Arjuna, the qualified listener: the chapter shows who can and cannot receive the Gita.</p>
+</aside>
+</div>
+</details>
+
+<!-- L9 -->
+<details class="lec" id="l9">
+<summary><span class="tag">L9</span><span class="t">Conches, the chariot, and a battlefield classroom</span><span class="meta">4/2/25 · pages 25–32</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<p class="flag">Dated “4/2/23” in the notes; almost certainly 4/2/25.</p>
+<span class="pg">Page 25</span>
+<ul>
+<li>Ch 1 = observing the armies, because it gives a description of the armies &amp; personalities in these armies.</li>
+<li>Our journey is from consciousness like Duryodhana to Arjuna.</li>
+</ul>
+<span class="pg">Page 26</span>
+<ul>
+<li>Only Arjuna-like people can understand BG.</li>
+<li>Duryodhana expected only few people will be there to fight with. It was a big size army in opposition (almost half the size).</li>
+<li>Son of Drupada → Dhrishtadyumna arranged the opposition’s army.</li>
+<li>He criticized / taunted Dronacharya and listed powerful opposition personalities.</li>
+<li>Then he goes to Bhishma (<span class="deva">icchamrityu का वरदान</span> — boon of death at will).</li>
+<li>Bhishma knew that at this point of time Duryodhana is not going to take good advice, so he blew the conch shell; then war music began.</li>
+<li>Bhishma is fighting from this side because of <span class="deva">शपथ</span> (vow) → loyal to the king of the vansh. Also to show that no matter how powerful you may be, if you are on the wrong side you will lose.</li>
+</ul>
+<span class="pg">Page 27</span>
+<p><strong>Now we look at the Pandavas’ side</strong></p>
+<ul>
+<li>Lord Krishna blew his conch shell (Panchajanya), then Arjun (Devadatta), then Bhishma (other side).</li>
+<li>More details are mentioned on the Pandavas’ side because Krishna is significant.</li>
+<li>The vibration of the conch shell sound, within sky &amp; on the earth, shattered the hearts of the sons of Dhritarashtra (Kauravas).</li>
+</ul>
+<p><strong>Signs of victory for the Pandavas</strong></p>
+<ol>
+<li>Kurukshetra is a place of pilgrimage, named because of King Kuru (earlier in their lineage). Kuru Maharaj after retirement chose this place for doing bhakti (so it was a holy place). So these holy vibes supported the Pandavas.</li>
+</ol>
+<span class="pg">Page 28</span>
+<ol start="2">
+<li>Krishna is personally driving Arjuna’s chariot.</li>
+<li>Wherever Krishna is present, the goddess of opulence etc. (33 crore devtas) are there.</li>
+<li>The chariot was given by Agni devta, which could conquer all sides. (Arjuna had got very powerful weapons from other planets.)</li>
+<li>Hanuman on the flag of Arjuna’s chariot.</li>
+</ol>
+<ul>
+<li>Ramayan → Mahabharat: Hanuman, Jamvan → many common characters. Jamvan’s daughter got married to Krishna.</li>
+<li>Bhim &amp; Hanuman are born from Vayu (<span class="deva">पवन</span>) → brothers.</li>
+</ul>
+<span class="pg">Page 29</span>
+<ul>
+<li>Hanuman had a lot of affection for Ram, so also for Krishna. So Hanuman requested Krishna to participate in the war.</li>
+<li>Krishna told that this time I want the credit to be given to Arjuna. So you can sit on the flag of Arjuna’s chariot; whenever Bhima roars, you can also roar.</li>
+<li><strong>Now</strong> → Arjuna requests Krishna to take the chariot between the 2 armies: “I want to see who all have come to fight.”</li>
+</ul>
+<p><strong>Krishna chose a battleground to give BG</strong></p>
+<ol>
+<li>Not necessary to give up everything to understand BG; no need to go to the Himalayas.</li>
+</ol>
+<span class="pg">Page 30</span>
+<ol start="2">
+<li>BG is for responsible people. Krishna did not speak BG to everyone. If you are totally negligent in your studies, casual attitude, people can’t understand BG.</li>
+<li>Life is like a war → fighting with mind, diseases, exams. In this war situation Krishna is giving teaching &amp; Arjuna is learning peacefully, so we also need to take out time to learn BG. As life progresses it becomes more &amp; more hectic.</li>
+</ol>
+<p>Lord said “<em>samavetān kurūn iti</em>” → Just behold, Partha, all the Kurus assembled here.</p>
+<span class="pg">Page 31</span>
+<ul>
+<li>He takes him in front of Bhishma &amp; Dronacharya (while being in the middle), because he knew Arjun would have to confront these 2.</li>
+<li>But Arjun had great affection for both; so that’s why Krishna took him to that place (purposefully).</li>
+<li>Dronacharya’s son → Ashwatthama; he loved Arjun more than his son.</li>
+<li>So if Arjun faces these people he won’t be able to fight; he will not fight with them.</li>
+<li>Dharma → is to fight Bhishma → Dronacharya, but Arjun has <strong>weakness of heart</strong>.</li>
+</ul>
+<span class="pg">Page 32</span>
+<ul>
+<li>In our lives, weakness of heart can’t be taken out with our own efforts; need to listen to BG. It doesn’t allow us to take right (dharmic) decisions.</li>
+<li>Acting in (behaviour): <strong>impulse</strong> (carried away by feelings &amp; emotions) / <strong>considerate</strong> (what is my duty / dharma).</li>
+<li>Considerate → what’s the right thing to do in this situation? What is my dharma / duty in this situation?</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Bhishma sounds the conch knowing Duryodhana won’t listen; he fights for the Kauravas only because of his vow. The notes give five signs the Pandavas will win: holy Kurukshetra, Krishna as charioteer, the goddess of fortune with Krishna, Agni’s chariot, and Hanuman on the flag.</p>
+<p>Why teach on a battlefield: you don’t need to renounce the world, the Gita is for responsible people, and life itself is a war. Krishna then deliberately parks the chariot before Bhishma and Drona to expose Arjuna’s weakness of heart. The lecture ends on impulsive vs considerate action.</p>
+</aside>
+</div>
+</details>
+
+<!-- L10 -->
+<details class="lec" id="l10">
+<summary><span class="tag">L10</span><span class="t">Arjuna’s five considerations</span><span class="meta">6/2/25 · pages 32–37</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 32</span>
+<p>Sketch: the field, with Dronacharya and Bhishma marked; the chariot parked right before them. The field was like 1 km long and broad, but Krishna parked the chariot in that specific spot.</p>
+<span class="pg">Page 33</span>
+<ul>
+<li>Arjun started considering what all will happen if the war begins → how many people will become widows, children becoming orphans, etc.</li>
+<li>This signifies that we must consider our duties in every situation &amp; plan our time wisely → you should consider what time you are sleeping.</li>
+</ul>
+<p><strong>Exercise:</strong> Think of a situation in life when you were offended by someone (spoke ill words / attempt to disrespect you / someone hit you / harmed you / were dealt in an unjust way). You couldn’t do anything but tolerate. What was your internal &amp; external response?</p>
+<ul><li>“Dekh lunga isko to!!”</li><li>Immediately you start “appreciating” that person with curse words etc.</li></ul>
+<p><strong>Arjuna’s considerations</strong></p>
+<p><strong>① Compassion / soft-heartedness</strong> — upon seeing all these different grades of friends &amp; relatives, he becomes overwhelmed with compassion and spoke thus. <strong>BG 1.27</strong>: why so much bloodshed just to become a king? To understand BG you need to have a soft heart (compassion), not a hard heart.</p>
+<span class="pg">Page 34</span>
+<ul>
+<li>He had compassion for whom — who had tried to kill them, Draupadi → <span class="deva">चीर हरण</span> etc. Still he had compassion for the enemies.</li>
+<li>Just like Jesus Christ also, when he was being nailed he was praying to the Lord to forgive these people.</li>
+<li>Nowadays we torture the animals → chickens (hellish environment).
+  <ul>
+  <li>Female will give eggs; almost half are male. The male will just eat throughout the life.</li>
+  <li>There are automated machines: chicks are coming through a roller; the males are selected and put into crushers.</li>
+  <li>Now the hellish life of females starts. Poultry birds give 1–2 eggs every day (highly unnatural); they are given heavy injections.</li>
+  <li>Their body becomes devoid of calcium (no wings also). Their beaks are cut so that they don’t bite.</li>
+  <li>After being old they are transported in open trucks on cold nights. Then they are killed by putting in boiling water so that the flesh becomes soft &amp; fluffy.</li>
+  </ul></li>
+<li>Just like we have life, we feel pain; these living entities also feel pain. If you are cause of giving so much pain, the reaction will come to you.</li>
+<li>One drinks cow’s milk throughout the life. Cow is like mother. How can you even think to slaughter a cow?</li>
+<li>Burning marking put on the cow (OK tested) — cow’s demands are not too much.</li>
+</ul>
+<span class="pg">Page 35</span>
+<ul><li>Instead of burning the waste of the field, it can be given to cows.</li></ul>
+<p><strong>② Fear of sinful reaction — BG 1.36</strong>. Arjuna says: sin will overcome us if we slay such aggressors. So it’s not proper to kill the sons of Dhritarashtra &amp; our friends. What should we gain, O Krishna, husband of the goddess of fortune, and how could we be happy by killing our own kinsmen?</p>
+<ul>
+<li>We see nowadays people are hardly concerned of sinful reaction.</li>
+<li>1 boy born in <span class="deva">झुग्गी झोपड़ी</span> | 1 boy born in Ambani’s → there must be some law governing this.</li>
+<li>Taking alcohol is not good for your health, not good for people around you (children).</li>
+<li>Abortion.</li>
+</ul>
+<span class="pg">Page 36</span>
+<ul>
+<li>It’s not that govt. makes it legal, the reaction will not come. Till some time abortion was legal, now they say illegal.</li>
+<li>From 5th month to 9th month, child is ready but just grows in size → doctors put tweezers &amp; scissors inside and cut the child because he cannot come out like that.</li>
+</ul>
+<p><strong>③ Gratitude</strong> — “O Govinda, of what avail to us are a kingdom, happiness or even life itself, when all those whom we may desire them are now arrayed on the battlefield?” So many gifts we have received but we are not grateful.</p>
+<p><strong>④ Impact on the future generations (1.37–43)</strong> → no protective environment / good training for children.</p>
+<ul>
+<li>If all responsibility comes to the mother, then children won’t get required attention &amp; training from mothers. The child needs mother’s love.</li>
+<li>If no attention to child, it will lead to chain reaction generation to generation &amp; <span class="unclear">[lower?]</span> class people will be born.</li>
+</ul>
+<span class="pg">Page 37</span>
+<ul>
+<li>Spoiled generations → like live-in relationships: B and G → child is born; then the boy says “ta-ta bye bye”. What will be the life of the child? What kind of character will this child have?</li>
+</ul>
+<p><strong>⑤ Indecision</strong> — inability to take decision quickly.</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Arjuna hesitates for five reasons: compassion, fear of sin, gratitude, concern for future generations, and indecision. The lecture links each to modern life — animal cruelty and karma, the law of reaction behind unequal births, alcohol, family breakdown — and uses an exercise on how we respond when wronged.</p>
+<p class="flag">The poultry, abortion and live-in sections are the lecturer’s moral positions; some factual descriptions (e.g. of abortion procedures and laws) are simplified or disputed.</p>
+</aside>
+</div>
+</details>
+
+<!-- L11 -->
+<details class="lec" id="l11">
+<summary><span class="tag">L11</span><span class="t">Why the considerations were misdirected</span><span class="meta">7/2/25 · pages 38–40</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 38</span>
+<ul>
+<li>We saw Arjun was considerate; he didn’t get into action blindly. (Govt. has laws; similarly the Lord also has many laws.)</li>
+<li>Compassion, fear of sinful reaction, gratitude (Bhishma + Drona + all these personalities have given me so much; how can I fight against them?), impact on future generations (if the father is not there, all load will come on the mother &amp; children won’t get required attention), indecision (considering all these things together at the same time, he comes to total indecision).</li>
+<li>All these qualities are <strong>misdirected</strong>.</li>
+</ul>
+<p><strong>Compassion</strong> — if they don’t fight then Duryodhana will become king, and what kind of rule will the people get?</p>
+<p><strong>Fear of sinful reaction</strong> — there are 6 aggressors; all these aggressors are at once to be killed, and no sin is incurred by killing such aggressors:</p>
+<span class="pg">Page 39</span>
+<ol>
+<li>Poison-giver</li>
+<li>One who sets fire to the house</li>
+<li>Who attacks with a deadly weapon</li>
+<li>One who plunders riches (mass robbery)</li>
+<li>One who occupies another’s land</li>
+<li>One who kidnaps a wife</li>
+</ol>
+<ul>
+<li>Capital punishment → death penalty. It’s good both for (a) criminal &amp; (b) public.
+  <ul>
+  <li>(a) Because he is kind of freed from that reaction (he gets reaction immediately), and they can’t do more sin.</li>
+  <li>(b) Public gets protection, feels safe.</li>
+  </ul></li>
+<li>All conditions of aggressor are fulfilled by the Kauravas, so they are perfect candidates for capital punishment.</li>
+</ul>
+<p><strong>Gratitude</strong> — who will be most sad when Arjuna runs away from the battlefield? Bhishma &amp; Dronacharya.</p>
+<span class="pg">Page 40</span>
+<p>(When Dronacharya was going to bath, a crocodile caught him. Arjun shot arrows &amp; killed the croc. Then Drona gave him a special weapon; he could be killed using only that weapon.)</p>
+<p><strong>Impact on FG</strong> — if king is bad, <span class="deva">प्रजा</span> also will become bad.</p>
+<p><strong>Indecision</strong> — he had Krishna in his front; he can take consultation from him.</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Each of Arjuna’s reasons is turned around. Real compassion means saving the people from Duryodhana’s rule. The Kauravas meet every mark of an ātatāyī (aggressor), so killing them incurs no sin. Bhishma and Drona would be the ones most disappointed if he fled. A bad king corrupts his subjects. And indecision has an obvious cure: Krishna is right in front of him.</p>
+<p>This sets up Chapter 2, where Arjuna finally asks Krishna for guidance.</p>
+<p class="flag">The capital-punishment argument is the lecturer’s interpretation; it’s a contested topic in ethics and law.</p>
+</aside>
+</div>
+</details>
+
+<section class="closing" id="verses">
+  <h2 class="section-head">Verse index</h2>
+  <div class="scroll"><table>
+  <thead><tr><th>Verse</th><th>What the notes use it for</th><th>Lecture</th></tr></thead>
+  <tbody>
+  <tr><td>BG 1.1</td><td>Dhritarashtra asks Sanjay what happened at Kurukshetra</td><td>L8</td></tr>
+  <tr><td>BG 1.2</td><td>Sanjay: Duryodhana approaches his teacher</td><td>L8</td></tr>
+  <tr><td>BG 1.3</td><td>“Behold the army… arranged by the son of Drupada”</td><td>L8</td></tr>
+  <tr><td>BG 1.25</td><td>“samavetān kurūn iti” — Krishna’s only words in Ch 1</td><td>L9</td></tr>
+  <tr><td>BG 1.27</td><td>Arjuna overwhelmed by compassion</td><td>L10</td></tr>
+  <tr><td>BG 1.32–35</td><td>“Of what avail is a kingdom…” (gratitude)</td><td>L10</td></tr>
+  <tr><td>BG 1.36</td><td>Sin in slaying aggressors (fear of sinful reaction)</td><td>L10, L11</td></tr>
+  <tr><td>BG 1.37–43</td><td>Destruction of families and future generations</td><td>L10</td></tr>
+  <tr><td>BG 4.34</td><td>Approach a teacher: surrender, inquiry, service</td><td>L5</td></tr>
+  <tr><td>BG 4.39</td><td>The faithful attain knowledge</td><td>L5</td></tr>
+  </tbody></table></div>
+  <p style="color:var(--muted);font-size:.92rem;margin-top:1rem">Verse numbers for 1.25 and 1.32–35 are added from the standard text; the notes quote them without numbers.</p>
+</section>
+</main>
+</div>
+
+<footer>Transcribed from handwritten class notes, 40 pages. Words marked [?] were hard to read.</footer>
+
+<script>
+(function(){
+  var lecs=document.querySelectorAll('details.lec');
+  document.getElementById('openAll').addEventListener('click',function(){lecs.forEach(function(d){d.open=true;});});
+  document.getElementById('closeAll').addEventListener('click',function(){lecs.forEach(function(d){d.open=false;});});
+  document.querySelectorAll('nav.toc a[href^="#l"]').forEach(function(a){
+    a.addEventListener('click',function(){var t=document.querySelector(a.getAttribute('href'));if(t&&t.tagName==='DETAILS')t.open=true;});
+  });
+})();
+</script>
+</body>
+</html>

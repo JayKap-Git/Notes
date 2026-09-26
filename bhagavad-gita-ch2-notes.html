@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bhagavad Gita Chapter 2 — Science of the Soul, class notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f4fa; --sheet:#ffffff; --ink:#1d2340; --muted:#5f6480;
+  --peacock:#0e6a6c; --saffron:#c9780f; --rule:#dcdbe8; --wash:#eef3f2; --note:#fff6e6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12152a; --sheet:#1a1e38; --ink:#e7e8f3; --muted:#a3a7c2;
+    --peacock:#5cc3c0; --saffron:#f0a93e; --rule:#2d3256; --wash:#18313a; --note:#2e2716;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12152a; --sheet:#1a1e38; --ink:#e7e8f3; --muted:#a3a7c2;
+  --peacock:#5cc3c0; --saffron:#f0a93e; --rule:#2d3256; --wash:#18313a; --note:#2e2716;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4","Tiro Devanagari Hindi",Georgia,serif;font-size:1.06rem;line-height:1.7}
+.deva{font-family:"Tiro Devanagari Hindi","Source Serif 4",serif}
+a{color:var(--peacock)}
+a:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid var(--saffron);outline-offset:3px}
+
+header.hero{padding:clamp(2.5rem,7vw,5rem) 1.25rem 2.5rem;max-width:68rem;margin:0 auto;
+  display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end}
+.hero h1{font-family:"Rozha One",Georgia,serif;font-weight:400;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;margin:0;color:var(--ink)}
+.hero .sub{color:var(--muted);margin:.8rem 0 0;max-width:36rem}
+.ratio{text-align:right;font-family:"Rozha One",serif;color:var(--peacock);line-height:1}
+.ratio .big{font-size:clamp(2.6rem,7vw,4.4rem);display:block}
+.ratio .from{font-size:1.4rem;color:var(--saffron)}
+.ratio small{display:block;font-family:"Source Serif 4",serif;font-size:.85rem;color:var(--muted);margin-top:.5rem;max-width:14rem;margin-left:auto}
+@media (max-width:640px){header.hero{grid-template-columns:1fr}.ratio{text-align:left}.ratio small{margin-left:0}}
+
+.layout{max-width:68rem;margin:0 auto;padding:0 1.25rem 4rem;display:grid;grid-template-columns:13rem 1fr;gap:2.5rem}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1rem);align-self:start;font-size:.92rem}
+nav.toc ol{list-style:none;padding:0;margin:0;border-left:2px solid var(--rule)}
+nav.toc li a{display:block;padding:.3rem .8rem;text-decoration:none;color:var(--muted)}
+nav.toc li a:hover{color:var(--ink);border-left:2px solid var(--saffron);margin-left:-2px}
+nav.toc .num{color:var(--peacock);font-weight:600;margin-right:.35rem}
+@media (max-width:820px){.layout{grid-template-columns:1fr}nav.toc{position:static}
+  nav.toc ol{display:flex;flex-wrap:wrap;border:0;gap:.3rem}nav.toc li a{border:1px solid var(--rule);border-radius:999px;padding:.15rem .7rem}}
+
+main{min-width:0}
+.intro{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1.6rem;margin-bottom:2rem}
+.intro h2,.section-head{font-family:"Rozha One",serif;font-weight:400;font-size:1.6rem;margin:0 0 .6rem;line-height:1.2}
+.arc{counter-reset:arc;list-style:none;padding:0;margin:.6rem 0 0}
+.arc li{counter-increment:arc;padding:.35rem 0 .35rem 2.2rem;position:relative}
+.arc li::before{content:counter(arc);position:absolute;left:0;top:.35rem;width:1.6rem;height:1.6rem;border-radius:50%;
+  background:var(--peacock);color:var(--sheet);font-size:.85rem;display:grid;place-items:center;font-weight:600}
+
+details.lec{background:var(--sheet);border:1px solid var(--rule);border-left:5px solid var(--peacock);border-radius:6px;margin:0 0 1rem}
+details.lec[open]{border-left-color:var(--saffron)}
+details.lec>summary{cursor:pointer;list-style:none;padding:1rem 1.4rem;display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+details.lec>summary::-webkit-details-marker{display:none}
+summary .tag{font-family:"Rozha One",serif;color:var(--peacock);font-size:1.5rem;min-width:2.6rem}
+summary .t{font-weight:600;font-size:1.12rem;flex:1 1 16rem}
+summary .meta{color:var(--muted);font-size:.88rem}
+summary .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
+details[open]>summary .chev{transform:rotate(90deg)}
+@media (prefers-reduced-motion: reduce){summary .chev{transition:none}}
+.body{padding:0 1.4rem 1.4rem;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:1.6rem}
+@media (max-width:900px){.body{grid-template-columns:1fr}}
+.written h3,.sum h3{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--muted)}
+.written{max-width:44rem}
+.written ul,.written ol{padding-left:1.25rem;margin:.3rem 0 .8rem}
+.written li{margin:.15rem 0}
+.written p{margin:.4rem 0}
+.pg{display:inline-block;font-size:.78rem;color:var(--saffron);border:1px solid var(--saffron);border-radius:3px;padding:0 .35rem;margin:1rem 0 .3rem;line-height:1.5}
+.pg:first-child{margin-top:0}
+.sum{background:var(--wash);border-radius:6px;padding:1rem 1.2rem;align-self:start;position:sticky;top:1rem}
+@media (max-width:900px){.sum{position:static}}
+.sum p{margin:.3rem 0}
+.flag{background:var(--note);border-left:3px solid var(--saffron);padding:.4rem .7rem;font-size:.92rem;margin:.6rem 0;border-radius:0 4px 4px 0}
+.unclear{color:var(--muted);font-style:italic}
+blockquote{margin:.5rem 0;padding:.3rem 0 .3rem 1rem;border-left:3px solid var(--peacock);font-style:italic}
+.scroll{overflow-x:auto;margin:.5rem 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:28rem}
+th,td{border-bottom:1px solid var(--rule);text-align:left;padding:.4rem .6rem;vertical-align:top}
+th{color:var(--muted);font-weight:600}
+pre.mermaid{background:transparent;margin:.8rem 0;overflow-x:auto;text-align:center}
+.closing{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:1.4rem 1.6rem;margin-top:2rem}
+.controls{display:flex;gap:.5rem;margin:0 0 1rem;flex-wrap:wrap}
+.controls button{font:inherit;font-size:.9rem;background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:.25rem .9rem;cursor:pointer}
+.controls button:hover{border-color:var(--peacock)}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:2rem 1rem}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div>
+    <h1>Chapter 2<br>Science of the soul</h1>
+    <p class="sub">Ten classes, 7 to 28 February 2025, transcribed from 43 handwritten pages, with a summary beside each class.</p>
+  </div>
+  <div class="ratio" aria-label="The soul is one ten-thousandth the tip of a hair">
+    <span class="from">the soul is</span>
+    <span class="big">1⁄10,000</span>
+    <small>of the tip of a hair, seated in the heart, and not slain when the body is slain.</small>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" aria-label="Classes">
+  <ol>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#c1"><span class="num">7/2</span>Arjuna’s impurity</a></li>
+    <li><a href="#c2"><span class="num">11/2</span>Surrender, body vs soul</a></li>
+    <li><a href="#c3"><span class="num">13/2</span>Nature of the soul</a></li>
+    <li><a href="#c4"><span class="num">14/2</span>Why we are here</a></li>
+    <li><a href="#c5"><span class="num">18/2</span>Does God exist?</a></li>
+    <li><a href="#c6"><span class="num">20/2</span>Understanding God</a></li>
+    <li><a href="#c7"><span class="num">21/2</span>Avatars</a></li>
+    <li><a href="#c8"><span class="num">25/2</span>Three realizations</a></li>
+    <li><a href="#c9"><span class="num">27/2</span>Demigods &amp; lokas</a></li>
+    <li><a href="#c10"><span class="num">28/2</span>Heaven isn’t the goal</a></li>
+    <li><a href="#verses">Verse index</a></li>
+  </ol>
+</nav>
+
+<main>
+<section class="intro" id="overview">
+  <h2>How the chapter builds</h2>
+  <ol class="arc">
+    <li><strong>Arjuna surrenders:</strong> he finally accepts Krishna as teacher and asks for what is truly good (shreyas), not what is pleasant.</li>
+    <li><strong>I am not this body:</strong> the soul is eternal, tiny, conscious, and changes bodies as we change clothes; pain and pleasure come from identifying with the body.</li>
+    <li><strong>Why we’re here:</strong> free will, the desire to enjoy apart from God (iccha) and envy of Him (dvesha) bring the soul into matter; karma and 84 lakh species follow.</li>
+    <li><strong>Who God is:</strong> arguments from design, the six opulences, avatars, and the three levels of realization (Brahman, Paramatma, Bhagavan).</li>
+    <li><strong>Demigods and heaven:</strong> the universe’s lokas and cosmic time; even heaven is temporary, so the goal is Krishna Himself — water the root.</li>
+  </ol>
+</section>
+
+<div class="controls">
+  <button type="button" id="openAll">Expand all classes</button>
+  <button type="button" id="closeAll">Collapse all</button>
+</div>
+
+<!-- C1 -->
+<details class="lec" id="c1" open>
+<summary><span class="tag">7/2</span><span class="t">Ch 2 begins: Arjuna’s impurity, humans vs animals</span><span class="meta">pages 1–2</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 1</span>
+<p><strong>Ch-2 · Science of Soul</strong></p>
+<ul>
+<li>Krishna: how have these impurities come upon you? They are not at all benefiting.</li>
+<li>Till now Arjuna has not sought advice from K. He has not accepted him as a teacher. → No matter how qualified the teacher is, acceptance needs to be there from the student’s side.</li>
+</ul>
+<p><strong>Humans vs animals</strong> — common: ① eating ② sleeping ③ mating ④ defence ⑤ society / technology (ants, spider’s web, honey, ultrasound of bats).</p>
+<span class="pg">Page 2</span>
+<p><strong>Speciality:</strong> man can search after God / dharma but an animal cannot. Therefore a man without that urge for searching after God is no better than an animal.</p>
+<p><strong>Real problems of life</strong> (very painful process):</p>
+<ol>
+<li>Birth — <span class="deva">जन्म</span></li>
+<li>Disease — <span class="deva">व्याधि</span></li>
+<li>Old age — <span class="deva">जरा</span></li>
+<li>Death — <span class="deva">मृत्यु</span></li>
+</ol>
+<p>→ Physical + emotional pain. (Birth is like) 40,000 scorpions biting.</p>
+<p class="flag">In the notes the Hindi words are written against the wrong English lines (मृत्यु next to disease, व्याधि next to death); they are matched correctly above.</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Krishna opens by rebuking Arjuna’s despondency. The class stresses that even the best teacher can’t help until the student accepts him. Humans share eating, sleeping, mating and defending — even “technology” — with animals; what sets us apart is the ability to inquire about God. The four real problems are birth, disease, old age and death.</p>
+</aside>
+</div>
+</details>
+
+<!-- C2 -->
+<details class="lec" id="c2">
+<summary><span class="tag">11/2</span><span class="t">Surrender, shreyas, and body vs soul</span><span class="meta">pages 2–5</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 2</span>
+<ul>
+<li>Arjun asks Krishna to instruct him; he surrenders to Krishna.</li>
+<li><strong>Karpanya</strong> — we have got something very valuable (human form of life). If we use it for eating, sleeping… then we are a kripana. We didn’t realize the actual value</li>
+<li>Kripana → miser person (<span class="deva">कंजूस</span>). Brahmana → broad-minded person.</li>
+</ul>
+<span class="pg">Page 3</span>
+<ul>
+<li>… &amp; we misused it.</li>
+<li><strong>Dharma</strong> → what is the right thing to do in a situation (plan).</li>
+<li><strong>Shreyas</strong> <span class="deva">श्रेयस</span> → ultimate good / benefit (long-term benefit). <strong>Preyas</strong> <span class="deva">प्रेयस</span> → short-term benefit.</li>
+<li>He says to Krishna: “You please guide me keeping <span class="deva">श्रेयस</span> in mind.”</li>
+<li><strong>Shadhi</strong> → please give me direction.</li>
+<li><strong>Lottery</strong> → win 1 crore ₹ for 1 day, but get beaten red &amp; blue daily for 3 years. Same is like with human life: for short-term happiness we do bad things, but that creates a whole package of suffering.</li>
+<li>Just like when you wake up from your dream the whole world in the dream disappears, just like bursting of a bubble — just like that the body also dies.</li>
+</ul>
+<p><strong>Krishna starts with the science of soul</strong></p>
+<ul>
+<li>He begins with scolding Arjun: while speaking learned words, you are mourning for what is not worthy of grief.</li>
+</ul>
+<span class="pg">Page 4</span>
+<blockquote>BG 2.13 — As the embodied soul continuously passes, in this body, from boyhood to youth to old age, the soul similarly passes into another body at death. A sober person is not bewildered by such a change.</blockquote>
+<ul>
+<li>Scientific: every 7 years almost most of your body cells change.</li>
+<li>5 → 12 → 35 → 70 → 0: child body, youth body, old body | new body.</li>
+</ul>
+<blockquote>BG 2.22 — As a person puts on new garments, giving up old ones, similarly the soul accepts new material bodies, giving up the old and useless ones.</blockquote>
+<p><strong>Body vs soul</strong> (diagram: soul at the centre, subtle body around it, gross body outside)</p>
+<pre class="mermaid">
+flowchart LR
+  S((Soul)) --- SB["Subtle body: mind, intelligence, false ego"]
+  SB --- GB["Gross body: earth, water, fire, air, ether"]
+</pre>
+<ul>
+<li><strong>Subtle body</strong>: mind, intelligence (discriminative power between right &amp; wrong), false ego.
+  <ul>
+  <li>Laptop analogy: hard disk (store) → mind → storehouse of desires, impressions.</li>
+  <li>Operating system → false ego → “I am professor”, “I am Indian”, “I am this / that” &amp; so on.</li>
+  </ul></li>
+<li><strong>Gross body</strong>: earth, water, fire, air, ether.
+  <ul>
+  <li>Earth → lump of flesh; water → blood etc.; fire → constant body temperature; air → swallowing, excretion, ejection etc. — there are various airs.</li>
+  <li>Ether → if any EMR has to travel it requires a medium; ether is that medium. Ether can be perceived only through sound / EMW.</li>
+  <li>5 senses: seeing, hearing, touching, smell, taste. Earth → 5; water → 4 (can’t smell).</li>
+  </ul></li>
+</ul>
+<span class="pg">Page 5</span>
+<ul>
+<li>At time of death the gross body just finishes, but the subtle body continues with the living entity.</li>
+<li>Some children are very sober from birth, or some very angry — that is because of the subtle body.</li>
+<li>Just like if you didn’t study 1st–4th class properly, then it becomes very difficult to pick up from 5th class. We are also doing bad work since so many incarnations, so it becomes difficult to develop good habits.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Arjuna surrenders and asks for shreyas — the lasting good — rather than preyas, the pleasant. Wasting human life on animal pursuits is being a miser (kripana). The lottery analogy shows how short pleasures buy long suffering.</p>
+<p>Krishna’s teaching starts with the soul: it changes bodies as we move from childhood to old age, and as we change clothes. The self has three layers: soul, subtle body (mind, intelligence, false ego — hard disk and operating system) and gross body (five elements). The subtle body, carrying our habits and impressions, travels with the soul at death.</p>
+<p class="flag">“Ether as the medium for EM waves” is the lecturer’s link to the Vedic element ākāśa; modern physics dropped the luminiferous ether over a century ago.</p>
+</aside>
+</div>
+</details>
+
+<!-- C3 -->
+<details class="lec" id="c3">
+<summary><span class="tag">13/2</span><span class="t">Characteristics of the soul, Jiva and God</span><span class="meta">pages 5–10</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 5</span>
+<ul>
+<li>Krishna starts with the science of the soul.</li>
+<li>At the time of death the soul leaves the gross body but the subtle body continues; whatever desires etc. you have collected continue with the soul. e.g. some children are very fearless, some very fearful; some people remember past-life memories.</li>
+<li>We tend to forget our dreams: even if we remember, after 4–5 days we forget. When the soul leaves this body &amp; goes to another body, generally he forgets all the details; only subtle impressions remain. Very less possibility some people remember past life.</li>
+<li>The soul has its own senses also &amp; they don’t depend on the gross senses.</li>
+<li>The soul is the one who sees. After death eyes are fine but the soul is not there; that’s why a dead person can’t see.</li>
+<li>Or in dream → we can see, hear, taste all, but none of the senses are working.</li>
+</ul>
+<span class="pg">Page 6</span>
+<ul>
+<li>Because the soul has all these senses it can see / smell / hear etc. All are actually in the soul.</li>
+<li>So: <strong>I am not this body, I am soul.</strong></li>
+</ul>
+<p><strong>Characteristics of the soul</strong></p>
+<blockquote>BG 2.20 — For the soul there is neither birth nor death at any time… unborn, eternal, ever-existing and primeval. He is not slain when the body is slain.</blockquote>
+<ul>
+<li>Every material object (body) has 6 kinds of transformation — birth, growth, produces effects… <span class="unclear">(list left incomplete)</span></li>
+<li>That which pervades the entire body you should know to be indestructible. No one is able to destroy that imperishable soul.</li>
+<li>Soul → 1/10,000 of the tip of a hair (sketch: soul in the heart).</li>
+</ul>
+<span class="pg">Page 7</span>
+<ul>
+<li>The soul can never be cut to pieces by any weapon, nor burned by fire — <span class="deva">नैनं छिन्दन्ति</span>.</li>
+<li>The individual soul is unbreakable and insoluble &amp; can be neither burned nor dried. He is everlasting.</li>
+<li>The material body of the indestructible, immeasurable living entity (soul) is sure to come to an end; therefore fight, O descendant of Bharata. (Even before Kuru Maharaj there was a great king Bharat.)</li>
+<li>None of the material elements exhibits consciousness (thinking, feeling, willing).</li>
+<li><strong>Consciousness</strong> — thinking, feeling, willing. All feeling of pain etc. is due to the presence of soul.</li>
+</ul>
+<p><strong>Varieties of bodies</strong></p>
+<ul>
+<li>Aeroplane, car, cycle, JCB → the same person can drive all these vehicles.</li>
+<li>Body of a blue whale / body of a virus / ant → virus small soul, whale big soul? No — soul is neither big nor small; same size, 1/10,000 of the tip of a hair.</li>
+<li>But I don’t know how the car is running. I have control on certain functions, but not on all — the strokes of engine etc., no control.</li>
+</ul>
+<span class="pg">Page 8</span>
+<ul>
+<li>Similarly we don’t have control over 100% of our body, only some aspects.</li>
+<li><strong>Car vs driver:</strong> driver keeps on decorating the car but doesn’t take care of himself, doesn’t eat → he would become weak. Similarly we are nourishing only the material; we should also look at the needs of the soul.</li>
+<li><strong>Pains / pleasures due to identification with body:</strong> <span class="deva">cycle पे चोट</span> → laugh; <span class="deva">मेरी cycle पे चोट</span> → angry.</li>
+<li>While playing a video game, if the car crashes we feel pain because we are identifying ourselves with the person in the game. The very same way we feel pain because we (soul) identify ourselves with this material body.</li>
+<li>While sleeping: night warm | morning cold → lost connection (identity) with material body, so in dream you don’t feel the shivering (cold) of the material body.</li>
+</ul>
+<span class="pg">Page 9</span>
+<p><strong>Relationship between Jiva and God</strong> — e.g. leaf &amp; tree, hand &amp; body.</p>
+<ul>
+<li>It should be understood that all species of life… God is the seed-giving father for all species.</li>
+<li>The living entities in this conditioned world are My eternal fragmented parts.</li>
+<li>“I am the father of this universe, the mother, the support and the grandsire. I am the object of knowledge, the purifier and the syllable Om. I am also the Rig, the Sama and the Yajur Vedas.”</li>
+<li><strong>Ocean &amp; a drop of ocean</strong>: same quality in both (salty, H₂O); the quantity is different. → Jiva has the same qualities which are there in the Lord, but they are in very very minute amount.</li>
+<li>God’s body made up of 3 elements → (composition of soul):
+  <ul>
+  <li><span class="deva">सत्</span> → eternity — so all living entities have a feeling that they are eternal.</li>
+  <li><span class="deva">चित्</span> → knowledge potency — trying to acquire knowledge (explore), inquiry.</li>
+  <li><span class="deva">आनंद</span> → happiness — whatever we do, we have happiness as inspiration behind that.</li>
+  </ul></li>
+</ul>
+<span class="pg">Page 10</span>
+<ul>
+<li>In any species there is a heart region; there is a seat of energy where there is soul; besides that there is <strong>Super-Soul</strong> — takes care of functions inside our body; it provides intelligence, remembrance, forgetfulness.</li>
+<li>It accompanies the soul. It’s the same Supersoul with each soul. e.g. the same sun shining for everyone; similarly the same Supersoul is there with every soul.</li>
+<li>Two birds in a tree (noted beside BG 2.22): the Jiva is fully involved in eating the fruits of the tree; we are not paying attention to the Supersoul.</li>
+<li>Although the two birds are in the same tree, the eating bird is fully engrossed with anxiety and moroseness as the enjoyer of the fruits of the tree. But if in some way or other he turns his face towards his friend the Lord and knows His glories, at once the suffering bird becomes free from all anxieties.</li>
+<li>Arjuna has now turned his face towards his eternal friend Krishna and is understanding the Bhagavad Gita from Him. And thus, hearing from Krishna, he can understand the supreme glories of the Lord and be free from lamentation.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>The soul is the real seer: the eyes of a dead body work, but no one is there to see; in dreams we see with no physical senses. It is unborn, eternal, can’t be cut, burned, wetted or dried, and is the same tiny size in a whale or a virus — the body is only a vehicle it drives.</p>
+<p>Pain and pleasure come from identifying with the body, like feeling a crash in a video game. The soul relates to God as a drop to the ocean: the same qualities (sat, chit, ananda) in minute quantity. The Supersoul sits beside every soul, like the second bird in the tree; turning toward Him ends anxiety, which is what Arjuna is now doing.</p>
+<p class="flag">The two-birds image comes from the Upanishads (Mundaka / Shvetashvatara); it appears in the commentary on the Gita, not in verse 2.22 itself.</p>
+</aside>
+</div>
+</details>
+
+<!-- C4 -->
+<details class="lec" id="c4">
+<summary><span class="tag">14/2</span><span class="t">Liberation, and why we come here</span><span class="meta">pages 11–16</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 11</span>
+<p><strong>Do we merge in God? What happens after liberation?</strong></p>
+<ul>
+<li>BG 2.12 — Never was there a time when I did not exist, nor you, nor all these kings…</li>
+<li>BG 15.7 — The living entities in this conditioned world are My eternal fragmental parts…</li>
+<li>Soul is never inactive… even in dreams it’s active. Even in this conditioned / bound state it’s so very active, so it would be much more active after liberation. You can’t make thinking, feeling, willing zero.</li>
+</ul>
+<p><strong>Reason why we come here</strong></p>
+<blockquote>O scion of Bharata, O conqueror of the foe, all living entities are born into delusion, bewildered by dualities arising from desire and hate. (BG 7.27)</blockquote>
+<span class="pg">Page 12</span>
+<p>2 reasons:</p>
+<ul>
+<li><strong>Iccha</strong> → desire to enjoy separate from God.</li>
+<li><strong>Dvesh</strong> → why is God supreme? Why not me? Why am I not the centre of attraction? Can I take His position?</li>
+<li>Spiritual world: all are existing with the Supreme Lord, getting great affection (extremely loving relationships with each other, selfless relationships; no negative things here). Population is 3 times more than the material world population.</li>
+<li>Material world (including millions of universes). In the spiritual world the living entity has a lot of freedom, abilities &amp; powers; it gets constrained when we come to the material world.</li>
+<li>Govt. wants you to enjoy; a lot of freedom is provided. But if you enjoy by robbing others or doing crime, govt. will put you in jail (not because they hate him). Now he is constrained, but the govt. only is nourishing the prisoner (all arrangements are made by govt.).</li>
+<li>So God sends the soul to the material world to fulfil all the desires separate from Him.</li>
+<li><strong>Dvesh</strong> → that’s why most of the people don’t believe in God, because they want to become God. Dvesh can’t be fulfilled in the spiritual world because everyone is praising the Lord there. So the Lord sends the Jiva to the material world to fulfil dvesh, and God conceals Himself so that the Jiva doesn’t become jealous of the Lord.</li>
+</ul>
+<span class="pg">Page 13</span>
+<ul>
+<li>Q → The Lord is all-powerful, so why did He send us here? He could have stopped us.
+  <ul>
+  <li>Jiva is not a robot. So the Lord has provided free will → desire — that whether the Jiva wants to be in the spiritual or material world.</li>
+  <li>Once the Jiva comes to the material world (put into prison), the Lord has affection still towards him.</li>
+  <li>The Lord accompanies each &amp; every living entity in the heart as the Supersoul &amp; provides remembrance, knowledge, forgetfulness.</li>
+  </ul></li>
+</ul>
+<blockquote>BG 15.15 — I am seated in everyone’s heart, and from Me come remembrance, knowledge and forgetfulness. By all the Vedas, I am to be known. Indeed, I am the compiler of Vedanta, and I am the knower of the Vedas.</blockquote>
+<p><strong>Why are we given the material body?</strong> Can’t we remain in the spiritual body here?</p>
+<ul>
+<li>The nature of soul is spiritual. The nature of this material world is material. If the soul has to interact with the material world it needs a covering to interact.</li>
+<li>Go to outer space ✗. We wear a space suit, then go to outer space ✓ — it has eyes, hands, legs; now you can enjoy outer space.</li>
+</ul>
+<span class="pg">Page 14</span>
+<ul>
+<li>The Supreme Lord has made the perfect law: <strong>desire + deserve</strong> (karma).
+  <ul>
+  <li>sleep → polar bear; fly + non-veg → eagle; swim + veg → …; king but karma of dog → king of dogs (dominant dog). 84 lakh species are there.</li>
+  </ul></li>
+<li>Daily sample of death: awake → sleep → dream; accumulated desires etc., karmas — can’t control.</li>
+<li>We have no control of what happens after death; we don’t know which body we will get.</li>
+<li>Diagram: 84 lakh species with the human form near the top; same desires &amp; impressions → reincarnation again and again.</li>
+</ul>
+<p><strong>Happiness at various platforms</strong></p>
+<ul>
+<li>Body / senses platform → temporary, limited (gulab jamun: 5–10 min; how many can you eat?).</li>
+<li>Subtle body / mind platform → solve a difficult problem, becoming course topper — this is also temporary &amp; limited.</li>
+<li>Soul / spiritual platform → not temporary, unlimited. After experiencing this happiness the other 2 become (like) rotten chapati.</li>
+</ul>
+<span class="pg">Page 15</span>
+<p><strong>Does yoga mean one has to give up material life?</strong></p>
+<p>1 0000 → the “1” is study of Bhagavad Gita; the zeros are all social activity, work, family. Without this “1” everything is zero.</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>We don’t merge into God after liberation: the soul is eternally individual and always active, so liberation means more activity, not less. We fall into matter because of iccha (wanting to enjoy apart from God) and dvesha (envy of His position). God allows this out of respect for free will — like a government that jails but still feeds the prisoner — and stays with us as the Supersoul.</p>
+<p>The body is a space suit for a spiritual being in a material world. What body we get next follows “desire + deserve” across 84 lakh species. Happiness on the sensory and mental platforms is limited; only spiritual happiness is unlimited. Yoga doesn’t mean abandoning life: add the “1” of the Gita and the zeros of work and family gain value.</p>
+<p class="flag">The quote under “Reason why we come here” is BG 7.27; the notes don’t number it.</p>
+</aside>
+</div>
+</details>
+
+<!-- C5 -->
+<details class="lec" id="c5">
+<summary><span class="tag">18/2</span><span class="t">Does God exist? The argument from design</span><span class="meta">pages 15–20</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 15</span>
+<p>History of the semiconductor industry (Aug 1945 onward):</p>
+<div class="scroll"><table>
+<thead><tr><th>1950s</th><th>1960</th><th>1970</th><th>1980</th><th>2000</th></tr></thead>
+<tbody>
+<tr><td>silicon transistor</td><td>TTL and gate</td><td>8-bit µP</td><td>32-bit</td><td>64</td></tr>
+<tr><td>1 T</td><td>16 T</td><td>45,000 T</td><td>3,100,000</td><td>5… <span class="unclear">(cut off)</span></td></tr>
+</tbody></table></div>
+<ul>
+<li>“All this happened without human intervention” (unbelievable). Similarly Darwin’s theory (of automatic evolution) — but we believe it.</li>
+</ul>
+<span class="pg">Page 16</span>
+<ul>
+<li>How can a tiny squirrel evolve to be a giraffe (so tall) without intervention of a highly intelligent being?</li>
+<li>We think ourselves to be so very great: tiny planet, tiny creatures; the nearest star is so many light-years far.</li>
+</ul>
+<p><strong>Does God exist?</strong></p>
+<ul>
+<li>Does creation exist? A remote, chair, board, building — we can’t believe they came up automatically. Our body is so very complex; how can you say that it came up automatically?</li>
+<li>Creation implies creator. Control implies controller. Organisation implies organizer.</li>
+<li>In this room: remote batteries charged, cleaning, AC turned off, putting chalk — we don’t know who does this,</li>
+</ul>
+<span class="pg">Page 17</span>
+<ul>
+<li>but actually Babulal ji does it. In our solar system similarly, how can it be operating without an operator?</li>
+<li>APOGEE: there is a whole coordinating team who do very hard work to make APOGEE event happen; invite people… Everything in this world is so much organised.</li>
+<li>Creation → creator: mobile, remote → more intelligent creator required.</li>
+<li>Aquatic life: beautiful design of fishes with different designs. If you allocate the whole world’s researchers and ask them to make a project — 95% water and it should glow also — they won’t be able to make it, &amp; you believe the jellyfish came up automatically.</li>
+<li>Kangaroo’s pocket: even the shirt’s pocket is stitched by a tailor, &amp; you believe the kangaroo’s pouch came up on its own.</li>
+</ul>
+<span class="pg">Page 18</span>
+<ul>
+<li>Each one is unique (species).</li>
+<li>Ostrich egg → an elephant can dance on it, it won’t break.</li>
+<li>Surajmukhi (sunflower).</li>
+<li>Lotus → it remains open on full moon day: 14th day moon → closed; 15th day → open. The lotus is able to discriminate between these two moons; all researchers of the world won’t be able to make such a device.</li>
+<li>We are just a virus of BITS Pilani — how much do we know?</li>
+<li>Our body: cells, nervous system (electric pulses), epiglottis → high degree of complexity.</li>
+<li>There must be some very intelligent creator behind these creations.</li>
+</ul>
+<span class="pg">Page 19</span>
+<ul>
+<li>Our eyes are so very complex (the way we see). Our ears are so very complex.</li>
+<li>Flies have eyes bigger than their head: 4000–4500 lenses → compound eyes; almost 360° view.</li>
+</ul>
+<blockquote>BG 7.7 — <span class="deva">mattaḥ parataraṁ nānyat kiñcid asti dhanañjaya</span>. O conqueror of wealth (Arjuna), there is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread.</blockquote>
+<ul>
+<li>(Sketch of a <span class="deva">माला</span> — you can’t see the thread.)</li>
+<li>24 × 60 × 60 → how many seconds a day you remember the Lord?</li>
+<li>You don’t want to see God, so He has designed it in such a way — just as you can’t see the escalator operator.</li>
+</ul>
+<span class="pg">Page 20</span>
+<p><strong>BG 7.8–10</strong></p>
+<ul>
+<li>Taste in water is due to Me.</li>
+<li>I am the Om of the Vedas.</li>
+<li>I am the fragrance of the earth.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>The class argues from design: we’d never believe a chip went from 1 to millions of transistors without engineers, or that a fest runs without organizers, yet we accept that eyes, jellyfish, kangaroo pouches and lotuses arose by chance. Creation implies a creator, control a controller.</p>
+<p>BG 7.7–7.10 give the Gita’s answer: Krishna is the unseen thread on which everything is strung — the taste of water, the fragrance of earth, Om in the Vedas.</p>
+<p class="flag">This is the classic design argument. Evolutionary biology explains features like eyes and pouches through natural selection over long time spans; the squirrel-to-giraffe line misstates the theory. Some nature facts are also loose (e.g. lotuses open daily with the sun, not on the full moon).</p>
+</aside>
+</div>
+</details>
+
+<!-- C6 -->
+<details class="lec" id="c6">
+<summary><span class="tag">20/2</span><span class="t">Why understand God: the six opulences</span><span class="meta">pages 20–23</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 20</span>
+<ul>
+<li>Autonomous cars → require so much effort, but we can drive so easily. Autonomous drones.</li>
+<li>Dragonfly → 30,000 lenses; multiple images; 360° view.</li>
+<li>BG 18.61 — The Supreme Lord is situated in everyone’s heart, O Arjuna, and is directing (the wanderings of all living entities, who are seated as on a machine). Same driver driving different vehicles.</li>
+</ul>
+<span class="pg">Page 21</span>
+<p><strong>Why do we need to understand God?</strong></p>
+<ul>
+<li>One can’t have complete understanding of oneself without knowing the Supreme Lord.</li>
+<li>Without defining the Supreme Lord, one can’t define what is duty and what is not duty: convenience becomes the rule (whatever I like, that is right, &amp; vice versa).</li>
+<li>Ex: in the absence of sunlight one can’t see oneself in darkness. That’s why the Supreme Lord is also called Absolute Truth.</li>
+<li>You need to identify which is the real golden bangle &amp; which is fake. XYZ person does some magic, people get fooled, consider him as god.</li>
+</ul>
+<p><strong>Can God be defined?</strong> → can be defined only by a qualified person. From Vedanta Sutra —</p>
+<span class="pg">Page 22</span>
+<p>We get attracted to these 6 opulences → God has these opulences in full, completely.</p>
+<div class="scroll"><table>
+<thead><tr><th>Opulence</th><th>Example in the notes</th></tr></thead>
+<tbody>
+<tr><td>Wealth</td><td>9 lakh cows; married 16,108 wives &amp; all were very happy; for each wife 1 palace; Krishna was simultaneously present in all palaces &amp; doing different things</td></tr>
+<tr><td>Strength</td><td>lifted Govardhan hill on his little finger</td></tr>
+<tr><td>Beauty</td><td>Krishna is very beautiful</td></tr>
+<tr><td>Fame</td><td>—</td></tr>
+<tr><td>Knowledge</td><td>Vedas → condensed into BG</td></tr>
+<tr><td>Renunciation</td><td>God is the chariot driver of everyone, sitting in everyone’s heart</td></tr>
+</tbody></table></div>
+<ul>
+<li>Names: Krishna → krish → attraction → the all-attractive. Rama → the all-pleasure. Allah → the almighty, all-powerful. Parameshwar → Ishvara = controller; Param = controller of controllers.</li>
+</ul>
+<span class="pg">Page 23</span>
+<ul>
+<li>Krishna is the God → He himself declares (BG 10.8).</li>
+<li>Sandipani Muni ji asked (for) 7 children back to life as guru dakshina from Krishna.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Without knowing God we can’t fully know ourselves or define duty — otherwise “what I like” becomes the rule. Because fakes exist, God must be understood through qualified sources. God is defined by possessing all six opulences (wealth, strength, beauty, fame, knowledge, renunciation) in full, and the notes illustrate each from Krishna’s life. Different names — Krishna, Rama, Allah, Parameshwar — describe aspects of the same Supreme.</p>
+<p class="flag">In the Bhagavata story Sandipani Muni asked for his one drowned son to be returned; “7 children” may be a slip.</p>
+</aside>
+</div>
+</details>
+
+<!-- C7 -->
+<details class="lec" id="c7">
+<summary><span class="tag">21/2</span><span class="t">Avatars, the three miseries, and the prodigal son</span><span class="meta">pages 23–29</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 23</span>
+<p><strong>Avatar</strong></p>
+<ul>
+<li>Material entity: asat, achit, ananda (opposite of sat-chit-ananda).</li>
+<li><span class="deva">इच्छा / द्वेष</span> → that’s why we had to come to the material world.</li>
+<li>When the Jiva comes into the material world, according to his karma he faces difficulties. Govt. puts a troublesome person into jail &amp; makes many provisions so that he can improve, but in jail he has to make many inconveniences (hard life).</li>
+<li>Space suit: Jiva is given a material body; he has desires (many); to fulfil desires he gets a suitable body, like flying → birds etc.</li>
+</ul>
+<span class="pg">Page 24</span>
+<p><strong>3 categories of miseries</strong></p>
+<ol>
+<li><strong>Adhibhautik</strong> — coming from other living entities (mosquito bite, abuse).</li>
+<li><strong>Adhidaivik</strong> — difficulties put on by higher forces: earthquakes, COVID-19, tsunami, volcano; we don’t have control.</li>
+<li><strong>Adhyatmik</strong> — own mind &amp; senses are giving you a lot of trouble: depression; poisonous (“why I did this mistake!!”).</li>
+</ol>
+<p><strong>Avatar — background story</strong> (given by Jesus Christ)</p>
+<ul>
+<li>Once upon a time a merchant had 3 sons: S1, S2 obedient; S3 arrogant, had a different opinion. Then at a point of time he asked for his part of the wealth and to leave me alone. After being so adamant, the father gave 1/3rd wealth.</li>
+</ul>
+<span class="pg">Page 25</span>
+<ul>
+<li>Now he got many friends → gambling, drinking etc. Now lost all money, now all friends go away. Now nothing to eat. “I can’t go back to father” (ego issue).</li>
+<li>Can’t find a job. Went to a pig farm: “please hire me and give me money.” “You can stay here &amp; take care of pigs, but the same grains the pigs eat, you can eat it.” He became adapted to it.</li>
+<li>Once father’s friend was passing by. He identified him: “Your father is so well-to-do merchant,” and told him “why are you suffering?” “He won’t accept me now.” “No, he still loves you, please come with me.” He takes him back to his father and S3 is rectified. The end.</li>
+<li>Jiva has free will; he can use it or misuse it (you only have to suffer).</li>
+<li>Who is suffering in addition to S3? His father will feel pain that what can I do to help him.</li>
+</ul>
+<span class="pg">Page 26</span>
+<ul>
+<li>Similarly the Lord feels for us. Who helped the boy → father’s friend. Same way when the Jiva is going here to these species after species, the Lord sends His friend to give the message of BG etc.</li>
+<li>When will S3 be happy? If S3 shoos away the friend (“you are my father’s friend, go away”), then he will not get happy &amp; not get benefit. But if S3 understands the friend’s message &amp; goes back to father, he can become happy.</li>
+<li>If you have pressure of stool or urine you won’t be comfortable doing any task, but after passing the stool away you become comfortable &amp; peacefully do work. Similarly the heart is full of dirt (desires) → envy, lust, greed, iccha, dvesh, anger, lobh, moh, ego. So until &amp; unless you clear your heart you will remain restless.</li>
+<li>The Lord keeps sending friends time and again.</li>
+</ul>
+<span class="pg">Page 27</span>
+<ul>
+<li><strong>Avatar</strong> → one who descends from the spiritual world to the material world (sent by the Lord from the spiritual world) for the purpose of uplifting the Jiva.</li>
+</ul>
+<blockquote>BG 4.6 — Although I am unborn and My transcendental body never deteriorates, and although I am the Lord of all living entities, I still appear in every millennium in My original transcendental form.</blockquote>
+<ul>
+<li>(Krishna doesn’t grow beyond 16 years.)</li>
+<li>Yugas: S | T | D | K (Satyug…) — appears in each, not only here.</li>
+<li>BG 4.9 — one who knows…</li>
+<li><strong>Prison house</strong> → the rules don’t apply to the jail keepers; sometimes the king may also visit the jail. Similarly avatars…</li>
+</ul>
+<span class="pg">Page 28</span>
+<ul>
+<li>…when the Supreme Lord descends as avatars.</li>
+</ul>
+<p><strong>3 things that control the Jivas:</strong> ① Kala ② Karma ③ Guna. These 3 things don’t influence avatars; the Lord is beyond kala, karma &amp; guna.</p>
+<ul>
+<li>If a king sees that there is a genuine criminal who is suffering, if the king wants he can free him. Similarly the Lord can free us from our loads &amp; loads of bad karma, desires etc.</li>
+</ul>
+<blockquote>BG 4.7 — Whenever and wherever there is a decline in religious practice, O descendant of Bharata, and a predominant rise of irreligion…</blockquote>
+<p><strong>Lord’s descent — purpose (BG 4.8):</strong> ① protect sadhus (devotees) ② destroy demonic people ③ help us re-establish…</p>
+<span class="pg">Page 29</span>
+<ul>
+<li>All of the avatars are eternally present; that form of avatar is already there in the spiritual world.</li>
+<li>Katha Upanishad 2.2.13 → the Lord fulfils desires of all Jivas.</li>
+<li>BG 9.11 → fools deride Me when I descend in the human form. They do not know My transcendental nature as the Supreme…</li>
+<li>BG 7.25 (noted).</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Life in matter brings three kinds of misery: from other beings, from nature, and from our own mind. The prodigal-son parable frames the whole situation: the son (Jiva) demands his share, wastes it, and ends up eating with pigs; the father (God) suffers too and sends a friend (the Gita, the guru) to call him home. The son only recovers if he listens instead of sending the friend away.</p>
+<p>An avatar is God descending by choice, like a king visiting a jail — untouched by time, karma and the gunas. He comes whenever dharma declines (BG 4.7–8) to protect the good, remove the demonic and help us restore our relationship with Him.</p>
+</aside>
+</div>
+</details>
+
+<!-- C8 -->
+<details class="lec" id="c8">
+<summary><span class="tag">25/2</span><span class="t">Purpose of descent, and three levels of realizing God</span><span class="meta">pages 29–34</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 29</span>
+<p>Elements and the senses they carry:</p>
+<div class="scroll"><table>
+<thead><tr><th>Element</th><th>Perceived by</th></tr></thead>
+<tbody>
+<tr><td>Earth</td><td>all 5</td></tr>
+<tr><td>Water</td><td>no smell</td></tr>
+<tr><td>Fire</td><td>no smell, no taste (touch, see, hear)</td></tr>
+<tr><td>Air</td><td>no smell, taste or sight (only touch, hear)</td></tr>
+<tr><td>Ether</td><td>only hear</td></tr>
+</tbody></table></div>
+<span class="pg">Page 30</span>
+<ul>
+<li>The Lord frees the sincere soul; does rectification. He does not free every prisoner — when they get freed they will cause trouble to the public.</li>
+<li>Kala (time), karma, gunas → influence the living entity; do not influence the Lord or the Arjuna… Pandavas.</li>
+<li><strong>Purpose of Lord’s descent</strong> → protect sadhus; destroy demonic people; help us re-establish our relationship with God — not sentimental, but by giving the teachings of the Bhagavad Gita.</li>
+<li>The Lord comes in various incarnations in various yugas for different purposes.</li>
+<li>The Lord also performs various leelas that enable people to criticize the Lord. So not everyone can know the Lord. So many people were envious of Krishna.</li>
+</ul>
+<span class="pg">Page 31</span>
+<p><strong>Krishna &amp; Vishnu</strong> — same personality but different mood.</p>
+<ul>
+<li>Vishnu → manages all kinds of universal affairs. Krishna → not interested in managing; loving exchanges with the devotees in the spiritual world.</li>
+<li>The Lord gives liberty whichever relationship you want to have with Him: friend, lover, parent, servant (e.g. Hanuman ji). Lord Krishna is all-accommodating. You can’t become father of Lord Shiva or wife etc.</li>
+<li>Primary relationship → servitor: devoted servant of Krishna.</li>
+</ul>
+<p><strong>3 levels of realisation of God</strong></p>
+<div class="scroll"><table>
+<thead><tr><th>Level</th><th>Aspect</th><th>Sun analogy</th></tr></thead>
+<tbody>
+<tr><td>Brahman</td><td>energy</td><td>as soon as you perceive sunlight you have some idea of the sun</td></tr>
+<tr><td>Paramatma</td><td>localised</td><td>if you could go to the sun, you could have a deeper understanding</td></tr>
+<tr><td>Bhagavan</td><td>personality</td><td>if you could have a relationship with the sun god (Vivasvan), he could tell you much more about the sun</td></tr>
+</tbody></table></div>
+<p>(Arrow down the side: depth of realisation.)</p>
+<span class="pg">Page 32</span>
+<ul>
+<li>Approaching a mountain: far → a peak; closer → roads; near → trees, houses.</li>
+<li><strong>Brahman</strong> → you can see light (of the sun).</li>
+<li><strong>Paramatma</strong> → localised aspect of the Supreme Lord who accompanies the Jiva in the material world to help in fulfilling its independent desires. Although Paramatma is present in every living being, yet He is the same person — the same sun shining on the heads of a person in Rajasthan and in Orissa. He is situated in the heart (wherever is the seat of energy in the body).</li>
+<li>Realizing “sat” &amp; “chit” features of the Lord, i.e. eternality &amp; knowledge aspect of the Lord.</li>
+<li>Ananda → relationship with the Lord gives happiness (ananda).</li>
+</ul>
+<span class="pg">Page 33</span>
+<ul>
+<li>Paramatma accompanies the living entity. Why is He not helping us if He knows that we are in the cycle of birth &amp; death? → He helps us; He sends avatars.</li>
+<li>The Lord gives forgetfulness so that you can sleep; gives remembrance when you wake up.</li>
+<li>Bhagavan aspect of God realization is most complete → the Lord is the complete Absolute Truth.</li>
+<li>We have thinking, feeling, willing, desire → so our source also has all these things.</li>
+<li>The Lord is a person having His own: nama (names), guna (qualities), dhama (abode), iccha, feelings, rupa, lila, sambandha, likes &amp; dislikes, individuality.</li>
+</ul>
+<span class="pg">Page 34</span>
+<p><strong>2 kinds of people</strong></p>
+<ul>
+<li><strong>Materialists</strong> → sum &amp; substance of life is eating, sleeping, mating, defending; maximise this to attain happiness.</li>
+<li><strong>Transcendentalists</strong> → happiness in this material world is very very temporary, &amp; they look for happiness beyond the material world.
+  <ul>
+  <li><strong>Impersonalists</strong> → God is energy; the Absolute Truth does not have any form; energy, no personality. (BG 12.1)</li>
+  <li><strong>Personalists</strong> → consider the Lord as a personality.</li>
+  </ul></li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>God frees sincere souls, not everyone, and appears in different forms and moods — Vishnu the manager, Krishna the lover of devotees — letting each soul choose its relationship, though our original role is servant.</p>
+<p>There are three depths of realizing God, explained with the sun and a mountain: Brahman (the light, His eternity), Paramatma (the Supersoul in every heart, His knowledge) and Bhagavan (the person, His bliss) — the most complete. Since we think, feel and will, our source must too, so God has name, form, abode, pastimes and personality. The class closes by dividing people into materialists and transcendentalists, the latter split into impersonalists and personalists.</p>
+</aside>
+</div>
+</details>
+
+<!-- C9 -->
+<details class="lec" id="c9">
+<summary><span class="tag">27/2</span><span class="t">Demigods, planetary systems, cosmic time</span><span class="meta">pages 34–41</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 34</span>
+<ul>
+<li>We are using services but we don’t know the persons behind it, e.g. water, electricity, time table. Organisation vs control.</li>
+</ul>
+<span class="pg">Page 35</span>
+<p><strong>Demigods — devi-devta.</strong> Spiritual world: everything is managed by the Lord. Material world: He does not directly manage, because the Jiva is jealous of Him.</p>
+<ul>
+<li>BG 10.2 — difference between God &amp; demigods: neither the hosts of demigods nor the great sages know My origin or opulences, for in every respect I am the source of the demigods and sages.</li>
+<li>Creation can’t understand creator. If you want to know about your mother’s history / life, only she can tell you.</li>
+<li>BG 10.8 — I am the source of all spiritual &amp; material worlds; everything emanates from Me.</li>
+<li>Purport: from Narayana → Brahma, Prajapatis, Indra; 12 Adityas, 11 Rudras, 8 Vasus.</li>
+</ul>
+<span class="pg">Page 36</span>
+<ul>
+<li>Adityas → sons of Aditi. 33 primary demigods; each of them has around 1 crore followers.</li>
+<li>Brahma-samhita 5.54 — “I adore the primeval Lord Govinda, who burns up to their roots all fruitive…”; e.g. spider (from the insect to Indra).</li>
+<li>You can become one of the 33 crore demigods &amp; get a high enjoyment, but you still remain in the material world. Indra ↔ virus: do good things &amp; follow scriptures, or you can fall down.</li>
+</ul>
+<span class="pg">Page 37</span>
+<ul>
+<li>You will always find demigods meditating on the Lord’s name (Shiva → Ram). All of them are very submissive.</li>
+<li>All demigods are also Jiva — just a position occupied by eligible &amp; worthy Jivas.</li>
+<li>Demigods are Jiva tattva, even up to Brahma — except Lord Shiva.</li>
+<li>2 tattvas: Ishvara and Jiva; Lord Shiva is in between. Milk → curd: from milk curd comes, but they are not the same.</li>
+<li>Satyaloka: resided by Brahma ji (position taken by 1 Jiva) with many more living entities who have similar calibre; level of happiness is much higher, much much elevated.</li>
+<li>The demigods remain young. After their term is over (punyas get finished) they fall back to Martyaloka.</li>
+</ul>
+<span class="pg">Pages 37–38 · Planetary system</span>
+<div class="scroll"><table>
+<thead><tr><th>Loka</th><th>Group</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Satyaloka, Tapaloka, Janaloka, Maharloka, Svargaloka, Bhuvar</td><td>Svarga loka (heavenly planets)</td><td>highly elevated people</td></tr>
+<tr><td>Bhur</td><td>Martyaloka (earthly planets), aka Karma-loka</td><td>other lokas are Bhoga-lokas; till Bhur-loka there is presence of sun</td></tr>
+<tr><td>Atala, Vitala, Sutala, Talatala, Mahatala, Rasatala, Patala</td><td>Patala loka (lower planes)</td><td>for sinful living entities; mixture of happiness &amp; distress; illuminated artificially by gems; below them hellish planets</td></tr>
+</tbody></table></div>
+<ul>
+<li>Avatars → not only in Bhur-loka but also in other lokas.</li>
+<li>An ant can’t envision / understand BITS Pilani &amp; its functioning; similarly for us to conceive all this is practically infeasible.</li>
+</ul>
+<blockquote>BG 8.17 — By human calculation, a thousand ages taken together form the duration of Brahma’s one day. And such also is the duration of his night.</blockquote>
+<span class="pg">Page 39 · Time chart of different yugas</span>
+<div class="scroll"><table>
+<thead><tr><th>Satya</th><th>Treta</th><th>Dvapara</th><th>Kali</th><th>Total</th></tr></thead>
+<tbody><tr><td>4x</td><td>3x</td><td>2x</td><td>x = 432,000 years</td><td>10x = 43,20,000 years</td></tr></tbody></table></div>
+<ul>
+<li>Brahma’s day = × 1000. Life of (Brahma) = 100 × 365 × (43.2 L + same night) days.</li>
+<li>Brahma ji lives 100 years → 1 year = 365 days. 1 din → 43.2 L yrs of ours.</li>
+<li>100 × (2 × 43.2 L) → life of Brahma ji in our years.</li>
+<li>Analogy: a fly insect in rainy season — mayfly → 24 hrs life (~1 day); takes birth, grows, mates, eats, grows old &amp; dies in just 24 hrs. Human being ~100 years ~36,500 days → 36,500 times the mayfly.</li>
+</ul>
+<p class="flag">The arithmetic in the notes drops the ×1000. By the standard reckoning, one day of Brahma = 1000 × 43,20,000 = 4.32 billion years (432 crore), a night is the same, and his 100-year life (using 360-day years) is about 311 trillion years.</p>
+<span class="pg">Page 40</span>
+<ul>
+<li>Time affects different living entities in different ways, so there may be living entities who have life more than us.</li>
+<li>Dimensions: A · B · C on a line (1D) → B is closer to A; with another dimension → C is closer to A. Different dimensions.</li>
+<li>In higher planetary systems there are higher numbers of dimensions: Svarloka → 10 dimensions; Satyaloka → 64 dimensions; Bhur-loka → 3 dimensions. Your perception of things may be very very different. You have to be in that particular dimension to understand that thing.</li>
+</ul>
+<span class="pg">Page 41</span>
+<ul>
+<li>2D creature → sees a circle growing &amp; vanishing; 3D → a ball crossing the plane.</li>
+<li>Only Satya, Tapa, Jana, Mahar-loka remain after Brahma’s day → partial devastation.</li>
+<li>Full devastation happens after 100 years of Brahma; new creation is created.</li>
+</ul>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>God doesn’t run the material world directly; demigods — souls holding offices, like officials in a government — manage it. They are powerful and long-lived but still jivas, and fall when their merit runs out (Shiva is a special category, like curd from milk). Creation can’t fully know its creator, just as only a mother can tell her own history.</p>
+<p>The universe has fourteen planetary levels, from Satyaloka down to Patala, and time scales with them: a mayfly’s day is our lifetime, and Brahma’s day spans a thousand cycles of the four yugas. Higher worlds are described as having more dimensions, which is why we can’t easily conceive of them.</p>
+<p class="flag">The specific dimension counts (10, 64) are the lecturer’s illustration; they aren’t from the Gita.</p>
+</aside>
+</div>
+</details>
+
+<!-- C10 -->
+<details class="lec" id="c10">
+<summary><span class="tag">28/2</span><span class="t">Heaven isn’t the goal: water the root</span><span class="meta">pages 42–43</span><span class="chev" aria-hidden="true">›</span></summary>
+<div class="body">
+<div class="written">
+<h3>As written</h3>
+<span class="pg">Page 42</span>
+<ul>
+<li>If one has high rectification but also high desire for material (enjoyment), they end up in Swargaloka.</li>
+<li>Brahma → 1000 chaturyugas. Swargaloka → 1 day = earthly 6 months.</li>
+</ul>
+<blockquote>BG 9.21 — When they have thus enjoyed vast heavenly (sense pleasure)…</blockquote>
+<blockquote>BG 2.42–43 — Men of small knowledge are very much attached to the flowery words of the Vedas, which recommend various fruitive activities for elevation to heavenly planets, resultant good birth, power and so forth. Being desirous of sense gratification and opulent life, they say there is nothing more than this.</blockquote>
+<blockquote>BG 8.16 — From the highest planet in the material world down to the lowest, all are places of misery wherein repeated birth and death take place. But one who attains to My abode, O son of Kunti, never takes birth again.</blockquote>
+<blockquote>BG 7.20 — Those whose intelligence has been stolen by material desires surrender unto demigods and follow the particular rules and regulations of worship according to their own natures.</blockquote>
+<span class="pg">Page 43</span>
+<p><strong>“All paths lead to same God” ✗ wrong.</strong></p>
+<blockquote>BG 9.25 — Those who worship the demigods will take birth among the demigods; those who worship the ancestors go to the ancestors; those who worship ghosts and spirits will take birth among such beings; and those who worship Me will live with Me.</blockquote>
+<p><strong>Watering the root</strong> (sketch: watering can at the root of a tree) — when a Jiva worships the Supreme God, all the demigods are naturally pleased (more than pleased).</p>
+</div>
+<aside class="sum"><h3>Summary</h3>
+<p>Pious people who still want enjoyment reach heaven, but even heaven is temporary: when merit is used up they return (BG 9.21), and every material world involves birth and death (BG 8.16). Chasing heaven through Vedic rituals or demigod worship is called a mark of small knowledge (2.42–43, 7.20).</p>
+<p>The lecture rejects “all paths lead to the same God”: you reach what you worship (BG 9.25). Worship the Supreme directly and, like watering a tree’s root, every branch — every demigod — is nourished.</p>
+<p class="flag">“All paths lead to the same God” being wrong is this tradition’s reading; other Hindu schools (e.g. Advaita) read these verses differently.</p>
+</aside>
+</div>
+</details>
+
+<section class="closing" id="verses">
+  <h2 class="section-head">Verse index</h2>
+  <div class="scroll"><table>
+  <thead><tr><th>Reference</th><th>Used for</th><th>Class</th></tr></thead>
+  <tbody>
+  <tr><td>BG 2.12</td><td>We all existed before and will exist after</td><td>14/2</td></tr>
+  <tr><td>BG 2.13</td><td>Soul passes through bodies as through ages</td><td>11/2</td></tr>
+  <tr><td>BG 2.20</td><td>Soul unborn, eternal, not slain</td><td>13/2</td></tr>
+  <tr><td>BG 2.22</td><td>Changing bodies like garments</td><td>11/2, 13/2</td></tr>
+  <tr><td>BG 2.23–24</td><td>Weapons can’t cut, fire can’t burn the soul</td><td>13/2</td></tr>
+  <tr><td>BG 2.42–43</td><td>Flowery words of the Vedas</td><td>28/2</td></tr>
+  <tr><td>BG 4.6–4.9</td><td>Avatars: why and when God descends</td><td>21/2</td></tr>
+  <tr><td>BG 7.7–7.10</td><td>Pearls on a thread; taste in water</td><td>18/2</td></tr>
+  <tr><td>BG 7.20, 7.25, 7.27</td><td>Demigod worship; God veiled; desire and hate</td><td>14/2, 21/2, 28/2</td></tr>
+  <tr><td>BG 8.16, 8.17</td><td>All worlds temporary; Brahma’s day</td><td>27/2, 28/2</td></tr>
+  <tr><td>BG 9.11, 9.21, 9.25</td><td>Fools deride Me; return from heaven; you reach what you worship</td><td>21/2, 28/2</td></tr>
+  <tr><td>BG 10.2, 10.8</td><td>Source of demigods and all worlds</td><td>20/2, 27/2</td></tr>
+  <tr><td>BG 12.1</td><td>Impersonal vs personal worship</td><td>25/2</td></tr>
+  <tr><td>BG 15.7, 15.15</td><td>Eternal fragments; Lord in the heart</td><td>13/2, 14/2</td></tr>
+  <tr><td>BG 18.61</td><td>Lord in the heart directs all beings</td><td>20/2</td></tr>
+  <tr><td>Katha Up. 2.2.13</td><td>The Lord fulfils the desires of all</td><td>21/2</td></tr>
+  <tr><td>Brahma-samhita 5.54</td><td>Govinda judges karma from insect to Indra</td><td>27/2</td></tr>
+  </tbody></table></div>
+  <p style="color:var(--muted);font-size:.92rem;margin-top:1rem">Where the notes quote a verse without a number (2.23–24, 7.27), the number is added from the standard text.</p>
+</section>
+</main>
+</div>
+
+<footer>Transcribed from handwritten class notes, 43 pages. Words marked [?] or in grey italics were hard to read or left incomplete.</footer>
+
+<script>
+(function(){
+  var lecs=document.querySelectorAll('details.lec');
+  document.getElementById('openAll').addEventListener('click',function(){lecs.forEach(function(d){d.open=true;});});
+  document.getElementById('closeAll').addEventListener('click',function(){lecs.forEach(function(d){d.open=false;});});
+  document.querySelectorAll('nav.toc a[href^="#c"]').forEach(function(a){
+    a.addEventListener('click',function(){var t=document.querySelector(a.getAttribute('href'));if(t&&t.tagName==='DETAILS')t.open=true;});
+  });
+})();
+</script>
+
+</body>
+</html>
