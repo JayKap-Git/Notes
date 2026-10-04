@@ -3,33 +3,168 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Notes — Landing</title>
+  <title>Notes</title>
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f6f8}
-    h1{margin:0 0 1rem 0;font-size:clamp(1.25rem,2.5vw,2rem)}
-    .nav{display:flex;gap:12px}
-    .btn{display:inline-block;padding:10px 16px;background:#0b5fff;color:#fff;border-radius:8px;text-decoration:none;font-weight:600}
-    .btn.secondary{background:#6b7280}
+    :root{--bg:#f5f6f8;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#0b5fff;--accent-soft:#e3ebff}
+    @media (prefers-color-scheme:dark){
+      :root{--bg:#0f1115;--card:#171a21;--text:#e5e7eb;--muted:#9ca3af;--line:#272c36;--accent:#6b96ff;--accent-soft:#1c2747}
+    }
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:var(--text)}
+    main{max-width:880px;margin:0 auto;padding:56px 16px 64px}
+    h1{margin:0;font-size:clamp(1.5rem,3vw,2.25rem)}
+    .count{margin:.25rem 0 1.25rem;color:var(--muted);font-size:.95rem}
+
+    .search{position:relative}
+    .search input{width:100%;padding:12px 14px;font:inherit;font-size:1rem;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:10px;outline:none}
+    .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+    .search kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:2px 8px;font:inherit;font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:6px;pointer-events:none}
+    .search input:focus + kbd,.search input:not(:placeholder-shown) + kbd{display:none}
+    @media (hover:none){.search kbd{display:none}}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+    .chip{font:inherit;font-size:.875rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer}
+    .chip:hover{border-color:var(--accent)}
+    .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    .recent{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 18px;font-size:.875rem;color:var(--muted)}
+    .recent a{color:var(--accent);text-decoration:none;font-weight:600}
+    .recent a:hover{text-decoration:underline}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .card{display:flex;flex-direction:column;gap:4px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:inherit;text-decoration:none;transition:transform .15s,border-color .15s,box-shadow .15s}
+    .card[hidden]{display:none}
+    .card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 6px 18px rgb(0 0 0 / .08)}
+    .card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    .card.first{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+    .card b{font-size:1.05rem;color:var(--accent)}
+    .card span{font-size:.875rem;line-height:1.35;color:var(--muted)}
+    .empty{padding:32px 0;text-align:center;color:var(--muted)}
+    @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
   </style>
 </head>
 <body>
-  <h1>Notes — Landing</h1>
-  <div class="nav">
-    <a class="btn" href="1.html">DSA</a>
-    <a class="btn" href="2.html">Interview</a>
-    <a class="btn" href="3.html">Samsung</a>
-    <a class="btn" href="4.html">Pro</a>
-    <a class="btn" href="5.html">CS-Funda</a>
-    <a class="btn" href="6.html">Sam-Interview</a>
-    <a class="btn" href="computer-networks-hinglish-guide.html">CN</a>
-    <a class="btn" href="dp-phase3-to-9_1.html">DP</a>
-    <a class="btn" href="graphs-scratch-to-advanced.html">Graphs</a>
-    <a class="btn" href="ml-interview-prep.html">ML</a>
-    <a class="btn" href="os-interview-manual.html">OS</a>
-    <a class="btn" href="system-design-manual.html">System Design</a>
-    <a class="btn" href="React++.html">Full Stack</a>
-    <a class="btn" href="bhagavad-gita-notes.html">BG 1</a>
-    <a class="btn" href="bhagavad-gita-ch2-notes.html">BG 2</a>
-  </div>
+  <main>
+    <h1>Notes</h1>
+    <p class="count" id="count" aria-live="polite"></p>
+
+    <div class="search">
+      <input id="q" type="search" placeholder="Search notes…" aria-label="Search notes" autocomplete="off" />
+      <kbd>/</kbd>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+    <nav class="recent" id="recent" aria-label="Recently opened" hidden></nav>
+
+    <!-- To add a note: copy one line. data-cat is the filter chip it shows under (a new value makes a new chip). -->
+    <div class="grid" id="grid">
+      <a class="card" data-cat="DSA" href="1.html"><b>DSA</b><span>DSA Notes</span></a>
+      <a class="card" data-cat="DSA" href="dp-phase3-to-9_1.html"><b>DP</b><span>Phase 3 — Subsequences &amp; Knapsack</span></a>
+      <a class="card" data-cat="DSA" href="graphs-scratch-to-advanced.html"><b>Graphs</b><span>Scratch se Advanced · Hinglish + Java</span></a>
+      <a class="card" data-cat="Samsung" href="3.html"><b>Samsung</b><span>Samsung PPO — Java Algorithm Mastery Guide</span></a>
+      <a class="card" data-cat="Samsung" href="4.html"><b>Pro</b><span>Samsung PRO — Learn the Patterns</span></a>
+      <a class="card" data-cat="Samsung" href="6.html"><b>Sam-Interview</b><span>SRIB · Interview Dossier</span></a>
+      <a class="card" data-cat="CS Core" href="2.html"><b>Interview</b><span>The SDE Interview Field Manual — CS Fundamentals</span></a>
+      <a class="card" data-cat="CS Core" href="5.html"><b>CS-Funda</b><span>CS Interview Revision — OOPS · OS · DBMS · CN</span></a>
+      <a class="card" data-cat="CS Core" href="computer-networks-hinglish-guide.html"><b>CN</b><span>Computer Networks — Zero se Interview tak</span></a>
+      <a class="card" data-cat="CS Core" href="os-interview-manual.html"><b>OS</b><span>Operating Systems — Interview Prep Manual</span></a>
+      <a class="card" data-cat="Engineering" href="system-design-manual.html"><b>System Design</b><span>HLD + LLD, scratch to advanced</span></a>
+      <a class="card" data-cat="Engineering" href="ml-interview-prep.html"><b>ML</b><span>ML Interview — scratch to advanced</span></a>
+      <a class="card" data-cat="Engineering" href="React++.html"><b>Full Stack</b><span>Route map: JavaScript to Kubernetes</span></a>
+      <a class="card" data-cat="Gita" href="bhagavad-gita-notes.html"><b>BG 1</b><span>Bhagavad Gita — Class Notes, Lectures 1–11</span></a>
+      <a class="card" data-cat="Gita" href="bhagavad-gita-ch2-notes.html"><b>BG 2</b><span>Bhagavad Gita Ch. 2 — Science of the Soul</span></a>
+    </div>
+    <p class="empty" id="empty" hidden>Nothing matches. Try another word.</p>
+  </main>
+
+  <script>
+    (() => {
+      const q = document.getElementById('q');
+      const chipsEl = document.getElementById('chips');
+      const countEl = document.getElementById('count');
+      const emptyEl = document.getElementById('empty');
+      const recentEl = document.getElementById('recent');
+      const cards = [...document.querySelectorAll('.card')];
+      const RECENT_KEY = 'notes:recent';
+      const label = c => c.querySelector('b').textContent;
+      // Name, subtitle and category, space-separated so words don't run together across them.
+      const haystack = new Map(cards.map(c => [c, [...c.children].map(n => n.textContent).concat(c.dataset.cat).join(' ').toLowerCase()]));
+      let cat = 'All';
+      let best = null; // card that Enter opens
+
+      for (const name of ['All', ...new Set(cards.map(c => c.dataset.cat))]) {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip';
+        chip.textContent = name;
+        chip.setAttribute('aria-pressed', name === cat);
+        chip.addEventListener('click', () => {
+          cat = name;
+          for (const c of chipsEl.children) c.setAttribute('aria-pressed', c === chip);
+          apply();
+        });
+        chipsEl.append(chip);
+      }
+
+      function apply() {
+        const query = q.value.toLowerCase().trim();
+        const terms = query.split(/\s+/).filter(Boolean);
+        let shown = 0;
+        for (const c of cards) {
+          c.hidden = !((cat === 'All' || c.dataset.cat === cat) && terms.every(t => haystack.get(c).includes(t)));
+          c.classList.remove('first');
+          if (!c.hidden) shown++;
+        }
+        // Enter opens the visible card whose name matches best: exact name, then name prefix, then page order.
+        const rank = c => { const l = label(c).toLowerCase(); return l === query ? 0 : l.startsWith(query) ? 1 : 2; };
+        best = cards.filter(c => !c.hidden).reduce((a, c) => (a && rank(a) <= rank(c) ? a : c), null);
+        if (terms.length) best?.classList.add('first');
+        countEl.textContent = shown === cards.length ? `${cards.length} notes` : `${shown} of ${cards.length} notes`;
+        emptyEl.hidden = shown > 0;
+      }
+
+      function loadRecent() {
+        try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch { return []; }
+      }
+
+      function remember(card) {
+        const href = card.getAttribute('href');
+        const list = [href, ...loadRecent().filter(h => h !== href)].slice(0, 4);
+        try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch {}
+      }
+
+      function renderRecent() {
+        const list = loadRecent().map(h => cards.find(c => c.getAttribute('href') === h)).filter(Boolean);
+        recentEl.replaceChildren();
+        recentEl.hidden = !list.length;
+        if (!list.length) return;
+        recentEl.append('Recent:');
+        for (const card of list) {
+          const a = document.createElement('a');
+          a.href = card.href;
+          a.textContent = label(card);
+          a.addEventListener('click', () => remember(card));
+          recentEl.append(a);
+        }
+      }
+
+      for (const c of cards) {
+        c.addEventListener('click', () => remember(c));
+        c.addEventListener('auxclick', () => remember(c));
+      }
+
+      q.addEventListener('input', apply);
+      q.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && best) { remember(best); location.href = best.href; }
+        if (e.key === 'ArrowDown' && best) { e.preventDefault(); best.focus(); }
+        if (e.key === 'Escape') { q.value = ''; apply(); }
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); }
+      });
+
+      // pageshow also fires on back-navigation, so the recent list and any restored search text stay in sync.
+      window.addEventListener('pageshow', () => { apply(); renderRecent(); });
+    })();
+  </script>
 </body>
 </html>
