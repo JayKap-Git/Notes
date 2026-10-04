@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HSS F334 Bhagavad Gita — Midsem answer bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F4; --paper:#FFFFFF; --ink:#1B2440; --muted:#5A6480; --line:#D5DCE3;
+  --peacock:#0E6B6B; --peacock-soft:#DCEDEC; --turmeric:#C4850A; --turmeric-soft:#F6E7C6;
+  --cell-off:#DDE3E9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121827; --paper:#1A2236; --ink:#E6EAF2; --muted:#9AA4BD; --line:#2C3650;
+    --peacock:#5CC4C0; --peacock-soft:#173638; --turmeric:#E8B04A; --turmeric-soft:#3A2E14; --cell-off:#2A3349;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121827; --paper:#1A2236; --ink:#E6EAF2; --muted:#9AA4BD; --line:#2C3650;
+  --peacock:#5CC4C0; --peacock-soft:#173638; --turmeric:#E8B04A; --turmeric-soft:#3A2E14; --cell-off:#2A3349;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Spectral,Georgia,"Times New Roman",serif;font-size:17px;line-height:1.62}
+h1,h2,h3,.ui{font-family:Mukta,"Segoe UI",system-ui,sans-serif}
+a{color:var(--peacock)}
+:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px}
+header.hero{max-width:1180px;margin:0 auto;padding:44px 20px 20px}
+.hero h1{font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.08;margin:0 0 10px;font-weight:800;letter-spacing:-.01em;max-width:18ch}
+.hero p{margin:0;color:var(--muted);max-width:62ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:.88rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+
+/* frequency strip: the one signature element */
+.strip{display:inline-grid;grid-template-columns:repeat(6,1fr);gap:3px;vertical-align:middle}
+.strip i{display:block;width:12px;height:12px;border-radius:2px;background:var(--cell-off)}
+.strip i.on{background:var(--turmeric)}
+.strip.big i{width:22px;height:22px;border-radius:3px}
+.strip-labels{display:grid;grid-template-columns:repeat(6,22px);gap:3px;font-size:.62rem;color:var(--muted);text-align:center;margin-top:3px}
+
+nav.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;padding:8px 0 24px}
+nav.side ol{list-style:none;margin:0;padding:0}
+nav.side li a{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:7px 10px;border-radius:6px;text-decoration:none;color:var(--ink);font-family:Mukta,system-ui,sans-serif;font-size:.95rem;line-height:1.25}
+nav.side li a:hover{background:var(--paper)}
+nav.side li a.active{background:var(--paper);box-shadow:inset 3px 0 0 var(--peacock)}
+
+.toolbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--line);margin-bottom:8px}
+.toolbar input{flex:1 1 220px;min-width:0;font:inherit;font-size:.95rem;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.toolbar button{font-family:Mukta,system-ui,sans-serif;font-size:.92rem;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.toolbar button[aria-pressed="true"]{background:var(--peacock);border-color:var(--peacock);color:var(--paper)}
+.count{font-family:Mukta,system-ui,sans-serif;font-size:.85rem;color:var(--muted)}
+
+section.topic{padding:28px 0 8px}
+.topic-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.topic-head h2{font-size:1.65rem;line-height:1.15;margin:0;font-weight:800}
+.topic-head .rank{color:var(--peacock);margin-right:.35em}
+.topic-head .freq{font-family:Mukta,system-ui,sans-serif;font-size:.85rem;color:var(--muted);text-align:right}
+.topic-note{color:var(--muted);font-size:.95rem;margin:-6px 0 14px;max-width:70ch}
+
+details.q{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin:0 0 10px}
+details.q[open]{border-color:var(--peacock)}
+details.q summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+details.q summary::-webkit-details-marker{display:none}
+.qt{font-family:Mukta,system-ui,sans-serif;font-weight:600;font-size:1.04rem;line-height:1.35}
+.qt .verdict{font-weight:800;color:var(--peacock)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;max-width:210px}
+.chip{font-family:Mukta,system-ui,sans-serif;font-size:.72rem;padding:1px 7px;border-radius:20px;background:var(--peacock-soft);color:var(--peacock);white-space:nowrap}
+.chip.rep{background:var(--turmeric-soft);color:var(--turmeric);font-weight:600}
+.chip.nn{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+.ans{padding:0 18px 16px;border-top:1px solid var(--line);max-width:76ch}
+.ans p{margin:12px 0 0}
+.ans ul,.ans ol{margin:10px 0 0;padding-left:1.25em}
+.ans li{margin:4px 0}
+.ans b{font-weight:600}
+.ans .v{font-style:italic}
+.ans .tf{display:inline-block;font-family:Mukta,system-ui,sans-serif;font-weight:800;padding:0 8px;border-radius:4px;background:var(--turmeric-soft);color:var(--turmeric);margin-right:6px}
+.tablewrap{overflow-x:auto;margin-top:12px}
+.ans table{border-collapse:collapse;font-size:.95rem;min-width:420px}
+.ans td,.ans th{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.ans th{font-family:Mukta,system-ui,sans-serif;font-weight:600}
+.empty{padding:30px 0;color:var(--muted);display:none}
+footer{max-width:1180px;margin:30px auto 0;padding:20px;color:var(--muted);font-size:.85rem}
+mark{background:var(--turmeric-soft);color:inherit;border-radius:2px}
+
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr;gap:0}
+  nav.side{position:static;max-height:none;padding:0 0 10px}
+  nav.side ol{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+  nav.side li a{white-space:nowrap;background:var(--paper);grid-template-columns:auto}
+  nav.side li a .strip{display:none}
+  details.q summary{grid-template-columns:1fr}
+  .chips{justify-content:flex-start;max-width:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  details.q[open] .ans{animation:open .18s ease-out}
+  @keyframes open{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>Bhagavad Gita midsem answer bank</h1>
+  <p>Every question from six HSS F334 midsem papers (2019–2025), answered once and grouped by how often the topic comes up. Answers are written from your class notes; anything the notes don't cover is flagged.</p>
+  <div class="legend ui">
+    <span><span class="strip"><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i></span> which of the 6 papers a topic appeared in</span>
+    <span><span class="chip">23-1</span> paper where the question appeared (2023-24 Sem 1)</span>
+    <span><span class="chip rep">Repeats</span> asked near-verbatim more than once</span>
+    <span><span class="chip nn">Not in notes</span> answered from standard texts</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="side" aria-label="Topics"><ol id="nav"></ol></nav>
+  <main>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Search questions and answers" aria-label="Search questions and answers">
+      <button id="toggleAll" type="button">Show all answers</button>
+      <button id="repOnly" type="button" aria-pressed="false">Repeats only</button>
+      <span class="count" id="count"></span>
+    </div>
+    <div id="content"></div>
+    <p class="empty" id="empty">No questions match that search. Try a shorter word, like "soul" or "Brahma".</p>
+  </main>
+</div>
+<footer>Papers: 19-1 = 2019-20 Sem 1 · 21-2 = 2021-22 Sem 2 · 23-1, 23-2 = 2023-24 Sem 1 and 2 · 24-1, 24-2 = 2024-25 Sem 1 and 2. Tap a question to reveal its answer, so the page doubles as a self-test.</footer>
+
+<script>
+const PAPERS=["19-1","21-2","23-1","23-2","24-1","24-2"];
+const TF=(t)=>`<span class="tf">${t}</span>`;
+const DATA=[
+{title:"Ways of gaining knowledge and the four defects",freq:[1,1,1,1,1,1],qs:[
+{q:"Three ways of gaining knowledge",t:["24-1"],a:`<ul><li><b>Pratyaksha</b>: direct sense perception.</li><li><b>Anumana</b>: inference or theorizing, built on inputs from the five senses.</li><li><b>Shabda</b>: hearing from a perfect authority, the Vedas, which are God's words and free of defects.</li></ul>`},
+{q:"The four defects",t:[],a:`<ol><li>Imperfect senses. We see only a few hundred nanometres of the electromagnetic spectrum.</li><li>Tendency to fall into illusion.</li><li>Tendency to commit mistakes.</li><li>Cheating propensity.</li></ol>`},
+{q:"Why is hearing (shabda) so important for spiritual knowledge?",t:["19-1"],a:`<p>Shabda is the only pramana free of the four defects. Pratyaksha and anumana both carry them. The Supreme is beyond the senses, so knowledge of Him can only come by hearing from a perfect source.</p>`},
+{q:"What is anumana and why is it defective?",t:["21-2"],a:`<p>Anumana is inference or theorizing. Its inputs come from the senses, so it inherits all four defects. A conclusion can be no better than its data, and inference can never reach beyond what the senses can access.</p>`},
+{q:"\"Seeing is believing.\" Comment.",t:["23-1"],a:`<p>Flawed. Our senses are imperfect and prone to illusion. We can't see air, atoms, radio waves or our own brain, yet we accept they exist. We even accept "who is your father" purely on our mother's word, which is shabda. Most real knowledge comes by hearing from authority, not seeing.</p>`},
+{q:"Smash Sparrows campaign and the defect of pratyaksha",t:["23-1","24-2"],rep:1,a:`<p>In 1958 Mao's China killed sparrows because people <i>saw</i> sparrows eating grain (direct perception). What they couldn't perceive was that sparrows also eat locusts and insects. Locusts multiplied, crops were destroyed, and the famine killed millions.</p><p><b>Defect:</b> imperfect senses. Pratyaksha shows only part of the picture, and acting on that partial view led to a disastrous mistake.</p>`},
+{q:"Hari's universe theory, devised while sitting idle in the metro: which defect?",t:["24-2"],a:`<p>This is anumana by mental speculation. It suffers mainly from <b>imperfect senses</b>, since it's built on limited data with no access to the full truth, which leads to <b>mistakes</b>. Claiming it beats every previous theory without verification also shows illusion or pride.</p>`},
+{q:"Optical illusion images (rotating circles): which defect?",t:["23-2"],a:`<p><b>Illusion (bhrama).</b> The images are static, yet the eyes see motion. The senses themselves report something false.</p>`},
+{q:"Blind men and the elephant: which way of gaining knowledge, and why?",t:["24-1"],a:`<p><b>Pratyaksha</b>, plus anumana drawn from it. Each man touches one part and concludes the elephant is a rope, a pillar or a wall. Limited senses give partial knowledge, and confident inferences from partial data are wrong. Only someone who sees the whole, an authority, can describe it fully.</p>`},
+{q:"What does \"apauruseya\" signify for the Vedas?",t:["23-1"],a:`<p>The Vedas were not composed by any human or mortal being, so they're free of the four defects. They were spoken by God and have existed since time immemorial.</p>`},
+{q:"\"Srila Vyasadeva was the pioneer who created Vedic knowledge.\"",t:["24-1"],a:`<p>${TF("False")}Vyasa only compiled and wrote down the Vedas. They existed eternally and were passed on orally. He wrote them down because memory and consciousness had declined in Kali-yuga.</p>`}
+]},
+{title:"Guru, parampara and the disciple",freq:[1,1,1,1,1,1],qs:[
+{q:"First and foremost criterion of a bona fide teacher, and why it's primary",t:["19-1","23-2"],rep:1,a:`<p>The teacher must belong to one of the <b>four authorized disciplic successions</b>.</p><p><b>Why:</b> knowledge must start from God, who is beyond the four defects, and pass down without distortion. Otherwise there's no guarantee it's free of speculation or ulterior motive. BG 4.2: when the succession is broken, the knowledge is lost.</p>`},
+{q:"Other qualifications of a teacher (any four, with significance)",t:["19-1"],a:`<ol><li>He is an <b>acharya</b>: practises what he preaches. Otherwise there's hypocrisy and the student can't absorb the message.</li><li>Teaches strictly from shastra and previous acharyas, like a lawyer citing the law.</li><li>Free from lust, anger, greed, pride, illusion and envy; equipoised.</li><li>No discrimination by caste or creed.</li><li>No commercialization: no charging money, no selling "secret mantras", no attracting people with cheap miracles.</li><li>Absorbed in God and has realized the truth.</li></ol>`},
+{q:"Significance of the word \"acharya\"",t:["23-2"],a:`<p>From <i>acharana</i>, conduct. An acharya teaches by his own example.</p>`},
+{q:"Why isn't academic scholarship a criterion for a teacher?",t:["19-1"],a:`<p>A guru's job is to train the student in his relationship with God and give realization, not to transmit information. Scholarship isn't a disqualification, but even an illiterate person can be a bona fide guru if he has the real qualifications.</p>`},
+{q:"The three-point check and balance",t:["23-2","24-2"],rep:1,a:`<p><b>Guru – sadhu – shastra.</b> The guru's teaching must match the teachings of previous saints and acharyas, and both must match scripture. If any one disagrees, something is wrong.</p>`},
+{q:"Why must one have a personal teacher? Refute \"self-study is enough\"",t:["21-2","24-1"],a:`<ol><li>Every field of knowledge, including applied sciences, needs a personal teacher.</li><li>The Vedas are <i>shruti</i>, "that which is heard", meaning heard from a teacher.</li><li>You need someone to clear doubts. ChatGPT or self-interpretation can be wrong.</li><li>You need someone to correct you when you apply the teaching wrongly.</li><li>The Lord set the example: Krishna had Sandipani Muni; Rama had Vashishtha and Vishwamitra.</li><li>BG 4.34 itself instructs us to approach a teacher.</li><li>Seed and soil: a potent seed (genuine teacher) in fertile land (receptive disciple) gives a good crop.</li></ol>`},
+{q:"Mr. ABC claims realization without a disciplic succession. Fundamental flaw?",t:["21-2"],a:`<p>His knowledge didn't come from God through parampara, so it's his own speculation, subject to the four defects, and nothing can verify it. Per BG 4.2, knowledge outside the succession is lost.</p>`},
+{q:"Shri XYZ invents a new, easy path not found in the Vedas. Key defect?",t:["23-1"],a:`<p>It isn't authorized by shastra or parampara, so it's speculation with the four defects and fails the guru–sadhu–shastra test. Lakhs of followers prove popularity, not truth.</p>`},
+{q:"Evaluate \"Guru1\" (austere, no teacher, magical touch, miracles, followers think he's God)",t:["23-1"],a:`<p><b>Comment on genuineness:</b> not a bona fide spiritual teacher.</p><ul><li><b>Reason 1:</b> no teacher, no parampara. "Self-realization" by meditation can't be verified and is open to the four defects.</li><li><b>Reason 2:</b> doesn't teach the Vedas or shastra. Moral principles alone are not spiritual knowledge.</li><li><b>Reason 3:</b> attracts people with a "magical touch" and miracles. Mystic tricks aren't a qualification.</li><li><b>Reason 4:</b> lets followers believe he is God and doesn't correct them. A genuine acharya presents himself as God's servant. Austerity alone doesn't qualify anyone.</li></ul>`},
+{q:"Who received the Gita before Arjuna (Ch 4)? Heads of the four sampradayas?",t:["23-2"],a:`<p>(i) <b>Vivasvan</b>, the sun god (BG 4.1), then Manu, then Ikshvaku.</p><p>(ii) The four heads:</p><ul><li>Brahma → Madhvacharya</li><li>Lakshmi (Sri) → Ramanujacharya</li><li>Shiva (Rudra) → Vishnuswami</li><li>Four Kumaras → Nimbarkacharya</li></ul>`},
+{q:"\"Regardless of who speaks the Gita, simply hearing it purifies the listener.\"",t:["24-2"],a:`<p>${TF("False")}Milk touched by a serpent's lips becomes poison. The same truth heard from an unqualified speaker gets distorted.</p>`},
+{q:"\"A teacher may discard scripture if personally convinced.\"",t:["24-2"],a:`<p>${TF("False")}A bona fide teacher must teach strictly from shastra and stay consistent with guru–sadhu–shastra.</p>`},
+{q:"Qualities of a disciple (BG 4.34) and how they counter the three obstacles; the fourth principle",t:["19-1","21-2","23-2","24-2"],rep:1,a:`<ul><li><b>Pranipata (submission)</b> counters stubbornness: drop preconceptions, become open-minded.</li><li><b>Pariprashna (inquiry)</b> counters ignorance: ask relevant questions, clear doubts.</li><li><b>Seva (service)</b> counters mental speculation and whimsical behaviour: please the teacher instead of following your own whims.</li></ul><p><b>Fourth: truthfulness</b> with the teacher, a good starting point even when the others are lacking. Faith also matters (BG 4.39).</p>`},
+{q:"Why is sevaya important? What is the primary seva a disciple must render?",t:["21-2"],a:`<p>Service removes whimsicality and pride and makes the heart receptive. The most important service is <b>attentively hearing</b> the teacher's instructions.</p>`}
+]},
+{title:"The soul",freq:[1,1,1,1,1,1],qs:[
+{q:"Composition of the soul / its three constituents",t:["21-2","23-1","24-2"],rep:1,a:`<p><b>Sat</b> (eternity), <b>chit</b> (knowledge), <b>ananda</b> (bliss).</p>`},
+{q:"Sat-chit-ananda: meaning, and an indicator from our own nature",t:["19-1","23-2"],rep:1,a:`<ul><li><b>Sat, eternity:</b> no one wants to die; we want good things, including life, to last.</li><li><b>Chit, knowledge:</b> constant curiosity and drive to explore and inquire.</li><li><b>Ananda, bliss:</b> every act is motivated by happiness; after sadness we drift back to happiness, our "default state".</li></ul>`},
+{q:"Three symptoms of consciousness",t:["23-1","23-2","24-2"],rep:1,a:`<p>Thinking, feeling, willing.</p>`},
+{q:"Size of the soul, and where it's situated",t:["23-1","23-2"],rep:1,a:`<p><b>1/10,000th of the tip of a hair</b>, situated in the <b>heart region</b>, the seat of energy.</p>`},
+{q:"\"A whale's soul is bigger than a virus's\" / \"the soul grows or shrinks with karma\"",t:["23-1","24-1"],a:`<p>${TF("Contradict / False")}Every soul is the same size. The body is a vehicle: the same driver can drive a cycle, a car or a JCB. BG 18.61 says the Lord directs souls "as if seated on a machine" (yantra). Body size comes from desire and karma, not soul size.</p>`},
+{q:"Two lines of reasoning that we are not the body / two logics for transmigration",t:["19-1","21-2","24-2"],rep:1,a:`<ol><li><b>The body changes, "I" stay the same</b> (BG 2.13). Childhood, youth, old age; most cells are replaced every 7 years, yet identity remains. Death is one more change of body.</li><li><b>Matter is never conscious, but we are.</b> We think, feel and will. A dead body has all its parts, yet no one is seeing or feeling, so the conscious self is something other than matter.</li></ol>`},
+{q:"Two analogies Krishna gives in Ch 2 for soul vs body",t:["23-1"],a:`<ol><li><b>BG 2.13:</b> the soul passes from boyhood to youth to old age, and similarly into another body at death.</li><li><b>BG 2.22:</b> as a person gives up old clothes for new ones, the soul gives up old bodies and accepts new ones.</li></ol>`},
+{q:"What principle does Krishna establish using clothes?",t:["24-1"],a:`<p>Transmigration of the soul. The body is a garment; changing it at death doesn't end the person wearing it, so a sober person doesn't lament.</p>`},
+{q:"Everyday example that the soul sees and hears without gross senses",t:["23-1","23-2","24-2"],rep:1,a:`<p><b>Dreams.</b> With eyes closed and senses inactive, you still see, hear, taste and touch. Also, a dead body's eyes are intact, but nothing is seen because the soul has left.</p>`},
+{q:"Does the soul merge with God at liberation?",t:["23-1","24-1"],a:`<p>${TF("No")}</p><ul><li>BG 2.12: never was there a time when I, you or these kings did not exist, nor shall we ever cease to be. Individuality is eternal.</li><li>BG 15.7: living entities are the Lord's <b>eternal</b> fragmental parts.</li><li>The soul is always active, even in dreams; thinking, feeling and willing can't become zero. Liberation means more activity, not loss of identity.</li></ul>`},
+{q:"\"Two souls can merge to form a bigger soul.\"",t:["23-1","24-2"],rep:1,a:`<p>${TF("False")}Souls are eternally individual (2.12), unbreakable and indivisible (2.23–24), and fixed in size.</p>`},
+{q:"What is liberation?",t:["23-1"],a:`<p>Freedom from the cycle of birth and death and from material conditioning. The soul returns to its constitutional position in the spiritual world, keeping its individuality.</p>`},
+{q:"Jiva's relationship with God, with verses",t:["21-2","23-1"],a:`<p>The jiva is an eternal fragmental part and servant of God, like a drop of the ocean: same quality, minute quantity.</p><p><b>Verses:</b> BG 15.7, BG 2.12 (also 14.4, God as the seed-giving father).</p>`},
+{q:"Principle of individuality of the soul",t:["21-2"],a:`<p>BG 2.12: Krishna, Arjuna and all the kings existed in the past, exist now and will exist in the future as individuals. Individuality is eternal, not a temporary illusion.</p>`},
+{q:"The soul as \"part and parcel\" of God: meaning of part and parcel",t:["19-1"],a:`<ul><li><b>Part:</b> the jiva has the same qualities as God, in minute quantity.</li><li><b>Parcel:</b> the jiva keeps a distinct individuality.</li></ul><p>A part is healthy only when connected to the whole (leaf to tree, hand to body), so the soul is happy only acting in the interest of the whole, God.</p>`},
+{q:"Jiva vs Ishvara: two similarities, two differences",t:["23-2"],a:`<p><b>Similarities:</b> (1) both sat-chit-ananda; (2) both persons with thinking, feeling, willing, and eternal.</p><p><b>Differences:</b> (1) jiva minute, God unlimited; (2) jiva controlled by kala, karma, gunas and can fall under maya, while God controls maya and is present in every heart as Paramatma.</p>`},
+{q:"Why does the living entity come to the material world? (BG 7.27)",t:["21-2","23-1","24-2"],rep:1,a:`<ol><li><b>Iccha:</b> desire to enjoy separately from God.</li><li><b>Dvesha:</b> envy of God. "Why is He supreme and not me?"</li></ol>`},
+{q:"The Lord is all-powerful. Why doesn't He force us to stay in the spiritual world?",t:["23-1","24-2"],rep:1,a:`<p><b>Free will.</b> The jiva is not a robot, and love can't be forced. The Lord respects our choice but still accompanies us as Paramatma.</p>`},
+{q:"Why is the soul given a material body in the material world?",t:["21-2","23-1","24-1","24-2"],rep:1,a:`<p>The soul is spiritual, this world is material. To interact with matter it needs a material covering, like an astronaut needs a space suit to function in outer space.</p>`},
+{q:"Why so many varieties of bodies? What two things decide the species?",t:["23-1","24-2"],a:`<p><b>Desire + deserve (karma).</b> The jiva gets a body suited to its desires, as earned by karma: wanting to fly gives a bird's body, wanting to sleep a polar bear's, across 84 lakh species.</p>`},
+{q:"Subtle body: three elements and their functions",t:["23-1"],a:`<ol><li><b>Mind:</b> storehouse of desires and impressions (hard disk).</li><li><b>Intelligence:</b> discriminates right from wrong.</li><li><b>False ego:</b> identification with matter, "I am Indian", "I am a professor" (operating system).</li></ol><p>It carries habits and impressions into the next body.</p>`},
+{q:"Most subtle element of the gross body, and why",t:["24-1"],a:`<p><b>Ether</b>, perceived by only one sense, hearing.</p><div class="tablewrap"><table><tr><th>Element</th><th>Perceived by</th></tr><tr><td>Earth</td><td>all 5 senses</td></tr><tr><td>Water</td><td>4 (no smell)</td></tr><tr><td>Fire</td><td>3 (sight, touch, hearing)</td></tr><tr><td>Air</td><td>2 (touch, hearing)</td></tr><tr><td>Ether</td><td>1 (hearing)</td></tr></table></div>`},
+{q:"Examples that pain and pleasure come from identifying with the body (car, video game)",t:["23-1","23-2","24-1"],rep:1,a:`<ol><li><b>Car or cycle:</b> someone else's gets scratched, you laugh; "my" cycle, you're angry. Same damage, different identification.</li><li><b>Video game:</b> when your game car crashes you flinch, because you identify with the character.</li><li><b>Sleep:</b> the body gets cold at dawn, but in a dream you don't feel it, since identification with the body is temporarily lost.</li></ol>`}
+]},
+{title:"God: Bhagavan, Paramatma, avatars",freq:[0,0,1,1,1,1],qs:[
+{q:"Why is \"God cannot be defined\" dangerous? Parashara's definition and why it's foolproof",t:["23-2"],a:`<p><b>(i)</b> Anyone doing a little magic can claim to be God and fool people. Without knowing God we can't define duty, and "whatever I like" becomes the rule.</p><p><b>(ii)</b> Bhagavan possesses <b>all six opulences in full</b>: wealth, strength, fame, beauty, knowledge, renunciation. No fake can display all six in full, so it's a hard test.</p>`},
+{q:"Evidences that Krishna is Bhagavan (list 3–6)",t:["23-1","24-2"],rep:1,a:`<ol><li>Displays all six opulences in full: 16,108 wives each with a palace and Krishna present in all at once; lifting Govardhan.</li><li>His declarations: BG 10.8 (source of everything), 7.7 (no truth superior to Me).</li><li>Arjuna in BG 10.12–13, citing Narada, Asita, Devala, Vyasa.</li><li>Brahma Samhita 5.1: <i>ishvarah paramah krishnah</i>.</li><li>Srimad Bhagavatam 1.3.28: <i>krishnas tu bhagavan svayam</i>.</li><li>Vyasa writes <i>sri-bhagavan uvaca</i>; all great acharyas accept Him.</li></ol>`},
+{q:"\"Krishna is called Bhagavan solely because of His mystic powers on the battlefield.\"",t:["24-2"],a:`<p>${TF("False")}He has all six opulences in full and is confirmed by shastra and the acharyas. Mystic powers alone don't make anyone God.</p>`},
+{q:"Why does Arjuna mention Narada, Vyasa and other sages while glorifying Krishna?",t:["24-1"],a:`<p>BG 10.12–13: to show his acceptance isn't sentiment or friendship but backed by recognized authorities, which is shabda pramana.</p>`},
+{q:"Who spoke the Brahma Samhita? Theme of its 5th chapter?",t:["24-1"],nn:1,a:`<p>Spoken by <b>Lord Brahma</b>, as prayers. Chapter 5: Krishna (Govinda) is the Supreme Lord and cause of all causes. E.g. 5.54, Govinda judges everyone's karma, from the insect to Indra.</p>`},
+{q:"Why isn't God present in this world in a perceptible way?",t:["23-1","24-1","24-2"],rep:1,a:`<p>Because of the jiva's <b>envy (dvesha)</b> and desire for independence. God conceals Himself (BG 7.25, yogamaya) so the jiva can pursue its desire without becoming jealous of Him, respecting free will. He's still present, like the unseen thread in a string of pearls or the escalator operator we never see.</p>`},
+{q:"Prove God's existence scientifically with a housefly / dragonfly",t:["23-1","24-2"],a:`<p>Creation implies a creator, control a controller, organization an organizer.</p><ul><li><b>Housefly:</b> compound eyes, about 4,000–4,500 lenses, nearly 360° vision.</li><li><b>Dragonfly:</b> about 30,000 lenses.</li></ul><p>The world's engineers struggle to build autonomous drones; such designs can't arise without a supremely intelligent designer. This came up while discussing "Ishvara".</p>`},
+{q:"Analogy for how Krishna manages cosmic functions unmanifestly, with examples",t:["23-2","24-2"],rep:1,a:`<p>BG 7.7: everything rests on Him <b>like pearls strung on a thread</b>. The thread is unseen but holds it all together.</p><p><b>Examples (7.8–7.10):</b> taste in water, light of sun and moon, Om in the Vedas, sound in ether, fragrance of earth, heat in fire, life of all that lives.</p><p>(If your teacher used BG 9.6 instead: the wind moving everywhere yet resting in the sky.)</p>`},
+{q:"BG 15.15 & 18.61: the two living beings in the heart",t:["23-1"],a:`<p>The <b>jiva</b> (individual soul) and the <b>Paramatma</b> (Supersoul).</p>`},
+{q:"We forget dreams on waking. How can this be explained?",t:["23-1"],a:`<p>BG 15.15: remembrance, knowledge and <b>forgetfulness (apohanam)</b> come from the Lord. Paramatma gives forgetfulness, just as He makes us forget past lives at a change of body.</p>`},
+{q:"What is \"yantra\" in BG 18.61?",t:["23-1"],a:`<p>The <b>material body</b>, a machine made of material energy (maya). The soul is seated on it and the Lord as Paramatma directs its wanderings according to karma and desire.</p>`},
+{q:"Parallels between a conventional yantra and the body",t:["23-1"],a:`<ul><li>A machine is inert and needs an operator; the body needs the soul.</li><li>A machine is built for a purpose; the body is designed by desire and karma.</li><li>The operator is different from the machine; the soul is different from the body.</li><li>A machine wears out and is discarded; the body ages and dies, and the soul takes another.</li><li>A machine is supplied by its maker; the body is supplied by the Lord through material nature.</li></ul>`},
+{q:"Why does Paramatma accompany the jiva? Key functions",t:["24-1"],a:`<p><b>Why:</b> out of love, to enable the jiva's independent desires and wait for it to turn back. Two birds in a tree: the eating bird finds peace only when it turns to its friend.</p><p><b>Functions:</b> gives remembrance, knowledge, forgetfulness; witnesses and permits; directs wanderings per karma; guides from within.</p>`},
+{q:"Explain Paramatma through the sun analogy",t:["24-2"],a:`<p>The same single sun shines over Rajasthan and Odisha at once. One Paramatma is present in every heart simultaneously, without being divided.</p>`},
+{q:"Three levels of God realization",t:[],a:`<div class="tablewrap"><table><tr><th>Level</th><th>Aspect</th><th>Sun</th><th>Mountain</th></tr><tr><td>Brahman</td><td>impersonal energy (sat, chit)</td><td>seeing sunlight</td><td>a peak from far</td></tr><tr><td>Paramatma</td><td>localized, in the heart</td><td>going to the sun</td><td>roads visible</td></tr><tr><td>Bhagavan</td><td>the Supreme Person (ananda)</td><td>meeting the sun god</td><td>houses, trees in detail</td></tr></table></div><p>Bhagavan realization is most complete.</p>`},
+{q:"Personal vs impersonal realization: which is higher, and where in the Gita?",t:["23-1","23-2","24-2"],rep:1,a:`<p><b>Personal is higher.</b> <b>Chapter 12</b> (12.1–2): Arjuna asks whether devotees of the personal form or worshippers of impersonal Brahman are more perfect; Krishna says those who worship Him personally with faith are most perfect. 12.5: the impersonal path is very troublesome.</p>`},
+{q:"Two classes of transcendentalists at the start of Ch 12; which is superior?",t:["24-1"],a:`<p>Devotees of the personal form, and worshippers of the unmanifested impersonal Brahman. <b>The devotees are superior.</b></p>`},
+{q:"God can send associates to help devotees and destroy demons. Why does He descend personally? (2 reasons)",t:["24-1"],a:`<ol><li><b>To re-establish our relationship with Him personally</b>, by teaching directly as with the Gita (BG 4.8), not by sentiment.</li><li><b>To reciprocate with and please His devotees</b> in person (Katha Upanishad: the Lord fulfils the desires of all).</li></ol><p>Like a king visiting a jail, He's not bound by its rules; kala, karma and gunas don't touch Him (BG 4.6).</p>`},
+{q:"How far does the Gita support the Big Bang theory?",t:["23-2"],a:`<p>Partly. It agrees the universe has a beginning: it manifests at the start of Brahma's day and is withdrawn at night (8.17–19, 9.7). But creation is <b>cyclic and directed by the Lord</b> (9.10, "under My direction material nature produces"), not a causeless one-time accident.</p>`}
+]},
+{title:"Demigods and cosmology",freq:[0,0,1,1,1,1],qs:[
+{q:"Presiding deity of Satyaloka",t:["23-1"],a:`<p>Lord Brahma.</p>`},
+{q:"Brahma is which tattva? Justify.",t:["23-1","24-2"],rep:1,a:`<p><b>Jiva tattva.</b> It's a post held by the most qualified jiva; all demigods up to Brahma are jivas. Lord Shiva is a special category between Ishvara and jiva, like curd from milk.</p>`},
+{q:"Brahma's life as per the Gita (day in chatur-yugas; is it eternal?)",t:["23-1","24-1","24-2"],rep:1,a:`<ul><li>One day = <b>1000 chatur-yugas</b> (BG 8.17) ≈ <b>4.32 billion years</b>; his night is equally long.</li><li>He lives 100 such years ≈ <b>311 trillion years</b>.</li><li>"Brahma's life is eternal": ${TF("False")}</li></ul><p>(Your notes' arithmetic drops the ×1000; these are the correct figures.)</p>`},
+{q:"Are demigods eternal? Why are they called \"amar\"?",t:["23-1","23-2"],rep:1,a:`<p>${TF("No")}When their punya runs out they fall back to the earthly planets (BG 9.21). "Amar" is <b>relative</b>: a mayfly lives about a day, humans about 36,500 times longer, so to the mayfly we'd seem immortal. Likewise demigods' vast lifespans make them seem immortal to us.</p>`},
+{q:"Two differences between demigods and God",t:["23-2"],a:`<ol><li>God is the <b>source</b> of the demigods (BG 10.2, 10.8); they can't even know His origin.</li><li>Demigods are jivas holding temporary posts and can fall; God is eternal Ishvara. They have opulences partially, serve and meditate on Him, and can't give liberation.</li></ol>`},
+{q:"For how long does a particular set of demigods rule?",t:["24-1"],nn:1,a:`<p><b>One manvantara</b> (the reign of one Manu): about <b>71 chatur-yugas ≈ 306.72 million years</b>. There are 14 Manus in one day of Brahma.</p>`},
+{q:"Time relativity and dimensionality across planetary systems",t:["24-2"],a:`<p><b>Time relativity:</b> one day on svarga = six earthly months; Brahma's day = 4.32 billion years; the mayfly vs human analogy.</p><p><b>Dimensionality:</b> higher lokas have more dimensions (lecturer's illustration: Bhurloka 3, Svarloka 10, Satyaloka 64). A 2D creature sees a ball passing through its plane only as a circle growing and vanishing; we likewise can't perceive higher-dimensional realities.</p>`},
+{q:"Number of dimensions on Brahma's planet",t:["23-1"],a:`<p>64, per your lecturer.</p>`},
+{q:"How are Jana, Tapa and Maharloka different from svargaloka?",t:["23-1"],a:`<ul><li>Residents are elevated sages and yogis, not enjoyers; svarga is a <i>bhoga-loka</i> for sense enjoyment.</li><li>More dimensions, far longer lifespans, finer happiness.</li><li>They survive the partial devastation at the end of Brahma's day; svarga and below are destroyed.</li></ul>`},
+{q:"What happens at the end of Brahma's day, and at the end of his life?",t:["24-1"],a:`<p><b>End of his day:</b> partial devastation. Lower lokas up to svarga are destroyed and beings enter an unmanifest state (8.18–19). Only Satya, Tapa, Jana and Maharloka remain.</p><p><b>End of his life:</b> total devastation. The whole universe is withdrawn into the Lord, then a new creation follows.</p>`},
+{q:"Logically prove we may not perceive things on higher planets even if we visit",t:["24-1"],a:`<p>Perception depends on the senses and dimensions available. A 2D being sees a sphere only as a circle appearing and vanishing; an ant can't conceive how BITS functions; we can't see most of the EM spectrum, and dogs hear whistles we can't. So things could be right in front of us and still be imperceptible.</p>`},
+{q:"Logically prove demigods like Brahma live trillions of times longer than us",t:["24-1"],a:`<p>Lifespans vary enormously even here: a mayfly lives about a day, a human about 36,500 days. Physics also accepts that time is relative. So beings with lifespans vastly longer than ours are entirely reasonable.</p>`},
+{q:"\"The best destination is to ascend to the heavenly planets\" / \"perfection of the Vedas is svarga\"",t:["24-1","24-2"],rep:1,a:`<p>${TF("False")}</p><ul><li>BG 9.21: they enjoy heaven, then fall back when merit runs out.</li><li>BG 8.16: every material planet up to Brahmaloka has repeated birth and death; only reaching Krishna's abode ends it.</li><li>BG 2.42–43: chasing heaven via the "flowery words of the Vedas" is small knowledge.</li></ul>`},
+{q:"\"All paths lead to the same goal\" / worship any deity and reach the same destination",t:["23-1","24-1","24-2"],rep:1,a:`<p>${TF("Refute")}</p><ul><li>BG 9.25: worshippers of demigods go to demigods, of ancestors to ancestors, of ghosts to ghosts, and My worshippers come to Me. You reach what you worship.</li><li>BG 7.20, 7.23: those whose intelligence is stolen by desire worship demigods; results are limited and temporary.</li><li>Watering the root: worshipping Krishna automatically satisfies every demigod.</li></ul>`}
+]},
+{title:"Gita basics, Vedic culture and lists",freq:[1,1,1,1,1,1],qs:[
+{q:"How is the Bhagavad Gita not a sectarian book?",t:["21-2","23-1","23-2"],rep:1,a:`<p>It deals with universal topics: God, soul, nature, time, action. It addresses every living being as a soul, not as Hindu or Muslim. Like the laws of physics, its science of the self applies to everyone.</p>`},
+{q:"References that the Gita doesn't recommend giving up responsibilities",t:["23-1","23-2"],rep:1,a:`<ul><li>Spoken on a battlefield to a warrior and householder who wanted to quit, and Krishna told him to <b>fight</b> (2.31, 2.47, 3.8, 18.48).</li><li>Krishna didn't take Arjuna to the Himalayas.</li><li>"1 and zeros": the Gita is the 1 that gives value to the zeros of work and family.</li></ul>`},
+{q:"Why was the battlefield chosen instead of a serene setting?",t:["23-2","24-1"],rep:1,a:`<ol><li>You don't need to give up responsibilities or go to the Himalayas to understand the Gita.</li><li>The Gita is for responsible people.</li><li>Life itself is a war against the mind, disease, exams. Arjuna learned calmly in crisis, so we too can make time for it amid busy lives.</li></ol>`},
+{q:"Five major topics of the Bhagavad Gita",t:["21-2","23-2","24-2"],rep:1,a:`<p>Ishvara (God), jiva (soul), prakriti (material nature), kala (time), karma (action).</p>`},
+{q:"Four things common to humans and animals; what makes humans different",t:["23-1","23-2","24-2"],rep:1,a:`<p><b>Common:</b> eating, sleeping, mating, defending.</p><p><b>Difference:</b> only humans can inquire about God and dharma. A human without that urge is no better than an animal.</p>`},
+{q:"\"The ability to defend makes humans unique and superior.\"",t:["24-1"],a:`<p>${TF("False")}Defending is common to animals. Only inquiry into God and dharma makes humans unique.</p>`},
+{q:"Four major limbs of dharma",t:["23-1","23-2"],nn:1,rep:1,a:`<p>Truthfulness (satya), austerity (tapas), cleanliness (shaucha), mercy (daya).</p>`},
+{q:"Four real problems of conditioned life (one-liner each)",t:["23-1","23-2","24-1","24-2"],rep:1,a:`<ul><li><b>Janma (birth):</b> agony of womb and delivery, compared to 40,000 scorpion bites.</li><li><b>Jara (old age):</b> body decays, you become dependent and helpless.</li><li><b>Vyadhi (disease):</b> constant physical and emotional pain.</li><li><b>Mrityu (death):</b> forcibly separated from everything, sent to an uncertain next body.</li></ul>`},
+{q:"Three kleshas (tapas), with an example each",t:["23-1","24-1"],rep:1,a:`<ul><li><b>Adhyatmika</b>, from one's own body and mind: depression, regret.</li><li><b>Adhibhautika</b>, from other beings: mosquito bite, abuse.</li><li><b>Adhidaivika</b>, from higher forces or nature: earthquake, tsunami, COVID-19.</li></ul>`},
+{q:"Why did the British propagate \"Vedic mythology\"? Impact, and how we know it's wrong",t:["19-1","21-2","24-1"],rep:1,a:`<p><b>Why:</b> "to rule people, convince them of their inferiority." Macaulay's education system, the Aryan invasion theory, projecting distortions like caste and sati as essential Vedic practice, promoting un-Vedic habits as elite.</p><p><b>Impact:</b> broke the backbone of the culture that held India together; a society without God at its centre degrades.</p><p><b>Why it's erroneous</b> (any two):</p><ol><li>Sheer volume, about 10¹⁰ verses, can't be mere human effort.</li><li>Elegant organization: the Gita sits in the middle of the Mahabharata, the most confidential verses in its middle chapters.</li><li>The same verses are found consistently worldwide.</li><li>"A tree is known by its fruits": followers' lives are exemplary, and anyone can practise and experience it.</li></ol>`},
+{q:"People 5,000 years ago were more advanced in consciousness and quality of life. Explain.",t:["21-2"],a:`<ul><li>Agriculture used cow dung, no pesticides.</li><li>Animals, especially cows, protected and treated like mothers.</li><li>Sattvic, wholesome food.</li><li>Early to bed, early to rise.</li><li>Ayurveda, without side effects.</li><li>Little crime: kings strictly punished aggressors.</li><li>Stable families, children raised with attention.</li><li>Natural, handloomed textiles.</li><li>Far greater memory, consciousness, lifespan; the Vedas were memorized and only later written down.</li></ul>`},
+{q:"Washing clothes: Vedic vs modern, environmental impact",t:["23-1"],a:`<p><b>Vedic:</b> reetha (soapnut), hand washing. Natural, biodegradable, harmless to water bodies.</p><p><b>Modern:</b> synthetic detergents and washing machines. Phosphates and surfactants cause eutrophication and harm aquatic life; more energy and water; releases microplastics.</p>`},
+{q:"Milk: Vedic way vs mechanized large-scale production",t:["23-2"],a:`<p><b>Vedic:</b> cow treated as mother, grazes freely, calf fed first, milked by hand without stress or chemicals, protected for life.</p><p><b>Mechanized:</b> repeated artificial insemination, calves separated, hormones and antibiotics (e.g. oxytocin) leaving residues, stressed animals slaughtered once unproductive.</p><p><b>Result:</b> poorer milk quality, cruelty and its karmic reaction, environmental damage.</p>`}
+]},
+{title:"Analogies",freq:[0,1,0,1,0,0],note:"Most of these show up in 21-2 and 23-2, but the same images keep appearing inside other answers.",qs:[
+{q:"Milk touched by the lips of a serpent",t:["21-2","23-2"],rep:1,a:`<p>Hearing the Gita from an unqualified, non-devotee speaker turns nectar into poison.</p>`},
+{q:"Leaf and the tree",t:["21-2"],a:`<p>The jiva's relationship with God, as part and whole. A leaf is healthy only when attached to the tree.</p>`},
+{q:"Potent seed and fertile land",t:["21-2"],a:`<p>A genuine teacher plus an open-minded, receptive disciple gives a good crop of realization.</p>`},
+{q:"Watering the root",t:["23-2"],a:`<p>Worshipping Krishna satisfies all the demigods, as watering a tree's root nourishes every branch.</p>`},
+{q:"Seeing a mountain from different distances",t:["23-2"],a:`<p>The three realizations: from far a peak (Brahman), closer the roads (Paramatma), up close houses and trees in full detail (Bhagavan).</p>`},
+{q:"King visiting jail",t:["23-2"],a:`<p>The avatar. God comes into the material world by choice, not by karma, and the jail rules (kala, karma, guna) don't bind Him.</p>`},
+{q:"Shankaracharya's \"milking the cow\": cow, calf, milkman, milk, lesson",t:["23-2"],a:`<ul><li>Cow = the Upanishads</li><li>Calf = Arjuna</li><li>Milkman = Krishna</li><li>Milk = the Bhagavad Gita</li></ul><p><b>Lesson:</b> the Gita is the distilled essence of all Vedic knowledge, drawn out by Krishna for a qualified receiver like Arjuna. We benefit by receiving it the way Arjuna did.</p>`},
+{q:"City and jail: city, jail, breaking law, prisoner, lesson",t:["23-2"],a:`<ul><li>City = the spiritual world</li><li>Jail = the material world</li><li>Breaking law = wanting to enjoy separately from God, envying Him</li><li>Prisoner = the conditioned jiva</li></ul><p><b>Lesson:</b> the material world is a correctional facility, not punishment born of hatred. The government still feeds prisoners; God still cares. The purpose is to reform and go back home.</p>`}
+]},
+{title:"Chapter 1 and the Mahabharata background",freq:[0,1,0,1,1,1],qs:[
+{q:"Chapter 1 hardly discusses the 5 topics. Why did Vyasa include it?",t:["21-2"],a:`<p>It sets the background and works as a <b>mirror of qualification</b>: Dhritarashtra and Duryodhana show who can't understand the Gita, Arjuna shows who can. It also sets up Arjuna's dilemma, which triggers the teaching. Our journey is from Duryodhana-consciousness to Arjuna-consciousness.</p>`},
+{q:"Two fears sensed in Dhritarashtra's words (BG 1.1)",t:["24-1"],a:`<ol><li>That the holy place, <i>dharmakshetra</i>, would influence his sons toward peace and compromise instead of fighting for the kingdom.</li><li>That the pious Pandavas would be favoured and win.</li></ol><p>Behind both: his <i>mamakah</i> ("my sons vs Pandu's sons") attachment.</p>`},
+{q:"Why did Duryodhana approach Dronacharya as the war was about to begin?",t:["21-2"],a:`<p>Shocked and afraid at the huge, expertly arranged Pandava army. Instead of honestly expressing fear, he went to provoke Drona into fighting hard.</p>`},
+{q:"Why does Duryodhana mention Dhrishtadyumna to Drona?",t:["24-1"],a:`<p>To taunt him. Dhrishtadyumna, Drupada's son, was born to kill Drona, yet Drona taught him, and now he arranged the enemy army. The hint: "your leniency has cost us; don't be soft on the Pandavas."</p>`},
+{q:"Why does Duryodhana mention Vikarna as a chief combatant?",t:["21-2"],nn:1,a:`<p>Vikarna alone among the Kauravas protested Draupadi's disrobing, so Duryodhana doubted his loyalty. Naming him among the great warriors flattered him and kept him firmly on his side.</p>`},
+{q:"Two bad qualities in Duryodhana's interaction with Drona that blocked good instruction",t:["23-2"],a:`<ol><li><b>Hypocrisy and insincerity:</b> hid fear behind diplomacy instead of frankly asking for guidance.</li><li><b>Arrogance and disrespect:</b> criticized and taunted his own teacher instead of seeking a solution.</li></ol>`},
+{q:"Two examples of Duryodhana's diplomatic, hypocritical approach",t:["24-2"],a:`<ol><li>Taunting Drona about Dhrishtadyumna instead of honestly expressing fear.</li><li>Praising Bhishma and Drona and telling everyone to support Bhishma (1.11), while privately suspecting their soft corner for the Pandavas.</li></ol>`},
+{q:"Why did Bhishma blow his conch though Duryodhana was about to consult him?",t:["24-1"],a:`<p>Bhishma knew Duryodhana wouldn't take good advice then, so he simply cheered him up with the conch and the war music began. He fought for the Kauravas only by his vow of loyalty to the throne, which also shows that however powerful you are, the wrong side loses.</p>`},
+{q:"The Pandavas' conches shattered the Kauravas' hearts. Significance for you?",t:["24-1"],a:`<p>Someone on the side of adharma lives with inner fear and a guilty conscience. Someone on the side of dharma, sheltered by Krishna, is fearless.</p>`},
+{q:"Basis of fear and anxiety: Duryodhana's side vs the Pandavas' side (20–30 words)",t:["24-2"],a:`<p>Duryodhana's side, rooted in adharma, attachment, envy and distrust without Krishna's shelter, lived in fear. The Pandavas, acting from dharma with Krishna as charioteer, had confidence and peace.</p>`},
+{q:"Signs of victory on the Pandavas' side (any four)",t:["24-2"],a:`<ol><li>Kurukshetra is holy; Kuru Maharaj did bhakti there.</li><li>Krishna personally drove Arjuna's chariot.</li><li>The goddess of fortune and all opulence are wherever Krishna is.</li><li>The chariot was Agni's gift and could conquer in every direction.</li><li>Hanuman on Arjuna's flag.</li></ol>`},
+{q:"Why did Duryodhana and Arjuna meet Krishna before the war? What happened; significance?",t:["24-1"],a:`<p>Both sought His help. Krishna offered Himself, unarmed and not fighting, or His Narayani Sena. Arjuna chose first and took Krishna; Duryodhana took the army. A devotee chooses God over all resources, and where Krishna is, victory is assured (BG 18.78).</p>`},
+{q:"Krishna's words in Chapter 1 and their background",t:["24-1"],a:`<p>BG 1.25, <i>"Partha, pashyaitan samavetan kurun iti"</i>: "Just behold, Partha, all the Kurus assembled here." Arjuna asked to place the chariot between the armies; Krishna deliberately parked it before Bhishma and Drona, whom Arjuna loved, to bring out his weakness of heart and set the stage for the Gita.</p>`},
+{q:"Significance of Lakshagraha",t:["24-1"],a:`<p>The house of lac where the Kauravas tried to burn the Pandavas alive. One of many murder attempts, showing the Kauravas were <i>atatayis</i> (aggressors).</p>`},
+{q:"Significance of Khandavaprastha",t:["24-1"],a:`<p>The barren land Dhritarashtra grudgingly gave the Pandavas, which they turned into the beautiful Indraprastha as people followed them. Shows the Pandavas' merit and the Kauravas' injustice and envy.</p>`},
+{q:"Arjuna's reasons for not fighting, and why each was misdirected",t:["24-2"],a:`<div class="tablewrap"><table><tr><th>Reason</th><th>Why misdirected</th></tr><tr><td>Compassion (1.27)</td><td>Real compassion is saving people from Duryodhana's rule.</td></tr><tr><td>Fear of sinful reaction (1.36)</td><td>Killing aggressors incurs no sin.</td></tr><tr><td>Gratitude (1.32–35)</td><td>Bhishma and Drona would be most disappointed if he fled.</td></tr><tr><td>Future generations (1.37–43)</td><td>A bad king corrupts his subjects.</td></tr><tr><td>Indecision</td><td>Krishna was right in front of him to consult.</td></tr></table></div><p>24-2 asks only the first four (the 5th is indecision).</p>`},
+{q:"Fighting Bhishma and Drona seemed ungrateful. How was it the other way around?",t:["21-2"],a:`<p>They would be the most disappointed if Arjuna ran from his duty. Real gratitude to teachers is doing the dharma they taught. Drona had even given Arjuna a special weapon for saving him from a crocodile.</p>`},
+{q:"Who gets capital punishment in the Vedic system? Why good for criminal and society?",t:["23-2","24-2"],rep:1,a:`<p><b>The six aggressors (atatayis):</b> poisoner, arsonist, attacker with deadly weapons, plunderer of wealth, occupier of another's land, kidnapper of a wife. The Kauravas fit all six.</p><p><b>Criminal:</b> reaction settled immediately, spared worse karma, can't sin further.</p><p><b>Society:</b> protected and feels safe.</p>`}
+]},
+{title:"Arjuna's surrender and the start of Chapter 2",freq:[1,0,0,1,1,1],qs:[
+{q:"Arjuna uses the word karpanya (miserliness). What does he mean?",t:["19-1"],a:`<p>Like a miser who doesn't use wealth he has, Arjuna knows he shouldn't be attached on bodily grounds, yet weakness of heart stops him from his duty.</p>`},
+{q:"What kind of human being is a kripana, and why?",t:["24-2"],a:`<p>One who receives the priceless human form of life and wastes it on eating, sleeping, mating and defending, never using it for self-realization.</p>`},
+{q:"How do the brahmana and kripana approaches differ?",t:["19-1"],a:`<p>The brahmana is broad-minded and acts for <b>shreyas</b> (long-term ultimate good); the kripana is narrow-minded and acts for <b>preyas</b> (short-term pleasure).</p>`},
+{q:"Difference between shreyas and preyas",t:["24-1"],a:`<p><b>Shreyas:</b> ultimate, long-term good. <b>Preyas:</b> immediate, short-term pleasure. Lottery analogy: ₹1 crore for one day, then beaten daily for three years. Arjuna asks Krishna to guide him with shreyas in mind.</p>`},
+{q:"How does BG 2.7 change the Krishna–Arjuna relationship? Why significant?",t:["19-1"],a:`<p>Arjuna voluntarily changes from <b>friend to disciple</b> ("I am Your disciple, surrendered to You; instruct me"). Friendly talk is never conclusive; only once a student accepts the teacher can real instruction begin. That's when Krishna starts the Gita.</p>`},
+{q:"Why did Krishna stay silent at first? What prompted Him to speak? Practical lesson?",t:["23-2","24-2"],rep:1,a:`<p><b>(a)</b> Arjuna hadn't sought advice or accepted Krishna as teacher; he was still talking as a friend. However qualified the teacher, the student must accept him first.</p><p><b>(b)</b> Arjuna's surrender in BG 2.7.</p><p><b>(c)</b> Knowledge is received only through humble, surrendered inquiry. Don't impose unasked advice; for our own problems, approach a bona fide teacher.</p>`},
+{q:"Arjuna asked \"fight or not\", but Krishna began with atma-anatma viveka. Why?",t:["19-1","23-2"],rep:1,a:`<p>Arjuna's confusion is rooted in the <b>bodily conception of life</b>; all five of his reasons assume we are our bodies. So Krishna first removes that misconception by distinguishing spirit from matter. Unless you know who you really are, you can't know your real duty.</p>`}
+]},
+{title:"Karma",freq:[0,1,0,1,0,0],note:"Your notes stop before this material, so every answer here is from the standard Prabhupada-tradition reading the course follows.",qs:[
+{q:"How is karma defined in the Bhagavad Gita?",t:["23-2"],nn:1,a:`<p>BG 8.3: action that brings about the development of material bodies is called karma.</p>`},
+{q:"How is the law of karma God's compassion / equal treatment?",t:["21-2","23-2"],nn:1,rep:1,a:`<p>Everyone gets results exactly per their own actions, no favouritism (BG 9.29: "I envy no one, nor am I partial to anyone"). Reactions are corrective, like a jail meant to reform: they teach us and give the chance to improve and turn back to God.</p>`},
+{q:"Prarabdha, aprarabdha, kuta and bija",t:["21-2","23-2"],nn:1,rep:1,a:`<ul><li><b>Aprarabdha:</b> stored karma not yet fructified.</li><li><b>Kuta:</b> karma beginning to take shape toward becoming a seed.</li><li><b>Bija:</b> the seed stage, a desire or tendency ready to sprout.</li><li><b>Prarabdha:</b> karma fructified and experienced now (present body, circumstances).</li></ul>`},
+{q:"Sakarma, akarma and vikarma, with examples",t:["21-2"],nn:1,a:`<ul><li><b>Sakarma:</b> pious, scripturally sanctioned work for results, e.g. charity to reach heaven. Good reactions, still binding.</li><li><b>Vikarma:</b> sinful work against scripture, e.g. theft, animal slaughter. Bad reactions.</li><li><b>Akarma:</b> work for Krishna's satisfaction, no reaction, e.g. Arjuna fighting on Krishna's instruction.</li></ul>`},
+{q:"Why are sakarma and vikarma compared to dry and wet stool?",t:["23-2"],nn:1,a:`<p>Both are still stool; one is less messy, but neither is acceptable. Likewise both bind the soul to birth and death, golden chains and iron chains. Only akarma frees.</p>`},
+{q:"\"I'm fine just doing sakarma.\" Fundamental problem?",t:["21-2"],nn:1,a:`<p>Sakarma still produces reactions to be enjoyed in another body, keeping you in birth and death. Even heaven ends in a fall (BG 9.21).</p>`},
+{q:"Do sakarma and vikarma cancel each other? How can stocked karma be burnt?",t:["23-2"],nn:1,a:`<p>${TF("No")}Each must be experienced separately, as a good deed doesn't erase a separate crime in court.</p><p><b>Burnt by</b> the fire of transcendental knowledge and devotional service: BG 4.37 (fire of knowledge burns all reactions to ashes), BG 18.66 (surrender, and Krishna frees one from all reactions).</p>`},
+{q:"Important factors for work to be classified as akarma",t:["21-2"],nn:1,a:`<ol><li>Done for Krishna's satisfaction, as yajna (BG 3.9).</li><li>Without attachment to fruits (BG 2.47).</li><li>Under the guidance of shastra and guru.</li><li>In Krishna consciousness, not for one's own sense gratification.</li></ol>`}
+]},
+{title:"Personal questions",freq:[0,0,1,0,1,0],note:"Write these in your own words; the points below are ones the course gives you to draw on.",qs:[
+{q:"Three ways the course's teachings made you more humble",t:["23-1","24-1"],rep:1,a:`<ol><li>I am a tiny soul, 1/10,000th of a hair's tip, and the Supersoul runs most of my body's functions, not me.</li><li>My senses are imperfect, so my own perception and theories can't be fully trusted without authority.</li><li>Even Brahma and Indra, far beyond me in lifespan and power, are submissive servants of the Lord.</li><li>I can't even define duty without hearing from a qualified teacher; Arjuna himself had to surrender first.</li></ol>`}
+]}
+];
+
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const strip=(f,big)=>`<span class="strip${big?" big":""}" aria-label="Appeared in ${f.reduce((a,b)=>a+b,0)} of 6 papers">${f.map(v=>`<i class="${v?"on":""}"></i>`).join("")}</span>`;
+const nav=document.getElementById("nav"), content=document.getElementById("content");
+let html="";
+DATA.forEach((s,i)=>{
+  const id="t"+(i+1), n=s.freq.reduce((a,b)=>a+b,0);
+  nav.insertAdjacentHTML("beforeend",`<li><a href="#${id}"><span>${s.title}</span>${strip(s.freq)}</a></li>`);
+  html+=`<section class="topic" id="${id}"><div class="topic-head"><h2><span class="rank">${i+1}.</span>${s.title}</h2><div class="freq">${strip(s.freq,true)}<div class="strip-labels">${PAPERS.map(p=>`<span>${p}</span>`).join("")}</div>${n} of 6 papers</div></div>${s.note?`<p class="topic-note">${s.note}</p>`:""}`;
+  s.qs.forEach(q=>{
+    const chips=q.t.map(t=>`<span class="chip">${t}</span>`).join("")+(q.rep?`<span class="chip rep">Repeats</span>`:"")+(q.nn?`<span class="chip nn">Not in notes</span>`:"");
+    html+=`<details class="q"${q.rep?' data-rep="1"':""}><summary><span class="qt">${esc(q.q)}</span><span class="chips">${chips}</span></summary><div class="ans">${q.a}</div></details>`;
+  });
+  html+=`</section>`;
+});
+content.innerHTML=html;
+
+const all=[...document.querySelectorAll("details.q")];
+const countEl=document.getElementById("count"), emptyEl=document.getElementById("empty");
+const search=document.getElementById("search"), repBtn=document.getElementById("repOnly"), togBtn=document.getElementById("toggleAll");
+function apply(){
+  const term=search.value.trim().toLowerCase(), repOnly=repBtn.getAttribute("aria-pressed")==="true";
+  let shown=0;
+  all.forEach(d=>{
+    const ok=(!repOnly||d.dataset.rep)&&(!term||d.textContent.toLowerCase().includes(term));
+    d.hidden=!ok; if(ok) shown++;
+    if(term&&ok) d.open=true;
+  });
+  document.querySelectorAll("section.topic").forEach(sec=>{sec.hidden=![...sec.querySelectorAll("details.q")].some(d=>!d.hidden)});
+  countEl.textContent=`${shown} of ${all.length} questions`;
+  emptyEl.style.display=shown?"none":"block";
+}
+search.addEventListener("input",apply);
+repBtn.addEventListener("click",()=>{repBtn.setAttribute("aria-pressed",repBtn.getAttribute("aria-pressed")==="true"?"false":"true");apply()});
+togBtn.addEventListener("click",()=>{
+  const openAll=togBtn.textContent.startsWith("Show");
+  all.forEach(d=>{if(!d.hidden) d.open=openAll});
+  togBtn.textContent=openAll?"Hide all answers":"Show all answers";
+});
+apply();
+
+const links=[...nav.querySelectorAll("a")];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("active",l.getAttribute("href")==="#"+e.target.id))}})},{rootMargin:"-30% 0px -60% 0px"});
+document.querySelectorAll("section.topic").forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
