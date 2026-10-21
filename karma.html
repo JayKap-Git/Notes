@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karma, Akarma, Vikarma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+/* Layout: sticky lecture index on the left, one long reading column; verses as set-off cards, class examples as saffron notes. Same identity as the earlier Gita notes pages. */
+:root{
+  --paper:#f5f4fa; --sheet:#ffffff; --ink:#1d2340; --muted:#5f6480;
+  --peacock:#0e6a6c; --saffron:#b86d0b; --rule:#dcdbe8; --wash:#eef3f2; --note:#fff6e6;
+  --bad:#a63d3d; --badwash:#f9ecec; --good:#2f6f3e; --goodwash:#ebf4ed;
+  --display:"Rozha One", "Tiro Devanagari Hindi", Georgia, serif;
+  --body:"Source Serif 4", "Tiro Devanagari Hindi", Georgia, "Times New Roman", serif;
+  --deva:"Tiro Devanagari Hindi", "Noto Serif Devanagari", serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12152a; --sheet:#1a1e38; --ink:#e7e8f3; --muted:#a3a7c2;
+    --peacock:#5cc3c0; --saffron:#f0a93e; --rule:#2d3256; --wash:#18313a; --note:#2e2716;
+    --bad:#ef8d8d; --badwash:#3a1f27; --good:#86cf98; --goodwash:#1b3226;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12152a; --sheet:#1a1e38; --ink:#e7e8f3; --muted:#a3a7c2;
+  --peacock:#5cc3c0; --saffron:#f0a93e; --rule:#2d3256; --wash:#18313a; --note:#2e2716;
+  --bad:#ef8d8d; --badwash:#3a1f27; --good:#86cf98; --goodwash:#1b3226;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1.06rem;line-height:1.62;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+a{color:var(--peacock)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
+
+.hero{max-width:72rem;margin:0 auto;padding-block:2.6rem 1.6rem;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:2rem;align-items:end;border-bottom:1px solid var(--rule)}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);color:var(--peacock)}
+.hero .eyebrow{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--saffron);margin-bottom:.6rem}
+.hero .sub{color:var(--muted);max-width:38rem;margin:.8rem 0 0}
+.triad{display:grid;gap:.5rem}
+.triad div{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:.8rem;align-items:baseline;padding:.45rem 0;border-bottom:1px dashed var(--rule)}
+.triad b{font-family:var(--display);font-weight:400;font-size:1.25rem}
+.triad span{font-size:.95rem;color:var(--muted)}
+.t-sak{color:var(--saffron)} .t-vik{color:var(--bad)} .t-ak{color:var(--peacock)}
+
+.layout{max-width:72rem;margin:0 auto;display:grid;grid-template-columns:14rem minmax(0,1fr);gap:2.5rem;padding-block:2rem 3rem}
+.toc{position:sticky;top:1rem;align-self:start;max-height:calc(100vh - 2rem);overflow:auto;font-size:.92rem}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:.1rem}
+.toc a{display:grid;grid-template-columns:2rem minmax(0,1fr);text-decoration:none;color:var(--muted);padding:.22rem .4rem;border-radius:4px}
+.toc a:hover{color:var(--ink);background:var(--wash)}
+.toc a.on{color:var(--peacock);background:var(--wash)}
+.toc .num{font-variant-numeric:tabular-nums;color:var(--saffron)}
+.toc .grp{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .2rem .4rem}
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr;gap:1rem}
+  .toc{position:static;max-height:none;background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:.8rem}
+  .toc ol{grid-template-columns:repeat(auto-fill,minmax(11rem,1fr))}
+  .toc .grp{grid-column:1/-1}
+}
+
+main{min-width:0}
+section{padding-block:1.2rem 2rem;border-bottom:1px solid var(--rule);scroll-margin-top:1rem}
+section:last-child{border-bottom:0}
+section>h2{font-size:clamp(1.6rem,3.5vw,2.1rem);margin-bottom:.2rem}
+section>h2 .n{color:var(--saffron);font-size:.7em;margin-right:.5rem;font-variant-numeric:tabular-nums}
+.lede{color:var(--muted);margin:.2rem 0 1rem;font-style:italic}
+main p, main li{max-width:44rem}
+main h3{font-size:1.3rem;margin:1.4rem 0 .4rem;color:var(--peacock)}
+ul,ol{padding-left:1.3rem}
+li{margin:.2rem 0}
+
+.verse{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:1rem 1.2rem;margin:1rem 0;max-width:44rem}
+.verse .ref{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--saffron);font-weight:600}
+.verse .skt{font-style:italic;color:var(--peacock);margin:.4rem 0 .6rem;line-height:1.5}
+.verse .tr{margin:0}
+.verse .tr::before{content:"“"} .verse .tr::after{content:"”"}
+.verse.para .tr::before,.verse.para .tr::after{content:""}
+.verse .meaning{margin:.6rem 0 0;padding-top:.6rem;border-top:1px dashed var(--rule);font-size:.97rem}
+
+.cls{background:var(--note);border-left:3px solid var(--saffron);border-radius:0 6px 6px 0;padding:.7rem 1rem;margin:1rem 0;max-width:44rem}
+.cls .tag{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--saffron);font-weight:700;display:block;margin-bottom:.2rem}
+.cls p{margin:.3rem 0}
+.key{background:var(--wash);border-radius:6px;padding:.8rem 1.1rem;margin:1rem 0;max-width:44rem}
+.key .tag{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--peacock);font-weight:700}
+.key ul{margin:.3rem 0}
+.flag{font-size:.92rem;border:1px dashed var(--saffron);border-radius:6px;padding:.5rem .8rem;margin:.8rem 0;max-width:44rem;color:var(--muted)}
+.flag b{color:var(--ink)}
+.deva{font-family:var(--deva)}
+
+.scroll{overflow-x:auto;margin:1rem 0;max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:34rem}
+th,td{border-bottom:1px solid var(--rule);text-align:left;padding:.5rem .6rem;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.85rem;letter-spacing:.04em}
+td:first-child{font-weight:600}
+
+figure{margin:1.2rem 0;max-width:44rem}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:.88rem;color:var(--muted);margin-top:.4rem}
+svg text{font-family:var(--body);fill:var(--ink)}
+svg .mut{fill:var(--muted)}
+svg .box{fill:var(--sheet);stroke:var(--rule);stroke-width:1.5}
+svg .bx-s{fill:var(--note);stroke:var(--saffron);stroke-width:1.5}
+svg .bx-v{fill:var(--badwash);stroke:var(--bad);stroke-width:1.5}
+svg .bx-a{fill:var(--wash);stroke:var(--peacock);stroke-width:1.5}
+svg .ln{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .ln-a{stroke:var(--peacock);stroke-width:2;fill:none}
+svg .ln-s{stroke:var(--saffron);stroke-width:2;fill:none}
+svg .ah{fill:var(--muted)} svg .ah-a{fill:var(--peacock)} svg .ah-s{fill:var(--saffron)}
+svg .hd{font-family:var(--display);font-size:20px}
+svg .c-s{fill:var(--saffron)} svg .c-v{fill:var(--bad)} svg .c-a{fill:var(--peacock)}
+
+.cond{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:.6rem;margin:1rem 0;max-width:44rem}
+.cond div{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:.7rem .8rem}
+.cond b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem;color:var(--saffron);line-height:1}
+.cond span{font-size:.95rem}
+
+.ladder{display:grid;gap:.3rem;max-width:30rem;margin:1rem 0}
+.ladder div{display:flex;justify-content:space-between;gap:1rem;padding:.35rem .8rem;border-radius:4px;background:var(--sheet);border:1px solid var(--rule)}
+.ladder div:first-child{background:var(--wash);border-color:var(--peacock)}
+.ladder small{color:var(--muted)}
+
+.controls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0 1rem}
+.controls button{font:inherit;font-size:.9rem;background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:.25rem .9rem;cursor:pointer}
+.controls button:hover{border-color:var(--peacock)}
+details.q{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;margin:.5rem 0;max-width:46rem}
+details.q summary{cursor:pointer;padding:.7rem 1rem;font-weight:600;list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::after{content:"+";color:var(--saffron);font-family:var(--display);font-size:1.3rem;line-height:1}
+details.q[open] summary::after{content:"–"}
+details.q .a{padding:0 1rem .8rem;border-top:1px dashed var(--rule)}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.05rem .45rem;border-radius:999px;border:1px solid var(--saffron);color:var(--saffron);margin-left:.4rem;vertical-align:.1em}
+
+details.lec{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;margin:.8rem 0}
+details.lec>summary{cursor:pointer;padding:.8rem 1rem;font-family:var(--display);font-size:1.25rem;color:var(--peacock)}
+details.lec>summary small{font-family:var(--body);font-size:.85rem;color:var(--muted);margin-left:.4rem}
+.written{padding:0 1.2rem 1rem;max-width:46rem}
+.written p{margin:.35rem 0}
+.written ul{margin:.2rem 0 .6rem}
+.pg{display:inline-block;font-size:.76rem;color:var(--saffron);border:1px solid var(--saffron);border-radius:3px;padding:0 .35rem;margin:1rem 0 .2rem}
+.unclear{color:var(--muted);font-style:italic}
+.ed{color:var(--muted);font-size:.92rem}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding-block:2rem}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div>
+    <div class="eyebrow">Bhagavad Gita · Lecture 20 · Classes of 18, 20 &amp; 21 March 2025</div>
+    <h1>Karma, Akarma, Vikarma</h1>
+    <p class="sub">The full topic explained in detail, built from the 39-slide deck and your 15 pages of class notes. Every verse from the slides is here with its meaning, every example from class sits beside the idea it illustrates, and the notes themselves are transcribed at the end.</p>
+  </div>
+  <div class="triad" aria-label="The three kinds of action">
+    <div><b class="t-sak">Sakarma</b><span>Action by the rules, for my own enjoyment. Good reaction, still binding.</span></div>
+    <div><b class="t-vik">Vikarma</b><span>Action against the rules. Bad reaction, binding.</span></div>
+    <div><b class="t-ak">Akarma</b><span>Prescribed action, done for Krishna's pleasure. No reaction; it frees.</span></div>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" aria-label="Contents">
+  <ol>
+    <li class="grp">The problem</li>
+    <li><a href="#why"><span class="num">1</span>Why study karma</a></li>
+    <li><a href="#what"><span class="num">2</span>What karma is</a></li>
+    <li><a href="#law"><span class="num">3</span>The law of karma</a></li>
+    <li><a href="#three"><span class="num">4</span>Three kinds of action</a></li>
+    <li><a href="#four"><span class="num">5</span>Four kinds of reaction</a></li>
+    <li><a href="#fine"><span class="num">6</span>How subtle the law is</a></li>
+    <li><a href="#species"><span class="num">7</span>Who makes karma</a></li>
+    <li class="grp">The way out</li>
+    <li><a href="#renounce"><span class="num">8</span>Why not just stop?</a></li>
+    <li><a href="#yajna"><span class="num">9</span>Akarma &amp; yajña</a></li>
+    <li><a href="#conditions"><span class="num">10</span>Four conditions</a></li>
+    <li><a href="#doer"><span class="num">11</span>Five factors of action</a></li>
+    <li><a href="#offer"><span class="num">12</span>Offering the results</a></li>
+    <li><a href="#peace"><span class="num">13</span>Peace formula</a></li>
+    <li><a href="#quota"><span class="num">14</span>One's quota</a></li>
+    <li><a href="#worship"><span class="num">15</span>Platforms of worship</a></li>
+    <li><a href="#tyaga"><span class="num">16</span>Sannyāsa vs tyāga</a></li>
+    <li class="grp">Revise</li>
+    <li><a href="#sheet"><span class="num">17</span>One-page summary</a></li>
+    <li><a href="#qs"><span class="num">18</span>Exam questions</a></li>
+    <li><a href="#notes"><span class="num">19</span>Class notes, as written</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- 1 -->
+<section id="why">
+  <h2><span class="n">1</span>Why study karma at all</h2>
+  <p class="lede">Karma is the "behind the scenes" of every experience we have.</p>
+  <div class="cls"><span class="tag">From class: the phone call</span>
+    <p>A dials B and they talk. That is all A sees. But behind the scene there is a huge amount going on: how the call gets connected, the network, the towers, the routing. Our life is the same. We see only "this happened to me". Karma is the hidden network that decided why it happened.</p>
+  </div>
+  <p>The slides open with a pointed remark: <b>people generally talk about karma more and Krishna less.</b> Karma has become a popular word, but in the Gita it is not the main subject. It is the problem; Krishna is the solution.</p>
+  <h3>Karma applies only to conditioned souls</h3>
+  <p>Karma is a subject only for <b>conditioned living entities</b>: souls who have rebelled against the Lord and want to enjoy independently of Him. A soul who is not in rebellion is not under the law of karma at all.</p>
+  <p>Your notes draw this with the <b>city and jail</b> picture used earlier in the course:</p>
+  <ul>
+    <li><b>Spiritual world = the city.</b> Souls there are not misusing their facilities, so they are given full freedom.</li>
+    <li><b>Material world = the jail.</b> Souls here are constrained, that is, <i>conditioned</i>. Just as many rules and laws apply to a prisoner that don't apply to a free citizen, many rules (karma among them) apply to the jīva in the material world.</li>
+    <li>Why did the soul come down? Because of <b>icchā</b> (desire, to enjoy separately) and <b>dveṣa</b> (envy of the Lord). The ×3 and ×2 marks in your sketch show souls in the spiritual world and the few who fell.</li>
+  </ul>
+  <div class="key"><span class="tag">Remember</span>
+    <ul>
+      <li>Action does not necessarily mean karma. Some action creates no karma at all (that is akarma, §9).</li>
+      <li>Karma is a feature of the jail, not of the soul's real home.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="what">
+  <h2><span class="n">2</span>What karma is</h2>
+  <p class="lede">Karma is action that builds your next body.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 8.3</div>
+    <div class="skt">śrī-bhagavān uvāca<br>akṣaraṁ brahma paramaṁ svabhāvo 'dhyātmam ucyate<br>bhūta-bhāvodbhava-karo visargaḥ karma-saṁjñitaḥ</div>
+    <p class="tr">The Supreme Personality of Godhead said: The indestructible, transcendental living entity is called Brahman, and his eternal nature is called adhyātma, the self. Action pertaining to the development of the material bodies of the living entities is called karma, or fruitive activities.</p>
+    <p class="meaning">This is the textbook definition. Three terms are defined in one verse: the soul is <b>Brahman</b>, its eternal nature is <b>adhyātma</b>, and <b>karma</b> is whatever action leads to the development of material bodies. In your notes: karma is what <i>keeps you trapped in the birth–death cycle</i> through the 84 lakh (8.4 million) species.</p>
+  </div>
+  <h3>The working definition</h3>
+  <ul>
+    <li><b>Karma</b> = actions that lead to the development of future bodies; activities that bring some reaction.</li>
+    <li><b>Akarma</b> (inaction) = actions that do not bear any reaction.</li>
+  </ul>
+  <p>So the test is not "did I do something?" but "does this action come back to me as a reaction, in this body or the next?"</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 4.16 · Even the intelligent are bewildered</div>
+    <div class="skt">kiṁ karma kim akarmeti kavayo 'py atra mohitāḥ<br>tat te karma pravakṣyāmi yaj jñātvā mokṣyase 'śubhāt</div>
+    <p class="tr">Even the intelligent are bewildered in determining what is action and what is inaction. Now I shall explain to you what action is, knowing which you shall be liberated from all misfortune.</p>
+    <p class="meaning">Your notes title this <b>"Discrimination is not easy."</b> Even <i>kavayaḥ</i>, the wise, get confused. That is why we need Krishna's explanation, and the promise is big: understand this properly and you are freed from all misfortune (<i>aśubhāt</i>).</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="law">
+  <h2><span class="n">3</span>The law of karma</h2>
+  <p class="lede">A law of God's mercy, not of God's anger.</p>
+  <h3>The first thing to understand</h3>
+  <p>Your notes underline it in red: <b>no one else is responsible for the reactions we are getting.</b> We get exactly what our own choices earned.</p>
+  <ul>
+    <li><b>Free will.</b> The Lord has given every jīva free will. Used properly, it takes us back to the spiritual world. Misused, we suffer. (Class example: the Lord created the world and gave free will; it's the jīva who chooses alcohol or drugs.)</li>
+    <li><b>Icchā and dveṣa.</b> All jīvas in the material world want to be the best and grab as much as they can. The goal becomes "facilities".</li>
+    <li><b>So the world can never be peaceful.</b> It is full of jīvas with desire and envy, each trying to acquire more resources than they need. Resources are limited, so jīvas fight, hurt and harm each other, and then the reactions come. Class example: one country wanting to capture another's land, and that one wanting a third's.</li>
+  </ul>
+  <h3>Why it is called God's mercy (compassion)</h3>
+  <div class="cls"><span class="tag">From class: the father and ten sons</span>
+    <p>A father has ten sons. He buys ten apples and gives one to each child. One son snatches the apples of two or three brothers and beats them. The father punishes that child. He does it <b>not out of envy, only out of love</b>, and he still loves that son as much as the others.</p>
+  </div>
+  <p>That is the law of karma. The punishment is corrective, meant to reform the jīva and bring it back, like a jail meant to reform rather than to take revenge. So the idea that <b>"the Lord is a punishment-giver" is a wrong concept</b>.</p>
+  <ul>
+    <li>The law of karma is <b>maintained by the demigods</b>. The Lord does not interfere with this law.</li>
+    <li><b>"I didn't know" is no excuse.</b> <b>"I am very famous / powerful" is no excuse.</b> The law treats everyone the same.</li>
+  </ul>
+  <div class="cls"><span class="tag">From class: fire</span>
+    <p>Whether a child or an adult touches fire, both get burned, no matter who they are. The child should have learned from his parents not to touch fire. The fire won't excuse him because he didn't know that it burns.</p>
+  </div>
+  <h3>The law also proves the law-giver</h3>
+  <p>The notes box this as an argument for God's existence: <b>a law means a law-maker; imposing a law means a law-imposer.</b> A system this precise, which tracks every act across lifetimes, implies an intelligence behind it.</p>
+  <div class="key"><span class="tag">Remember</span>
+    <ul>
+      <li>We get results according to <b>desire</b> and <b>deserve</b>: what we wanted, and what we earned.</li>
+      <li>The law is compassionate, impartial and corrective.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="three">
+  <h2><span class="n">4</span>Three kinds of action</h2>
+  <p class="lede">Sakarma, vikarma and akarma, and why the first two are both a problem.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 4.17</div>
+    <div class="skt">karmaṇo hy api boddhavyaṁ boddhavyaṁ ca vikarmaṇaḥ<br>akarmaṇaś ca boddhavyaṁ gahanā karmaṇo gatiḥ</div>
+    <p class="tr">The intricacies of action are very hard to understand. Therefore one should know properly what action is, what forbidden action is, and what inaction is.</p>
+    <p class="meaning"><i>Gahanā karmaṇo gatiḥ</i>: the way of karma is deep, like a dense forest. Krishna names all three categories here, and says each one must be "known" (<i>boddhavyam</i>) separately.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="An action splits three ways: by scripture for self, against scripture, or prescribed and for Krishna">
+      <defs>
+        <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+        <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ah-a"/></marker>
+      </defs>
+      <rect x="250" y="12" width="140" height="46" rx="23" class="box"/>
+      <text x="320" y="41" text-anchor="middle" class="hd">An action</text>
+      <path d="M290 58 C 200 90, 120 90, 110 118" class="ln" marker-end="url(#m1)"/>
+      <path d="M320 58 L 320 118" class="ln" marker-end="url(#m1)"/>
+      <path d="M350 58 C 440 90, 520 90, 530 118" class="ln-a" marker-end="url(#m2)"/>
+      <text x="96" y="92" text-anchor="end" class="mut" font-size="14">by scripture,</text>
+      <text x="96" y="109" text-anchor="end" class="mut" font-size="14">for myself</text>
+      <text x="330" y="100" class="mut" font-size="14">against scripture</text>
+      <text x="548" y="92" class="mut" font-size="14">prescribed,</text>
+      <text x="548" y="109" class="mut" font-size="14">for Krishna</text>
+      <rect x="20" y="122" width="180" height="92" rx="6" class="bx-s"/>
+      <text x="110" y="150" text-anchor="middle" class="hd c-s">Sakarma</text>
+      <text x="110" y="172" text-anchor="middle" font-size="14">puṇya (piety)</text>
+      <text x="110" y="192" text-anchor="middle" font-size="14">good reaction</text>
+      <rect x="230" y="122" width="180" height="92" rx="6" class="bx-v"/>
+      <text x="320" y="150" text-anchor="middle" class="hd c-v">Vikarma</text>
+      <text x="320" y="172" text-anchor="middle" font-size="14">pāpa (sin)</text>
+      <text x="320" y="192" text-anchor="middle" font-size="14">bad reaction</text>
+      <rect x="440" y="122" width="180" height="92" rx="6" class="bx-a"/>
+      <text x="530" y="150" text-anchor="middle" class="hd c-a">Akarma</text>
+      <text x="530" y="172" text-anchor="middle" font-size="14">yajña (sacrifice)</text>
+      <text x="530" y="192" text-anchor="middle" font-size="14">no reaction</text>
+      <path d="M110 214 L110 240 L320 240 L320 214" class="ln"/>
+      <path d="M215 240 L215 262" class="ln" marker-end="url(#m1)"/>
+      <text x="215" y="285" text-anchor="middle" font-size="14">another material body · stays in the cycle</text>
+      <path d="M530 214 L530 262" class="ln-a" marker-end="url(#m2)"/>
+      <text x="530" y="285" text-anchor="middle" font-size="14" class="c-a">frees from the cycle</text>
+    </svg>
+    <figcaption>Sakarma and vikarma both end in a future body. Only akarma leads out.</figcaption>
+  </figure>
+
+  <div class="scroll"><table>
+    <thead><tr><th>Type</th><th>What it is</th><th>Examples (slides &amp; class)</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td class="t-sak">Karma / Sakarma<br><span class="ed">(action)</span></td><td>Action impelled by the three modes of nature, but <b>as per scriptural regulations</b>.</td><td>Performing one's prescribed duty, charity, feeding cows, Gaṅgā snān, feeding brāhmaṇas, feeding the poor.</td><td>Puṇya. Good reaction in a future body.</td></tr>
+      <tr><td class="t-vik">Vikarma<br><span class="ed">(forbidden action)</span></td><td>(1) Action impelled by the three modes but <b>against scriptural injunctions</b>.<br>(2) From class: <b>not doing your prescribed duties</b>.</td><td>Cheating, exploiting, abortion, meat eating, taking intoxicants, stealing, physical relationships outside marriage, watching forbidden actions in some form. Not taking care of old parents.</td><td>Pāpa. Bad reaction in a future body.</td></tr>
+      <tr><td class="t-ak">Akarma<br><span class="ed">(inaction)</span></td><td>Action <b>without any reaction</b>: action carried out for the pleasure of the Supreme Lord Krishna.</td><td>Arjuna fighting for Krishna's pleasure.</td><td>No material reaction. Uproots past reactions.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>One action, three outcomes: Arjuna</h3>
+  <p>The slides use Arjuna to show that the category depends on <i>how and why</i> you act, not just on what you do. Fighting is Arjuna's prescribed duty as a kṣatriya.</p>
+  <ul>
+    <li>If Arjuna <b>begs for a living</b> instead, it is <span class="t-vik"><b>vikarma</b></span> (he abandons his duty).</li>
+    <li>If Arjuna <b>fights</b>, it is <span class="t-sak"><b>karma</b></span>.</li>
+    <li>If Arjuna <b>fights for the pleasure of Vishnu</b>, it is <span class="t-ak"><b>akarma</b></span>.</li>
+  </ul>
+
+  <h3>Dry stool and wet stool</h3>
+  <p>Karma (puṇya) and vikarma (pāpa) <b>both bring reactions in the form of a future body.</b> The slides ask: dry stool or wet stool, which is better? The dry one is less messy, but you wouldn't want either. Puṇya is relatively better than pāpa, and pāpa is really bad, but <b>puṇya is not spiritual</b>. A golden chain still binds.</p>
+
+  <h3>Puṇya and pāpa don't cancel</h3>
+  <p>You cannot neutralise puṇya with pāpa or pāpa with puṇya. Each has its own separate reactions, which have to be experienced.</p>
+  <div class="cls"><span class="tag">From class: two quivers</span>
+    <p>Your notes draw two separate rows of arrows, one labelled <b>S</b> (sakarma) and one <b>V</b> (vikarma). They are two separate accounts. Doing a lot of charity does not erase a theft; you will enjoy the reward of the charity <i>and</i> suffer the reaction of the theft, each in its own time.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="four">
+  <h2><span class="n">5</span>Four kinds of reaction</h2>
+  <p class="lede">Every sakarma or vikarma leaves four kinds of trace behind.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Reaction</th><th>Meaning</th><th>What it looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Prārabdha</td><td>Manifested reaction: what has already come to fruit.</td><td>Specific bodily features: short or tall, beautiful or ugly, dull or sharp intelligence; the situation one is born in, rich or poor. Your notes: <i>hard to change</i>.</td></tr>
+      <tr><td>Aprārabdha</td><td>Unmanifested reaction: in stock, yet to manifest.</td><td>When there is such a stock, one feels distress and anxiety for no reason. Class link: the mental disorders common in Kali-yuga. It is "stored up", and when the opportunity comes, the reaction happens.</td></tr>
+      <tr><td>Kūṭa</td><td>Sinful or pious <b>inclination</b>; the start of a desire.</td><td>Doing an activity gives a tendency to do it again. Such tendencies accumulate and form a desire. Your notes: kūṭa forms through <b>association</b> (saṅgat).</td></tr>
+      <tr><td>Bīja</td><td>The <b>desire</b> to do a pious or sinful act; the seed.</td><td>When one has a desire to do something, he makes plans and efforts to fulfil it. Your notes: keep "hammering" (repeating) an inclination and it becomes bīja, a very strong desire.</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure>
+    <svg viewBox="0 0 440 400" role="img" aria-label="The cycle: an act creates stocked and manifested reactions, and a habit that grows into desire, which drives the next act">
+      <defs>
+        <marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ah-s"/></marker>
+      </defs>
+      <rect x="140" y="10" width="160" height="58" rx="6" class="bx-s"/>
+      <text x="220" y="36" text-anchor="middle" class="hd">An act</text>
+      <text x="220" y="57" text-anchor="middle" font-size="14" class="mut">sakarma or vikarma</text>
+      <rect x="270" y="150" width="160" height="62" rx="6" class="box"/>
+      <text x="350" y="176" text-anchor="middle" class="hd">Aprārabdha</text>
+      <text x="350" y="198" text-anchor="middle" font-size="14" class="mut">stocked, waiting</text>
+      <rect x="140" y="326" width="160" height="62" rx="6" class="box"/>
+      <text x="220" y="352" text-anchor="middle" class="hd">Prārabdha</text>
+      <text x="220" y="374" text-anchor="middle" font-size="14" class="mut">body, situation now</text>
+      <rect x="10" y="232" width="150" height="58" rx="6" class="box"/>
+      <text x="85" y="257" text-anchor="middle" class="hd">Kūṭa</text>
+      <text x="85" y="278" text-anchor="middle" font-size="14" class="mut">tendency</text>
+      <rect x="10" y="100" width="150" height="58" rx="6" class="box"/>
+      <text x="85" y="125" text-anchor="middle" class="hd">Bīja</text>
+      <text x="85" y="146" text-anchor="middle" font-size="14" class="mut">strong desire</text>
+      <path d="M300 48 C 350 60, 360 100, 354 144" class="ln-s" marker-end="url(#m3)"/>
+      <path d="M350 212 C 352 290, 340 345, 306 354" class="ln-s" marker-end="url(#m3)"/>
+      <path d="M196 68 C 186 150, 160 200, 128 228" class="ln-s" marker-end="url(#m3)"/>
+      <path d="M50 232 L 50 164" class="ln-s" marker-end="url(#m3)"/>
+      <path d="M110 100 C 116 66, 124 46, 134 40" class="ln-s" marker-end="url(#m3)"/>
+      <text x="362" y="98" font-size="14" class="mut">stored</text>
+      <text x="358" y="290" font-size="14" class="mut">in time</text>
+      <text x="186" y="170" font-size="14" class="mut">habit</text>
+      <text x="58" y="203" font-size="14" class="mut">repeated</text>
+      <text x="62" y="68" font-size="14" class="mut">plans</text>
+    </svg>
+    <figcaption>Prārabdha and aprārabdha run out with time. Kūṭa and bīja feed the next act, so the loop restarts by itself.</figcaption>
+  </figure>
+
+  <h3>Why the cycle never ends on its own</h3>
+  <ul>
+    <li><b>Prārabdha and aprārabdha finish with time</b>: you live them out.</li>
+    <li><b>Kūṭa and bīja cannot be ended by one's own endeavour.</b> The desires lead to further activities, which create new reactions and new desires.</li>
+    <li>So <b>once one does karma, it goes on endlessly.</b></li>
+    <li>The <b>original karma</b> began with the jīva envying the Supreme Lord. Whatever the jīva does after that carries that tendency, so it <b>can't be overcome by any amount of karma.</b> Good karma doesn't remove the root, because the root is the desire to enjoy separately.</li>
+    <li>Therefore <b>akarma is required.</b> Akarma has the potency to uproot all four: prārabdha, aprārabdha, kūṭa and bīja.</li>
+  </ul>
+  <div class="cls"><span class="tag">From class: the seed and the phone</span>
+    <p><b>Addiction:</b> bīja → plant → more seeds → more plants and seeds. A trap. The jīva is "very, very trapped". The notes connect this to Kali-yuga sitting in our pocket, the phone: every scroll strengthens a tendency (kūṭa) which grows into a craving (bīja).</p>
+  </div>
+  <div class="cls"><span class="tag">From class: delayed reactions</span>
+    <p><b>Killing an animal:</b> you won't get the reaction immediately. It is stored in aprārabdha. Later you will be born in that scenario, in that animal's body, and you will be killed.</p>
+    <p><b>The sleeping dog:</b> a person bursts a cracker next to a sleeping dog and laughs, "ha ha ha". The dog suffers a lot. That karma is stored in aprārabdha, and after many lives the person gets a dog body and goes through similar suffering.</p>
+  </div>
+  <div class="key"><span class="tag">Remember</span>
+    <ul>
+      <li>The result of a reaction is <b>not random</b>. It is decided by <b>desire</b> and <b>deserve</b>.</li>
+      <li>Sakarma and vikarma do not cancel each other.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="fine">
+  <h2><span class="n">6</span>How subtle the law is</h2>
+  <p class="lede">The slides call it "very, very complicated". Class gave six cases.</p>
+
+  <h3>Dhṛtarāṣṭra's hundred sons</h3>
+  <p>Dhṛtarāṣṭra lost all his hundred sons. The reason: <b>a hundred lives earlier</b>, he had killed a bird's hundred babies on a tree. To undergo the pain of losing a hundred children, he first had to go through a hundred lives and acquire enough puṇya to get a hundred sons. Only then could the reaction come, through the killing of his hundred sons. This shows how precisely, and over how long a time, the law works.</p>
+
+  <h3>When X kills B: whose karma is it?</h3>
+  <p>The question raised in class on 20 March: if B was destined to suffer (it was B's karma), should X be punished?</p>
+  <ul>
+    <li><b>You can't enjoy or suffer more than is there in your karma.</b> So B suffered only what B's karma allowed.</li>
+    <li><b>But X still gets a reaction</b>, because of his own wrong desire and deed.</li>
+    <li>In short: <b>X had the desire, and B had the karma.</b> Both are accounted for separately.</li>
+  </ul>
+  <div class="cls"><span class="tag">From class: the matchbox</span>
+    <p>Your notes sketch a matchbox, a matchstick and a simple stick. Fire will only ignite when a matchstick is struck on the box; a simple stick won't do it. The way I read the analogy: B's stored karma is like the box, ready to ignite, but it takes someone's active desire (X, the matchstick) to strike it. Neither alone produces the event, and both are responsible for their own part.</p>
+  </div>
+
+  <h3>A child committing sin</h3>
+  <p>Until about <b>14 years of age</b>, children don't have that much discrimination. So the reaction for a child's sin goes <b>to the parents</b>, for not training them properly.</p>
+
+  <h3>Suicide</h3>
+  <div class="cls"><span class="tag">From class: the library book</span>
+    <p>A library issues you a book and you burn it. Now you won't get another book. Similarly: say your life is meant to be 50 years and you commit suicide at 30. You were given the human form of life (a facility) to fulfil a <b>purpose</b>. For some time after that you are not given any body; you don't get a gross body and you roam around quite helpless. It is a terrible life: you want to drink water but you can't; you have desires but can't fulfil them.</p>
+  </div>
+
+  <h3>Giving money</h3>
+  <p>If X gives money to Y and Y misuses it, <b>X also gets a reaction</b> for Y's misuse. Charity has to be given with discrimination, to the right person.</p>
+
+  <h3>The king's share</h3>
+  <p>A king gets <b>one-sixth of the sinful reactions</b> of his citizens (prajā) and <b>one-sixth of their pious reactions</b>, because he is the one facilitating their lives. That is why it is the <b>duty of a leader to punish people doing sinful activities</b>: if he lets sin flourish, he shares in it.</p>
+</section>
+
+<!-- 7 -->
+<section id="species">
+  <h2><span class="n">7</span>Who makes new karma</h2>
+  <p class="lede">Only humans. Every other body is for reaping.</p>
+  <p><b>Karma can be done only in the human form of life.</b> The human form is called <b>karma-yoni</b>, the body in which new karma is generated. In the higher species (demigods) or the lower species, you <b>only reap the reactions</b>.</p>
+  <h3>Why animals don't create karma</h3>
+  <ul>
+    <li>Except humans, other species do not generate new karma.</li>
+    <li>They don't have free will, or it is very much curtailed. Their sleep time is fixed, their mating season is fixed. Individual choice is curtailed.</li>
+    <li>They are just reaping the reactions of past sakarma and vikarma.</li>
+  </ul>
+  <div class="ladder" aria-label="Species from humans downward">
+    <div><span><b>Humans</b></span><small>karma-yoni: new karma made here</small></div>
+    <div><span>Animals</span><small>reaping only</small></div>
+    <div><span>Reptiles</span><small>reaping only</small></div>
+    <div><span>Birds</span><small>reaping only</small></div>
+    <div><span>Insects</span><small>reaping only</small></div>
+    <div><span>Normal trees</span><small>reaping only</small></div>
+    <div><span>Sea plants</span><small>lowest: not even sunlight</small></div>
+  </div>
+  <p>If you fall, your notes say, you have to go through each and every species in the sequence, and then after thousands and thousands of years you get the human form of life again. The lowest species are the sea trees, plants and shrubs, which don't get even sunlight.</p>
+  <h3>What about heaven?</h3>
+  <p>As long as the jīva is in the material world, he is trapped. If his sakarma is very good he can go to the <b>heavenly planets</b>: better facilities, no old age, no troubles. But after finishing his quota of puṇya, he <b>falls back to earth</b>. And there is always the possibility of falling into bad association again. Heaven is a better cell in the same jail.</p>
+  <h3>What is out of our control</h3>
+  <div class="cls"><span class="tag">From class: three things you can't control</span>
+    <ul>
+      <li>Once you submit your paper, the ball is in the examiner's court.</li>
+      <li>After you sleep, what you dream is not in your control.</li>
+      <li>After you die, which next life you get is not in your control.</li>
+    </ul>
+    <p>The point: we have choice only while acting in the human body. The result, and the next body, are decided by the law.</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="renounce">
+  <h2><span class="n">8</span>Why not just stop working?</h2>
+  <p class="lede">If every action binds, the obvious idea is to do nothing. It doesn't work.</p>
+  <p>Since every activity has stringent reactions, some think it's better not to do any work: leave everything and go to the forest. But in the forest too, staying in a cave, one develops a tendency (a desire) to stay in the cave. Work and reactions can't be avoided this way. <b>Akarma means inaction, but inaction doesn't mean no work.</b></p>
+  <div class="cls"><span class="tag">From class</span>
+    <p>The nature we have is accumulated from so many past lives, so one can't change oneself in just one night. Even if you go to the forest, you will get bored and come back.</p>
+  </div>
+  <h3>What Chapter 3 says (from your notes)</h3>
+  <ul>
+    <li><b>3.4</b>: Not by renouncing alone can one attain perfection.</li>
+    <li><b>3.5</b>: Everyone is forced to act helplessly according to the qualities acquired from the modes of material nature, so no one can refrain from doing something, even for a moment.</li>
+    <li><b>3.6</b>: Even if you restrain the senses, you can't stop thinking about the sense objects. (Outer renunciation with inner craving is pretence.)</li>
+    <li><b>3.7</b>: The sincere person practises <b>karma-yoga</b>: controlling the senses by the mind and working without attachment.</li>
+  </ul>
+  <div class="verse"><div class="ref">Bhagavad Gita 3.8 · Prescribed duties</div>
+    <div class="skt">niyataṁ kuru karma tvaṁ karma jyāyo hy akarmaṇaḥ<br>śarīra-yātrāpi ca te na prasiddhyed akarmaṇaḥ</div>
+    <p class="tr">Perform your prescribed duty, for doing so is better than not working. One cannot even maintain one's physical body without work.</p>
+    <p class="meaning">Notice that <i>akarmaṇaḥ</i> here means simply "not working", which is different from the technical akarma of 4.17. Krishna's verdict is clear: doing your duty beats doing nothing, and you can't even keep the body alive without action.</p>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="yajna">
+  <h2><span class="n">9</span>Akarma and yajña</h2>
+  <p class="lede">The way out is to change who the work is for.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 3.9</div>
+    <div class="skt">yajñārthāt karmaṇo 'nyatra loko 'yaṁ karma-bandhanaḥ<br>tad-arthaṁ karma kaunteya mukta-saṅgaḥ samācara</div>
+    <p class="tr">Work done as a sacrifice for Vishnu has to be performed; otherwise work causes bondage in this material world. Therefore, O son of Kuntī, perform your prescribed duties for His satisfaction, and in that way you will always remain free from bondage.</p>
+    <p class="meaning">The key verse of the topic. Your notes compress it to two lines: <b>work for the Lord → akarma; work for the fruits → sakarma.</b> Only <i>yajñārtha</i> work, work as sacrifice for Vishnu, escapes <i>karma-bandhana</i> (bondage by karma).</p>
+  </div>
+  <h3>What akarma is</h3>
+  <ul>
+    <li>Action done <b>only for the pleasure of Vishnu</b>.</li>
+    <li>It doesn't bear any material results.</li>
+    <li>It has the potency to <b>uproot all four types</b> of accumulated reactions: prārabdha, aprārabdha, kūṭa and bīja. Your notes: it is so potent that it can burn off all of one's sakarma and vikarma.</li>
+  </ul>
+  <h3>Yajña</h3>
+  <p><b>Yajña means any activity done for the pleasure of Vishnu.</b> Vishnu is also known as Yajña-puruṣa, or simply Yajña. Acting for His pleasure requires <b>selflessness</b>, and acting selflessly is not easy. That is why we need a <b>spiritual master</b>.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 3.14 · Yajña and prescribed duties</div>
+    <div class="skt">annād bhavanti bhūtāni parjanyād anna-sambhavaḥ<br>yajñād bhavati parjanyo yajñaḥ karma-samudbhavaḥ</div>
+    <p class="tr">All living bodies subsist on food grains, which are produced from rains. Rains are produced by performance of yajña [sacrifice], and yajña is born of prescribed duties.</p>
+    <p class="meaning">A chain: <b>prescribed duty → yajña → rain → grain → living bodies.</b> The phrase the slides pick out is <i>yajñaḥ karma-samudbhavaḥ</i>, "yajña is born of prescribed duties". You don't do yajña by leaving your duty; you do it by performing your duty as a sacrifice.</p>
+  </div>
+  <h3>Who decides my prescribed duty?</h3>
+  <ul>
+    <li>Duties are prescribed in the Vedic scriptures.</li>
+    <li>But someone still has to prescribe them <b>according to the person's nature</b>. This needs a spiritual relationship with a spiritual master.</li>
+    <li>Performing an act for the Lord's pleasure is possible only when one has a <b>relationship with Him</b>. Therefore yoga is required (taken up later in the course).</li>
+  </ul>
+  <div class="verse"><div class="ref">Bhagavad Gita 2.47 · Yajña is non-fruitive</div>
+    <div class="skt">karmaṇy evādhikāras te mā phaleṣu kadācana<br>mā karma-phala-hetur bhūr mā te saṅgo 'stv akarmaṇi</div>
+    <p class="tr">You have a right to perform your prescribed duty, but you are not entitled to the fruits of action. Never consider yourself the cause of the results of your activities, and never be attached to not doing your duty.</p>
+    <p class="meaning">Four instructions in one verse: (1) your right is to the work; (2) not to the fruit; (3) don't think you are the cause of results; (4) don't become attached to inaction either.</p>
+  </div>
+  <h3>"Work is worship"</h3>
+  <p>The popular saying <i>karm hi pūjā hai</i> is true only in a specific sense. Which work is worship? <b>Only a prescribed duty done with the sole motivation of pleasing Lord Vishnu.</b> Claiming proprietorship over the results doesn't make work worship. Work should be done without desire for any fruits, and the only desire should be to bring happiness to the Supreme Lord.</p>
+  <div class="key"><span class="tag">Definition to memorise</span>
+    <p style="margin:.3rem 0">Yajña means doing prescribed duty without attachment to the fruits of one's work and performing it only for the pleasure of Lord Vishnu.</p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section id="conditions">
+  <h2><span class="n">10</span>The four conditions for akarma</h2>
+  <p class="lede">From your notes. All four have to be present.</p>
+  <div class="cond">
+    <div><b>1</b><span>It must be a <b>prescribed duty</b></span></div>
+    <div><b>2</b><span>Done <b>without attachment</b> to results</span></div>
+    <div><b>3</b><span>With the understanding <b>"I am not the doer"</b></span></div>
+    <div><b>4</b><span>Done <b>for the pleasure of the Lord</b></span></div>
+  </div>
+
+  <h3>1 · It must be a prescribed duty</h3>
+  <p>You can't make any action akarma just by saying "it's for God". <b>Drinking alcohol to please the Lord ✗. Killing people to please the Lord ✗.</b> The action itself must be sanctioned.</p>
+  <div class="cls"><span class="tag">From class: the map of India</span>
+    <p>A soldier who kills an enemy at the border gets a <b>medal</b>. A man who kills someone inside the country goes to <b>prison</b>. The same outward act, killing, is duty in one case and crime in the other. What decides it is whether the act is prescribed.</p>
+  </div>
+  <p>Verses cited: <b>3.8</b> (perform your prescribed duty, §8) and <b>16.23</b>, which says that one who discards scriptural injunctions and acts on whim attains neither perfection, nor happiness, nor the supreme destination.</p>
+
+  <h3>2 · Without attachment to results (BG 2.47)</h3>
+  <div class="cls"><span class="tag">From class: the bank cashier</span>
+    <p>A cashier counts lakhs of rupees every day but isn't attached to that money, or to the bank's profit or loss. <span class="deva">आज कम गिना, आज ज़्यादा</span> ("today I counted less, today more"): it makes no difference to him. He does his job fully and leaves the result where it belongs.</p>
+  </div>
+
+  <h3>3 · "I am not the doer" (BG 3.27)</h3>
+  <p>Don't take the credit. Out of false ego, the soul thinks it is doing everything, when activities are actually carried out by the three modes of material nature. The full analysis is in §11.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 3.27</div>
+    <div class="skt">prakṛteḥ kriyamāṇāni guṇaiḥ karmāṇi sarvaśaḥ<br>ahaṅkāra-vimūḍhātmā kartāham iti manyate</div>
+    <p class="tr">The spirit soul bewildered by the influence of false ego thinks himself the doer of activities that are in actuality carried out by the three modes of material nature.</p>
+  </div>
+
+  <h3>4 · For the pleasure of the Lord (BG 3.9)</h3>
+  <p>Your notes give the clearest meaning of "sacrifice" in 3.9: it is a <b>sacrifice of the fruitive mentality</b>. Whenever we act, we have the desire to enjoy the result ("I want to enjoy"). An action done to please the Lord is called a sacrifice because <b>we are sacrificing the desire to enjoy the result of the action.</b></p>
+  <div class="cls"><span class="tag">From class: grapes</span>
+    <p>You have beautiful grapes and offer them to the Lord. Not because God has a scarcity of grapes, but because this strengthens your relationship with Him. "These are such beautiful grapes, let me offer them to the Lord", without the tendency to enjoy them first yourself.</p>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Same action</th><th>Where the focus is</th></tr></thead>
+    <tbody>
+      <tr><td class="t-sak">Sakarma</td><td>Focus is on <b>I</b>: my enjoyment, my result.</td></tr>
+      <tr><td class="t-ak">Akarma</td><td>Focus is on <b>the Supreme Lord</b> and on going back to the spiritual world. It's not that you will lose out materially by having this mentality.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="cls"><span class="tag">From class (21 March): teaching the Gita</span>
+    <p>Even a pious activity like teaching the Bhagavad Gita can be either kind. Done just to complete my hours or for a grade, it is <b>sakarma</b>. Done to get free from the cycle of birth and death, it is <b>akarma</b>.</p>
+  </div>
+  <p class="flag"><b>Note:</b> the slides define akarma strictly as action done <i>for Krishna's pleasure</i>. "To get free from birth and death" in the class example is best read the same way: freedom comes as the result of working for Him. In an exam, phrase it in terms of pleasing the Lord.</p>
+  <p>Your notes on 21 March tick "prescribed duty" as the easy one and circle "without attachment to result" and "I am not the doer" as the hard parts. That is why the slides say acting selflessly is not easy and needs a guide.</p>
+</section>
+
+<!-- 11 -->
+<section id="doer">
+  <h2><span class="n">11</span>The five factors of action</h2>
+  <p class="lede">Why I am not the only doer, and so have no claim on the result.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 18.13</div>
+    <div class="skt">pañcaitāni mahā-bāho kāraṇāni nibodha me<br>sāṅkhye kṛtānte proktāni siddhaye sarva-karmaṇām</div>
+    <p class="tr">O mighty-armed Arjuna, according to the Vedānta there are five causes for the accomplishment of all action. Now learn of these from Me.</p>
+  </div>
+  <div class="verse"><div class="ref">Bhagavad Gita 18.14</div>
+    <div class="skt">adhiṣṭhānaṁ tathā kartā karaṇaṁ ca pṛthag-vidham<br>vividhāś ca pṛthak ceṣṭā daivaṁ caivātra pañcamam</div>
+    <p class="tr">The place of action [the body], the performer, the various senses, the many different kinds of endeavor, and ultimately the Supersoul—these are the five factors of action.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 250" role="img" aria-label="Five factors combine to produce an action">
+      <defs>
+        <marker id="m4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ah-a"/></marker>
+      </defs>
+      <g font-size="14">
+        <rect x="8" y="10" width="116" height="62" rx="6" class="box"/><text x="66" y="36" text-anchor="middle" font-weight="600">Adhiṣṭhāna</text><text x="66" y="56" text-anchor="middle" class="mut">body, place</text>
+        <rect x="134" y="10" width="116" height="62" rx="6" class="box"/><text x="192" y="36" text-anchor="middle" font-weight="600">Kartā</text><text x="192" y="56" text-anchor="middle" class="mut">doer, soul</text>
+        <rect x="260" y="10" width="116" height="62" rx="6" class="box"/><text x="318" y="36" text-anchor="middle" font-weight="600">Karaṇa</text><text x="318" y="56" text-anchor="middle" class="mut">senses</text>
+        <rect x="386" y="10" width="116" height="62" rx="6" class="box"/><text x="444" y="36" text-anchor="middle" font-weight="600">Ceṣṭā</text><text x="444" y="56" text-anchor="middle" class="mut">many endeavours</text>
+        <rect x="512" y="10" width="120" height="62" rx="6" class="bx-a"/><text x="572" y="36" text-anchor="middle" font-weight="600">Daiva</text><text x="572" y="56" text-anchor="middle" class="mut">Supersoul</text>
+      </g>
+      <path d="M66 72 C 66 130, 250 140, 300 172" class="ln-a" marker-end="url(#m4)"/>
+      <path d="M192 72 C 192 120, 280 140, 310 170" class="ln-a" marker-end="url(#m4)"/>
+      <path d="M318 72 L 320 168" class="ln-a" marker-end="url(#m4)"/>
+      <path d="M444 72 C 444 120, 360 140, 330 170" class="ln-a" marker-end="url(#m4)"/>
+      <path d="M572 72 C 572 130, 390 140, 340 172" class="ln-a" marker-end="url(#m4)"/>
+      <rect x="220" y="176" width="200" height="56" rx="28" class="bx-a"/>
+      <text x="320" y="203" text-anchor="middle" class="hd">Action</text>
+      <text x="320" y="222" text-anchor="middle" font-size="12" class="mut">right or wrong</text>
+    </svg>
+    <figcaption>The five factors cooperate to produce every action (your notes, BG 18.14). The soul is only one of them.</figcaption>
+  </figure>
+
+  <ol>
+    <li><b>Place of action</b> (the body).</li>
+    <li><b>Performer</b> (the doer, the soul).</li>
+    <li><b>Senses</b>: your notes add that they are superior to the body.</li>
+    <li><b>Different kinds of endeavour</b>, and your notes stress: <i>not just yours</i>.</li>
+    <li><b>The Supersoul</b>, who finally sanctions the action.</li>
+  </ol>
+  <div class="cls"><span class="tag">From class: whose endeavour?</span>
+    <ul>
+      <li>The mess workers cooked food for you, and only then were you able to give your exam.</li>
+      <li>Babulal ji set up the mic, so sir could deliver the lecture.</li>
+      <li>If other people didn't get lower marks, how would you get an A? If you got an A, so many people contributed to it.</li>
+    </ul>
+  </div>
+  <h3>The analysis of action (slide)</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Group</th><th>Its three parts</th></tr></thead>
+    <tbody>
+      <tr><td>Five factors of action</td><td>Body · performer (soul) · senses · endeavours · Supersoul</td></tr>
+      <tr><td>Motivation (impetus) for action</td><td>Knowledge · object of knowledge · knower</td></tr>
+      <tr><td>Constituents of action</td><td>Senses · work · doer</td></tr>
+    </tbody>
+  </table></div>
+  <div class="verse"><div class="ref">Bhagavad Gita 18.15</div>
+    <div class="skt">śarīra-vāṅ-manobhir yat karma prārabhate naraḥ<br>nyāyyaṁ vā viparītaṁ vā pañcaite tasya hetavaḥ</div>
+    <p class="tr">Whatever right or wrong action a man performs by body, mind or speech is caused by these five factors.</p>
+  </div>
+  <div class="verse"><div class="ref">Bhagavad Gita 18.16</div>
+    <div class="skt">tatraivaṁ sati kartāram ātmānaṁ kevalaṁ tu yaḥ<br>paśyaty akṛta-buddhitvān na sa paśyati durmatiḥ</div>
+    <p class="tr">Therefore one who thinks himself the only doer, not considering the five factors, is certainly not very intelligent and cannot see things as they are.</p>
+    <p class="meaning">This is the answer to "why not desire the results of work?" If I am one of five causes, and the final one is the Supersoul, then claiming the result as "mine" is simply a wrong view of reality.</p>
+  </div>
+</section>
+
+<!-- 12 -->
+<section id="offer">
+  <h2><span class="n">12</span>Offering the results of work</h2>
+  <p class="lede">What pleases the Lord is the affection behind the offering.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 3.30</div>
+    <div class="skt">mayi sarvāṇi karmāṇi sannyasyādhyātma-cetasā<br>nirāśīr nirmamo bhūtvā yudhyasva vigata-jvaraḥ</div>
+    <p class="tr">Therefore, O Arjuna, surrendering all your works unto Me, with full knowledge of Me, without desires for profit, with no claims to proprietorship, and free from lethargy, fight.</p>
+    <p class="meaning">Five qualities in one line: surrender all works to Me · with knowledge of Me (<i>adhyātma-cetasā</i>) · without desire for profit (<i>nirāśīḥ</i>) · without "mine-ness" (<i>nirmamaḥ</i>) · free from lethargy or feverish anxiety (<i>vigata-jvaraḥ</i>).</p>
+  </div>
+  <p>The jīva can hardly offer anything to God; everything already belongs to Him. What pleases the Lord is the <b>affection</b> the jīva shows towards Him.</p>
+  <div class="cls"><span class="tag">From class: the child's painting</span>
+    <p>A child says, "See, papa, I made a painting!" The father says, "Arre wah!", even though the child has only drawn a few lines, a very rough drawing. What pleases the father is the affection the child has towards him.</p>
+  </div>
+  <h3>Changing the fruitive mindset</h3>
+  <p>Your notes draw the jīva at the centre of its world, seeing everything with a fruitive mindset: food, a girl, and so on. Everything is "how can I enjoy this?". We came into the material world with the desire to enjoy separately from the Lord, so this mindset is very difficult to change.</p>
+  <p>But if the jīva gets the message of the Gita, it can understand: "I've got this rare human form of life; birth and death are real; so let me work to please the Supreme Lord." Then we <b>dovetail</b> our endeavours so that they take us closer to the Supreme Lord. Nothing is given up outwardly; the direction changes.</p>
+</section>
+
+<!-- 13 -->
+<section id="peace">
+  <h2><span class="n">13</span>The peace formula</h2>
+  <p class="lede">Three facts about Krishna which, once known, bring peace.</p>
+  <div class="verse"><div class="ref">Bhagavad Gita 5.29</div>
+    <div class="skt">bhoktāraṁ yajña-tapasāṁ sarva-loka-maheśvaram<br>suhṛdaṁ sarva-bhūtānāṁ jñātvā māṁ śāntim ṛcchati</div>
+    <p class="tr">A person in full consciousness of Me, knowing Me to be the ultimate beneficiary of all sacrifices and austerities, the Supreme Lord of all planets and demigods, and the benefactor and well-wisher of all living entities, attains peace from the pangs of material miseries.</p>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Krishna is…</th><th>Sanskrit</th><th>Why (slides)</th></tr></thead>
+    <tbody>
+      <tr><td>The ultimate beneficiary of all sacrifices and austerities</td><td><i>bhoktāraṁ yajña-tapasām</i></td><td>No activity can happen without Krishna's sanction. If He permits an activity, He has some purpose behind it. So for any activity, the beneficiary is Krishna.</td></tr>
+      <tr><td>The controller and proprietor of all planets</td><td><i>sarva-loka-maheśvaram</i></td><td>One can claim to own something only if he owns it in the past, present and future. Only the Supreme Lord can claim this.</td></tr>
+      <tr><td>The benefactor and well-wisher of all living entities</td><td><i>suhṛdaṁ sarva-bhūtānām</i></td><td>He is everyone's friend. Your notes draw the heart with the soul and the Supersoul side by side: you should acknowledge your actual best friend, and thank Him.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Knowing vs being aware</h3>
+  <ul>
+    <li><b>Akarma (inaction)</b> means prescribed activity performed without attachment to results and only for the pleasure of Vishnu.</li>
+    <li>An action is not strictly inaction <b>if one is not aware of these three attributes</b> of the Supreme Lord.</li>
+    <li><b>Knowing is different from being aware of.</b> You may know the verse; being aware means it is present in your mind while you act.</li>
+  </ul>
+  <div class="key"><span class="tag">Spiritual work: three tests (slide)</span>
+    <ol style="margin:.3rem 0">
+      <li>The work must be a prescribed duty.</li>
+      <li>It is performed without attachment to results.</li>
+      <li>One performs it for His pleasure, being aware of these three attributes.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 14 -->
+<section id="quota">
+  <h2><span class="n">14</span>One's quota</h2>
+  <p class="lede">Take what your duty needs, and no more.</p>
+  <div class="verse"><div class="ref">Śrī Īśopaniṣad, Mantra 1</div>
+    <div class="skt">īśāvāsyam idaṁ sarvaṁ yat kiñca jagatyāṁ jagat<br>tena tyaktena bhuñjīthā mā gṛdhaḥ kasya svid dhanam</div>
+    <p class="tr">Everything animate or inanimate that is within the universe is controlled and owned by the Lord. One should therefore accept only those things necessary for himself, which are set aside as his quota, and one should not accept other things, knowing well to whom they belong.</p>
+  </div>
+  <ul>
+    <li>Everything, animate and inanimate, belongs to the Supreme Lord.</li>
+    <li>One should accept only those things necessary for carrying out one's prescribed duty.</li>
+    <li><b>Accepting more than necessary is dishonesty</b>, and everything one does with that dishonesty is bad karma only.</li>
+  </ul>
+  <p>This links back to §3: the world is never peaceful because every jīva grabs more than its quota. The Īśopaniṣad's answer is the cure for that.</p>
+</section>
+
+<!-- 15 -->
+<section id="worship">
+  <h2><span class="n">15</span>Different platforms of worship</h2>
+  <p class="lede">The same worship can come from four different motives.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Platform</th><th>Motive</th></tr></thead>
+    <tbody>
+      <tr><td>Fear</td><td>One worships out of fear of something going wrong.</td></tr>
+      <tr><td>Desire</td><td>One worships expecting some material result in return.</td></tr>
+      <tr><td>Duty</td><td>One worships out of scriptural obligation.</td></tr>
+      <tr><td class="t-ak">Love</td><td>One worships out of selfless love, with the only motivation of giving happiness.</td></tr>
+    </tbody>
+  </table></div>
+  <p>The list runs from lowest to highest. Only the last is fully akarma: the first two are still fruitive (I worship to avoid a loss or to get a gain), and the third is good but mechanical. The child's painting in §12 is the platform of love.</p>
+</section>
+
+<!-- 16 -->
+<section id="tyaga">
+  <h2><span class="n">16</span>Sannyāsa vs tyāga</h2>
+  <p class="lede">Giving up the work, or giving up the fruit.</p>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>Sannyāsa</th><th>Tyāga</th></tr></thead>
+    <tbody>
+      <tr><td>What is given up</td><td>One's work</td><td>The fruits of work</td></tr>
+      <tr><td>Practical?</td><td>Not fully: it is impossible for an embodied being to give up all activities (3.5, 3.8)</td><td>Yes: you keep working and change the motive</td></tr>
+      <tr><td>Verdict</td><td colspan="2">The two are the same in aim, <b>but tyāga is better.</b> The <b>mood of tyāga</b> is to be cultivated.</td></tr>
+    </tbody>
+  </table></div>
+  <p>This closes the loop with §8: running to the forest is an attempt at sannyāsa; the Gita's recommendation is tyāga, which is the same thing as akarma in practice.</p>
+</section>
+
+<!-- 17 -->
+<section id="sheet">
+  <h2><span class="n">17</span>One-page summary</h2>
+  <p class="lede">The whole topic in the order you'd write it in an answer.</p>
+  <ol>
+    <li><b>Definition (8.3):</b> karma is action that leads to the development of material bodies. Akarma is action with no reaction.</li>
+    <li><b>Scope:</b> karma applies only to conditioned souls who rebelled against the Lord (icchā, dveṣa). City vs jail.</li>
+    <li><b>Hard to understand (4.16, 4.17):</b> even the wise are bewildered; know karma, vikarma and akarma.</li>
+    <li><b>The law:</b> no one else is responsible for our reactions; free will; God's mercy (father and sons); maintained by demigods; ignorance or power is no excuse (fire); law implies a law-maker; results by desire and deserve.</li>
+    <li><b>Three kinds:</b> sakarma (by scripture), vikarma (against scripture or neglecting duty), akarma (for Krishna). Arjuna example. Dry and wet stool. They don't cancel.</li>
+    <li><b>Four reactions:</b> prārabdha, aprārabdha, kūṭa, bīja. The first two finish with time; the last two keep the cycle going. Original karma is envy of the Lord, so no karma can fix it.</li>
+    <li><b>Subtlety:</b> Dhṛtarāṣṭra's 100 sons; X had the desire, B had the karma; child under 14; suicide; giving money; king's one-sixth.</li>
+    <li><b>Human birth = karma-yoni.</b> Other species and demigods only reap. Heaven ends.</li>
+    <li><b>Renouncing doesn't work (3.4–3.8):</b> no one can stay without action; inaction doesn't mean no work.</li>
+    <li><b>Akarma = yajña (3.9, 3.14, 2.47):</b> prescribed duty, without attachment, for Vishnu's pleasure. Uproots all four reactions. Needs a spiritual master.</li>
+    <li><b>Four conditions:</b> prescribed duty · no attachment · not the doer · for the Lord.</li>
+    <li><b>Not the doer (3.27, 18.13–16):</b> five factors: body, soul, senses, endeavours, Supersoul.</li>
+    <li><b>Offering (3.30):</b> affection is what pleases Him (child's painting).</li>
+    <li><b>Peace formula (5.29):</b> beneficiary, proprietor, friend. Knowing vs being aware.</li>
+    <li><b>Quota (Īśopaniṣad 1):</b> taking more than needed is dishonesty.</li>
+    <li><b>Platforms of worship:</b> fear, desire, duty, love.</li>
+    <li><b>Sannyāsa vs tyāga:</b> tyāga is better; cultivate its mood.</li>
+  </ol>
+  <h3>Verse index</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Verse</th><th>Point</th><th>Section</th></tr></thead>
+    <tbody>
+      <tr><td>BG 2.47</td><td>Right to work, not to the fruit</td><td><a href="#yajna">§9</a>, <a href="#conditions">§10</a></td></tr>
+      <tr><td>BG 3.4–3.7</td><td>Renunciation alone fails; everyone must act; karma-yoga</td><td><a href="#renounce">§8</a></td></tr>
+      <tr><td>BG 3.8</td><td>Perform prescribed duty; better than not working</td><td><a href="#renounce">§8</a>, <a href="#conditions">§10</a></td></tr>
+      <tr><td>BG 3.9</td><td>Work as sacrifice for Vishnu frees; otherwise binds</td><td><a href="#yajna">§9</a>, <a href="#conditions">§10</a></td></tr>
+      <tr><td>BG 3.14</td><td>Yajña is born of prescribed duties</td><td><a href="#yajna">§9</a></td></tr>
+      <tr><td>BG 3.27</td><td>False ego thinks itself the doer</td><td><a href="#conditions">§10</a></td></tr>
+      <tr><td>BG 3.30</td><td>Surrender all works unto Me and fight</td><td><a href="#offer">§12</a></td></tr>
+      <tr><td>BG 4.16</td><td>Even the intelligent are bewildered</td><td><a href="#what">§2</a></td></tr>
+      <tr><td>BG 4.17</td><td>Know karma, vikarma and akarma</td><td><a href="#three">§4</a></td></tr>
+      <tr><td>BG 5.29</td><td>Peace formula</td><td><a href="#peace">§13</a></td></tr>
+      <tr><td>BG 8.3</td><td>Definition of karma</td><td><a href="#what">§2</a></td></tr>
+      <tr><td>BG 16.23</td><td>Discarding scripture: no perfection, no happiness</td><td><a href="#conditions">§10</a></td></tr>
+      <tr><td>BG 18.13–18.16</td><td>Five factors of action</td><td><a href="#doer">§11</a></td></tr>
+      <tr><td>Īśopaniṣad 1</td><td>Everything belongs to the Lord; accept your quota</td><td><a href="#quota">§14</a></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 18 -->
+<section id="qs">
+  <h2><span class="n">18</span>Exam-style questions</h2>
+  <p class="lede">Try each one before opening the answer. Tagged ones came up in the past papers you went through earlier.</p>
+  <div class="controls"><button type="button" id="openAll">Show all answers</button><button type="button" id="closeAll">Hide all answers</button></div>
+
+  <details class="q"><summary><span>How is karma defined in the Bhagavad Gita? <span class="pill">Past paper</span></span></summary><div class="a">
+    <p>BG 8.3: "Action pertaining to the development of the material bodies of the living entities is called karma, or fruitive activities." Karma is action that brings a reaction and so leads to a future body. Akarma is action that bears no reaction.</p></div></details>
+
+  <details class="q"><summary><span>How is the law of karma an expression of God's compassion? <span class="pill">Past paper</span></span></summary><div class="a">
+    <p>The law is impartial: everyone gets results only according to their own desire and deserve, and no one else is responsible. It is also corrective rather than vengeful. Like a father who punishes the son who snatched his brothers' apples, out of love and still loving him equally, the law reforms the jīva so it can return to the Lord. The Lord does not interfere; demigods maintain the law. "God as punishment-giver" is a wrong concept.</p></div></details>
+
+  <details class="q"><summary><span>Explain prārabdha, aprārabdha, kūṭa and bīja. <span class="pill">Past paper</span></span></summary><div class="a">
+    <ul><li><b>Prārabdha:</b> manifested reaction: bodily features, intelligence, birth situation.</li>
+    <li><b>Aprārabdha:</b> unmanifested, stocked reaction; felt as anxiety without reason; comes when the opportunity arises.</li>
+    <li><b>Kūṭa:</b> inclination; an act creates a tendency to repeat it, built up by association.</li>
+    <li><b>Bīja:</b> desire; repeated inclination becomes a strong desire that makes plans and efforts.</li></ul>
+    <p>The first two end with time. The last two cannot be ended by one's own effort and produce new acts, so the cycle continues. Only akarma uproots all four.</p></div></details>
+
+  <details class="q"><summary><span>Distinguish sakarma, vikarma and akarma with examples. <span class="pill">Past paper</span></span></summary><div class="a">
+    <ul><li><b>Sakarma:</b> action by scriptural rules, impelled by the modes, for one's own result: charity, feeding cows, Gaṅgā snān. Gives puṇya and a future body.</li>
+    <li><b>Vikarma:</b> action against scripture, or neglecting duty: cheating, stealing, intoxication, neglecting old parents. Gives pāpa and a future body.</li>
+    <li><b>Akarma:</b> prescribed duty done without attachment for Vishnu's pleasure. No reaction.</li></ul>
+    <p>Arjuna: begging = vikarma; fighting = karma; fighting for Vishnu's pleasure = akarma.</p></div></details>
+
+  <details class="q"><summary><span>Why are sakarma and vikarma compared to dry and wet stool? <span class="pill">Past paper</span></span></summary><div class="a">
+    <p>Both are stool: one is less messy, but neither is desirable. Likewise both puṇya and pāpa bring a future material body and keep the soul in birth and death. Puṇya is better than pāpa but is not spiritual. Only akarma frees.</p></div></details>
+
+  <details class="q"><summary><span>"I'm fine just doing good karma." What is the problem? <span class="pill">Past paper</span></span></summary><div class="a">
+    <p>Sakarma still produces reactions to be enjoyed in another body, so you stay in the cycle. Even heaven ends: after the puṇya is used up you fall back to earth, with the risk of bad association. And the root, the original envy of the Lord, is untouched, so kūṭa and bīja keep generating new karma. No amount of karma removes karma; akarma is required.</p></div></details>
+
+  <details class="q"><summary><span>Can puṇya cancel pāpa? How can stocked karma be burnt? <span class="pill">Past paper</span></span></summary><div class="a">
+    <p>No. Puṇya and pāpa have separate reactions, each of which must be experienced (two separate quivers of arrows). Stocked karma is burnt only by akarma, work done as yajña for the pleasure of Vishnu, which has the potency to uproot prārabdha, aprārabdha, kūṭa and bīja.</p></div></details>
+
+  <details class="q"><summary><span>X kills B. If it was B's karma to suffer, why should X be punished?</span></summary><div class="a">
+    <p>No one can suffer or enjoy more than their karma allows, so B suffered only what was due. But X acted out of his own wrong desire and deed, which creates his own reaction. X had the desire; B had the karma. Each is accounted for separately (matchstick and matchbox).</p></div></details>
+
+  <details class="q"><summary><span>Why don't animals generate new karma?</span></summary><div class="a">
+    <p>Their free will is absent or very curtailed: their sleep and mating are fixed by nature. They are only reaping past reactions. Only the human body is karma-yoni. Demigods too only reap.</p></div></details>
+
+  <details class="q"><summary><span>If every action binds, why not give up all action and go to the forest?</span></summary><div class="a">
+    <p>It is impossible to stay without action even for a moment (3.5); even the body can't be maintained without work (3.8); restraining the senses while thinking of their objects is pretence (3.6). Even in a cave one develops attachment to the cave. Our nature comes from many lives and doesn't change overnight. Inaction (akarma) doesn't mean no work; it means work for Vishnu (3.9). Tyāga, giving up fruits, is better than sannyāsa, giving up work.</p></div></details>
+
+  <details class="q"><summary><span>What are the four conditions for work to be akarma?</span></summary><div class="a">
+    <ol><li>It must be a prescribed duty (not alcohol or killing "for God"; soldier's medal vs murderer's prison; 3.8, 16.23).</li>
+    <li>Without attachment to results (2.47; the bank cashier).</li>
+    <li>Understanding "I am not the doer" (3.27; the five factors, 18.14).</li>
+    <li>For the pleasure of the Lord (3.9; sacrifice of the fruitive mentality; grapes).</li></ol></div></details>
+
+  <details class="q"><summary><span>What are the five factors of action, and what follows from them?</span></summary><div class="a">
+    <p>BG 18.14: the body (place), the performer (soul), the senses, the various endeavours (including others', like the mess workers), and the Supersoul. Since the soul is only one of five causes, one who thinks himself the sole doer "cannot see things as they are" (18.16). So there's no basis to claim the result as mine.</p></div></details>
+
+  <details class="q"><summary><span>State the peace formula and its three parts.</span></summary><div class="a">
+    <p>BG 5.29. Knowing Krishna as (1) the ultimate beneficiary of all sacrifices and austerities, since nothing happens without His sanction; (2) the Supreme Lord and proprietor of all planets, since only He owns past, present and future; (3) the friend and well-wisher of all living beings. One who knows this attains peace. For work to be akarma, one must be <i>aware</i> of these, not just know them.</p></div></details>
+
+  <details class="q"><summary><span>What does "work is worship" really mean?</span></summary><div class="a">
+    <p>Only prescribed duty done with the sole motivation of pleasing Vishnu, without claiming the results, is worship. Work done for oneself, even good work, is not worship. Knowing one's prescribed duty requires a spiritual master.</p></div></details>
+
+  <details class="q"><summary><span>Explain one's quota from Īśopaniṣad 1.</span></summary><div class="a">
+    <p>Everything belongs to the Lord. Accept only what is needed to carry out your prescribed duty. Accepting more is dishonesty, and everything done with it is bad karma.</p></div></details>
+
+  <details class="q"><summary><span>Name the four platforms of worship.</span></summary><div class="a">
+    <p>Fear (something may go wrong), desire (material gain), duty (scriptural obligation), and love (selfless, only to give Him happiness).</p></div></details>
+</section>
+
+<!-- 19 -->
+<section id="notes">
+  <h2><span class="n">19</span>Class notes, as written</h2>
+  <p class="lede">A transcription of your 15 handwritten pages, with page markers so you can match it to the PDF. Diagrams are described in brackets.</p>
+  <div class="controls"><button type="button" id="openLec">Expand all</button><button type="button" id="closeLec">Collapse all</button></div>
+
+  <details class="lec"><summary>18 March <small>pages 1–5</small></summary><div class="written">
+    <p class="flag" style="margin-top:0"><b>Date:</b> page 1 reads "18/3/24". The next classes are dated 20/3/25 and 21/3/25 and the file is from March 2025, so this is almost certainly 18/3/25.</p>
+    <span class="pg">p.1</span>
+    <p><b>Karma</b></p>
+    <p>A dialed B and talked to him, but behind the scene so much details are there about how the call gets connected &amp; the network, etc.</p>
+    <p>Generally → people talk more of karma &amp; less about Krishna.<br>→ Karma → subject of conditioned living entities. Applies to those who have rebelled against Lord &amp; who want to enjoy independently.<br>→ Action need not necessarily mean karma.</p>
+    <p class="ed">[Diagram: the sun / spiritual world with souls (×3) above an arc; below the arc, the material world with one soul (×2). Labels: Iccha (desire), Dwesh (envy). "Now also many rules apply to jiva in Mt world just like rules &amp; laws in jail." City: "he is not misusing the facilities so he is given freedom." Jail ← constrained (conditioned).]</p>
+    <p><b>Bg 8.3</b> The indestructible entity → Brahman &amp; his eternal nature is called adhyatma, the self. Action pertaining to the development of the material bodies of the living entities is called karma or fruitive activities. → keeps you trapped in the birth–death cycle, 84 lakh species.</p>
+    <span class="pg">p.2</span>
+    <p>Karma definition (slide)</p>
+    <p><b>Discrimination is not easy:</b> even intelligent are bewildered in determining what's action &amp; what is inaction…</p>
+    <p><b>Imp things to understand:</b> no one else is responsible for the reactions we are getting.</p>
+    <p>Free will · Iccha &amp; dwesh · Law of karma: God's mercy (compassion).</p>
+    <p class="ed">[Side note] Supreme Lord created; alcohol/drugs. He has given free will. Uses properly → SP world; misuse → suffers.</p>
+    <p>All the jivas in Mt world, all of them want to be the best, want to grab as much as they can. Goal → facilities.<br>World is filled with jivas with iccha &amp; dwesh, it can never be peaceful. Everyone trying to acquire as much resources, more than they need. Resources → limited. So jivas fight, hurt, harm other jivas → then you will get reaction.</p>
+    <p class="ed">[Side note] Want to capture China → Japan land, India land, Taiwan land.</p>
+    <p>Father, 10 sons. Buys 10 apples, 1 apple given to every child. 1 son snatches apples of 2–3 other brothers and beats other brothers. Father punishes that child (not out of envy, out of love only) (he still loves that son as much as he loves others).</p>
+    <span class="pg">p.3</span>
+    <p>Lord ≠ punishment giver (wrong concept).</p>
+    <p>Law of karma is maintained by demigods. Lord don't interfere with this law.</p>
+    <p>"I don't know" — not an excuse. "I am very famous/powerful" — no excuse.</p>
+    <p class="ed">[Diagram: fire, a child and an adult.]</p>
+    <p>Everyone who touches fire will get burn (no matter who). He should learn from parents that not to touch fire. No excuse, fire will burn even if you don't know it burns.</p>
+    <p>+ God's existence: <b>Law means law maker. Law imposition means law imposer.</b></p>
+    <p class="ed">[Two circles: "Desire &amp; Deserve" and "Sakarma, Vikarma, Akarma".]</p>
+    <p><b>Karma/Sakarma (action):</b> action impelled by 3 modes but as per scriptural regulations. • Performing one's prescribed duty, charity, feeding cows, ganga snan, feeding poor, feeding brahmanas, etc.</p>
+    <p><b>Vikarma (forbidden action):</b> (1) Action impelled by 3 modes but against scriptural injunctions. • Cheating, exploiting, abortion, meat eating, taking intoxicants, stealing, physical relationships outside marriage, etc. (2) Not doing your prescribed duties — taking care of (old) parents, etc.</p>
+    <span class="pg">p.4</span>
+    <p><b>Akarma</b> (inaction).</p>
+    <p><b>Reactions to Sakarma or Vikarma</b> — 4 kinds of reactions</p>
+    <p>(1) <b>Prarabdha (manifested reaction):</b> specific bodily features, short, tall, intelligent, beautiful, ugly, dull, sharp, situations one is born in rich/poor. Hard to change.</p>
+    <p>(2) <b>Aprarabdha (unmanifested reaction):</b> reactions in stock but yet to be manifested. When there is such stock, one feels distress, anxiety for no reason. (mental disorders) ← Kalyuga</p>
+    <p>(3) <b>Kuta</b> (start) (sinful inclination [tendency] or pious inclination) (beginning desire): when one does an activity it gives tendency to do it again. Such tendencies accumulate and form a desire. All this kuta happens by association (sangat). If you go on hammering (repeating) that inclination it becomes a bija (desire becomes very very strong).</p>
+    <p>(4) <b>Bija (desire to do pious or sinful act):</b> when one has got a desire to do something, he makes plans and efforts to fulfil it.</p>
+    <p class="ed">[A purple arrow runs from Bija back up to Prarabdha, labelled "based on bija".]</p>
+    <p>If you kill an animal, you won't get rxn immediately (stored in aprabdha), you will be born in that scenario (that animal body) &amp; you will be killed, etc.</p>
+    <p class="ed">[Boxed]</p>
+    <p>→ Result of rxn is not random → Deserve, Desire.<br>→ Sakarma &amp; vikarma do not cancel each other.</p>
+    <p class="ed">[Two rows of arrows labelled S and V.]</p>
+    <span class="pg">p.5</span>
+    <p><b>Law of karma:</b> very very complicated. Rxn: Dritrastra → his 100 sons dies (so much punya he had to get 100 sons). He had killed 100 babies of bird on the tree, 100 lives back.</p>
+    <p>• Rxn is many folds: • Prarabdha…</p>
+    <p>→ Aprarabdha is stored up (when opportunity comes, rxn happens).</p>
+    <p><b>Law of karma?</b> very fine.</p>
+    <p>eg → <b>Child committing sin</b> (&lt;14 years of age): till 14 years of age the children don't have that much discrimination → all reaction goes to parents, for not training them properly.</p>
+    <p>eg → <b>Suicide</b>. Library, book issued, you burnt the book, now you won't get another book. (Say your life is 50 years. At 30 suicide. You were given human form of life (facility) to fulfil a purpose. Now for some time they are not given any body; they don't get gross body, roam around quite helpless.) (Terrible life after that: you want to drink water but you can't, etc. Have desires but can't fulfil them.)</p>
+    <p>eg: <b>Giving money</b>. X → money → Y → misuse. X will also get reaction of Y misusing the money.</p>
+  </div></details>
+
+  <details class="lec"><summary>20 March <small>pages 6–11</small></summary><div class="written">
+    <span class="pg">p.6</span>
+    <p>When X kills B. <span class="ed">[Note beside it: "Red &amp; Blue".]</span></p>
+    <p>Isn't X to be punished because it is B's karma…? You can't enjoy or suffer any more than is there in your karma.</p>
+    <p>Will X get rxn or not? Yes, because of his wrong desire &amp; deed. X had desire &amp; B had karma.</p>
+    <p class="ed">[Sketch: a matchbox, a matchstick and a simple stick. "Fire will only ignite with match stick."]</p>
+    <p class="ed">[Sketch: a person laughing "ha ha ha", a cracker beside a sleeping dog. "Dog goes through lot of suffering."]</p>
+    <p>Karma stored in aprabdha. Now this person will get dog body after many lives and go through similar suffering.</p>
+    <span class="pg">p.7</span>
+    <p class="ed">[Arc with souls above.]</p>
+    <p>As long as jiva is in mat-world he is trapped. If sakarma is very good he can go to heavenly planets (better facilities, no old age, no troubles) but after finishing their quota, fall back to earth. Always possibility of falling into bad association.</p>
+    <p><b>How is law of karma applicable to animals:</b> except humans other species do not have new karma generation. They do not have free will (or very much curtailed). Sleep time fixed, mating period/season fixed (individuality is curtailed). They are just reaping the reactions of sakarma vikarma.</p>
+    <p>Lowest species → sea trees/plants/shrubs, no sunlight even.</p>
+    <span class="pg">p.8</span>
+    <p>Humans (→ karma yoni), animals, reptiles, birds, insects, normal trees, sea plants. <span class="ed">[A red arrow curves from humans down to birds.]</span></p>
+    <p>If you fall you have to go through each and every species in the sequence. Then after thousands &amp; thousands of years we get human form of life again.</p>
+    <p>→ Once you submit paper, the ball in the examiner court, out of your control.<br>→ After you sleep, what dream is not in your control.<br>→ After you die, next life which one you will get is not in your control.</p>
+    <p>King get (1/6)th of the sinful rxn of the praja and (1/6)th of pious rxn of the praja ∵ he is facilitating. It's duty of leader to punish the people doing sinful activities.</p>
+    <p>→ In higher (demigods) or lower (species) you only reap the reaction.<br>→ Karma can be done only in human form of life.</p>
+    <span class="pg">p.9</span>
+    <p><b>Akarma:</b> → so potent that it can burn off sakarma, akarma all. <span class="ed">[Probably meant "sakarma, vikarma".]</span></p>
+    <p>Since every activity has stringent reactions, some think that better not to do any work.</p>
+    <p>Whatever nature we have is accumulated from so many past lives, so one can't change yourself in just 1 night. Even if you go forest you will get bored &amp; come back.</p>
+    <p><b>Bg Ch-3</b></p>
+    <p>3.4 → Not by renouncing alone one can attain perfection.<br>3.5 → Everyone is forced to act helplessly according to the qualities he has acquired from the modes of material nature; ∴ no one can refrain from doing something even for a moment.<br>3.6 → If you restrain senses, still you can't stop thinking that.<br>3.7 → Sincere person — karm yoga.<br>3.8 → Perform your prescribed duty, it's better than not working. One cannot maintain even physical body without work.<br>3.9 → Do work for Lord → akarma. Do work for fruits → sakarma. Work done as a sacrifice for Vishnu has to be performed, otherwise work causes bondages in this material world. Therefore, O son of Kunti, perform your prescribed duties for His satisfaction and in that way you will always remain free from bondages.</p>
+    <span class="pg">p.10</span>
+    <p>• Work must be (1) prescribed duty (drinking alcohol to please Lord ✗) (killing people to please Lord).</p>
+    <p class="ed">[Map of India: a figure at the border marked "medal", a figure inside marked "prison".]</p>
+    <p>Bg 4.(17)? / 3.8 / Bg 16.23</p>
+    <p>(2) Should be performed without attachment to results. Bg 2.47<br>(3) I am not the doer.<br>(4) For the pleasure of Lord.</p>
+    <p>Cashier in the bank → counts lakhs of money → not attached to that money, profit/loss of bank. <span class="deva">आज कम गिना / आज ज़्यादा</span></p>
+    <p>(2) Bg 2.47</p>
+    <p>(3) Don't take the credit. Bg 3.27 — false ego, activities are carried out by 3 modes.</p>
+    <span class="pg">p.11</span>
+    <p><b>Bg 18.14</b> → five factors → (cooperation) → Action (right or wrong).</p>
+    <p><b>Analysis of Action</b> → Five factors of action: (1) place of action (body), (2) performer (doer, soul), (3) senses (superior to body), (4) different kinds of endeavour (not just yours), (5) Supersoul.</p>
+    <p class="ed">[Side note] Mess worker cooked food for you, then you were able to give exam. Babulal ji set up mic so sir can deliver the lecture. If people don't get bad marks how will you get A? So if you have got A there is contribution of so many people.</p>
+    <p><b>Bg 18.16</b></p>
+  </div></details>
+
+  <details class="lec"><summary>21 March <small>pages 11–15</small></summary><div class="written">
+    <span class="pg">p.11</span>
+    <p>Teaching BG ∵ it's a pious activity → Sakarma → just for completing my hours → for grade. → Akarma → if you do it for getting free from cycle of B&amp;D.</p>
+    <span class="pg">p.12</span>
+    <p>(4) For the Lord. <b>Bg 3.9</b> → sacrifice of the fruitive mentality.</p>
+    <p>When we do an action we have the desire to… enjoying the result. But action done for pleasing the Lord is called a sacrifice. ∵ We are sacrificing the desire to enjoy the result of action ("I want to enjoy").</p>
+    <p>Grapes → offer to Lord (without having the tendency to enjoy them). Not that God has scarcity of grapes, but this will strengthen the relationship with Lord. "These are such beautiful grapes, let me offer them to Lord."</p>
+    <p>Action → Sakarma: focus is on I. → Akarma: focus is on the Supreme Lord / on going to the spiritual world (it's not that you will lose materially by having this kind of mentality).</p>
+    <span class="pg">p.13</span>
+    <p><b>Peace formula Bg 5.29</b></p>
+    <p class="ed">[Heart with two figures, the soul and the Supersoul.]</p>
+    <p>You should acknowledge your actual best friend (thank him)… etc.</p>
+    <p><b>Offering results of work Bg 3.30</b></p>
+    <p>Jiva → God: we can hardly offer anything to God, but what pleases the Lord is the affection that the jiva is showing towards Lord.</p>
+    <p>Just like when child offers "see papa I made painting", father be like "are waah!!" even though he has just drawn some lines &amp; very rough drawing, what pleases the father is the affection that child has towards him.</p>
+    <span class="pg">p.14</span>
+    <p class="ed">[A big circle with the jiva at the centre, rays outward: "sees everything with the fruitive mindset (food, girl, etc.)".]</p>
+    <p>We have come into material world with the desire to enjoy separate from Lord. So it's very difficult to change this mindset.</p>
+    <p>But if jiva gets the message of BG we can understand, then after getting the concept that rare human form of life, birth &amp; death, so, let me work for pleasing the Supreme Lord. Dovetail our endeavours so that they take us close to the Supreme Lord.</p>
+    <span class="pg">p.15</span>
+    <p><b>Karma, Akarma, Vikarma</b> → Karma (punya) and Vikarma (papa) both bring reactions in the form of future body. • Analogy: dry stool, wet stool.</p>
+    <p>(Addiction) Bij → plant → more seeds → more plant-seeds (trap). → Jiva is very very trapped.</p>
+    <p class="ed">[Side note] "S T D K" <span class="unclear">[?]</span>, with an arrow from K: "Kalyuga in pocket ↓ Phone".</p>
+    <p>→ <b>Akarma → Yajna</b> → activity done for pleasure of Lord. Requires selflessness → not easy.</p>
+    <p>⇒ <b>Yajna: non-fruitive</b> — prescribed duty ✓ · without attachment of result · I not the doer · for pleasure of Lord. <span class="ed">[The middle two are circled in yellow and marked ✗.]</span></p>
+    <p>→ Work is worship ("karm hi pooja"). → If you have only motivation of pleasing Lord.</p>
+    <p class="ed">[Page 16 is blank.]</p>
+  </div></details>
+</section>
+
+</main>
+</div>
+<footer>Sources: course slide deck "Karma" (Lecture 20; text: Bhagavad Gita As It Is, BBT) and your handwritten notes of 18–21 March 2025.</footer>
+
+<script>
+(function(){
+  var qs=document.querySelectorAll('details.q'), lec=document.querySelectorAll('details.lec');
+  function set(list,v){for(var i=0;i<list.length;i++)list[i].open=v;}
+  document.getElementById('openAll').addEventListener('click',function(){set(qs,true)});
+  document.getElementById('closeAll').addEventListener('click',function(){set(qs,false)});
+  document.getElementById('openLec').addEventListener('click',function(){set(lec,true)});
+  document.getElementById('closeLec').addEventListener('click',function(){set(lec,false)});
+  var links=document.querySelectorAll('.toc a'), map={};
+  for(var i=0;i<links.length;i++){map[links[i].getAttribute('href').slice(1)]=links[i];}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){
+        for(var k in map)map[k].classList.remove('on');
+        if(map[e.target.id])map[e.target.id].classList.add('on');
+      }});
+    },{rootMargin:'-20% 0px -70% 0px'});
+    document.querySelectorAll('main section').forEach(function(s){io.observe(s)});
+  }
+})();
+</script>
+</body>
+</html>
